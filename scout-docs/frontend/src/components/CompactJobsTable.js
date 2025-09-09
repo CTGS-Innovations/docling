@@ -43,19 +43,6 @@ const CompactJobsTable = ({ jobs, selectedJob, onSelectJob }) => {
     }
   };
 
-  const getStatusBadge = (status) => {
-    const baseClasses = "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium";
-    switch (status) {
-      case 'completed':
-        return `${baseClasses} bg-green-100 text-green-800`;
-      case 'failed':
-        return `${baseClasses} bg-red-100 text-red-800`;
-      case 'processing':
-        return `${baseClasses} bg-blue-100 text-blue-800`;
-      default:
-        return `${baseClasses} bg-gray-100 text-gray-800`;
-    }
-  };
 
   const formatTime = (timeString) => {
     if (!timeString) return '';
@@ -63,7 +50,7 @@ const CompactJobsTable = ({ jobs, selectedJob, onSelectJob }) => {
     const now = new Date();
     const diffMinutes = Math.floor((now - date) / 60000);
     
-    if (diffMinutes < 1) return 'Just now';
+    if (diffMinutes < 1) return '';
     if (diffMinutes < 60) return `${diffMinutes}m ago`;
     if (diffMinutes < 1440) return `${Math.floor(diffMinutes / 60)}h ago`;
     return date.toLocaleDateString();
@@ -122,10 +109,13 @@ const CompactJobsTable = ({ jobs, selectedJob, onSelectJob }) => {
                 Status
               </th>
               <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Compute
+                Compute / Pipeline
               </th>
               <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Performance
+              </th>
+              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Throughput
               </th>
               <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Started / Action
@@ -159,10 +149,7 @@ const CompactJobsTable = ({ jobs, selectedJob, onSelectJob }) => {
                         {job.filename || truncateText(job.source, 50) || 'Processing...'}
                       </div>
                       <div className="text-xs text-gray-500">
-                        {job.result?.metrics?.document_pages && `${job.result.metrics.document_pages} pages`}
-                        {job.pipeline && ` • ${getPipelineDisplayName(job.pipeline)}`}
-                        {job.result?.metrics?.document_pages && job.pipeline && ''}
-                        {!job.result?.metrics?.document_pages && !job.pipeline && 'Processing...'}
+                        {job.status === 'processing' ? 'Processing...' : ''}
                       </div>
                     </div>
                   </div>
@@ -172,20 +159,17 @@ const CompactJobsTable = ({ jobs, selectedJob, onSelectJob }) => {
                 <td className="px-4 py-2">
                   <div className="flex items-center space-x-2">
                     {getStatusIcon(job.status)}
-                    <span className={getStatusBadge(job.status)}>
-                      {job.status}
-                    </span>
                     {job.status === 'processing' && job.progress > 0 && (
-                      <span className="text-xs text-blue-600 font-medium ml-2">
+                      <span className="text-xs text-blue-600 font-medium">
                         {job.progress}%
                       </span>
                     )}
                   </div>
                 </td>
 
-                {/* Compute Type */}
+                {/* Compute Type & Pipeline */}
                 <td className="px-4 py-2">
-                  <div className="flex items-center">
+                  <div className="flex items-center space-x-2">
                     <span 
                       className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
                         job.result?.metrics?.compute_type === 'GPU' 
@@ -211,33 +195,33 @@ const CompactJobsTable = ({ jobs, selectedJob, onSelectJob }) => {
                         </>
                       )}
                     </span>
+                    <span className="text-xs text-gray-600">
+                      • {getPipelineDisplayName(job.pipeline) || 'Processing...'}
+                    </span>
                   </div>
                 </td>
 
-                {/* Performance Metrics Combined */}
+                {/* Performance */}
                 <td className="px-4 py-2 text-xs text-gray-600">
                   {job.result?.metrics ? (
-                    <div className="space-y-1">
-                      <div className="flex items-center space-x-2">
-                        <span className="font-medium">{getPipelineDisplayName(job.pipeline)}</span>
-                        <span className="text-gray-400">•</span>
-                        <span>{formatDuration(job.result.metrics.total_time)}</span>
-                      </div>
-                      <div className="flex items-center space-x-3 text-gray-500">
-                        <span>{job.result.metrics.document_pages} pages</span>
-                        <span>{Math.round(job.result.metrics.words_processed / job.result.metrics.total_time)} w/s</span>
-                      </div>
+                    <div className="font-medium text-blue-600">
+                      {formatDuration(job.result.metrics.total_time)} • {job.result.metrics.document_pages} page{job.result.metrics.document_pages !== 1 ? 's' : ''} • {job.result.metrics.words_processed >= 1000 ? `${Math.round(job.result.metrics.words_processed / 1000)}K` : job.result.metrics.words_processed} words
                     </div>
                   ) : job.duration ? (
-                    <div className="space-y-1">
-                      <div className="font-medium">{getPipelineDisplayName(job.pipeline)}</div>
-                      <div className="text-gray-500">{formatDuration(job.duration)}</div>
+                    <div className="font-medium text-blue-600">{formatDuration(job.duration)}</div>
+                  ) : (
+                    <div className="text-gray-400">Processing...</div>
+                  )}
+                </td>
+
+                {/* Throughput */}
+                <td className="px-4 py-2 text-xs text-gray-600">
+                  {job.result?.metrics ? (
+                    <div className="font-medium text-green-600">
+                      {(job.result.metrics.document_pages / job.result.metrics.total_time).toFixed(1)} pages/s{job.result.metrics.document_size_bytes ? ` • ${((job.result.metrics.document_size_bytes / (1024 * 1024)) / job.result.metrics.total_time).toFixed(1)} MB/s` : ''}
                     </div>
                   ) : (
-                    <div className="space-y-1">
-                      <div className="font-medium">{getPipelineDisplayName(job.pipeline) || 'Processing...'}</div>
-                      <div className="text-gray-400">—</div>
-                    </div>
+                    <div className="text-gray-400">—</div>
                   )}
                 </td>
 

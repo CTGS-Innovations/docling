@@ -270,15 +270,23 @@ class DoclingProcessor:
             
             # Extract document metadata
             doc = result.document
-            metrics.document_pages = len(result.pages) if result.pages else 1
             
-            # Count words in the document
+            # Count words in the document first
             word_count = 0
             if hasattr(doc, 'texts') and doc.texts:
                 for text in doc.texts:
                     if hasattr(text, 'text'):
                         word_count += len(text.text.split())
             metrics.words_processed = word_count
+            
+            # Calculate page count - handle different document types
+            if result.pages is not None and len(result.pages) > 0:
+                # PDF and other formats with actual page data
+                metrics.document_pages = len(result.pages)
+            else:
+                # DOCX and other flow documents - estimate pages from word count
+                # Using standard estimate of 250 words per page
+                metrics.document_pages = max(1, word_count // 250)
             
             log(f"📊 Document stats: {metrics.document_pages} pages, ~{word_count:,} words")
             log(f"⏱️ Conversion completed in {conversion_time:.3f}s")
