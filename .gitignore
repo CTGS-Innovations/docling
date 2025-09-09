@@ -1,9 +1,10 @@
-# Ignore entire directories
-docline-github/
+# Ignore entire directories and all contents
+docling-github/
+docling_github/
 scout-docs/storage/
 scout-docs/backend/app/__pycache__/
 _images/
 
 # Individual files
 .claude/settings.json
-scout-docs/storage/**/*.*
+docling_github
