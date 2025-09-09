@@ -1,15 +1,31 @@
 # CLAUDE.md
 
+## ⚠️ CRITICAL RULES - MUST FOLLOW
+1. **NEVER run Python directly** - Python is NOT installed locally. Use Docker for ALL Python tasks.
+2. **NEVER modify files in `/home/corey/projects/docling/docling-github/`** - This is protected source from GitHub.
+3. **Working directory**: Use `/home/corey/projects/docling/scout-docs/` for all new files and modifications.
+
+**⚠️ ACCOUNTABILITY NOTE**: These rules were strengthened after being violated 7-10 times, including by the same Claude instance that wrote them. Breaking these rules again, especially Rule #1, would demonstrate inability to follow explicit self-imposed instructions.
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Docker Commands (Required for Python)
+- `docker compose up -d` - Start the application
+- `docker compose exec backend python -c "..."` - Run Python code in backend container
+- `docker compose exec backend bash` - Open shell in backend container
+- `docker compose logs -f` - View live logs
+- `docker compose logs -f backend` - View backend logs only
 
 ## Development Commands
 
 ### Environment Setup
+- **IMPORTANT**: Python is not installed locally - use Docker for all Python-related tasks
 - Use `uv sync` to create/update virtual environment and install dependencies
 - Use `uv add <package>` to add new dependencies (updates pyproject.toml and uv.lock)
 - Use `uv venv --python 3.12` for specific Python versions if needed
 
 ### Code Quality and Testing
+⚠️ **Remember: Use Docker for Python execution**
 - `uv run ruff format` - Format code with Ruff
 - `uv run ruff check --fix` - Lint and auto-fix with Ruff
 - `uv run mypy docling` - Run type checking with MyPy
@@ -22,8 +38,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `mkdocs gh-deploy` - Deploy documentation to GitHub Pages
 
 ### CLI Usage
+⚠️ **Note: Run these commands inside Docker containers**
 - `docling <file_or_url>` - Convert document to Markdown
-- `docling --pipeline vlm --vlm-model smoldocling <file_or_url>` - Use VLM pipeline
+- `docling --pipeline vlm --vlm-model smoldocling <file_or_url>` - Use VLM pipeline with Transformers
+- **vLLM Performance**: When running on GPU with VLM pipeline, vLLM is automatically used for maximum performance (GPU only)
 
 ## Directory Structure
 
@@ -62,6 +80,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **MyPy** for static type checking
 - **MkDocs** with Material theme for documentation
 - **pytest** for testing with coverage reporting
+- **vLLM** for GPU-accelerated VLM inference (automatically enabled on GPU for VLM pipeline)
 
 ### Testing Philosophy
 - Reference test data stored in `tests/data_scanned/groundtruth/`

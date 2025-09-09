@@ -1,23 +1,39 @@
-version: '3.8'
-
 services:
   backend:
     build: ./backend
+    container_name: docling-backend
     ports:
       - "8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
       - LOG_LEVEL=INFO
       - STORAGE_PATH=/app/storage
+      - OMP_NUM_THREADS=8
+      - MKL_NUM_THREADS=8
+      # NVIDIA/CUDA settings
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
     volumes:
       - ./storage:/app/storage
       - ./backend:/app
     depends_on:
       - redis
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    # GPU support (Docker Compose v2 format)
+    deploy:
+      resources:
+        limits:
+          memory: 16G
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --workers 1 --loop uvloop
 
   frontend:
     build: ./frontend
+    container_name: docling-frontend
     ports:
       - "3000:3000"
     environment:
@@ -26,18 +42,22 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
+    restart: unless-stopped
     command: npm start
 
   redis:
     image: redis:7-alpine
+    container_name: docling-redis
     ports:
       - "6379:6379"
     command: redis-server --appendonly yes
     volumes:
       - redis_data:/data
+    restart: unless-stopped
 
   nginx:
     image: nginx:alpine
+    container_name: docling-nginx
     ports:
       - "80:80"
     volumes:
@@ -45,6 +65,7 @@ services:
     depends_on:
       - backend
       - frontend
+    restart: unless-stopped
 
 volumes:
   redis_data:

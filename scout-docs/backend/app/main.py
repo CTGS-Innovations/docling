@@ -1,3 +1,6 @@
+# Configure PyTorch before any imports that might use it
+from app.torch_config import configure_torch_startup
+
 import logging
 import time
 import uuid
@@ -15,6 +18,10 @@ from pydantic import BaseModel
 from app.docling_service import DoclingProcessor, ProcessingResult
 from app.logger import setup_logger, LogCapture
 from app.websocket_manager import WebSocketManager
+from app.pipeline_configs import PipelineRegistry
+
+# Configure PyTorch once at startup
+configure_torch_startup()
 
 # Setup logging
 logger = setup_logger(__name__)
@@ -38,6 +45,7 @@ class ProcessingRequest(BaseModel):
     source: str  # URL or file reference
     pipeline: str = "standard"  # standard, vlm
     output_format: str = "markdown"  # markdown, html, json
+    compute_mode: str = "cpu"  # cpu, gpu
 
 class JobStatus(BaseModel):
     job_id: str
@@ -48,6 +56,12 @@ class JobStatus(BaseModel):
     end_time: Optional[datetime]
     duration: Optional[float]
     result: Optional[ProcessingResult] = None
+    # Job metadata
+    filename: Optional[str] = None
+    source: Optional[str] = None
+    pipeline: Optional[str] = None
+    output_format: Optional[str] = None
+    compute_mode: Optional[str] = None
 
 @app.websocket("/ws/{job_id}")
 async def websocket_endpoint(websocket: WebSocket, job_id: str):
@@ -65,7 +79,8 @@ async def websocket_endpoint(websocket: WebSocket, job_id: str):
 async def upload_file(
     file: UploadFile = File(...),
     pipeline: str = Form("standard"),
-    output_format: str = Form("markdown")
+    output_format: str = Form("markdown"),
+    compute_mode: str = Form("cpu")
 ):
     """Upload and process a file"""
     job_id = str(uuid.uuid4())
@@ -85,7 +100,8 @@ async def upload_file(
         "result": None,
         "filename": file.filename,
         "pipeline": pipeline,
-        "output_format": output_format
+        "output_format": output_format,
+        "compute_mode": compute_mode
     }
     
     # Save uploaded file
@@ -102,7 +118,7 @@ async def upload_file(
         
         # Start processing (in background)
         import asyncio
-        asyncio.create_task(process_document_async(job_id, str(file_path), pipeline, output_format))
+        asyncio.create_task(process_document_async(job_id, str(file_path), pipeline, output_format, compute_mode))
         
         return {"job_id": job_id, "status": "pending", "message": "File uploaded, processing started"}
         
@@ -132,16 +148,17 @@ async def process_url(request: ProcessingRequest):
         "result": None,
         "source": request.source,
         "pipeline": request.pipeline,
-        "output_format": request.output_format
+        "output_format": request.output_format,
+        "compute_mode": request.compute_mode
     }
     
     # Start processing (in background)
     import asyncio
-    asyncio.create_task(process_document_async(job_id, request.source, request.pipeline, request.output_format))
+    asyncio.create_task(process_document_async(job_id, request.source, request.pipeline, request.output_format, request.compute_mode))
     
     return {"job_id": job_id, "status": "pending", "message": "URL processing started"}
 
-async def process_document_async(job_id: str, source: str, pipeline: str, output_format: str):
+async def process_document_async(job_id: str, source: str, pipeline: str, output_format: str, compute_mode: str = "cpu"):
     """Async document processing with detailed logging and timing"""
     job = active_jobs[job_id]
     log_capture = LogCapture()
@@ -163,11 +180,20 @@ async def process_document_async(job_id: str, source: str, pipeline: str, output
         job["logs"] = log_capture.logs.copy()
         await websocket_manager.send_update(job_id, job)
         
+        # Define progress callback that updates job and sends websocket updates
+        async def on_progress(progress_pct: int, message: str):
+            job["progress"] = progress_pct
+            job["logs"] = log_capture.logs.copy()
+            log_capture.add_log(message)
+            await websocket_manager.send_update(job_id, job)
+        
         result = await docling_processor.process_document(
             source=source,
             pipeline=pipeline,
             output_format=output_format,
-            log_capture=log_capture
+            compute_mode=compute_mode,
+            log_capture=log_capture,
+            progress_callback=on_progress
         )
         
         # Calculate total processing time
@@ -220,6 +246,127 @@ async def health_check():
         "active_jobs": len(active_jobs),
         "docling_available": True
     }
+
+@app.get("/api/system-info")
+async def get_system_info():
+    """Get system compute information"""
+    from app.torch_config import get_compute_info
+    return get_compute_info()
+
+@app.get("/api/pipelines")
+async def get_pipeline_profiles():
+    """Get available pipeline profiles with their configurations"""
+    return {
+        "profiles": PipelineRegistry.list_profiles(),
+        "description": "Available document processing pipelines with different performance characteristics"
+    }
+
+# CPU-specific endpoints
+@app.post("/api/upload-cpu", response_model=dict)
+async def upload_file_cpu(
+    file: UploadFile = File(...),
+    pipeline: str = Form("standard"),
+    output_format: str = Form("markdown")
+):
+    """Upload and process a file using CPU only"""
+    return await _process_upload(file, pipeline, output_format, "cpu")
+
+@app.post("/api/process-url-cpu", response_model=dict)
+async def process_url_cpu(request: ProcessingRequest):
+    """Process a document from URL using CPU only"""
+    return await _process_url_request(request, "cpu")
+
+# GPU-specific endpoints  
+@app.post("/api/upload-gpu", response_model=dict)
+async def upload_file_gpu(
+    file: UploadFile = File(...),
+    pipeline: str = Form("standard"),
+    output_format: str = Form("markdown")
+):
+    """Upload and process a file using GPU (falls back to CPU if unavailable)"""
+    return await _process_upload(file, pipeline, output_format, "gpu")
+
+@app.post("/api/process-url-gpu", response_model=dict)  
+async def process_url_gpu(request: ProcessingRequest):
+    """Process a document from URL using GPU (falls back to CPU if unavailable)"""
+    return await _process_url_request(request, "gpu")
+
+# Helper functions to reduce code duplication
+async def _process_upload(file: UploadFile, pipeline: str, output_format: str, compute_mode: str):
+    """Common upload processing logic"""
+    job_id = str(uuid.uuid4())
+    timestamp = datetime.now()
+    
+    logger.info(f"🚀 Starting {compute_mode.upper()} job {job_id}: {file.filename}")
+    
+    # Initialize job tracking
+    active_jobs[job_id] = {
+        "job_id": job_id,
+        "status": "pending",
+        "progress": 0,
+        "logs": [],
+        "start_time": timestamp,
+        "end_time": None,
+        "duration": None,
+        "result": None,
+        "filename": file.filename,
+        "pipeline": pipeline,
+        "output_format": output_format,
+        "compute_mode": compute_mode
+    }
+    
+    # Save uploaded file
+    storage_path = Path("storage") / job_id
+    storage_path.mkdir(exist_ok=True)
+    file_path = storage_path / file.filename
+    
+    try:
+        async with aiofiles.open(file_path, 'wb') as f:
+            content = await file.read()
+            await f.write(content)
+            
+        logger.info(f"📁 File saved: {file_path} ({len(content)} bytes)")
+        
+        # Start processing (in background)
+        import asyncio
+        asyncio.create_task(process_document_async(job_id, str(file_path), pipeline, output_format, compute_mode))
+        
+        return {"job_id": job_id, "status": "pending", "message": f"File uploaded, {compute_mode.upper()} processing started"}
+        
+    except Exception as e:
+        logger.error(f"❌ Upload failed for job {job_id}: {e}")
+        active_jobs[job_id]["status"] = "failed"
+        active_jobs[job_id]["logs"].append(f"Upload error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+async def _process_url_request(request: ProcessingRequest, compute_mode: str):
+    """Common URL processing logic"""
+    job_id = str(uuid.uuid4())
+    timestamp = datetime.now()
+    
+    logger.info(f"🌐 Starting {compute_mode.upper()} URL job {job_id}: {request.source}")
+    
+    # Initialize job tracking  
+    active_jobs[job_id] = {
+        "job_id": job_id,
+        "status": "pending",
+        "progress": 0,
+        "logs": [],
+        "start_time": timestamp,
+        "end_time": None,
+        "duration": None,
+        "result": None,
+        "source": request.source,
+        "pipeline": request.pipeline,
+        "output_format": request.output_format,
+        "compute_mode": compute_mode
+    }
+    
+    # Start processing (in background)
+    import asyncio
+    asyncio.create_task(process_document_async(job_id, request.source, request.pipeline, request.output_format, compute_mode))
+    
+    return {"job_id": job_id, "status": "pending", "message": f"URL {compute_mode.upper()} processing started"}
 
 if __name__ == "__main__":
     import uvicorn

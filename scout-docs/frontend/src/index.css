@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Executive Typography */
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -9,6 +10,33 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
+}
+
+/* Executive Interface Styles */
+.executive-card {
+  @apply bg-white rounded-lg shadow-sm border border-gray-200;
+  transition: all 0.15s ease;
+}
+
+.executive-card:hover {
+  @apply shadow-md border-gray-300;
+}
+
+.executive-table {
+  @apply min-w-full divide-y divide-gray-200;
+}
+
+.executive-table thead th {
+  @apply px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-50;
+}
+
+.executive-table tbody tr {
+  @apply bg-white hover:bg-gray-50 transition-colors duration-150;
+}
+
+.executive-table tbody td {
+  @apply px-6 py-4 whitespace-nowrap text-sm text-gray-900;
 }
 
 code {

@@ -206,9 +206,9 @@ const ResultsViewer = ({ result, jobId }) => {
       </div>
 
       {/* Content */}
-      <div className="p-4">
-        <div className="max-h-96 overflow-y-auto border border-gray-200 rounded-md">
-          <div className="p-4">
+      <div className="p-6">
+        <div className="max-h-[600px] overflow-y-auto border border-gray-200 rounded-lg bg-white">
+          <div className="p-6">
             {renderContent()}
           </div>
         </div>
@@ -216,24 +216,14 @@ const ResultsViewer = ({ result, jobId }) => {
 
       {/* Performance Metrics */}
       {result.metrics && (
-        <div className="px-4 py-3 bg-gray-50 border-t">
-          <h4 className="text-sm font-medium text-gray-900 mb-2">Performance Breakdown</h4>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
-            <div>
-              <span className="block text-gray-500">Loading</span>
-              <span className="font-medium">{(result.metrics.document_loading_time * 1000).toFixed(0)}ms</span>
-            </div>
-            <div>
-              <span className="block text-gray-500">Conversion</span>
-              <span className="font-medium">{(result.metrics.conversion_time * 1000).toFixed(0)}ms</span>
-            </div>
-            <div>
-              <span className="block text-gray-500">Output Gen</span>
-              <span className="font-medium">{(result.metrics.output_generation_time * 1000).toFixed(0)}ms</span>
-            </div>
-            <div>
-              <span className="block text-gray-500">Total</span>
-              <span className="font-medium text-blue-600">{(result.metrics.total_time * 1000).toFixed(0)}ms</span>
+        <div className="px-6 py-3 bg-gray-50 border-t">
+          <div className="flex items-center justify-between">
+            <h4 className="text-sm font-medium text-gray-900">Performance Breakdown</h4>
+            <div className="flex items-center space-x-6 text-xs text-gray-600">
+              <span>Loading: <strong>{(result.metrics.document_loading_time * 1000).toFixed(0)}ms</strong></span>
+              <span>Conversion: <strong>{(result.metrics.conversion_time * 1000).toFixed(0)}ms</strong></span>
+              <span>Output: <strong>{(result.metrics.output_generation_time * 1000).toFixed(0)}ms</strong></span>
+              <span>Total: <strong className="text-blue-600">{(result.metrics.total_time * 1000).toFixed(0)}ms</strong></span>
             </div>
           </div>
         </div>
