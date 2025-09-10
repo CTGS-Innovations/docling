@@ -8,3 +8,11 @@ _images/
 # Individual files
 .claude/settings.json
 docling_github
+
+# CLI-specific ignores
+cli/.venv/
+cli/__pycache__/
+cli/output/
+cli/*.pyc
+cli/.DS_Store
+cli/visual_optimization_results.json

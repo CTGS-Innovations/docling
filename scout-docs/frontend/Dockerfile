@@ -1,24 +1,22 @@
 FROM node:18-alpine
 
+# Create non-root user early
+RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
+
+# Create app directory with proper ownership
+RUN mkdir -p /app && chown nextjs:nodejs /app
+
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Copy package files with correct ownership
+COPY --chown=nextjs:nodejs package*.json ./
 
-# Install dependencies (including dev dependencies for build tools)
+# Switch to non-root user and install dependencies
+USER nextjs
 RUN npm install
 
-# Copy source code
-COPY . .
-
-# Create non-root user
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nextjs -u 1001
-
-# Change ownership to nextjs user
-RUN chown -R nextjs:nodejs /app
-
-USER nextjs
+# Copy source code with correct ownership (avoids chown -R)
+COPY --chown=nextjs:nodejs . .
 
 EXPOSE 3000
 

@@ -1,0 +1,50 @@
+{
+  "test_file": "/home/corey/projects/docling/cli/data/asciidoc/test_03.asciidoc",
+  "file_size_kb": 0.7373046875,
+  "successful_configs": 0,
+  "total_configs": 6,
+  "results": [
+    {
+      "config_name": "minimal",
+      "success": false,
+      "duration": 2.808140993118286,
+      "error": "2025-09-10 20:09:09,855 - INFO - Loading plugin 'docling_defaults'\n2025-09-10 20:09:09,856 - INFO - Registered ocr engines: ['easyocr', 'ocrmac', 'rapidocr', 'tesserocr', 'tesseract']\n2025-09-10 20:09:09,861 - INFO - paths: [PosixPath('/tmp/tmpel054_pl/test_03.asciidoc')]\n2025-09-10 20:09:09,861 - INFO - detected formats: [<InputFormat.ASCIIDOC: 'asciidoc'>]\n2025-09-10 20:09:09,862 - INFO - Going to convert document batch...\n2025-09-10 20:09:09,862 - INFO - Initializing pipeline for SimplePipeli",
+      "stdout": null
+    },
+    {
+      "config_name": "explicit_format",
+      "success": false,
+      "duration": 2.81744647026062,
+      "error": "2025-09-10 20:09:12,679 - INFO - Loading plugin 'docling_defaults'\n2025-09-10 20:09:12,680 - INFO - Registered ocr engines: ['easyocr', 'ocrmac', 'rapidocr', 'tesserocr', 'tesseract']\n2025-09-10 20:09:12,684 - INFO - paths: [PosixPath('/tmp/tmp6hri6pl2/test_03.asciidoc')]\n2025-09-10 20:09:12,684 - INFO - detected formats: [<InputFormat.ASCIIDOC: 'asciidoc'>]\n2025-09-10 20:09:12,684 - INFO - Going to convert document batch...\n2025-09-10 20:09:12,684 - INFO - Initializing pipeline for SimplePipeli",
+      "stdout": null
+    },
+    {
+      "config_name": "no_ocr",
+      "success": false,
+      "duration": 2.8145339488983154,
+      "error": "2025-09-10 20:09:15,494 - INFO - Loading plugin 'docling_defaults'\n2025-09-10 20:09:15,495 - INFO - Registered ocr engines: ['easyocr', 'ocrmac', 'rapidocr', 'tesserocr', 'tesseract']\n2025-09-10 20:09:15,500 - INFO - paths: [PosixPath('/tmp/tmp4tt1kqqw/test_03.asciidoc')]\n2025-09-10 20:09:15,501 - INFO - detected formats: [<InputFormat.ASCIIDOC: 'asciidoc'>]\n2025-09-10 20:09:15,501 - INFO - Going to convert document batch...\n2025-09-10 20:09:15,501 - INFO - Initializing pipeline for SimplePipeli",
+      "stdout": null
+    },
+    {
+      "config_name": "text_pipeline",
+      "success": false,
+      "duration": 2.826032876968384,
+      "error": "2025-09-10 20:09:18,317 - INFO - Loading plugin 'docling_defaults'\n2025-09-10 20:09:18,318 - INFO - Registered ocr engines: ['easyocr', 'ocrmac', 'rapidocr', 'tesserocr', 'tesseract']\n2025-09-10 20:09:18,323 - INFO - paths: [PosixPath('/tmp/tmpo95wepkf/test_03.asciidoc')]\n2025-09-10 20:09:18,323 - INFO - detected formats: [<InputFormat.ASCIIDOC: 'asciidoc'>]\n2025-09-10 20:09:18,324 - INFO - Going to convert document batch...\n2025-09-10 20:09:18,324 - INFO - Initializing pipeline for SimplePipeli",
+      "stdout": null
+    },
+    {
+      "config_name": "gpu_standard",
+      "success": false,
+      "duration": 2.8353028297424316,
+      "error": "2025-09-10 20:09:21,147 - INFO - Loading plugin 'docling_defaults'\n2025-09-10 20:09:21,148 - INFO - Registered ocr engines: ['easyocr', 'ocrmac', 'rapidocr', 'tesserocr', 'tesseract']\n2025-09-10 20:09:21,153 - INFO - paths: [PosixPath('/tmp/tmpvbumnekk/test_03.asciidoc')]\n2025-09-10 20:09:21,154 - INFO - detected formats: [<InputFormat.ASCIIDOC: 'asciidoc'>]\n2025-09-10 20:09:21,154 - INFO - Going to convert document batch...\n2025-09-10 20:09:21,154 - INFO - Initializing pipeline for SimplePipeli",
+      "stdout": null
+    },
+    {
+      "config_name": "current_benchmark_config",
+      "success": false,
+      "duration": 2.8285887241363525,
+      "error": "2025-09-10 20:09:23,986 - INFO - Loading plugin 'docling_defaults'\n2025-09-10 20:09:23,986 - INFO - Registered ocr engines: ['easyocr', 'ocrmac', 'rapidocr', 'tesserocr', 'tesseract']\n2025-09-10 20:09:23,992 - INFO - paths: [PosixPath('/tmp/tmp_uksn_8c/test_03.asciidoc')]\n2025-09-10 20:09:23,992 - INFO - detected formats: [<InputFormat.ASCIIDOC: 'asciidoc'>]\n2025-09-10 20:09:23,992 - INFO - Going to convert document batch...\n2025-09-10 20:09:23,992 - INFO - Initializing pipeline for SimplePipeli",
+      "stdout": null
+    }
+  ]
+}

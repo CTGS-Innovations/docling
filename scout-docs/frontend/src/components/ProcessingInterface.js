@@ -31,7 +31,7 @@ const ProcessingInterface = ({ onJobCreated }) => {
   const [isUploading, setIsUploading] = useState(false);
   
   // URL processing state
-  const [url, setUrl] = useState('');
+  const [urls, setUrls] = useState('');
 
   // Load pipeline profiles on component mount
   useEffect(() => {
@@ -108,35 +108,105 @@ const ProcessingInterface = ({ onJobCreated }) => {
     }
   }, [pipeline, outputFormat, computeMode, onJobCreated]);
 
+  // Smart URL extraction from search agent output
+  const extractUrlsFromText = (text) => {
+    // First, try to extract URLs using regex patterns
+    const urlRegex = /https?:\/\/[^\s\]\)]+/g;
+    const foundUrls = text.match(urlRegex) || [];
+    
+    // Clean up URLs (remove trailing punctuation, markdown syntax, etc.)
+    const cleanedUrls = foundUrls.map(url => {
+      return url.replace(/[\]\),;\.]+$/, ''); // Remove trailing punctuation
+    });
+    
+    // If we found URLs with regex, use those
+    if (cleanedUrls.length > 0) {
+      return cleanedUrls;
+    }
+    
+    // Fallback: split by common separators and filter for URL-like strings
+    const lines = text.split(/[\n,]+/);
+    const urlLikeStrings = lines
+      .map(line => line.trim())
+      .filter(line => line.includes('http') || line.includes('www.') || line.includes('.com') || line.includes('.org') || line.includes('.pdf'))
+      .map(line => {
+        // Extract URL from lines that might have titles
+        const urlMatch = line.match(/https?:\/\/[^\s\]\)]+/);
+        return urlMatch ? urlMatch[0].replace(/[\]\),;\.]+$/, '') : line;
+      })
+      .filter(url => url.length > 0);
+    
+    return urlLikeStrings;
+  };
+
+  // Real-time URL detection for preview (after function definition)
+  const detectedUrls = urls.trim() ? extractUrlsFromText(urls) : [];
+  const urlCount = detectedUrls.length;
+
   // URL submit handler
   const handleUrlSubmit = async (e) => {
     e.preventDefault();
-    if (!url.trim()) return;
+    if (!urls.trim()) return;
 
     setIsProcessing(true);
 
     try {
+      // Smart URL extraction - handles search agent output, titles, markdown, etc.
+      const urlList = extractUrlsFromText(urls);
+
+      if (urlList.length === 0) {
+        alert('No valid URLs found in the text. Please check your input.');
+        setIsProcessing(false);
+        return;
+      }
+
       // Choose endpoint based on compute mode
       const endpoint = computeMode === 'gpu' ? '/api/process-url-gpu' : '/api/process-url-cpu';
-      const response = await axios.post(`${API_URL}${endpoint}`, {
-        source: url.trim(),
-        pipeline,
-        output_format: outputFormat
+      
+      // Process all URLs in parallel
+      const promises = urlList.map(async (url) => {
+        try {
+          const response = await axios.post(`${API_URL}${endpoint}`, {
+            source: url,
+            pipeline,
+            output_format: outputFormat
+          });
+
+          onJobCreated({
+            ...response.data,
+            source: url,
+            pipeline,
+            output_format: outputFormat,
+            compute_mode: computeMode
+          });
+
+          return { url, success: true };
+        } catch (error) {
+          console.error(`Failed to process URL ${url}:`, error);
+          return { url, success: false, error: error.message };
+        }
       });
 
-      onJobCreated({
-        ...response.data,
-        source: url.trim(),
-        pipeline,
-        output_format: outputFormat,
-        compute_mode: computeMode
-      });
+      const results = await Promise.all(promises);
+      
+      // Show summary
+      const successful = results.filter(r => r.success).length;
+      const failed = results.filter(r => !r.success).length;
+      
+      console.log(`📊 Batch processing complete: ${successful} successful, ${failed} failed out of ${urlList.length} extracted URLs`);
+      
+      if (failed > 0) {
+        const failedUrls = results.filter(r => !r.success).map(r => r.url);
+        alert(`✅ Extracted ${urlList.length} URLs from your input.\n\nProcessed ${successful} URLs successfully. ${failed} failed:\n${failedUrls.join('\n')}`);
+      } else {
+        console.log(`🎉 All ${urlList.length} extracted URLs processed successfully!`);
+      }
 
-      setUrl(''); // Clear input after successful submission
+      setUrls(''); // Clear URLs after processing
 
     } catch (error) {
       console.error('URL processing error:', error);
-      alert('Processing failed: ' + (error.response?.data?.detail || error.message));
+      alert('Processing failed: ' + error.message);
     } finally {
       setIsProcessing(false);
     }
@@ -300,7 +370,7 @@ const ProcessingInterface = ({ onJobCreated }) => {
                   disabled={isProcessing}
                 >
                   <GlobeAltIcon className="h-4 w-4 inline mr-1" />
-                  URL
+                  URL(s)
                 </button>
               </div>
               <p className="text-xs text-gray-500 mt-1">Choose input type</p>
@@ -361,34 +431,51 @@ const ProcessingInterface = ({ onJobCreated }) => {
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <GlobeAltIcon className="h-4 w-4 text-gray-400" />
                     </div>
-                    <input
-                      type="url"
-                      value={url}
-                      onChange={(e) => setUrl(e.target.value)}
-                      placeholder="https://example.com/document.pdf"
-                      className="block w-full pl-9 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    <textarea
+                      value={urls}
+                      onChange={(e) => setUrls(e.target.value)}
+                      placeholder="🤖 Smart URL Extraction - Paste any format:&#10;&#10;• Search agent output with titles&#10;• Markdown links: [Title](https://example.com/doc.pdf)&#10;• Plain URLs: https://arxiv.org/pdf/2408.09869&#10;• Mixed text with URLs embedded&#10;• Comma or newline separated&#10;&#10;The system will automatically find and extract all URLs!"
+                      className="block w-full pl-9 pr-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-vertical"
                       disabled={isProcessing}
+                      rows={6}
                       required
                     />
                   </div>
                 </div>
-                <button
-                  type="submit"
-                  disabled={isProcessing || !url.trim()}
-                  className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isProcessing ? (
-                    <>
-                      <ArrowPathIcon className="animate-spin h-4 w-4 mr-2" />
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <ArrowPathIcon className="h-4 w-4 mr-2" />
-                      Process URL
-                    </>
+                <div className="flex flex-col space-y-2">
+                  <button
+                    type="submit"
+                    disabled={isProcessing || !urls.trim() || urlCount === 0}
+                    className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isProcessing ? (
+                      <>
+                        <ArrowPathIcon className="animate-spin h-4 w-4 mr-2" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <ArrowPathIcon className="h-4 w-4 mr-2" />
+                        Process {urlCount > 0 ? `${urlCount} URLs` : 'URLs'}
+                      </>
+                    )}
+                  </button>
+                  
+                  {/* Real-time URL counter */}
+                  {urls.trim() && (
+                    <div className="text-xs text-center">
+                      {urlCount > 0 ? (
+                        <span className="text-green-600 font-medium">
+                          ✅ {urlCount} URL{urlCount !== 1 ? 's' : ''} detected
+                        </span>
+                      ) : (
+                        <span className="text-red-500">
+                          ❌ No valid URLs found
+                        </span>
+                      )}
+                    </div>
                   )}
-                </button>
+                </div>
               </form>
             )}
           </div>

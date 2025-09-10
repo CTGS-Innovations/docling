@@ -1,0 +1,37 @@
+[
+  {
+    "engine": "default",
+    "success": true,
+    "duration": 6.5373594760894775,
+    "error": null,
+    "stdout": null
+  },
+  {
+    "engine": "easyocr",
+    "success": true,
+    "duration": 6.5488739013671875,
+    "error": null,
+    "stdout": null
+  },
+  {
+    "engine": "tesseract",
+    "success": false,
+    "duration": 2.8532676696777344,
+    "error": "2025-09-10 19:50:17,085 - INFO - Loading plugin 'docling_defaults'\n2025-09-10 19:50:17,086 - INFO - Registered ocr engines: ['easyocr', 'ocrmac', 'rapidocr', 'tesserocr', 'tesseract']\n2025-09-10 19:50",
+    "stdout": null
+  },
+  {
+    "engine": "rapidocr",
+    "success": false,
+    "duration": 2.8361685276031494,
+    "error": "2025-09-10 19:50:19,928 - INFO - Loading plugin 'docling_defaults'\n2025-09-10 19:50:19,928 - INFO - Registered ocr engines: ['easyocr', 'ocrmac', 'rapidocr', 'tesserocr', 'tesseract']\n2025-09-10 19:50",
+    "stdout": null
+  },
+  {
+    "engine": "tesserocr",
+    "success": false,
+    "duration": 2.8477542400360107,
+    "error": "2025-09-10 19:50:22,772 - INFO - Loading plugin 'docling_defaults'\n2025-09-10 19:50:22,773 - INFO - Registered ocr engines: ['easyocr', 'ocrmac', 'rapidocr', 'tesserocr', 'tesseract']\n2025-09-10 19:50",
+    "stdout": null
+  }
+]

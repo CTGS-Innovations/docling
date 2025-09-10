@@ -1,0 +1,14 @@
+{
+  "analysis_time_seconds": 223.6254723072052,
+  "total_files": 157,
+  "problematic_count": 2,
+  "success_rate": 98.72611464968153,
+  "problematic_files": [
+    "/home/corey/projects/docling/cli/data/asciidoc/test_03.asciidoc",
+    "/home/corey/projects/docling/cli/data/asciidoc/test_02.asciidoc"
+  ],
+  "by_extension": {
+    ".asciidoc": 2
+  },
+  "initial_error": "2025-09-10 20:01:54,918 - INFO - Loading plugin 'docling_defaults'\n2025-09-10 20:01:54,919 - INFO - Registered ocr engines: ['easyocr', 'ocrmac', 'rapidocr', 'tesserocr', 'tesseract']\n2025-09-10 20:01"
+}
