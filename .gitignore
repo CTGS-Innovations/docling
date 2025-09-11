@@ -13,6 +13,17 @@ docling_github
 cli/.venv/
 cli/__pycache__/
 cli/output/
+cli/temp/
+cli/tests/extracted_images/
+cli/tests/*_results.txt
 cli/*.pyc
 cli/.DS_Store
+cli/.env*
+cli/.env/
+cli/build/
+cli/dist/
+cli/*.egg-info/
 cli/visual_optimization_results.json
+cli/data/
+
+cli/all.tar
