@@ -27,10 +27,6 @@ if [ -f "vlm_processing.log" ]; then
     echo "   ✅ Removed VLM log"
 fi
 
-# Clean any .md output files in current directory
-echo "📄 Cleaning markdown output files..."
-rm -f *.md 2>/dev/null || true
-echo "   ✅ Cleaned markdown files"
 
 # Clean any JSON output files in current directory
 echo "📄 Cleaning JSON output files..."
