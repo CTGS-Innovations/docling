@@ -1,288 +1,103 @@
-=== VLM PROCESSING LOG - 2025-09-11 16:16:17.528602 ===
+=== VLM PROCESSING LOG - 2025-09-11 16:42:23.638079 ===
 
-[16:16:17.528] 🏭 Batch processor thread started
-[16:16:17.528] 👷 Worker VisualWorker-0 started
-[16:16:17.629] 🎯 Queued job 2ff5ebda: image on page 1 of visual_0001_figure_page1.png
-[16:16:17.629] 📊 Queue stats: 1 jobs queued, 0 active
-[16:16:17.629] 🎯 Queued job 2480c69e: image on page 1 of visual_0002_figure_page1.png
-[16:16:17.629] 📊 Queue stats: 2 jobs queued, 0 active
-[16:16:17.629] 🎯 Queued job a289cb43: chart on page 1 of visual_0003_chart_page1.png
-[16:16:17.629] 📊 Queue stats: 3 jobs queued, 0 active
-[16:16:17.629] 🎯 Queued job acf879a1: formula on page 2 of visual_0004_formula_page2.png
-[16:16:17.629] 📊 Queue stats: 4 jobs queued, 0 active
-[16:16:17.629] 🎯 Queued job 457063b3: formula on page 2 of visual_0005_formula_page2.png
-[16:16:17.629] 📊 Queue stats: 5 jobs queued, 0 active
-[16:16:17.629] 🎯 Queued job d6c3e5b4: formula on page 2 of visual_0006_formula_page2.png
-[16:16:17.629] 📊 Queue stats: 6 jobs queued, 0 active
-[16:16:17.629] 🎯 Queued job 6d019419: formula on page 2 of visual_0007_formula_page2.png
-[16:16:17.629] 📊 Queue stats: 7 jobs queued, 0 active
-[16:16:17.629] 🎯 Queued job 8e2a3c39: formula on page 2 of visual_0008_formula_page2.png
-[16:16:17.629] 📊 Queue stats: 8 jobs queued, 0 active
-[16:16:17.629] 🎯 Queued job 7dfa0f60: formula on page 2 of visual_0009_formula_page2.png
-[16:16:17.629] 📊 Queue stats: 9 jobs queued, 0 active
-[16:16:17.629] 🎯 Queued job f693948b: formula on page 2 of visual_0010_formula_page2.png
-[16:16:17.629] 📊 Queue stats: 10 jobs queued, 0 active
-[16:16:17.629] 🎯 Queued job ccb5718d: formula on page 2 of visual_0011_formula_page2.png
-[16:16:17.629] 📊 Queue stats: 11 jobs queued, 0 active
-[16:16:17.630] 🎯 Queued job 70d689f7: formula on page 2 of visual_0012_formula_page2.png
-[16:16:17.630] 📊 Queue stats: 12 jobs queued, 0 active
-[16:16:17.630] 🎯 Queued job 6f52dc48: formula on page 2 of visual_0013_formula_page2.png
-[16:16:17.630] 📊 Queue stats: 13 jobs queued, 0 active
-[16:16:17.630] 🎯 Queued job 19c44596: chart on page 2 of visual_0014_chart_page2.png
-[16:16:17.630] 📊 Queue stats: 14 jobs queued, 0 active
-[16:16:17.630] 🎯 Queued job 7f13dab3: formula on page 3 of visual_0015_formula_page3.png
-[16:16:17.630] 📊 Queue stats: 15 jobs queued, 0 active
-[16:16:17.630] 🎯 Queued job d52c5b78: formula on page 3 of visual_0016_formula_page3.png
-[16:16:17.630] 📊 Queue stats: 16 jobs queued, 0 active
-[16:16:17.630] 🎯 Queued job acf7eeea: formula on page 3 of visual_0017_formula_page3.png
-[16:16:17.630] 📊 Queue stats: 17 jobs queued, 0 active
-[16:16:17.630] 🎯 Queued job 10ccf6f9: formula on page 3 of visual_0018_formula_page3.png
-[16:16:17.630] 📊 Queue stats: 18 jobs queued, 0 active
-[16:16:17.630] 🎯 Queued job bed6ad97: formula on page 3 of visual_0019_formula_page3.png
-[16:16:17.630] 📊 Queue stats: 19 jobs queued, 0 active
-[16:16:17.630] 🎯 Queued job 4d83e0f5: formula on page 3 of visual_0020_formula_page3.png
-[16:16:17.630] 📊 Queue stats: 20 jobs queued, 0 active
-[16:16:17.630] 🎯 Queued job f6e9ebee: formula on page 3 of visual_0021_formula_page3.png
-[16:16:17.630] 📊 Queue stats: 21 jobs queued, 0 active
-[16:16:17.630] 🎯 Queued job bf16acaf: formula on page 3 of visual_0022_formula_page3.png
-[16:16:17.630] 📊 Queue stats: 22 jobs queued, 0 active
-[16:16:17.630] 🎯 Queued job 2878753f: formula on page 3 of visual_0023_formula_page3.png
-[16:16:17.630] 📊 Queue stats: 23 jobs queued, 0 active
-[16:16:17.630] 🎯 Queued job 16815892: formula on page 3 of visual_0024_formula_page3.png
-[16:16:17.630] 📊 Queue stats: 24 jobs queued, 0 active
-[16:16:17.630] 🎯 Queued job 2f0036e8: formula on page 3 of visual_0025_formula_page3.png
-[16:16:17.630] 📊 Queue stats: 25 jobs queued, 0 active
-[16:16:17.630] 🎯 Queued job 9f2f8d9d: formula on page 3 of visual_0026_formula_page3.png
-[16:16:17.630] 📊 Queue stats: 26 jobs queued, 0 active
-[16:16:17.630] 🎯 Queued job 67279743: formula on page 3 of visual_0027_formula_page3.png
-[16:16:17.630] 📊 Queue stats: 27 jobs queued, 0 active
-[16:16:17.630] 🎯 Queued job cb1dd213: formula on page 3 of visual_0028_formula_page3.png
-[16:16:17.630] 📊 Queue stats: 28 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job 9c1b85c5: formula on page 3 of visual_0029_formula_page3.png
-[16:16:17.631] 📊 Queue stats: 29 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job efb7519e: formula on page 3 of visual_0030_formula_page3.png
-[16:16:17.631] 📊 Queue stats: 30 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job b499d379: formula on page 3 of visual_0031_formula_page3.png
-[16:16:17.631] 📊 Queue stats: 31 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job f87686de: formula on page 3 of visual_0032_formula_page3.png
-[16:16:17.631] 📊 Queue stats: 32 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job aa7468f4: formula on page 3 of visual_0033_formula_page3.png
-[16:16:17.631] 📊 Queue stats: 33 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job 998636e5: formula on page 3 of visual_0034_formula_page3.png
-[16:16:17.631] 📊 Queue stats: 34 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job cfc2d496: formula on page 3 of visual_0035_formula_page3.png
-[16:16:17.631] 📊 Queue stats: 35 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job 4e2f66a8: formula on page 4 of visual_0036_formula_page4.png
-[16:16:17.631] 📊 Queue stats: 36 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job fda180b1: formula on page 4 of visual_0037_formula_page4.png
-[16:16:17.631] 📊 Queue stats: 37 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job 15c2d818: formula on page 4 of visual_0038_formula_page4.png
-[16:16:17.631] 📊 Queue stats: 38 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job 8952e163: formula on page 4 of visual_0039_formula_page4.png
-[16:16:17.631] 📊 Queue stats: 39 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job b66f9a52: formula on page 4 of visual_0040_formula_page4.png
-[16:16:17.631] 📊 Queue stats: 40 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job 14cc0acd: formula on page 4 of visual_0041_formula_page4.png
-[16:16:17.631] 📊 Queue stats: 41 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job 596b6037: formula on page 4 of visual_0042_formula_page4.png
-[16:16:17.631] 📊 Queue stats: 42 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job df4cfc68: formula on page 4 of visual_0043_formula_page4.png
-[16:16:17.631] 📊 Queue stats: 43 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job b271da4e: formula on page 4 of visual_0044_formula_page4.png
-[16:16:17.631] 📊 Queue stats: 44 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job 13657fdc: formula on page 4 of visual_0045_formula_page4.png
-[16:16:17.631] 📊 Queue stats: 45 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job 4af693f0: formula on page 4 of visual_0046_formula_page4.png
-[16:16:17.631] 📊 Queue stats: 46 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job 4c0c2adf: formula on page 4 of visual_0047_formula_page4.png
-[16:16:17.631] 📊 Queue stats: 47 jobs queued, 0 active
-[16:16:17.631] 🎯 Queued job b316213d: formula on page 4 of visual_0048_formula_page4.png
-[16:16:17.631] 📊 Queue stats: 48 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job 9ee6f2a0: formula on page 4 of visual_0049_formula_page4.png
-[16:16:17.632] 📊 Queue stats: 49 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job eb87de5c: formula on page 4 of visual_0050_formula_page4.png
-[16:16:17.632] 📊 Queue stats: 50 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job 35b32dbd: formula on page 4 of visual_0051_formula_page4.png
-[16:16:17.632] 📊 Queue stats: 51 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job 61100fdc: formula on page 4 of visual_0052_formula_page4.png
-[16:16:17.632] 📊 Queue stats: 52 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job fa34f050: formula on page 4 of visual_0053_formula_page4.png
-[16:16:17.632] 📊 Queue stats: 53 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job 52bc830f: formula on page 4 of visual_0054_formula_page4.png
-[16:16:17.632] 📊 Queue stats: 54 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job c03bacdd: formula on page 4 of visual_0055_formula_page4.png
-[16:16:17.632] 📊 Queue stats: 55 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job 7d3b26eb: formula on page 4 of visual_0056_formula_page4.png
-[16:16:17.632] 📊 Queue stats: 56 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job bef35e02: formula on page 4 of visual_0057_formula_page4.png
-[16:16:17.632] 📊 Queue stats: 57 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job 2e849ec9: formula on page 4 of visual_0058_formula_page4.png
-[16:16:17.632] 📊 Queue stats: 58 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job bdb5dba3: diagram on page 4 of visual_0059_diagram_page4.png
-[16:16:17.632] 📊 Queue stats: 59 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job 9ea1dcc3: diagram on page 4 of visual_0060_diagram_page4.png
-[16:16:17.632] 📊 Queue stats: 60 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job 9decbfca: diagram on page 4 of visual_0061_diagram_page4.png
-[16:16:17.632] 📊 Queue stats: 61 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job 4fa8be1c: formula on page 5 of visual_0062_formula_page5.png
-[16:16:17.632] 📊 Queue stats: 62 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job eb46ed88: formula on page 5 of visual_0063_formula_page5.png
-[16:16:17.632] 📊 Queue stats: 63 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job 181d1160: formula on page 5 of visual_0064_formula_page5.png
-[16:16:17.632] 📊 Queue stats: 64 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job 6d348468: formula on page 5 of visual_0065_formula_page5.png
-[16:16:17.632] 📊 Queue stats: 65 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job b235449b: formula on page 5 of visual_0066_formula_page5.png
-[16:16:17.632] 📊 Queue stats: 66 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job e0cd7245: formula on page 5 of visual_0067_formula_page5.png
-[16:16:17.632] 📊 Queue stats: 67 jobs queued, 0 active
-[16:16:17.632] 🎯 Queued job 1e0d142a: formula on page 5 of visual_0068_formula_page5.png
-[16:16:17.633] 📊 Queue stats: 68 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job 50fbe9c3: chart on page 5 of visual_0069_chart_page5.png
-[16:16:17.633] 📊 Queue stats: 69 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job d07a3c38: chart on page 5 of visual_0070_chart_page5.png
-[16:16:17.633] 📊 Queue stats: 70 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job 0e164c80: diagram on page 5 of visual_0071_diagram_page5.png
-[16:16:17.633] 📊 Queue stats: 71 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job 750909fd: formula on page 6 of visual_0072_formula_page6.png
-[16:16:17.633] 📊 Queue stats: 72 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job a5a350a6: formula on page 6 of visual_0073_formula_page6.png
-[16:16:17.633] 📊 Queue stats: 73 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job 7ab4ddd0: formula on page 6 of visual_0074_formula_page6.png
-[16:16:17.633] 📊 Queue stats: 74 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job 596e9094: image on page 6 of visual_0075_figure_page6.png
-[16:16:17.633] 📊 Queue stats: 75 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job 31900087: image on page 6 of visual_0076_figure_page6.png
-[16:16:17.633] 📊 Queue stats: 76 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job 3e675fa1: image on page 6 of visual_0077_image_page6.png
-[16:16:17.633] 📊 Queue stats: 77 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job 7314c926: image on page 6 of visual_0078_image_page6.png
-[16:16:17.633] 📊 Queue stats: 78 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job 8b7a6a95: diagram on page 6 of visual_0079_diagram_page6.png
-[16:16:17.633] 📊 Queue stats: 79 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job 82b6c6ff: diagram on page 6 of visual_0080_diagram_page6.png
-[16:16:17.633] 📊 Queue stats: 80 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job d289534d: formula on page 7 of visual_0081_formula_page7.png
-[16:16:17.633] 📊 Queue stats: 81 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job a2be04ef: formula on page 7 of visual_0082_formula_page7.png
-[16:16:17.633] 📊 Queue stats: 82 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job 30ef154d: formula on page 7 of visual_0083_formula_page7.png
-[16:16:17.633] 📊 Queue stats: 83 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job 44d0e063: formula on page 7 of visual_0084_formula_page7.png
-[16:16:17.633] 📊 Queue stats: 84 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job c391320d: formula on page 7 of visual_0085_formula_page7.png
-[16:16:17.633] 📊 Queue stats: 85 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job 4c83f4b3: formula on page 7 of visual_0086_formula_page7.png
-[16:16:17.633] 📊 Queue stats: 86 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job ed467b39: formula on page 7 of visual_0087_formula_page7.png
-[16:16:17.633] 📊 Queue stats: 87 jobs queued, 0 active
-[16:16:17.633] 🎯 Queued job 92b1609b: formula on page 7 of visual_0088_formula_page7.png
-[16:16:17.633] 📊 Queue stats: 88 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job 70787c18: image on page 7 of visual_0089_figure_page7.png
-[16:16:17.634] 📊 Queue stats: 89 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job 72c3cd48: image on page 7 of visual_0090_figure_page7.png
-[16:16:17.634] 📊 Queue stats: 90 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job cb55105e: chart on page 7 of visual_0091_chart_page7.png
-[16:16:17.634] 📊 Queue stats: 91 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job a742dd3e: diagram on page 7 of visual_0092_diagram_page7.png
-[16:16:17.634] 📊 Queue stats: 92 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job add511d6: chart on page 7 of visual_0093_chart_page7.png
-[16:16:17.634] 📊 Queue stats: 93 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job 23d1df6e: image on page 7 of visual_0094_image_page7.png
-[16:16:17.634] 📊 Queue stats: 94 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job bd636e12: formula on page 8 of visual_0095_formula_page8.png
-[16:16:17.634] 📊 Queue stats: 95 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job 2073bc02: formula on page 8 of visual_0096_formula_page8.png
-[16:16:17.634] 📊 Queue stats: 96 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job 10d626d6: chart on page 8 of visual_0097_chart_page8.png
-[16:16:17.634] 📊 Queue stats: 97 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job 24aab402: image on page 8 of visual_0098_image_page8.png
-[16:16:17.634] 📊 Queue stats: 98 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job d520c5bb: formula on page 13 of visual_0099_formula_page13.png
-[16:16:17.634] 📊 Queue stats: 99 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job cea4a4f8: formula on page 13 of visual_0100_formula_page13.png
-[16:16:17.634] 📊 Queue stats: 100 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job 0294b920: formula on page 13 of visual_0101_formula_page13.png
-[16:16:17.634] 📊 Queue stats: 101 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job 5d764ba2: formula on page 13 of visual_0102_formula_page13.png
-[16:16:17.634] 📊 Queue stats: 102 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job 88756511: formula on page 13 of visual_0103_formula_page13.png
-[16:16:17.634] 📊 Queue stats: 103 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job dc0b20aa: formula on page 13 of visual_0104_formula_page13.png
-[16:16:17.634] 📊 Queue stats: 104 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job c0c608de: formula on page 13 of visual_0105_formula_page13.png
-[16:16:17.634] 📊 Queue stats: 105 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job 405add4e: chart on page 13 of visual_0106_chart_page13.png
-[16:16:17.634] 📊 Queue stats: 106 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job a7d6dd16: chart on page 13 of visual_0107_chart_page13.png
-[16:16:17.634] 📊 Queue stats: 107 jobs queued, 0 active
-[16:16:17.634] 🎯 Queued job 0cf7fae5: chart on page 13 of visual_0108_chart_page13.png
-[16:16:17.635] 📊 Queue stats: 108 jobs queued, 0 active
-[16:16:17.635] 🎯 Queued job f796cd22: formula on page 14 of visual_0109_formula_page14.png
-[16:16:17.635] 📊 Queue stats: 109 jobs queued, 0 active
-[16:16:17.635] 🎯 Queued job 6e93f6f3: formula on page 14 of visual_0110_formula_page14.png
-[16:16:17.635] 📊 Queue stats: 110 jobs queued, 0 active
-[16:16:17.635] 🎯 Queued job 5c4119f5: formula on page 14 of visual_0111_formula_page14.png
-[16:16:17.635] 📊 Queue stats: 111 jobs queued, 0 active
-[16:16:17.635] 🎯 Queued job 08d91383: formula on page 14 of visual_0112_formula_page14.png
-[16:16:17.635] 📊 Queue stats: 112 jobs queued, 0 active
-[16:16:17.635] 🎯 Queued job 2dc81fe4: formula on page 14 of visual_0113_formula_page14.png
-[16:16:17.635] 📊 Queue stats: 113 jobs queued, 0 active
-[16:16:17.635] 🎯 Queued job 614c85ed: formula on page 14 of visual_0114_formula_page14.png
-[16:16:17.635] 📊 Queue stats: 114 jobs queued, 0 active
-[16:16:17.635] 🎯 Queued job 24a65edf: formula on page 14 of visual_0115_formula_page14.png
-[16:16:17.635] 📊 Queue stats: 115 jobs queued, 0 active
-[16:16:17.635] 🎯 Queued job bb9203a6: formula on page 15 of visual_0116_formula_page15.png
-[16:16:17.635] 📊 Queue stats: 116 jobs queued, 0 active
-[16:16:17.635] 🎯 Queued job c6283e7d: formula on page 15 of visual_0117_formula_page15.png
-[16:16:17.635] 📊 Queue stats: 117 jobs queued, 0 active
-[16:16:17.635] 🎯 Queued job 004df8bb: formula on page 16 of visual_0118_formula_page16.png
-[16:16:17.635] 📊 Queue stats: 118 jobs queued, 0 active
-[16:16:17.635] 🎯 Queued job 1e3d7e61: image on page 16 of visual_0119_figure_page16.png
-[16:16:17.635] 📊 Queue stats: 119 jobs queued, 0 active
-[16:16:17.635] 🎯 Queued job c849ac3b: image on page 16 of visual_0120_image_page16.png
-[16:16:17.635] 📊 Queue stats: 120 jobs queued, 0 active
-[16:16:17.635] 🎯 Queued job 10339c9b: image on page 16 of visual_0121_image_page16.png
-[16:16:17.635] 📊 Queue stats: 121 jobs queued, 0 active
-[16:16:17.635] 🎯 Queued job daf23056: image on page 17 of visual_0122_figure_page17.png
-[16:16:17.635] 📊 Queue stats: 122 jobs queued, 0 active
-[16:16:17.635] 🎯 Queued job 79846d20: chart on page 17 of visual_0123_chart_page17.png
-[16:16:17.635] 📊 Queue stats: 123 jobs queued, 0 active
-[16:16:17.635] 🎯 Queued job 3574be36: image on page 18 of visual_0124_figure_page18.png
-[16:16:17.635] 📊 Queue stats: 124 jobs queued, 0 active
-[16:16:17.635] 🎯 Queued job dda729b4: image on page 18 of visual_0125_figure_page18.png
-[16:16:17.635] 📊 Queue stats: 125 jobs queued, 0 active
-[16:16:17.635] 🎯 Queued job ee207c79: chart on page 18 of visual_0126_chart_page18.png
-[16:16:17.635] 📊 Queue stats: 126 jobs queued, 0 active
-[16:16:17.636] 🎯 Queued job 40b1c5a2: image on page 19 of visual_0127_figure_page19.png
-[16:16:17.636] 📊 Queue stats: 127 jobs queued, 0 active
-[16:16:17.636] 🎯 Queued job 1dddc481: chart on page 19 of visual_0128_chart_page19.png
-[16:16:17.636] 📊 Queue stats: 128 jobs queued, 0 active
-[16:16:17.636] 🎯 Queued job fc219254: image on page 20 of visual_0129_figure_page20.png
-[16:16:17.636] 📊 Queue stats: 129 jobs queued, 0 active
-[16:16:17.636] 🎯 Queued job d6840978: image on page 20 of visual_0130_image_page20.png
-[16:16:17.636] 📊 Queue stats: 130 jobs queued, 0 active
-[16:16:17.636] 🎯 Queued job cbba8249: image on page 21 of visual_0131_figure_page21.png
-[16:16:17.636] 📊 Queue stats: 131 jobs queued, 0 active
-[16:16:17.636] 🎯 Queued job 7f40376e: image on page 21 of visual_0132_figure_page21.png
-[16:16:17.636] 📊 Queue stats: 132 jobs queued, 0 active
-[16:16:17.636] 🎯 Queued job 1c8c08c8: chart on page 21 of visual_0133_chart_page21.png
-[16:16:17.636] 📊 Queue stats: 133 jobs queued, 0 active
-[16:16:17.636] 🎯 Queued job d128e725: image on page 22 of visual_0134_figure_page22.png
-[16:16:17.636] 📊 Queue stats: 134 jobs queued, 0 active
-[16:16:17.636] 🎯 Queued job a9931705: chart on page 22 of visual_0135_chart_page22.png
-[16:16:17.636] 📊 Queue stats: 135 jobs queued, 0 active
-[16:16:17.636] 🎯 Queued job d00fa6e6: image on page 23 of visual_0136_figure_page23.png
-[16:16:17.636] 📊 Queue stats: 136 jobs queued, 0 active
-[16:16:17.636] 🎯 Queued job e2d07289: chart on page 23 of visual_0137_chart_page23.png
-[16:16:17.636] 📊 Queue stats: 137 jobs queued, 0 active
-[16:16:17.636] 🎯 Queued job b1768f73: image on page 24 of visual_0138_figure_page24.png
-[16:16:17.636] 📊 Queue stats: 138 jobs queued, 0 active
-[16:16:17.636] 🎯 Queued job 7f6763b8: chart on page 24 of visual_0139_chart_page24.png
-[16:16:17.636] 📊 Queue stats: 139 jobs queued, 0 active
-[16:16:17.636] 🎯 Queued job 3c8bdd99: image on page 25 of visual_0140_figure_page25.png
-[16:16:17.636] 📊 Queue stats: 140 jobs queued, 0 active
-[16:16:17.636] 🎯 Queued job f6941414: chart on page 25 of visual_0141_chart_page25.png
-[16:16:17.636] 📊 Queue stats: 141 jobs queued, 0 active
-[16:16:17.729] 🏭 Batch processor thread stopping
-[16:16:18.029] 👷 Worker VisualWorker-0 stopping
+[16:42:23.638] 🏭 Batch processor thread started
+[16:42:23.638] 👷 Worker VisualWorker-0 started
+[16:42:23.970] 🎯 Queued job 20609954: image on page 1 of picture_classification.pdf
+[16:42:23.970] 📊 Queue stats: 1 jobs queued, 0 active
+[16:42:23.970] 🎯 Queued job 8133c376: image on page 1 of picture_classification.pdf
+[16:42:23.970] 📊 Queue stats: 2 jobs queued, 0 active
+[16:42:23.970] 🎯 Queued job 43230df7: image on page 2 of picture_classification.pdf
+[16:42:23.970] 📊 Queue stats: 3 jobs queued, 0 active
+[16:42:23.970] 🎯 Queued job 8ea0aae5: image on page 2 of picture_classification.pdf
+[16:42:23.970] 📊 Queue stats: 4 jobs queued, 0 active
+[16:42:24.070] 🔄 Batch processor: Found 4 jobs to batch
+[16:42:24.070] 🔍 Batch creation check: queue size=4, empty=False
+[16:42:24.070] 🔍 Creating batches from 4 queued jobs
+[16:42:24.070]    Collected job 20609954 for batching
+[16:42:24.070]    Collected job 8133c376 for batching
+[16:42:24.070]    Collected job 43230df7 for batching
+[16:42:24.070]    Collected job 8ea0aae5 for batching
+[16:42:24.070] 📦 Collected 4 jobs for batching
+[16:42:24.070] ✅ After batching: 0 jobs remain in queue
+[16:42:24.138] 👷 Worker VisualWorker-0 got batch f6c553a4 with 4 jobs
+[16:42:24.139] 🔄 Processing visual_0001 with: /home/corey/projects/docling/cli/.venv/bin/docling /home/corey/projects/docling/cli/temp/tmprhgswvai/extracted_image_visual_0001.jpeg --to md --pipeline vlm --vlm-model smoldocling --device auto --output /home/corey/projects/docling/cli/temp/tmprhgswvai -v
+[16:43:02.605] 📋 Docling result: returncode=0
+[16:43:02.605] 📤 Stdout: None
+[16:43:02.605] ❌ Stderr: 2025-09-11 16:42:26,635 - INFO - Loading plugin 'docling_defaults'
+2025-09-11 16:42:26,636 - INFO - Registered ocr engines: ['easyocr', 'ocrmac', 'rapidocr', 'tesserocr', 'tesseract']
+2025-09-11 16:42:26,641 - INFO - paths: [PosixPath('/tmp/tmp_hudwxx9/extracted_image_visual_0001.jpeg')]
+2025-09-11 16:42:26,641 - INFO - detected formats: [<InputFormat.IMAGE: 'image'>]
+2025-09-11 16:42:26,661 - INFO - Going to convert document batch...
+2025-09-11 16:42:26,661 - INFO - Initializing pipeline for VlmPipeline with options hash b7500fc58af7f032441777a46700c153
+2025-09-11 16:42:26,695 - INFO - Accelerator device: 'cuda:0'
+`torch_dtype` is deprecated! Use `dtype` instead!
+2025-09-11 16:42:27,741 - INFO - Processing document extracted_image_visual_0001.jpeg
+/home/corey/projects/docling/cli/.venv/lib/python3.12/site-packages/transformers/tokenization_utils_base.py:2752: UserWarning: `max_length` is ignored when `padding`=`True` and there is no truncation strategy. To pad to max length, use `padding='max_length'`.
+  warnings.warn(
+2025-09-11 16:43:01,688 - INFO - Finished converting document extracted_image_visual_0001.jpeg in 35.05 sec.
+2025-09-11 16:43:01,688 - INFO - writing Markdown output to /home/corey/projects/docling/cli/temp/tmprhgswvai/extracted_image_visual_0001.md
+2025-09-11 16:43:01,692 - INFO - Processed 1 docs, of which 0 failed
+2025-09-11 16:43:01,692 - INFO - All documents were converted in 35.05 seconds.
+
+[16:43:02.606] 🔄 Processing visual_0002 with: /home/corey/projects/docling/cli/.venv/bin/docling /home/corey/projects/docling/cli/temp/tmprhgswvai/extracted_image_visual_0002.jpeg --to md --pipeline vlm --vlm-model smoldocling --device auto --output /home/corey/projects/docling/cli/temp/tmprhgswvai -v
+[16:43:42.058] 📋 Docling result: returncode=0
+[16:43:42.058] 📤 Stdout: None
+[16:43:42.058] ❌ Stderr: 2025-09-11 16:43:05,112 - INFO - Loading plugin 'docling_defaults'
+2025-09-11 16:43:05,113 - INFO - Registered ocr engines: ['easyocr', 'ocrmac', 'rapidocr', 'tesserocr', 'tesseract']
+2025-09-11 16:43:05,119 - INFO - paths: [PosixPath('/tmp/tmpmdpl_i86/extracted_image_visual_0002.jpeg')]
+2025-09-11 16:43:05,119 - INFO - detected formats: [<InputFormat.IMAGE: 'image'>]
+2025-09-11 16:43:05,139 - INFO - Going to convert document batch...
+2025-09-11 16:43:05,139 - INFO - Initializing pipeline for VlmPipeline with options hash b7500fc58af7f032441777a46700c153
+2025-09-11 16:43:05,164 - INFO - Accelerator device: 'cuda:0'
+`torch_dtype` is deprecated! Use `dtype` instead!
+2025-09-11 16:43:06,287 - INFO - Processing document extracted_image_visual_0002.jpeg
+/home/corey/projects/docling/cli/.venv/lib/python3.12/site-packages/transformers/tokenization_utils_base.py:2752: UserWarning: `max_length` is ignored when `padding`=`True` and there is no truncation strategy. To pad to max length, use `padding='max_length'`.
+  warnings.warn(
+2025-09-11 16:43:41,113 - INFO - Finished converting document extracted_image_visual_0002.jpeg in 35.99 sec.
+2025-09-11 16:43:41,113 - INFO - writing Markdown output to /home/corey/projects/docling/cli/temp/tmprhgswvai/extracted_image_visual_0002.md
+2025-09-11 16:43:41,117 - INFO - Processed 1 docs, of which 0 failed
+2025-09-11 16:43:41,117 - INFO - All documents were converted in 36.00 seconds.
+
+[16:43:42.058] 🔄 Processing visual_0003 with: /home/corey/projects/docling/cli/.venv/bin/docling /home/corey/projects/docling/cli/temp/tmprhgswvai/extracted_image_visual_0003.jpeg --to md --pipeline vlm --vlm-model smoldocling --device auto --output /home/corey/projects/docling/cli/temp/tmprhgswvai -v
+[16:43:48.126] 📋 Docling result: returncode=0
+[16:43:48.126] 📤 Stdout: None
+[16:43:48.126] ❌ Stderr: 2025-09-11 16:43:44,576 - INFO - Loading plugin 'docling_defaults'
+2025-09-11 16:43:44,577 - INFO - Registered ocr engines: ['easyocr', 'ocrmac', 'rapidocr', 'tesserocr', 'tesseract']
+2025-09-11 16:43:44,583 - INFO - paths: [PosixPath('/tmp/tmpbm4zxyox/extracted_image_visual_0003.jpeg')]
+2025-09-11 16:43:44,583 - INFO - detected formats: [<InputFormat.IMAGE: 'image'>]
+2025-09-11 16:43:44,603 - INFO - Going to convert document batch...
+2025-09-11 16:43:44,603 - INFO - Initializing pipeline for VlmPipeline with options hash b7500fc58af7f032441777a46700c153
+2025-09-11 16:43:44,628 - INFO - Accelerator device: 'cuda:0'
+`torch_dtype` is deprecated! Use `dtype` instead!
+2025-09-11 16:43:45,812 - INFO - Processing document extracted_image_visual_0003.jpeg
+/home/corey/projects/docling/cli/.venv/lib/python3.12/site-packages/transformers/tokenization_utils_base.py:2752: UserWarning: `max_length` is ignored when `padding`=`True` and there is no truncation strategy. To pad to max length, use `padding='max_length'`.
+  warnings.warn(
+2025-09-11 16:43:47,196 - INFO - Finished converting document extracted_image_visual_0003.jpeg in 2.61 sec.
+2025-09-11 16:43:47,196 - INFO - writing Markdown output to /home/corey/projects/docling/cli/temp/tmprhgswvai/extracted_image_visual_0003.md
+2025-09-11 16:43:47,200 - INFO - Processed 1 docs, of which 0 failed
+2025-09-11 16:43:47,200 - INFO - All documents were converted in 2.62 seconds.
+
+[16:43:48.127] 🔄 Processing visual_0004 with: /home/corey/projects/docling/cli/.venv/bin/docling /home/corey/projects/docling/cli/temp/tmprhgswvai/extracted_image_visual_0004.jpeg --to md --pipeline vlm --vlm-model smoldocling --device auto --output /home/corey/projects/docling/cli/temp/tmprhgswvai -v
+[16:43:54.167] 📋 Docling result: returncode=0
+[16:43:54.167] 📤 Stdout: None
+[16:43:54.167] ❌ Stderr: 2025-09-11 16:43:50,628 - INFO - Loading plugin 'docling_defaults'
+2025-09-11 16:43:50,629 - INFO - Registered ocr engines: ['easyocr', 'ocrmac', 'rapidocr', 'tesserocr', 'tesseract']
+2025-09-11 16:43:50,634 - INFO - paths: [PosixPath('/tmp/tmp106uet9y/extracted_image_visual_0004.jpeg')]
+2025-09-11 16:43:50,634 - INFO - detected formats: [<InputFormat.IMAGE: 'image'>]
+2025-09-11 16:43:50,654 - INFO - Going to convert document batch...
+2025-09-11 16:43:50,655 - INFO - Initializing pipeline for VlmPipeline with options hash b7500fc58af7f032441777a46700c153
+2025-09-11 16:43:50,680 - INFO - Accelerator device: 'cuda:0'
+`torch_dtype` is deprecated! Use `dtype` instead!
+2025-09-11 16:43:51,836 - INFO - Processing document extracted_image_visual_0004.jpeg
+/home/corey/projects/docling/cli/.venv/lib/python3.12/site-packages/transformers/tokenization_utils_base.py:2752: UserWarning: `max_length` is ignored when `padding`=`True` and there is no truncation strategy. To pad to max length, use `padding='max_length'`.
+  warnings.warn(
+2025-09-11 16:43:53,252 - INFO - Finished converting document extracted_image_visual_0004.jpeg in 2.62 sec.
+2025-09-11 16:43:53,252 - INFO - writing Markdown output to /home/corey/projects/docling/cli/temp/tmprhgswvai/extracted_image_visual_0004.md
+2025-09-11 16:43:53,256 - INFO - Processed 1 docs, of which 0 failed
+2025-09-11 16:43:53,257 - INFO - All documents were converted in 2.62 seconds.
+
+[16:43:54.555] 🛑 Shutdown initiated
+[16:43:54.555] 🚦 Shutdown event set
+[16:43:54.580] 🏭 Batch processor thread stopping
+[16:43:54.668] 👷 Worker VisualWorker-0 stopping
+[16:43:54.668] ✅ Shutdown complete: 4 completed, 0 failed

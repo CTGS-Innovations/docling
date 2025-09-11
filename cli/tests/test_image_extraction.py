@@ -16,6 +16,14 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from fast_text_extractor import FastTextExtractor
 from visual_queue_manager import VisualQueueManager, ElementType, Priority
 
+# Import PyMuPDF for direct image extraction
+try:
+    import fitz  # PyMuPDF
+    PYMUPDF_AVAILABLE = True
+except ImportError:
+    PYMUPDF_AVAILABLE = False
+    print("Warning: PyMuPDF not available")
+
 
 class ImageExtractionTest:
     """Test image extraction and VLM processing."""
@@ -36,74 +44,139 @@ class ImageExtractionTest:
         print(f"\n📄 EXTRACTING IMAGES FROM: {pdf_path.name}")
         print("="*60)
         
-        extractor = FastTextExtractor()
-        
-        # Process the PDF to get visual elements
-        result = extractor.extract(pdf_path)
-        
-        if not result:
-            print("❌ Failed to extract from PDF")
+        if not PYMUPDF_AVAILABLE:
+            print("❌ PyMuPDF not available for image extraction")
             return []
         
-        visual_elements = result.get('visual_elements', [])
-        print(f"✅ Found {len(visual_elements)} visual elements")
-        
-        # Extract and save each visual element
         extracted_items = []
         
-        for i, element in enumerate(visual_elements):
-            element_type = element.get('type', 'unknown')
-            page_num = element.get('page', 1)
-            placeholder_id = element.get('placeholder_id', f'visual_{i:04d}')
+        try:
+            # Open PDF with PyMuPDF
+            doc = fitz.open(str(pdf_path))
             
-            print(f"\n🖼️  Processing {placeholder_id}:")
-            print(f"   Type: {element_type}")
-            print(f"   Page: {page_num}")
+            # First, use FastTextExtractor to detect visual elements
+            extractor = FastTextExtractor()
+            result = extractor.extract(pdf_path)
             
-            # Save the image if it exists
-            if 'image_data' in element:
-                image_path = self.output_dir / f"{placeholder_id}_{element_type}_page{page_num}.png"
+            if not result or not result.success:
+                print("❌ Failed to analyze PDF structure")
+                return []
+            
+            # Get visual placeholders from the extraction result
+            visual_placeholders = result.visual_placeholders
+            print(f"✅ Found {len(visual_placeholders)} visual elements identified")
+            
+            # Now extract actual images from each page
+            for page_num in range(len(doc)):
+                page = doc[page_num]
+                page_placeholders = [p for p in visual_placeholders if p.get('page', 1) == page_num + 1]
                 
-                # Get the image data (could be PIL Image or bytes)
-                image_data = element['image_data']
+                if not page_placeholders:
+                    continue
+                    
+                print(f"\n📄 Page {page_num + 1}: {len(page_placeholders)} visual elements")
                 
-                try:
-                    # If it's a PIL Image, save it directly
-                    if hasattr(image_data, 'save'):
-                        image_data.save(str(image_path), 'PNG')
-                        print(f"   ✅ Saved image to: {image_path.name}")
-                    else:
-                        # If it's bytes, write directly
-                        with open(image_path, 'wb') as f:
-                            f.write(image_data)
-                        print(f"   ✅ Saved image to: {image_path.name}")
+                # Extract all images from this page
+                image_list = page.get_images()
+                
+                for i, placeholder in enumerate(page_placeholders):
+                    element_type = placeholder.get('type', 'unknown')
+                    placeholder_id = placeholder.get('placeholder_id', f'visual_{page_num:02d}_{i:04d}')
+                    bbox = placeholder.get('bbox')
                     
-                    extracted_items.append({
-                        'placeholder_id': placeholder_id,
-                        'element_type': element_type,
-                        'page_number': page_num,
-                        'image_path': str(image_path),
-                        'bbox': element.get('bbox'),
-                        'context': element.get('context', '')
-                    })
+                    print(f"\n🖼️  Processing {placeholder_id}:")
+                    print(f"   Type: {element_type}")
+                    print(f"   Page: {page_num + 1}")
+                    if bbox:
+                        print(f"   Location: {bbox}")
                     
-                except Exception as e:
-                    print(f"   ❌ Failed to save image: {e}")
-            else:
-                print(f"   ⚠️  No image data found")
+                    # Try to extract the visual content
+                    image_path = None
+                    
+                    if element_type in ['formula', 'table', 'figure', 'chart', 'diagram', 'image']:
+                        # For any visual element, try to extract it as an image
+                        if bbox:
+                            # Convert bbox to fitz.Rect if it's a tuple/list
+                            if isinstance(bbox, (list, tuple)) and len(bbox) == 4:
+                                rect = fitz.Rect(bbox[0], bbox[1], bbox[2], bbox[3])
+                            else:
+                                # Fallback to full page if bbox is invalid
+                                rect = page.rect
+                            
+                            # Extract the region as an image
+                            # Increase resolution for better quality
+                            mat = fitz.Matrix(2.0, 2.0)  # 2x zoom for higher quality
+                            pix = page.get_pixmap(matrix=mat, clip=rect)
+                            
+                            # Save the extracted image
+                            image_path = self.output_dir / f"{placeholder_id}_{element_type}_page{page_num + 1}.png"
+                            pix.save(str(image_path))
+                            print(f"   ✅ Extracted and saved: {image_path.name}")
+                            
+                            extracted_items.append({
+                                'placeholder_id': placeholder_id,
+                                'element_type': element_type,
+                                'page_number': page_num + 1,
+                                'image_path': str(image_path),
+                                'bbox': bbox,
+                                'context': placeholder.get('context', '')
+                            })
+                        else:
+                            print(f"   ⚠️  No bounding box available for extraction")
+                    
+                    # Also try to extract embedded images if this is an image/figure
+                    if element_type in ['figure', 'image', 'chart', 'diagram'] and image_list:
+                        # Try to match and extract actual embedded images
+                        for img_index, img in enumerate(image_list):
+                            try:
+                                xref = img[0]
+                                # Get the image
+                                pix = fitz.Pixmap(doc, xref)
+                                
+                                # Convert CMYK to RGB if necessary
+                                if pix.n - pix.alpha > 3:
+                                    pix = fitz.Pixmap(fitz.csRGB, pix)
+                                
+                                # Save if it's substantial
+                                if pix.width > 50 and pix.height > 50:
+                                    img_path = self.output_dir / f"{placeholder_id}_embedded_{img_index}.png"
+                                    pix.save(str(img_path))
+                                    print(f"   ✅ Extracted embedded image: {img_path.name}")
+                                    
+                                    # Only add if we haven't already extracted this element
+                                    if not image_path:
+                                        extracted_items.append({
+                                            'placeholder_id': f"{placeholder_id}_embedded_{img_index}",
+                                            'element_type': element_type,
+                                            'page_number': page_num + 1,
+                                            'image_path': str(img_path),
+                                            'bbox': None,
+                                            'context': placeholder.get('context', '')
+                                        })
+                                
+                                pix = None  # Free memory
+                            except Exception as e:
+                                print(f"   ⚠️  Could not extract embedded image {img_index}: {e}")
+            
+            doc.close()
+            
+        except Exception as e:
+            print(f"❌ Error extracting images: {e}")
+            import traceback
+            traceback.print_exc()
         
         # Save extraction metadata
         metadata_file = self.output_dir / "extraction_metadata.json"
         with open(metadata_file, 'w') as f:
             json.dump({
                 'source_pdf': str(pdf_path),
-                'total_elements': len(visual_elements),
+                'total_placeholders': len(visual_placeholders) if 'visual_placeholders' in locals() else 0,
                 'extracted_items': extracted_items,
                 'extraction_time': time.strftime('%Y-%m-%d %H:%M:%S')
             }, f, indent=2)
         
         print(f"\n📊 EXTRACTION SUMMARY:")
-        print(f"   Total visual elements found: {len(visual_elements)}")
+        print(f"   Total visual elements found: {len(visual_placeholders) if 'visual_placeholders' in locals() else 0}")
         print(f"   Successfully extracted: {len(extracted_items)}")
         print(f"   Output directory: {self.output_dir}")
         
@@ -146,6 +219,7 @@ class ImageExtractionTest:
                     'formula': ElementType.FORMULA,
                     'table': ElementType.TABLE, 
                     'image': ElementType.IMAGE,
+                    'figure': ElementType.IMAGE,
                     'chart': ElementType.CHART,
                     'diagram': ElementType.DIAGRAM
                 }
@@ -164,7 +238,7 @@ class ImageExtractionTest:
                 )
                 
                 queued_jobs[job_id] = item
-                print(f"   ✅ Queued job: {job_id}")
+                print(f"   ✅ Queued job: {job_id[:8]}...")
                 
             except Exception as e:
                 print(f"   ❌ Failed to queue: {e}")
@@ -175,11 +249,14 @@ class ImageExtractionTest:
             vlm_queue.shutdown()
             return []
         
-        # Step 2: Wait for VLM processing to complete using the correct interface
+        # Step 2: Wait for VLM processing to complete
         print(f"\n⏳ WAITING FOR {len(queued_jobs)} VLM JOBS TO COMPLETE...")
         print("   This may take several minutes depending on GPU availability...")
         
         try:
+            # Give the batch processor time to create batches
+            time.sleep(1.0)
+            
             # Group jobs by document (since we're using individual image files as documents)
             jobs_by_document = {}
             for job_id, item in queued_jobs.items():
