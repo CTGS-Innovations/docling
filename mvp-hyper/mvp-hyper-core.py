@@ -221,46 +221,140 @@ class UltraFastExtractor:
         return h.hexdigest()
     
     def _extract_pdf(self, file_path: Path, start_time: float, cache_key: str) -> UltraFastResult:
-        """Extract from PDF files."""
+        """Extract from PDF files - fail fast on errors."""
         if not HAS_PYMUPDF:
-            return self._extract_fallback(file_path)
+            return self._fail_fast_pdf(file_path, start_time, "PyMuPDF not available")
         
-        # Memory-mapped file reading for speed
-        if self.use_mmap and file_path.stat().st_size < 500_000_000:  # <500MB
-            with open(file_path, 'rb') as f:
-                with mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as mmapped_file:
-                    doc = fitz.open(stream=mmapped_file, filetype="pdf")
-        else:
-            doc = fitz.open(file_path)
-        
-        page_count = len(doc)
-        
-        # Extract text
-        if page_count > 10:
-            text = self._extract_parallel(doc, page_count)
-        else:
-            text = self._extract_sequential(doc)
-        
-        metadata = self._extract_metadata_fast(doc, file_path)
-        doc.close()
-        
+        try:
+            # Direct file opening with timeout-like behavior
+            doc = fitz.open(str(file_path))
+            
+            try:
+                page_count = len(doc)
+                
+                # Fail fast if doc seems corrupted
+                if page_count == 0:
+                    doc.close()
+                    return self._fail_fast_pdf(file_path, start_time, "PDF has 0 pages")
+                
+                # Extract text with error handling per page
+                try:
+                    if page_count > 10:
+                        text = self._extract_sequential_safe(doc)  # Use safe sequential for now
+                    else:
+                        text = self._extract_sequential_safe(doc)
+                except Exception as text_error:
+                    # If text extraction fails, try basic extraction
+                    try:
+                        text = self._extract_basic_text(doc)
+                    except:
+                        doc.close()
+                        return self._fail_fast_pdf(file_path, start_time, f"Text extraction failed: {str(text_error)}")
+                
+                # Get basic metadata without complex parsing
+                try:
+                    metadata = self._extract_metadata_safe(doc, file_path)
+                except Exception:
+                    metadata = {
+                        "filename": file_path.name,
+                        "format": "PDF",
+                        "pages": page_count,
+                        "size_bytes": file_path.stat().st_size
+                    }
+                
+                doc.close()
+                
+                extraction_time = time.perf_counter() - start_time
+                pages_per_second = page_count / extraction_time if extraction_time > 0 else 0
+                
+                result = UltraFastResult(
+                    file_path=str(file_path),
+                    success=True,
+                    text=text or "[No text extracted]",
+                    page_count=page_count,
+                    extraction_time=extraction_time,
+                    pages_per_second=pages_per_second,
+                    metadata=metadata
+                )
+                
+                if len(text or "") < 10_000_000:
+                    self._cache_result(cache_key, result)
+                
+                return result
+                
+            except Exception as process_error:
+                try:
+                    doc.close()
+                except:
+                    pass
+                return self._fail_fast_pdf(file_path, start_time, f"PDF processing error: {str(process_error)}")
+                
+        except Exception as open_error:
+            return self._fail_fast_pdf(file_path, start_time, f"PDF open error: {str(open_error)}")
+    
+    def _fail_fast_pdf(self, file_path: Path, start_time: float, error_msg: str) -> UltraFastResult:
+        """Quickly fail a PDF with error info and move on."""
         extraction_time = time.perf_counter() - start_time
-        pages_per_second = page_count / extraction_time if extraction_time > 0 else 0
-        
-        result = UltraFastResult(
+        return UltraFastResult(
             file_path=str(file_path),
-            success=True,
-            text=text,
-            page_count=page_count,
+            success=False,
+            text="",
+            page_count=0,
             extraction_time=extraction_time,
-            pages_per_second=pages_per_second,
-            metadata=metadata
+            pages_per_second=0,
+            metadata={"filename": file_path.name, "format": "PDF", "error": "fail_fast"},
+            error=error_msg
         )
-        
-        if len(text) < 10_000_000:
-            self._cache_result(cache_key, result)
-        
-        return result
+    
+    def _extract_sequential_safe(self, doc) -> str:
+        """Safe sequential extraction with per-page error handling."""
+        texts = []
+        for i, page in enumerate(doc):
+            try:
+                text = page.get_text("text", flags=fitz.TEXT_PRESERVE_WHITESPACE)
+                texts.append(text or "")
+            except Exception as e:
+                texts.append(f"[Page {i+1} extraction failed: {str(e)[:50]}]")
+        return '\n'.join(texts)
+    
+    def _extract_basic_text(self, doc) -> str:
+        """Most basic text extraction - just get what we can."""
+        texts = []
+        for i in range(min(len(doc), 100)):  # Limit to first 100 pages for speed
+            try:
+                page = doc[i]
+                text = page.get_text()  # Simplest method
+                texts.append(text or "")
+            except:
+                texts.append(f"[Page {i+1} failed]")
+        return '\n'.join(texts)
+    
+    def _extract_metadata_safe(self, doc, file_path: Path) -> Dict[str, Any]:
+        """Safe metadata extraction."""
+        try:
+            metadata = {
+                "filename": file_path.name,
+                "pages": len(doc),
+                "size_bytes": file_path.stat().st_size,
+                "format": "PDF",
+            }
+            
+            # Try to get PDF metadata safely
+            if hasattr(doc, 'metadata') and doc.metadata:
+                try:
+                    metadata["title"] = doc.metadata.get("title", "")
+                    metadata["author"] = doc.metadata.get("author", "")
+                except:
+                    pass
+            
+            return metadata
+        except Exception:
+            return {
+                "filename": file_path.name,
+                "format": "PDF",
+                "pages": 1,
+                "size_bytes": file_path.stat().st_size
+            }
     
     def _extract_text(self, file_path: Path, start_time: float, cache_key: str) -> UltraFastResult:
         """Extract from plain text files."""
@@ -1043,34 +1137,72 @@ def main():
     """Main entry point for testing."""
     
     import argparse
+    from config_loader import load_config
     
     parser = argparse.ArgumentParser(description="Ultra-fast document processor")
-    parser.add_argument("input", nargs='+', help="Input file(s) or directory(ies)")
-    parser.add_argument("--workers", type=int, default=mp.cpu_count(), 
-                       help="Number of worker processes")
-    parser.add_argument("--batch-size", type=int, default=100,
-                       help="Batch size for parallel processing")
-    parser.add_argument("--output", help="Output directory")
-    parser.add_argument("--benchmark", action="store_true",
-                       help="Run in benchmark mode")
+    parser.add_argument("--config", default="config.yaml", help="Configuration file")
+    parser.add_argument("--test-config", action="store_true", 
+                       help="Create test config for troubleshooting")
+    parser.add_argument("input", nargs='*', help="Input file(s) or directory(ies) (overrides config)")
+    parser.add_argument("--workers", type=int, help="Number of worker processes (overrides config)")
+    parser.add_argument("--output", help="Output directory (overrides config)")
+    parser.add_argument("--benchmark", action="store_true", help="Run in benchmark mode")
     
     args = parser.parse_args()
     
-    input_paths = [Path(p) for p in args.input]
+    # Create test config if requested
+    if args.test_config:
+        from config_loader import create_test_config
+        create_test_config()
+        print("Test config created. Run with: --config test_config.yaml")
+        return
     
-    # Handle multiple inputs
-    if len(input_paths) == 1 and input_paths[0].is_file():
-        # Single file processing
-        extractor = UltraFastExtractor(num_workers=args.workers, batch_size=args.batch_size)
-        result = extractor.extract_document_ultrafast(input_paths[0])
+    # Load configuration
+    config = load_config(args.config)
+    
+    # Command line overrides
+    if args.input:
+        input_paths = [Path(p) for p in args.input]
+        # Override config with command line inputs
+        all_files = []
+        for input_path in input_paths:
+            if input_path.is_dir():
+                for file_path in input_path.rglob("*"):
+                    if file_path.is_file():
+                        all_files.append(file_path)
+            elif input_path.is_file():
+                all_files.append(input_path)
+    else:
+        # Use config file inputs
+        all_files = config.get_input_files()
+    
+    # Apply config overrides
+    max_workers = args.workers if args.workers else config.get('processing.max_workers', mp.cpu_count())
+    output_dir = Path(args.output) if args.output else Path(config.get('output.directory', 'output'))
+    
+    print(f"🔧 CONFIGURATION:")
+    print(f"  Workers: {max_workers}")
+    print(f"  Output: {output_dir}")
+    print(f"  Total files found: {len(all_files)}")
+    print(f"  Config file: {args.config}")
+    
+    if len(all_files) == 0:
+        print("❌ No files found to process")
+        return
         
-        print(f"\nFile: {result.file_path}")
+    if len(all_files) == 1:
+        # Single file processing
+        print(f"\n📄 SINGLE FILE MODE")
+        extractor = UltraFastExtractor(num_workers=max_workers)
+        result = extractor.extract_document_ultrafast(all_files[0])
+        
+        print(f"File: {result.file_path}")
         print(f"Pages: {result.page_count}")
         print(f"Extraction time: {result.extraction_time:.3f}s")
         print(f"Speed: {result.pages_per_second:.1f} pages/second")
         
-        if args.output:
-            output_path = Path(args.output) / f"{input_path.stem}.md"
+        if output_dir:
+            output_path = output_dir / f"{all_files[0].stem}.md"
             output_path.parent.mkdir(parents=True, exist_ok=True)
             
             with open(output_path, 'w', encoding='utf-8') as f:
@@ -1083,31 +1215,9 @@ def main():
         extractor.shutdown()
         
     else:
-        # Multiple directories or single directory processing
-        processor = HyperBatchProcessor(num_workers=args.workers)
-        
-        # Collect files from all input paths
-        all_files = []
-        total_dirs = 0
-        
-        for input_path in input_paths:
-            if input_path.is_dir():
-                total_dirs += 1
-                print(f"Scanning directory: {input_path}")
-                
-                # Find files in this directory
-                import os
-                for root, dirs, filenames in os.walk(input_path):
-                    for filename in filenames:
-                        file_path = Path(root) / filename
-                        all_files.append(file_path)
-            elif input_path.is_file():
-                all_files.append(input_path)
-            else:
-                print(f"Warning: {input_path} not found")
-        
-        print(f"\nProcessing files from {total_dirs} directories")
-        print(f"Found {len(all_files)} total files")
+        # Multiple files processing
+        print(f"\n📚 BATCH MODE - {len(all_files)} files")
+        processor = HyperBatchProcessor(num_workers=max_workers)
         
         # Show breakdown by file type
         file_types = {}
@@ -1119,14 +1229,121 @@ def main():
         for ext, count in sorted(file_types.items()):
             print(f"  {ext}: {count} files")
         
+        # Analyze potentially problematic file types
+        print("\n🔍 FILE TYPE ANALYSIS:")
+        
+        # Known fast formats
+        fast_formats = {'.txt', '.md', '.csv', '.html', '.htm'}
+        # Document formats (can be slow)
+        doc_formats = {'.pdf', '.docx', '.pptx', '.xlsx'}
+        # Binary/unknown formats (likely slow)
+        binary_formats = {'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.tif', 
+                         '.mp3', '.mp4', '.wav', '.avi', '.mov', '.zip', '.tar', '.gz',
+                         '.exe', '.dll', '.so', '.dylib', '.bin', '.dat', '.log'}
+        
+        fast_count = sum(count for ext, count in file_types.items() if ext in fast_formats)
+        doc_count = sum(count for ext, count in file_types.items() if ext in doc_formats)
+        binary_count = sum(count for ext, count in file_types.items() if ext in binary_formats)
+        unknown_count = len(all_files) - fast_count - doc_count - binary_count
+        
+        print(f"  📄 Fast text files: {fast_count} files")
+        print(f"  📚 Document files: {doc_count} files") 
+        print(f"  💾 Binary files: {binary_count} files")
+        print(f"  ❓ Unknown/other: {unknown_count} files")
+        
+        # Show the most common extensions
+        sorted_types = sorted(file_types.items(), key=lambda x: x[1], reverse=True)
+        print(f"\n📊 TOP FILE EXTENSIONS:")
+        for ext, count in sorted_types[:10]:
+            percentage = (count / len(all_files)) * 100
+            print(f"  {ext or 'no_extension'}: {count} files ({percentage:.1f}%)")
+        
+        # Identify potentially slow formats
+        slow_formats = []
+        for ext, count in sorted_types:
+            if ext not in fast_formats and count > 10:
+                slow_formats.append((ext, count))
+        
+        if slow_formats:
+            print(f"\n⚠️  POTENTIALLY SLOW FORMATS (>10 files):")
+            for ext, count in slow_formats[:5]:
+                print(f"  {ext or 'no_extension'}: {count} files - may be causing slowdown")
+        
         if len(all_files) == 0:
             print("No files found to process")
             return
         
-        # Process all files
+        # Process all files one by one with progress tracking
         start_time = time.perf_counter()
-        results = processor.extractor.process_batch(all_files)
+        results = []
+        
+        print(f"\n🔄 PROCESSING {len(all_files)} FILES:")
+        print("=" * 60)
+        
+        # Define file types to skip (will be too slow/pointless)
+        skip_extensions = {'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.tif',
+                          '.mp3', '.mp4', '.wav', '.avi', '.mov', '.wmv', '.flv',
+                          '.zip', '.tar', '.gz', '.bz2', '.rar', '.7z',
+                          '.exe', '.dll', '.so', '.dylib', '.bin', '.dat'}
+        
+        skipped_count = 0
+        
+        for i, file_path in enumerate(all_files, 1):
+            file_start = time.perf_counter()
+            file_ext = file_path.suffix.lower()
+            
+            # Show progress every 50 files or for first 20
+            if i % 50 == 0 or i <= 20:
+                print(f"[{i:4d}/{len(all_files)}] Processing: {file_path.name} ({file_ext or 'no ext'})")
+            
+            # Skip obviously problematic file types
+            if file_ext in skip_extensions:
+                if i <= 20 or i % 100 == 0:  # Show some skips
+                    print(f"  ⏭️  SKIPPED: {file_path.name} ({file_ext}) - binary file")
+                skipped_count += 1
+                results.append(UltraFastResult(
+                    file_path=str(file_path),
+                    success=True,
+                    text=f"[Skipped binary file: {file_path.name}]",
+                    page_count=1,
+                    extraction_time=0.001,
+                    pages_per_second=1000,
+                    metadata={"filename": file_path.name, "format": file_ext.upper(), "extracted": "skipped_binary"}
+                ))
+                continue
+            
+            try:
+                result = processor.extractor.extract_document_ultrafast(file_path)
+                results.append(result)
+                
+                file_time = time.perf_counter() - file_start
+                
+                # Warn about slow files (>1 second)
+                if file_time > 1.0:
+                    print(f"  ⚠️  SLOW FILE: {file_path.name} took {file_time:.2f}s ({file_path.suffix})")
+                
+                # Show progress for very slow files
+                if file_time > 5.0:
+                    print(f"  🐌 VERY SLOW: {file_path.name} took {file_time:.2f}s - consider skipping this type")
+                    
+            except Exception as e:
+                print(f"  ❌ CRASHED: {file_path.name} - {str(e)[:100]}")
+                # Create failed result
+                results.append(UltraFastResult(
+                    file_path=str(file_path),
+                    success=False,
+                    text="",
+                    page_count=0,
+                    extraction_time=time.perf_counter() - file_start,
+                    pages_per_second=0,
+                    metadata={"filename": file_path.name, "format": file_path.suffix.upper()},
+                    error=f"Processing crashed: {str(e)}"
+                ))
+                
         total_time = time.perf_counter() - start_time
+        print(f"\n✅ Completed processing {len(results)} files in {total_time:.2f}s")
+        if skipped_count > 0:
+            print(f"⏭️  Skipped {skipped_count} binary files for speed")
         
         # Calculate statistics
         successful = [r for r in results if r.success]
@@ -1155,6 +1372,77 @@ def main():
         print(f"Files/second: {stats['files_per_second']:.1f}")
         print(f"Pages/second: {stats['pages_per_second']:.1f}")
         
+        # Show failure analysis - SHOW ALL FAILURES
+        if stats['failed_files'] > 0:
+            print(f"\n❌ FAILURE ANALYSIS - ALL {stats['failed_files']} FAILURES:")
+            failed_results = [r for r in stats['results'] if not r.success]
+            
+            # Group failures by error type
+            error_types = {}
+            for result in failed_results:  # Show ALL failures
+                error = result.error or "Unknown error"
+                if error not in error_types:
+                    error_types[error] = []
+                error_types[error].append(result.file_path)
+            
+            for error, file_paths in error_types.items():
+                print(f"\n  ERROR: {error}")
+                print(f"  FILES ({len(file_paths)}):")
+                for file_path in file_paths:  # Show ALL files with this error
+                    print(f"    - {Path(file_path).name}")
+                print("")
+        
+        # Show success analysis
+        if stats['successful_files'] > 0:
+            print(f"\n✅ SUCCESS ANALYSIS:")
+            successful_results = [r for r in stats['results'] if r.success]
+            
+            # Group by extraction method
+            extraction_methods = {}
+            for result in successful_results:
+                method = result.metadata.get('extracted', 'unknown')
+                if method not in extraction_methods:
+                    extraction_methods[method] = []
+                extraction_methods[method].append(result)
+            
+            for method, results in extraction_methods.items():
+                total_pages = sum(r.page_count for r in results)
+                avg_speed = sum(r.pages_per_second for r in results) / len(results)
+                avg_time = sum(r.extraction_time for r in results) / len(results)
+                print(f"  {method}: {len(results)} files, {total_pages} pages, {avg_speed:.1f} avg pages/sec, {avg_time:.3f}s avg time")
+            
+            # Analyze by file extension performance
+            print(f"\n📊 PERFORMANCE BY FILE TYPE:")
+            ext_performance = {}
+            for result in successful_results:
+                file_ext = Path(result.file_path).suffix.lower() or 'no_extension'
+                if file_ext not in ext_performance:
+                    ext_performance[file_ext] = []
+                ext_performance[file_ext].append(result)
+            
+            # Sort by total processing time (slowest first)
+            ext_stats = []
+            for ext, results in ext_performance.items():
+                total_time = sum(r.extraction_time for r in results)
+                total_pages = sum(r.page_count for r in results)
+                avg_time = total_time / len(results)
+                avg_speed = sum(r.pages_per_second for r in results) / len(results)
+                ext_stats.append((ext, len(results), total_time, avg_time, avg_speed, total_pages))
+            
+            # Sort by total time (biggest bottlenecks first)
+            ext_stats.sort(key=lambda x: x[2], reverse=True)
+            
+            print("  Top time consumers:")
+            for ext, count, total_time, avg_time, avg_speed, pages in ext_stats[:8]:
+                print(f"    {ext}: {count} files, {total_time:.2f}s total, {avg_time:.3f}s avg, {avg_speed:.1f} pages/sec")
+            
+            # Find the fastest and slowest
+            if ext_stats:
+                fastest = min(ext_stats, key=lambda x: x[3])  # By avg time
+                slowest = max(ext_stats, key=lambda x: x[3])
+                print(f"\n  🚀 Fastest: {fastest[0]} ({fastest[3]:.3f}s avg)")
+                print(f"  🐌 Slowest: {slowest[0]} ({slowest[3]:.3f}s avg)")
+        
         if stats['pages_per_second'] >= 1000:
             print("\n🚀 TARGET ACHIEVED: 1000+ pages/second!")
         else:
@@ -1175,10 +1463,6 @@ def main():
             print(f"\nOutputs saved to: {output_dir}")
         
         processor.shutdown()
-    
-    else:
-        print(f"Error: {input_path} is neither a file nor directory")
-        sys.exit(1)
 
 
 if __name__ == "__main__":

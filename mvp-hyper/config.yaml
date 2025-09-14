@@ -1,0 +1,86 @@
+# MVP Hyper-Core Configuration
+# ===========================
+
+# Input sources - can be files or directories
+inputs:
+  # Individual files for testing
+  files: []
+  
+  # Directories to scan recursively
+  directories:
+    - "~/projects/docling/cli/data"
+    - "~/projects/docling/cli/data_complex" 
+    - "~/projects/docling/cli/data_osha"
+
+# File processing settings
+processing:
+  # Maximum workers for parallel processing
+  max_workers: 8
+  
+  # Skip these file extensions completely
+  skip_extensions:
+    - ".jpg"
+    - ".jpeg" 
+    - ".png"
+    - ".gif"
+    - ".bmp"
+    - ".tiff"
+    - ".tif"
+    - ".mp3"
+    - ".mp4" 
+    - ".wav"
+    - ".avi"
+    - ".mov"
+    - ".wmv"
+    - ".flv"
+    - ".zip"
+    - ".tar"
+    - ".gz"
+    - ".bz2"
+    - ".rar"
+    - ".7z"
+    - ".exe"
+    - ".dll"
+    - ".so"
+    - ".dylib"
+    - ".bin"
+    - ".dat"
+  
+  # Skip files larger than this (in MB)
+  max_file_size_mb: 100
+  
+  # Timeout per file (in seconds)
+  timeout_per_file: 10
+  
+  # Skip files that take longer than this (in seconds)
+  slow_file_threshold: 5.0
+
+# PDF-specific settings
+pdf:
+  # Skip PDFs with these patterns in filename (for troubleshooting)
+  skip_patterns:
+    - "training-requirements"  # These seem to be very slow
+    - "shipyard-industry"      # Another slow one
+  
+  # Try different PDF loading strategies
+  fallback_strategies:
+    - "direct_file_open"
+    - "pdftotext_command"
+    - "basic_text_only"
+    - "skip_if_slow"
+
+# Output settings  
+output:
+  directory: "output"
+  # Save detailed logs for troubleshooting
+  save_performance_log: true
+  save_error_log: true
+  
+# Debugging
+debug:
+  # Show progress every N files
+  progress_interval: 50
+  # Show detailed timing for files slower than this
+  timing_threshold: 1.0
+  # Stop processing after N files (for testing, 0 = process all)
+  max_files_to_process: 0

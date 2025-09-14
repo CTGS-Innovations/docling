@@ -1,0 +1,21 @@
+debug:
+  max_files_to_process: 5
+  progress_interval: 1
+  timing_threshold: 0.5
+inputs:
+  directories: []
+  files:
+  - ~/projects/docling/cli/data_osha/training-requirements-by-standard.pdf
+  - ~/projects/docling/cli/data_osha/2254-training-requirements-in-osha-standards.pdf
+  - ~/projects/docling/cli/data_osha/2268-shipyard-industry-standards.pdf
+output:
+  directory: test_output
+pdf:
+  fallback_strategies:
+  - direct_file_open
+  - pdftotext_command
+  skip_patterns: []
+processing:
+  max_workers: 1
+  slow_file_threshold: 2.0
+  timeout_per_file: 30
