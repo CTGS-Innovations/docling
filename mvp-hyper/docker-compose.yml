@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  mvp-hyper:
+    build: .
+    container_name: mvp-hyper-test
+    
+    # Resource constraints: 1 CPU core, 1GB RAM
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'      # 1 CPU core
+          memory: 1G       # 1 GB RAM
+        reservations:
+          cpus: '1.0'
+          memory: 512M     # Reserve 512MB
+    
+    # Mount data directories and output
+    volumes:
+      - ~/projects/docling/cli/data:/app/data:ro
+      - ~/projects/docling/cli/data_complex:/app/data_complex:ro  
+      - ~/projects/docling/cli/data_osha:/app/data_osha:ro
+      - ./output:/app/output
+      - ./config.yaml:/app/config.yaml
+    
+    # Environment variables for single-core performance
+    environment:
+      - PYTHONUNBUFFERED=1
+      - OMP_NUM_THREADS=1
+      - MKL_NUM_THREADS=1
+      - NUMBA_NUM_THREADS=1
+    
+    # Command to run
+    command: ["python", "mvp-hyper-core.py"]

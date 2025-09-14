@@ -1,0 +1,63 @@
+# Docker deployment configuration
+# 1 CPU core, 1GB RAM constraints
+
+inputs:
+  files: []
+  directories:
+    - "/app/data"
+    - "/app/data_complex" 
+    - "/app/data_osha"
+
+processing:
+  # Single core processing
+  max_workers: 1
+  
+  # Conservative memory settings
+  max_file_size_mb: 25          # Smaller files only
+  timeout_per_file: 10
+  slow_file_threshold: 3.0
+  
+  skip_extensions:
+    - ".jpg"
+    - ".jpeg" 
+    - ".png"
+    - ".gif"
+    - ".bmp"
+    - ".tiff"
+    - ".tif"
+    - ".mp3"
+    - ".mp4" 
+    - ".wav"
+    - ".avi"
+    - ".mov"
+    - ".wmv"
+    - ".flv"
+    - ".zip"
+    - ".tar"
+    - ".gz"
+    - ".bz2"
+    - ".rar"
+    - ".7z"
+    - ".exe"
+    - ".dll"
+    - ".so"
+    - ".dylib"
+    - ".bin"
+    - ".dat"
+
+pdf:
+  # Aggressive limits for 1GB memory constraint
+  max_pages_to_extract: 15      # Even fewer pages
+  skip_if_pages_over: 75        # Skip large PDFs sooner
+  
+  skip_patterns: []
+
+output:
+  directory: "/app/output"
+  save_performance_log: true
+  save_error_log: true
+  
+debug:
+  progress_interval: 25         # More frequent progress updates
+  timing_threshold: 0.5
+  max_files_to_process: 0       # Process all files

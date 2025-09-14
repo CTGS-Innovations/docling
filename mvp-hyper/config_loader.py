@@ -92,7 +92,8 @@ class Config:
         all_files = []
         
         # Add individual files
-        for file_path in self.config['inputs']['files']:
+        files_list = self.config.get('inputs', {}).get('files', [])
+        for file_path in files_list:
             path = Path(file_path)
             if path.is_file():
                 all_files.append(path)
@@ -100,7 +101,8 @@ class Config:
                 print(f"Warning: File not found: {file_path}")
         
         # Add files from directories
-        for dir_path in self.config['inputs']['directories']:
+        directories_list = self.config.get('inputs', {}).get('directories', [])
+        for dir_path in directories_list:
             path = Path(dir_path)
             if path.is_dir():
                 print(f"Scanning directory: {path}")
