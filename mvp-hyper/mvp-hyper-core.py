@@ -1167,6 +1167,9 @@ def main():
     parser.add_argument("input", nargs='*', help="Input file(s) or directory(ies) (overrides config)")
     parser.add_argument("--workers", type=int, help="Number of worker processes (overrides config)")
     parser.add_argument("--output", help="Output directory (overrides config)")
+    parser.add_argument("--enable-tagging", action="store_true", 
+                       help="Enable document tagging with metadata (slower)")
+    parser.add_argument("--tagged-output", help="Separate output directory for tagged files")
     parser.add_argument("--benchmark", action="store_true", help="Run in benchmark mode")
     
     args = parser.parse_args()
@@ -1488,6 +1491,32 @@ def main():
                     saved_count += 1
             
             print(f"✅ Saved {saved_count} markdown files to: {output_dir}")
+            
+            # Optional tagging step (sidecar process)
+            if args.enable_tagging:
+                print(f"\n🏷️  TAGGING DOCUMENTS...")
+                tagging_start = time.time()
+                
+                # Import tagger (handle hyphenated filename)
+                import importlib.util
+                spec = importlib.util.spec_from_file_location("mvp_hyper_tagger", 
+                                                             Path(__file__).parent / "mvp-hyper-tagger.py")
+                mvp_hyper_tagger = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(mvp_hyper_tagger)
+                tag_output_directory = mvp_hyper_tagger.tag_output_directory
+                
+                # Determine tagging output directory
+                tagged_dir = Path(args.tagged_output) if args.tagged_output else output_dir
+                
+                # Tag all saved markdown files
+                tagged_count = tag_output_directory(output_dir, tagged_dir)
+                
+                tagging_time = time.time() - tagging_start
+                print(f"✅ Tagged {tagged_count} files in {tagging_time:.2f}s")
+                print(f"⚡ Tagging overhead: {tagging_time/saved_count*1000:.1f}ms per file")
+                
+                if args.tagged_output:
+                    print(f"📁 Tagged files saved to: {tagged_dir}")
         else:
             print("\n⚠️  No output directory configured - files not saved")
         

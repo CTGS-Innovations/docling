@@ -118,10 +118,10 @@ class Config:
         """Filter files based on config settings."""
         
         filtered = []
-        skip_extensions = set(self.config['processing']['skip_extensions'])
-        max_size = self.config['processing']['max_file_size_mb'] * 1024 * 1024
-        skip_patterns = self.config['pdf']['skip_patterns']
-        max_files = self.config['debug']['max_files_to_process']
+        skip_extensions = set(self.config.get('processing', {}).get('skip_extensions', []))
+        max_size = self.config.get('processing', {}).get('max_file_size_mb', 100) * 1024 * 1024
+        skip_patterns = self.config.get('pdf', {}).get('skip_patterns', [])
+        max_files = self.config.get('debug', {}).get('max_files_to_process', 0)
         
         for file_path in files:
             # Skip by extension
