@@ -51,23 +51,23 @@ topics: system architecture, implementation, performance, testing
 ```
 INPUT DOCUMENT
       ↓
-  MARKDOWN CONVERSION (mvp-hyper-core.py)
+  MARKDOWN CONVERSION (core/mvp-hyper-core.py)
   • Convert to markdown format
   • Target: 700+ pages/sec
       ↓
-  ENHANCED CLASSIFICATION (mvp-hyper-classification-enhanced.py) 
+  ENHANCED CLASSIFICATION (core/mvp-hyper-classification-enhanced.py) 
   • Document types & domains
   • Universal entity extraction (spaCy NLP)
   • Structural pattern identification 
   • Authority/citation detection
   • Target: 1200-1500 pages/sec
       ↓
-  ENRICHMENT (mvp-hyper-tagger.py - enhanced)
+  ENRICHMENT (core/mvp-hyper-tagger.py - enhanced)
   • Domain-specific deep extraction
   • Targeted processing using classification roadmap
   • Target: 2000+ pages/sec (boosted by pre-identification)
       ↓
-  SEMANTIC FACT EXTRACTION (mvp-hyper-semantic.py)
+  SEMANTIC FACT EXTRACTION (core/mvp-hyper-semantic.py)
   • Structured fact extraction
   • Relationship building
   • JSON output generation
@@ -183,32 +183,32 @@ If enhanced classification drops below 1000 pages/sec:
 #### New Files to Create
 ```
 mvp-hyper/
-├── FutureState.md                           # This architecture document
-├── mvp-hyper-classification-enhanced.py     # New enhanced classifier
-└── test-enhanced-classification.py          # Performance testing script
+├── docs/FutureState.md                           # This architecture document
+├── core/mvp-hyper-classification-enhanced.py     # New enhanced classifier
+└── tests/test-enhanced-classification.py          # Performance testing script
 ```
 
 #### Files to Modify (Minimally)
 ```
 mvp-hyper/
-├── mvp-hyper-pipeline-clean.py             # Update step_classification() method
-└── mvp-hyper-pipeline-clean-config.yaml    # Add enhanced classification config
+├── core/mvp-hyper-pipeline-clean.py             # Update step_classification() method
+└── core/.config/mvp-hyper-pipeline-clean-config.yaml    # Add enhanced classification config
 ```
 
 #### Files to Keep Unchanged (Backwards Compatibility)
 ```
 mvp-hyper/
-├── mvp-hyper-core.py                       # Markdown conversion (no changes)
-├── mvp-hyper-tagger.py                     # Existing tagger (fallback)
-├── mvp-hyper-semantic.py                   # Semantic extraction (enhanced by classification)
-└── config.yaml                             # Existing config (preserved)
+├── core/mvp-hyper-core.py                       # Markdown conversion (no changes)
+├── core/mvp-hyper-tagger.py                     # Existing tagger (fallback)
+├── core/mvp-hyper-semantic.py                   # Semantic extraction (enhanced by classification)
+└── core/.config/config.yaml                     # Existing config (preserved)
 ```
 
 ### Integration Strategy
 
 #### Phase 1: Enhanced Classifier Creation
 ```python
-# mvp-hyper-classification-enhanced.py
+# core/mvp-hyper-classification-enhanced.py
 class EnhancedMVPClassifier:
     def __init__(self, enable_spacy=True, enable_structural=True):
         # Initialize spaCy NLP (NER-only)
@@ -237,7 +237,7 @@ class EnhancedMVPClassifier:
 
 #### Phase 2: Pipeline Integration
 ```python
-# mvp-hyper-pipeline-clean.py (step_classification method update)
+# core/mvp-hyper-pipeline-clean.py (step_classification method update)
 def step_classification(self, input_path: str, output_path: str) -> bool:
     """Step 2: Enhanced classification with universal entity extraction."""
     
@@ -254,7 +254,7 @@ def step_classification(self, input_path: str, output_path: str) -> bool:
 
 #### Phase 3: Configuration Enhancement
 ```yaml
-# mvp-hyper-pipeline-clean-config.yaml
+# core/.config/mvp-hyper-pipeline-clean-config.yaml
 pipeline:
   classification:
     enhanced_mode: true
