@@ -77,7 +77,7 @@ pdf:
 
 # Output settings  
 output:
-  directory: "output"
+  directory: "../output/core"
   # Save detailed logs for troubleshooting
   save_performance_log: true
   save_error_log: true

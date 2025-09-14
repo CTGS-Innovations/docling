@@ -79,7 +79,7 @@ pdf:
 
 pipeline:
   # Global pipeline settings
-  output_directory: "pipeline-output"
+  output_directory: "../output/pipeline"
   enable_caching: true
   performance_logging: true
   
@@ -92,7 +92,7 @@ pipeline:
 
 # Output configuration
 output:
-  directory: "pipeline-output"  # Default output directory
+  directory: "../output/pipeline"  # Default output directory
   
   # File formats to generate
   formats:
