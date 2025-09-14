@@ -1,0 +1,20 @@
+{
+  "document_path": "DISTRIBUTED_BENCHMARK.md",
+  "facts": [],
+  "entities": [],
+  "relationships": [],
+  "extraction_stats": {
+    "extraction_methods_used": [
+      "regex"
+    ],
+    "regex_facts": 0,
+    "regex_entities": 0,
+    "relationships": 0,
+    "final_entities": 0,
+    "final_facts": 0
+  },
+  "processing_time": 0.0003848075866699219,
+  "timestamp": "2025-09-14T06:01:51.663664+00:00",
+  "file_hash": "f806a34c232dac94",
+  "extraction_version": "1.0.0"
+}
