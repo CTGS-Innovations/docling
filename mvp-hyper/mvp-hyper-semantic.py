@@ -53,6 +53,25 @@ try:
 except ImportError:
     HAS_RAPIDFUZZ = False
 
+# Try to import domain configurations
+try:
+    from mvp_semantic_domains import (
+        DOMAIN_REGISTRY, 
+        classify_document_domain,
+        extract_domain_facts,
+        extract_domain_entities,
+        extract_domain_values,
+        get_domain_profile,
+        enhance_facts_with_domain,
+        facts_to_json,
+        CoreFact,
+        DomainFact
+    )
+    HAS_DOMAIN_CONFIGS = True
+except ImportError:
+    HAS_DOMAIN_CONFIGS = False
+    print("⚠️  Domain configurations not found. Running core extraction only.")
+
 
 @dataclass
 class ExtractedFact:
@@ -93,6 +112,19 @@ class ExistingTaggerMetadata:
     confidence: float = 0.0                 # Overall classification confidence
     word_count: int = 0                     # Document word count
     language: str = "en"                    # Document language
+    # Enhanced extraction fields from updated tagger
+    measurements: Optional[Dict[str, List[str]]] = None
+    time_references: Optional[Dict[str, List[str]]] = None
+    regulatory_framework: Optional[Dict[str, List[str]]] = None
+    logical_structures: Optional[Dict[str, List[str]]] = None
+    priority_fact_spans: Optional[List[Dict]] = None
+    stakeholder_roles: Optional[List[str]] = None
+    # Universal Business Intelligence fields for opportunity discovery
+    universal_entities: Optional[Dict[str, List[str]]] = None
+    pain_points: Optional[List[str]] = None
+    market_opportunities: Optional[List[str]] = None
+    innovation_signals: Optional[List[str]] = None
+    competitive_intelligence: Optional[List[str]] = None
 
 
 @dataclass
@@ -107,6 +139,11 @@ class SemanticMetadata:
     timestamp: str
     file_hash: str
     existing_tagger_metadata: Optional[ExistingTaggerMetadata] = None  # Integration with existing tagger
+    # Enhanced two-tier extraction fields
+    core_facts: Optional[List[Dict]] = None      # Tier 1: Universal facts
+    domain_facts: Optional[List[Dict]] = None    # Tier 2: Domain-specific facts
+    domain_classification: Optional[Dict] = None # Domain detection results
+    domain_entities: Optional[Dict[str, List]] = None  # Domain-specific entities
 
 
 class EntityType(Enum):
@@ -138,18 +175,23 @@ class FactType(Enum):
 
 
 class MVPHyperSemanticExtractor:
-    """Ultra-fast local knowledge extraction engine with quality filtering."""
+    """Ultra-fast local knowledge extraction engine with two-tier domain-aware extraction."""
     
     def __init__(self, 
                  enable_spacy: bool = True,
                  spacy_model: str = "en_core_web_sm",
                  cache_enabled: bool = True,
-                 min_fact_confidence: float = 0.6):
+                 min_fact_confidence: float = 0.6,
+                 enable_domain_extraction: bool = True):
         
         self.enable_spacy = enable_spacy and HAS_SPACY
         self.cache_enabled = cache_enabled
         self.extraction_cache = {}
         self.min_fact_confidence = min_fact_confidence
+        self.enable_domain_extraction = enable_domain_extraction and HAS_DOMAIN_CONFIGS
+        
+        if enable_domain_extraction and not HAS_DOMAIN_CONFIGS:
+            print("⚠️  Domain extraction requested but configurations not available")
         
         # Initialize spaCy if available
         self.nlp = None
@@ -318,7 +360,45 @@ class MVPHyperSemanticExtractor:
         relationships = []
         stats = {'extraction_methods_used': []}
         
-        # 1. Fast regex extraction (2,000-5,000 pages/sec) - now guided by existing metadata
+        # Two-tier extraction containers
+        core_facts = []
+        domain_facts = []
+        domain_classification = {'domain': 'unknown', 'confidence': 0.0}
+        domain_entities = {}
+        
+        # TIER 1: Core Foundational Extraction (always runs)
+        # Extract universal facts: who, what, when, how much
+        core_facts = self._extract_core_facts(content_for_extraction, existing_metadata)
+        stats['core_facts'] = len(core_facts)
+        
+        # TIER 2: Domain-Aware Extraction (if enabled)
+        if self.enable_domain_extraction:
+            # Classify document domain using existing metadata + content
+            existing_tags = self._convert_tagger_metadata_to_dict(existing_metadata)
+            domain_name, domain_confidence = classify_document_domain(content_for_extraction, existing_tags)
+            
+            domain_classification = {
+                'domain': domain_name,
+                'confidence': domain_confidence,
+                'method': 'hybrid' if existing_tags else 'content_based'
+            }
+            
+            # Extract domain-specific facts if confidence is high enough
+            if domain_confidence > 0.6:
+                domain_profile = get_domain_profile(domain_name)
+                if domain_profile:
+                    # Extract domain facts
+                    extracted_domain_facts = extract_domain_facts(content_for_extraction, domain_profile)
+                    domain_facts = facts_to_json(extracted_domain_facts)
+                    
+                    # Extract domain entities
+                    domain_entities = extract_domain_entities(content_for_extraction, domain_profile)
+                    
+                    stats['domain_facts'] = len(domain_facts)
+                    stats['domain_entities'] = sum(len(ents) for ents in domain_entities.values())
+                    stats['domain_used'] = domain_name
+        
+        # Legacy extraction (for backward compatibility)
         regex_facts, regex_entities = self._extract_with_regex(content_for_extraction, existing_metadata)
         facts.extend(regex_facts)
         entities.extend(regex_entities)
@@ -359,7 +439,7 @@ class MVPHyperSemanticExtractor:
         
         processing_time = time.time() - start_time
         
-        # Create metadata object
+        # Create metadata object with two-tier results
         metadata = SemanticMetadata(
             document_path=str(file_path),
             facts=facts,
@@ -369,7 +449,12 @@ class MVPHyperSemanticExtractor:
             processing_time=processing_time,
             timestamp=datetime.now(timezone.utc).isoformat(),
             file_hash=cache_key[:16],
-            existing_tagger_metadata=existing_metadata
+            existing_tagger_metadata=existing_metadata,
+            # Two-tier extraction results
+            core_facts=core_facts,
+            domain_facts=domain_facts,
+            domain_classification=domain_classification,
+            domain_entities=domain_entities
         )
         
         # Cache result
@@ -582,6 +667,62 @@ class MVPHyperSemanticExtractor:
                 
                 elif key == 'language':
                     metadata.language = value
+                
+                # Enhanced extraction fields - parse complex nested structures
+                elif key == 'measurements':
+                    metadata.measurements = self._parse_nested_field(line, front_matter_lines)
+                
+                elif key == 'time_references':
+                    metadata.time_references = self._parse_nested_field(line, front_matter_lines)
+                
+                elif key == 'regulatory_framework':
+                    metadata.regulatory_framework = self._parse_nested_field(line, front_matter_lines)
+                
+                elif key == 'logical_structures':
+                    metadata.logical_structures = self._parse_nested_field(line, front_matter_lines)
+                
+                elif key == 'stakeholder_roles':
+                    # Parse: [employer, employee, worker, contractor]
+                    if value.startswith('[') and value.endswith(']'):
+                        value = value[1:-1]
+                        metadata.stakeholder_roles = [item.strip() for item in value.split(',')]
+                
+                elif key == 'priority_fact_spans':
+                    # Extract count from "5 high-value spans identified"
+                    if 'spans identified' in value:
+                        try:
+                            count = int(value.split()[0])
+                            metadata.priority_fact_spans = [{'count': count}]  # Simplified representation
+                        except (ValueError, IndexError):
+                            pass
+                
+                # Universal Business Intelligence field parsing
+                elif key == 'universal_entities':
+                    metadata.universal_entities = self._parse_nested_field(line, front_matter_lines)
+                
+                elif key == 'pain_points':
+                    # Parse: [struggle with manual processes, difficulty in scaling, bottleneck in approval workflow]
+                    if value.startswith('[') and value.endswith(']'):
+                        value = value[1:-1]
+                        metadata.pain_points = [item.strip() for item in value.split(',')]
+                
+                elif key == 'market_opportunities':
+                    # Parse: [market for automation tools, demand for scalable solutions, gap in workflow optimization]
+                    if value.startswith('[') and value.endswith(']'):
+                        value = value[1:-1]
+                        metadata.market_opportunities = [item.strip() for item in value.split(',')]
+                
+                elif key == 'innovation_signals':
+                    # Parse: [new approach to AI automation, breakthrough in workflow optimization, novel solution for process management]
+                    if value.startswith('[') and value.endswith(']'):
+                        value = value[1:-1]
+                        metadata.innovation_signals = [item.strip() for item in value.split(',')]
+                
+                elif key == 'competitive_intelligence':
+                    # Parse: [competitor analysis, market leader insights, Partnership: Microsoft Corp]
+                    if value.startswith('[') and value.endswith(']'):
+                        value = value[1:-1]
+                        metadata.competitive_intelligence = [item.strip() for item in value.split(',')]
             
             return metadata, remaining_content
             
@@ -589,6 +730,379 @@ class MVPHyperSemanticExtractor:
             # If parsing fails, return original content
             print(f"Warning: Failed to parse front matter: {e}")
             return None, content
+    
+    def _parse_nested_field(self, current_line: str, all_lines: List[str]) -> Optional[Dict[str, List[str]]]:
+        """Parse nested YAML-like structure from front matter."""
+        try:
+            # Find the current line index
+            current_idx = -1
+            for i, line in enumerate(all_lines):
+                if line == current_line:
+                    current_idx = i
+                    break
+            
+            if current_idx == -1:
+                return None
+            
+            # Parse the nested structure
+            result = {}
+            i = current_idx + 1
+            
+            while i < len(all_lines):
+                line = all_lines[i].strip()
+                
+                # Stop if we hit the next top-level field or end
+                if line and not line.startswith(' ') and ':' in line and not line.startswith('  '):
+                    break
+                
+                # Parse nested field: "  weights: [250 weight, 114 weight]"
+                if line.startswith('  ') and ':' in line:
+                    nested_key, nested_value = line.split(':', 1)
+                    nested_key = nested_key.strip()
+                    nested_value = nested_value.strip()
+                    
+                    # Parse list format: [item1, item2, item3]
+                    if nested_value.startswith('[') and nested_value.endswith(']'):
+                        nested_value = nested_value[1:-1]  # Remove brackets
+                        items = [item.strip() for item in nested_value.split(',') if item.strip()]
+                        result[nested_key] = items
+                
+                i += 1
+            
+            return result if result else None
+            
+        except Exception as e:
+            print(f"Warning: Failed to parse nested field: {e}")
+            return None
+    
+    def _extract_core_facts(self, content: str, tagger_metadata: Optional[ExistingTaggerMetadata] = None) -> List[Dict[str, Any]]:
+        """Extract core foundational facts - Tier 1 (universal facts: who, what, when, how much)."""
+        
+        core_facts = []
+        
+        # Use enhanced tagger data to focus extraction if available
+        priority_regions = []
+        if tagger_metadata and tagger_metadata.priority_fact_spans:
+            # In a real implementation, we'd use the actual span positions
+            # For now, we'll use the knowledge that priority spans exist
+            priority_regions = tagger_metadata.priority_fact_spans
+        
+        
+        # Core Pattern 1: Extract WHO (proper names - organizations, people, places)
+        # Use pre-classified entities from tagger when available for higher accuracy
+        if tagger_metadata and tagger_metadata.universal_entities:
+            # Use pre-classified entities as authoritative source
+            entities = tagger_metadata.universal_entities
+            
+            # Process persons
+            for person in entities.get('persons', []):
+                core_facts.append({
+                    'type': 'entity_identification',
+                    'subject': person,
+                    'predicate': 'is_entity',
+                    'entity_type': 'PERSON',
+                    'confidence': 0.95,  # High confidence - pre-classified
+                    'source': 'pre_tagged'
+                })
+            
+            # Process organizations
+            for org in entities.get('organizations', []):
+                core_facts.append({
+                    'type': 'entity_identification',
+                    'subject': org,
+                    'predicate': 'is_entity',
+                    'entity_type': 'ORGANIZATION',
+                    'confidence': 0.95,
+                    'source': 'pre_tagged'
+                })
+            
+            # Process locations
+            for location in entities.get('locations', []):
+                core_facts.append({
+                    'type': 'entity_identification',
+                    'subject': location,
+                    'predicate': 'is_entity',
+                    'entity_type': 'LOCATION',
+                    'confidence': 0.95,
+                    'source': 'pre_tagged'
+                })
+            
+            # Process contact information
+            for email in entities.get('emails', []):
+                core_facts.append({
+                    'type': 'contact_info',
+                    'subject': email,
+                    'predicate': 'is_email',
+                    'entity_type': 'EMAIL',
+                    'confidence': 0.98,
+                    'source': 'pre_tagged'
+                })
+            
+            for phone in entities.get('phone_numbers', []):
+                core_facts.append({
+                    'type': 'contact_info',
+                    'subject': phone,
+                    'predicate': 'is_phone',
+                    'entity_type': 'PHONE',
+                    'confidence': 0.98,
+                    'source': 'pre_tagged'
+                })
+                
+        else:
+            # Fallback to pattern matching if no pre-classified entities available
+            org_pattern = re.compile(r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3})\b')
+            for match in org_pattern.finditer(content):
+                name = match.group(1)
+                if not any(word in name.lower() for word in ['The', 'This', 'That', 'These', 'Those', 'And', 'But', 'For']):
+                    core_facts.append({
+                        'type': 'entity_identification',
+                        'subject': name,
+                        'predicate': 'is_entity',
+                        'entity_type': 'ORGANIZATION',
+                        'confidence': 0.7,  # Lower confidence - pattern match
+                        'span': match.span(),
+                        'source': 'pattern_match'
+                    })
+        
+        # Core Pattern 2: Extract WHAT + WHO (actions with entities)
+        # Enhanced with stakeholder role targeting from tagger
+        stakeholder_pattern = r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*?)\s+(announced|reported|filed|issued|published|released|approved|denied|fined|cited|required|mandated|established)\s+([^.;]{10,100})'
+        
+        # If we have stakeholder roles from enhanced tagger, prioritize those
+        if tagger_metadata and tagger_metadata.stakeholder_roles:
+            roles_pattern = '|'.join(re.escape(role) for role in tagger_metadata.stakeholder_roles)
+            enhanced_pattern = rf'\b({roles_pattern}|[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*?)\s+(announced|reported|filed|issued|published|released|approved|denied|fined|cited|required|mandated|established)\s+([^.;]{{10,100}})'
+            action_pattern = re.compile(enhanced_pattern, re.IGNORECASE)
+        else:
+            action_pattern = re.compile(stakeholder_pattern, re.IGNORECASE)
+            
+        for match in action_pattern.finditer(content):
+            confidence = 0.8
+            # Higher confidence if this matches a known stakeholder role
+            if (tagger_metadata and tagger_metadata.stakeholder_roles and 
+                any(role.lower() in match.group(1).lower() for role in tagger_metadata.stakeholder_roles)):
+                confidence = 0.9
+                
+            core_facts.append({
+                'type': 'action_event',
+                'subject': match.group(1).strip(),
+                'predicate': match.group(2).lower(),
+                'object': match.group(3).strip(),
+                'confidence': confidence,
+                'span': match.span(),
+                'enhanced_by_tagger': confidence > 0.8
+            })
+        
+        # Core Pattern 3: Extract HOW MUCH (amounts, rates, percentages)
+        # Money amounts
+        money_pattern = re.compile(r'\$([\d,]+(?:\.\d{2})?)\s*(million|billion|thousand|M|B|K)?\b', re.IGNORECASE)
+        for match in money_pattern.finditer(content):
+            amount_str = match.group(1).replace(',', '')
+            multiplier = match.group(2)
+            
+            try:
+                amount = float(amount_str)
+                if multiplier:
+                    multipliers = {'million': 1e6, 'M': 1e6, 'billion': 1e9, 'B': 1e9, 'thousand': 1e3, 'K': 1e3}
+                    amount *= multipliers.get(multiplier.lower(), 1)
+                
+                # Get context to find subject
+                context_start = max(0, match.start() - 100)
+                context = content[context_start:match.start()]
+                words = context.split()
+                subject = ' '.join(words[-3:]) if words else 'unknown'
+                
+                core_facts.append({
+                    'type': 'amount_value',
+                    'subject': subject.strip(),
+                    'predicate': 'has_amount',
+                    'value': amount,
+                    'unit': 'USD',
+                    'raw_text': match.group(0),
+                    'confidence': 0.9,
+                    'span': match.span()
+                })
+            except ValueError:
+                continue
+        
+        # Percentages
+        percentage_pattern = re.compile(r'([+-]?\d+(?:\.\d+)?)\s*(?:percent|%)(?:\s+(increase|decrease|growth|decline|change))?', re.IGNORECASE)
+        for match in percentage_pattern.finditer(content):
+            # Get context for subject
+            context_start = max(0, match.start() - 100)
+            context = content[context_start:match.start()]
+            words = context.split()
+            subject = ' '.join(words[-3:]) if words else 'unknown'
+            
+            change_type = match.group(2) if match.group(2) else 'percentage'
+            
+            core_facts.append({
+                'type': 'percentage_value',
+                'subject': subject.strip(),
+                'predicate': f'has_{change_type}',
+                'value': float(match.group(1)),
+                'unit': 'percent',
+                'confidence': 0.8,
+                'span': match.span()
+            })
+        
+        # Core Pattern 4: Extract WHEN (dates, timeframes)
+        # Standard dates
+        date_pattern = re.compile(r'\b(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),?\s+(\d{4})\b')
+        for match in date_pattern.finditer(content):
+            date_str = f"{match.group(1)} {match.group(2)}, {match.group(3)}"
+            
+            # Get context for what happened on this date
+            context_start = max(0, match.start() - 150)
+            context_end = min(len(content), match.end() + 150)
+            context = content[context_start:context_end]
+            
+            core_facts.append({
+                'type': 'temporal_reference',
+                'subject': 'event',
+                'predicate': 'occurred_on',
+                'value': date_str,
+                'unit': 'date',
+                'context': context.strip(),
+                'confidence': 0.9,
+                'span': match.span()
+            })
+        
+        # Fiscal years and quarters
+        fiscal_pattern = re.compile(r'\b(?:FY|fiscal year|Q[1-4])\s*(\d{4})\b', re.IGNORECASE)
+        for match in fiscal_pattern.finditer(content):
+            core_facts.append({
+                'type': 'temporal_reference',
+                'subject': 'reporting_period',
+                'predicate': 'is_period',
+                'value': match.group(0),
+                'unit': 'fiscal_period',
+                'confidence': 0.85,
+                'span': match.span()
+            })
+        
+        # Core Pattern 5: Extract requirements and obligations (universal across domains)
+        # Enhanced with stakeholder role targeting
+        if tagger_metadata and tagger_metadata.stakeholder_roles:
+            # Build pattern that looks for stakeholder roles before requirements
+            roles_pattern = '|'.join(re.escape(role) for role in tagger_metadata.stakeholder_roles)
+            enhanced_req_pattern = rf'\b({roles_pattern})s?\s+(?:must|shall|required to|obligated to|mandated to)\s+([^.;]{{15,150}})'
+            requirement_pattern = re.compile(enhanced_req_pattern, re.IGNORECASE)
+            
+            for match in requirement_pattern.finditer(content):
+                requirement_text = match.group(2).strip()
+                stakeholder = match.group(1).strip()
+                
+                core_facts.append({
+                    'type': 'requirement',
+                    'subject': stakeholder,
+                    'predicate': 'must_comply_with',
+                    'object': requirement_text,
+                    'confidence': 0.95,  # Higher confidence due to tagger guidance
+                    'span': match.span(),
+                    'enhanced_by_tagger': True
+                })
+        else:
+            # Fallback to general pattern
+            requirement_pattern = re.compile(r'\b(?:must|shall|required to|obligated to|mandated to)\s+([^.;]{15,150})', re.IGNORECASE)
+            for match in requirement_pattern.finditer(content):
+                requirement_text = match.group(1).strip()
+                
+                # Get subject from preceding context
+                context_start = max(0, match.start() - 100)
+                preceding_context = content[context_start:match.start()]
+                words = preceding_context.split()
+                subject = ' '.join(words[-3:]) if words else 'entity'
+                
+                core_facts.append({
+                    'type': 'requirement',
+                    'subject': subject.strip(),
+                    'predicate': 'must_comply_with',
+                    'object': requirement_text,
+                    'confidence': 0.85,
+                    'span': match.span()
+                })
+        
+        # Universal Business Intelligence Facts - Extract pre-classified opportunity data
+        if tagger_metadata:
+            # Pain points extraction
+            if tagger_metadata.pain_points:
+                for pain_point in tagger_metadata.pain_points:
+                    core_facts.append({
+                        'type': 'business_intelligence',
+                        'subject': 'market',
+                        'predicate': 'has_pain_point',
+                        'object': pain_point,
+                        'bi_category': 'pain_points',
+                        'confidence': 0.92,  # High confidence - pre-extracted
+                        'source': 'pre_tagged'
+                    })
+            
+            # Market opportunities extraction  
+            if tagger_metadata.market_opportunities:
+                for opportunity in tagger_metadata.market_opportunities:
+                    core_facts.append({
+                        'type': 'business_intelligence',
+                        'subject': 'market',
+                        'predicate': 'has_opportunity',
+                        'object': opportunity,
+                        'bi_category': 'market_opportunities',
+                        'confidence': 0.92,
+                        'source': 'pre_tagged'
+                    })
+            
+            # Innovation signals extraction
+            if tagger_metadata.innovation_signals:
+                for signal in tagger_metadata.innovation_signals:
+                    core_facts.append({
+                        'type': 'business_intelligence',
+                        'subject': 'industry',
+                        'predicate': 'shows_innovation',
+                        'object': signal,
+                        'bi_category': 'innovation_signals',
+                        'confidence': 0.92,
+                        'source': 'pre_tagged'
+                    })
+            
+            # Competitive intelligence extraction
+            if tagger_metadata.competitive_intelligence:
+                for intel in tagger_metadata.competitive_intelligence:
+                    core_facts.append({
+                        'type': 'business_intelligence',
+                        'subject': 'competitive_landscape',
+                        'predicate': 'indicates_competition',
+                        'object': intel,
+                        'bi_category': 'competitive_intelligence',
+                        'confidence': 0.92,
+                        'source': 'pre_tagged'
+                    })
+        
+        # Filter out low-quality facts
+        filtered_facts = []
+        for fact in core_facts:
+            # Skip very short or generic facts
+            if fact.get('object') and len(str(fact['object'])) < 10:
+                continue
+            if fact.get('subject', '').lower() in ['the', 'this', 'that', 'it', 'they']:
+                continue
+            
+            filtered_facts.append(fact)
+        
+        return filtered_facts[:50]  # Limit to top 50 core facts
+    
+    def _convert_tagger_metadata_to_dict(self, metadata: Optional[ExistingTaggerMetadata]) -> Optional[Dict]:
+        """Convert tagger metadata to dictionary format for domain classification."""
+        if not metadata:
+            return None
+        
+        return {
+            'document_types': metadata.document_types,
+            'domains': metadata.domains,
+            'keywords': metadata.keywords,
+            'entities': metadata.entities,
+            'topics': metadata.topics,
+            'confidence': metadata.confidence
+        }
     
     def _extract_with_regex(self, content: str, existing_metadata: Optional[ExistingTaggerMetadata] = None) -> Tuple[List[ExtractedFact], List[ExtractedEntity]]:
         """Ultra-fast regex-based extraction - 2,000-5,000 pages/sec with domain-specific patterns."""
@@ -1092,7 +1606,12 @@ class MVPHyperSemanticExtractor:
             'timestamp': metadata.timestamp,
             'file_hash': metadata.file_hash,
             'existing_tagger_metadata': asdict(metadata.existing_tagger_metadata) if metadata.existing_tagger_metadata else None,
-            'extraction_version': '1.1.0'  # Updated version with tagger integration
+            # Two-tier extraction results
+            'core_facts': metadata.core_facts,
+            'domain_facts': metadata.domain_facts,
+            'domain_classification': metadata.domain_classification,
+            'domain_entities': metadata.domain_entities,
+            'extraction_version': '2.0.0'  # Two-tier extraction version
         }
         
         # Write JSON with pretty formatting
@@ -1105,7 +1624,8 @@ class MVPHyperSemanticExtractor:
 def extract_semantic_metadata_batch(input_dir: Path, 
                                    output_dir: Optional[Path] = None,
                                    file_pattern: str = "*.md",
-                                   enable_spacy: bool = True) -> Dict[str, Any]:
+                                   enable_spacy: bool = True,
+                                   enable_domain_extraction: bool = True) -> Dict[str, Any]:
     """Extract semantic metadata from all files in a directory."""
     
     if output_dir is None:
@@ -1113,12 +1633,20 @@ def extract_semantic_metadata_batch(input_dir: Path,
     
     output_dir.mkdir(parents=True, exist_ok=True)
     
-    extractor = MVPHyperSemanticExtractor(enable_spacy=enable_spacy)
+    extractor = MVPHyperSemanticExtractor(
+        enable_spacy=enable_spacy,
+        enable_domain_extraction=enable_domain_extraction
+    )
     
     files = list(input_dir.glob(file_pattern))
     total_files = len(files)
     
+    extraction_mode = "Two-tier (Core + Domain)" if enable_domain_extraction and HAS_DOMAIN_CONFIGS else "Core only"
     print(f"🧠 Extracting semantic metadata from {total_files} files...")
+    print(f"📊 Extraction mode: {extraction_mode}")
+    
+    if enable_domain_extraction and HAS_DOMAIN_CONFIGS:
+        print(f"🎯 Available domains: {', '.join(DOMAIN_REGISTRY.keys())}")
     
     results = {
         'total_files': total_files,
@@ -1155,7 +1683,11 @@ def extract_semantic_metadata_batch(input_dir: Path,
             # Progress feedback
             if i % 25 == 0:
                 print(f"  [{i}/{total_files}] Processed {file_path.name}")
-                print(f"    Facts: {len(metadata.facts)}, Entities: {len(metadata.entities)}")
+                print(f"    Legacy Facts: {len(metadata.facts)}, Entities: {len(metadata.entities)}")
+                if metadata.core_facts:
+                    print(f"    Core Facts: {len(metadata.core_facts)}")
+                if metadata.domain_facts:
+                    print(f"    Domain Facts: {len(metadata.domain_facts)} ({metadata.domain_classification.get('domain', 'unknown')})")
         
         except Exception as e:
             error_msg = f"Error processing {file_path.name}: {e}"
@@ -1185,16 +1717,26 @@ if __name__ == "__main__":
     import sys
     
     if len(sys.argv) < 2:
-        print("Usage: python mvp-hyper-semantic.py <input_dir> [output_dir] [--no-spacy]")
-        print("Example: python mvp-hyper-semantic.py output/ semantic_output/")
+        print("Usage: python mvp-hyper-semantic.py <input_dir> [output_dir] [options]")
+        print("Example: python mvp-hyper-semantic.py test_tagged_performance/ semantic_quality_filtered/")
+        print("Options:")
+        print("  --no-spacy        Disable spaCy NLP processing")  
+        print("  --no-domain       Disable domain-aware extraction (core only)")
+        print("  --core-only       Extract only core facts (fastest)")
         sys.exit(1)
     
     input_dir = Path(sys.argv[1])
     output_dir = Path(sys.argv[2]) if len(sys.argv) > 2 and not sys.argv[2].startswith('--') else None
     enable_spacy = '--no-spacy' not in sys.argv
+    enable_domain_extraction = '--no-domain' not in sys.argv and '--core-only' not in sys.argv
     
     if not input_dir.exists():
         print(f"❌ Input directory not found: {input_dir}")
         sys.exit(1)
     
-    extract_semantic_metadata_batch(input_dir, output_dir, enable_spacy=enable_spacy)
+    extract_semantic_metadata_batch(
+        input_dir, 
+        output_dir, 
+        enable_spacy=enable_spacy,
+        enable_domain_extraction=enable_domain_extraction
+    )

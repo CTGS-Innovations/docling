@@ -1,0 +1,257 @@
+# MVP Hyper Pipeline Configuration
+# =================================
+# Enhanced three-tier progressive document processing system
+
+# Input sources (from your original config)
+inputs:
+  # Individual files for testing
+  files: []
+  
+  # Directories to scan recursively 
+  directories:
+    - "~/projects/docling/cli/data"
+    - "~/projects/docling/cli/data_complex" 
+    - "~/projects/docling/cli/data_osha"
+
+# File processing settings (from your original config)
+processing:
+  # Maximum workers for parallel processing
+  max_workers: 1
+  
+  # Skip these file extensions completely
+  skip_extensions:
+    - ".jpg"
+    - ".jpeg" 
+    - ".png"
+    - ".gif"
+    - ".bmp"
+    - ".tiff"
+    - ".tif"
+    - ".mp3"
+    - ".mp4" 
+    - ".wav"
+    - ".avi"
+    - ".mov"
+    - ".wmv"
+    - ".flv"
+    - ".zip"
+    - ".tar"
+    - ".gz"
+    - ".bz2"
+    - ".rar"
+    - ".7z"
+    - ".exe"
+    - ".dll"
+    - ".so"
+    - ".dylib"
+    - ".bin"
+    - ".dat"
+  
+  # Skip files larger than this (in MB)
+  max_file_size_mb: 100
+  
+  # Timeout per file (in seconds)
+  timeout_per_file: 10
+  
+  # Skip files that take longer than this (in seconds)
+  slow_file_threshold: 5.0
+
+# PDF-specific settings (from your original config)
+pdf:
+  # Skip PDFs with these patterns in filename (for troubleshooting)
+  skip_patterns: []
+  
+  # Limit pages for ultra-fast processing
+  max_pages_to_extract: 25  # Only extract first 25 pages for speed
+  
+  # Skip PDFs with more than this many pages
+  skip_if_pages_over: 100
+  
+  # Try different PDF loading strategies
+  fallback_strategies:
+    - "direct_file_open"
+    - "pdftotext_command" 
+    - "basic_text_only"
+    - "skip_if_slow"
+
+# Three-Tier Pipeline Configuration
+# =================================
+
+pipeline:
+  # Global pipeline settings
+  output_directory: "output"
+  enable_caching: true
+  performance_logging: true
+  
+  # Tier 1: Ultra-Fast Document Classifier
+  tier1_classifier:
+    enabled: true
+    speed_target: 2000  # pages/sec (realistic target)
+    confidence_threshold: 0.5
+    
+    # Balanced keyword sets for meaningful classification
+    keywords:
+      technical: 
+        - "algorithm"
+        - "function" 
+        - "method"
+        - "system"
+        - "database"
+        - "api"
+        - "code"
+        - "software"
+        - "programming"
+        - "implementation"
+        - "framework"
+        - "protocol"
+        - "interface"
+      
+      legal: 
+        - "shall"
+        - "agreement"
+        - "contract" 
+        - "copyright"
+        - "patent"
+        - "clause"
+        - "liability"
+        - "warranty"
+        - "jurisdiction"
+        - "compliance"
+        - "regulation"
+        - "law"
+      
+      safety:
+        - "safety"
+        - "hazard"
+        - "risk"
+        - "osha"
+        - "emergency"
+        - "protection"
+        - "accident"
+        - "injury"
+        - "ppe"
+        - "inspection"
+        - "violation"
+        - "training"
+      
+      financial:
+        - "revenue"
+        - "profit"
+        - "investment"
+        - "budget"
+        - "cost"
+        - "tax"
+        - "financial"
+        - "earnings"
+        - "expense"
+        - "asset"
+        - "liability"
+        - "audit"
+      
+      research:
+        - "research"
+        - "study"
+        - "hypothesis"
+        - "analysis"
+        - "experiment"
+        - "data"
+        - "results"
+        - "methodology"
+        - "findings"
+        - "statistical"
+        - "sample"
+        - "conclusion"
+      
+      business:
+        - "business"
+        - "company"
+        - "market"
+        - "customer"
+        - "strategy"
+        - "management"
+        - "operations"
+        - "sales"
+        - "marketing"
+        - "competitive"
+        - "growth"
+        - "partnership"
+
+  # Tier 2: Domain-Specific Pre-Tagger
+  tier2_pretagger:
+    enabled: true
+    speed_target: 1500  # pages/sec
+    
+    # Universal entities (applied to all domains)
+    universal_entities:
+      persons: "\\b([A-Z][a-z]+(?:\\s+[A-Z][a-z]*)*)\\s+(?:said|stated|reported|announced|founded|CEO|CTO|president|director|manager|researcher|scientist|professor|Dr\\.|Ph\\.D\\.)"
+      organizations: "\\b([A-Z][A-Za-z&\\s]+(?:Inc\\.|LLC|Corp\\.|Company|Corporation|Ltd\\.|University|Institute|Foundation|Agency|Department|Bureau|Commission))\\b"
+      emails: "\\b([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})\\b"
+      urls: "https?://(?:[-\\w.])+(?:[:\\d]+)?(?:/(?:[\\w/_.])*(?:\\?(?:[\\w&=%.])*)?(?:#(?:[\\w.])*)?)"
+      locations: "\\b([A-Z][a-z]+(?:\\s+[A-Z][a-z]*)*),?\\s+(?:[A-Z]{2}|California|Texas|New York|Florida|Washington|Oregon|Illinois|Pennsylvania|Ohio|Michigan|Georgia|North Carolina)\\b"
+      phone_numbers: "\\b(?:\\+?1[-.]?)?\\(?([0-9]{3})\\)?[-.]?([0-9]{3})[-.]?([0-9]{4})\\b"
+    
+    # Domain-specific patterns
+    domains:
+      business:
+        pain_points: "\\b(?:struggle(?:s|d)?|difficult(?:y|ies)?|challenge(?:s|d)?|problem(?:s)?|issue(?:s)?|bottleneck(?:s)?|barrier(?:s)?|obstacle(?:s)?|limitation(?:s)?|constraint(?:s)?|frustrat(?:e|ed|ing)|inefficient|expensive|time-consuming|costly|manual|labor-intensive)\\s+(?:with|in|to|for|at|when|while|during)\\s+([^,.;]{10,80})"
+        market_opportunities: "\\b(?:market|opportunity|demand|need|gap|potential|growth|expansion|emerging|trend|opportunity|untapped|underserved)\\s+(?:for|in|to|worth|valued|estimated|projected|expected)\\s+([^,.;]{10,80})"
+        innovation_signals: "\\b(?:breakthrough|innovation|advance(?:d|ment)?|novel|new|emerging|cutting-edge|state-of-the-art|revolutionary|disruptive|patent(?:ed)?|proprietary|technology|solution|approach|method|technique)\\s+(?:in|for|to|that|which|using)\\s+([^,.;]{10,80})"
+        competitive_intel: "\\b(?:competitor(?:s)?|rival(?:s)?|alternative(?:s)?|compared\\s+to|versus|vs\\.?|market\\s+leader(?:s)?|dominant\\s+player(?:s)?|key\\s+player(?:s)?)\\s+([^,.;]{10,80})"
+        funding_signals: "\\b(?:raised|funding|investment|venture|capital|series|round|IPO|acquisition|merger|valuation)\\s+(?:of\\s+)?\\$\\d+(?:\\.\\d+)?\\s*(?:million|billion|M|B)"
+        
+      research:
+        datasets: "\\b([A-Z][A-Za-z0-9-]{2,20})\\s+dataset\\b"
+        methods: "\\b([A-Z][a-zA-Z\\s]{5,40})\\s+(?:algorithm|method|approach|technique|model|framework)\\b"
+        metrics: "\\b([A-Z]{2,10}|[A-Z][a-z]+(?:[A-Z][a-z]*)*?)\\s+(?:score|metric|measure|accuracy|precision|recall|F1)\\b"
+        institutions: "\\b([A-Z][a-zA-Z\\s&]{5,50}(?:University|Institute|Lab|Laboratory|Research|Center|College))\\b"
+        
+      safety:
+        regulations: "\\b(?:29\\s+CFR|CFR)\\s*\\d{3,4}(?:\\.\\d+)*[a-z]?\\b"
+        standards: "\\b(?:OSHA|ANSI|NFPA|ASTM|ISO)\\s*\\d{2,5}(?:[-.]?\\d+)*\\b"
+        hazards: "\\b((?:chemical|physical|biological|ergonomic|electrical|mechanical|fire|explosion|fall|struck-by|caught-in|electrocution)\\s+hazard)\\b"
+        ppe: "\\b((?:hard\\s+hat|safety\\s+glasses|hearing\\s+protection|respirator|gloves|safety\\s+shoes|fall\\s+protection)s?)\\b"
+        
+      technical:
+        technologies: "\\b([A-Z][a-zA-Z\\s]{3,30}(?:API|SDK|framework|library|protocol|standard|specification))\\b"
+        programming: "\\b((?:Python|Java|JavaScript|C\\+\\+|C#|Go|Rust|TypeScript|Ruby|PHP|Swift|Kotlin)\\s+(?:code|programming|development|application))\\b"
+        architectures: "\\b((?:microservices|monolithic|serverless|cloud-native|distributed|event-driven)\\s+architecture)\\b"
+        databases: "\\b((?:MySQL|PostgreSQL|MongoDB|Redis|Elasticsearch|Cassandra|Oracle|SQL Server)\\s+database)\\b"
+
+  # Tier 3: Enhanced Semantic Extraction
+  tier3_semantic:
+    enabled: true
+    speed_target: 300  # pages/sec
+    max_facts_per_doc: 100
+    confidence_threshold: 0.7
+    domain_enhancement: true
+    relationship_extraction: true
+    fact_validation: true
+
+# Output configuration
+output:
+  directory: "output"  # Default output directory
+  
+  # File formats to generate
+  formats:
+    enhanced_markdown: true    # Original markdown with enriched front matter
+    semantic_json: true        # Facts and entities as JSON
+    performance_stats: true    # Processing metrics
+  
+  # File naming conventions
+  file_naming:
+    enhanced_suffix: ""        # No suffix - enhance original file
+    semantic_suffix: ".metadata.json"
+    stats_suffix: ".stats.json"
+  
+  # Save detailed logs for troubleshooting (from original config)
+  save_performance_log: true
+  save_error_log: true
+
+# Debugging (from your original config)
+debug:
+  # Show progress every N files
+  progress_interval: 50
+  # Show detailed timing for files slower than this
+  timing_threshold: 1.0
+  # Stop processing after N files (for testing, 0 = process all)
+  max_files_to_process: 0

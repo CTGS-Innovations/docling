@@ -63,6 +63,20 @@ class DocumentTags:
     timestamp: str
     file_hash: str
     processing_time: float
+    # Enhanced extraction fields for better fact extraction
+    measurements: Optional[Dict[str, List[str]]] = None
+    time_references: Optional[Dict[str, List[str]]] = None
+    regulatory_framework: Optional[Dict[str, List[str]]] = None
+    logical_structures: Optional[Dict[str, List[str]]] = None
+    priority_fact_spans: Optional[List[Dict]] = None
+    stakeholder_roles: Optional[List[str]] = None
+    
+    # Universal Business Intelligence Entities for Opportunity Discovery
+    universal_entities: Optional[Dict[str, List[str]]] = None
+    pain_points: Optional[List[str]] = None
+    market_opportunities: Optional[List[str]] = None
+    innovation_signals: Optional[List[str]] = None
+    competitive_intelligence: Optional[List[str]] = None
 
 
 class MVPHyperTagger:
@@ -72,7 +86,7 @@ class MVPHyperTagger:
         self.cache_enabled = cache_enabled
         self.tag_cache = {}
         
-        # Pre-compiled patterns for speed
+        # Pre-compiled patterns for speed (original classification patterns)
         self.patterns = {
             'technical': re.compile(r'\b(algorithm|function|method|system|process|implementation|architecture|framework|protocol|specification|requirement|design|analysis|optimization|performance|configuration|parameter|variable|interface|component|module|class|object|structure|database|network|security|encryption|authentication)\b', re.I),
             'legal': re.compile(r'\b(shall|whereas|hereby|agreement|contract|terms|conditions|liability|indemnify|warranty|copyright|patent|trademark|confidential|proprietary|jurisdiction|governing law|dispute|arbitration|clause|provision|party|parties|obligation|breach|remedy|damages)\b', re.I),
@@ -80,6 +94,74 @@ class MVPHyperTagger:
             'financial': re.compile(r'\b(revenue|profit|loss|asset|liability|equity|balance sheet|income statement|cash flow|budget|forecast|investment|return|roi|expense|cost|price|tax|audit|compliance|gaap|ifrs|depreciation|amortization|dividend|earnings)\b', re.I),
             'research': re.compile(r'\b(study|research|hypothesis|methodology|results|conclusion|abstract|introduction|literature review|discussion|findings|analysis|data|sample|population|statistical|significant|correlation|experiment|observation|theory|model|framework)\b', re.I),
             'code': re.compile(r'\b(def |class |function|import |from |return|if |else|for |while|try|except|async|await|const |let |var |public |private |static|void|int |string|bool|package|module|namespace)\b', re.I),
+        }
+        
+        # Enhanced extraction patterns for fact-focused tagging
+        self.enhanced_patterns = {
+            # Quantitative measurements
+            'measurements': {
+                'heights': re.compile(r'(\d+(?:\.\d+)?)\s*(?:feet|ft|foot|meters?|m)\s+(?:high|tall|above|in height)', re.I),
+                'depths': re.compile(r'(\d+(?:\.\d+)?)\s*(?:feet|ft|foot|meters?|m)\s+(?:deep|below|in depth)', re.I),
+                'weights': re.compile(r'(\d+(?:\.\d+)?)\s*(?:pounds?|lbs?|kilograms?|kg|tons?)\s*(?:capacity|maximum|limit|weight)?', re.I),
+                'distances': re.compile(r'(\d+(?:\.\d+)?)\s*(?:feet|ft|inches|in|meters?|m|yards?|yd)\s+(?:apart|away|from|between)', re.I),
+                'money': re.compile(r'\$(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\s*(?:million|billion|thousand|M|B|K)?\s*(?:fine|penalty|cost|fee|charge)?', re.I),
+                'percentages': re.compile(r'(\d+(?:\.\d+)?)\s*(?:percent|%)\s*(?:increase|decrease|change|of|or|more|less)?', re.I),
+                'counts': re.compile(r'(\d+)\s+(?:or\s+)?(?:more|less)\s+(?:employees?|workers?|people|persons?|individuals?)', re.I)
+            },
+            
+            # Temporal references
+            'time_references': {
+                'dates': re.compile(r'\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4}\b', re.I),
+                'frequencies': re.compile(r'\b(?:daily|weekly|monthly|quarterly|annually|every\s+\d+\s+(?:days?|weeks?|months?|years?))\b', re.I),
+                'durations': re.compile(r'\b(?:within|for|during|lasting|over)\s+(\d+)\s*(?:minutes?|hours?|days?|weeks?|months?|years?)\b', re.I),
+                'deadlines': re.compile(r'\b(?:by|before|no later than|immediately|as soon as|within)\s+([^,;.]{5,30})', re.I)
+            },
+            
+            # Regulatory framework
+            'regulatory': {
+                'citations': re.compile(r'\b(?:29\s+CFR|CFR)\s*\d{3,4}(?:\.\d+)*[a-z]?\b', re.I),
+                'standards': re.compile(r'\b(?:OSHA|ANSI|NFPA|ASTM|ISO)\s*\d{2,5}(?:[-.]?\d+)*\b', re.I),
+                'parts': re.compile(r'\b(?:Part|Subpart|Section)\s+\d{3,4}(?:\.\d+)*[A-Z]?\b', re.I),
+                'compliance_terms': re.compile(r'\b(shall|must|required|mandatory|prohibited|not permitted|may not|forbidden)\b', re.I),
+                'enforcement': re.compile(r'\b(violation|citation|penalty|fine|warning|notice|compliance|inspection)\b', re.I)
+            },
+            
+            # Logical structures  
+            'logical': {
+                'conditions': re.compile(r'\b(when|if|where|unless|except|provided that|in cases where)\s+([^,;.]{10,80})', re.I),
+                'exceptions': re.compile(r'\b(except for|excluding|does not apply to|not applicable to|other than)\s+([^,;.]{5,50})', re.I),
+                'requirements': re.compile(r'\b(employer|employee|worker|person|contractor)s?\s+(?:shall|must|are required to)\s+([^,;.]{10,100})', re.I),
+                'scope': re.compile(r'\b(applicable to|applies to|covers|includes|extends to|limited to)\s+([^,;.]{5,60})', re.I)
+            },
+            
+            # Stakeholder roles
+            'stakeholders': re.compile(r'\b(employer|employee|worker|contractor|subcontractor|competent person|qualified person|authorized person|safety officer|supervisor|foreman|manager|inspector|auditor)\b', re.I),
+            
+            # Universal Business Intelligence Entity Patterns for Opportunity Discovery
+            'business_intelligence': {
+                # Universal entity types for structured classification
+                'persons': re.compile(r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]*)*)\s+(?:said|stated|reported|announced|founded|CEO|CTO|president|director|manager|researcher|scientist|professor|Dr\.|Ph\.D\.)', re.I),
+                'organizations': re.compile(r'\b([A-Z][A-Za-z&\s]+(?:Inc\.|LLC|Corp\.|Company|Corporation|Ltd\.|University|Institute|Foundation|Agency|Department|Bureau|Commission))\b', re.I),
+                'emails': re.compile(r'\b([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\b'),
+                'urls': re.compile(r'https?://(?:[-\w.])+(?:[:\d]+)?(?:/(?:[\w/_.])*(?:\?(?:[\w&=%.])*)?(?:#(?:[\w.])*)?)?', re.I),
+                'locations': re.compile(r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]*)*),?\s+(?:[A-Z]{2}|California|Texas|New York|Florida|Washington|Oregon|Illinois|Pennsylvania|Ohio|Michigan|Georgia|North Carolina)\b', re.I),
+                'phone_numbers': re.compile(r'\b(?:\+?1[-.\s]?)?\(?([0-9]{3})\)?[-.\s]?([0-9]{3})[-.\s]?([0-9]{4})\b'),
+                
+                # Pain points and market gaps
+                'pain_points': re.compile(r'\b(?:struggle(?:s|d)?|difficult(?:y|ies)?|challenge(?:s|d)?|problem(?:s)?|issue(?:s)?|bottleneck(?:s)?|barrier(?:s)?|obstacle(?:s)?|limitation(?:s)?|constraint(?:s)?|frustrat(?:e|ed|ing)|inefficient|expensive|time-consuming|costly|manual|labor-intensive)\s+(?:with|in|to|for|at|when|while|during)\s+([^,.;]{10,80})', re.I),
+                
+                # Market opportunities and sizing
+                'market_opportunities': re.compile(r'\b(?:market|opportunity|demand|need|gap|potential|growth|expansion|emerging|trend|opportunity|untapped|underserved)\s+(?:for|in|to|worth|valued|estimated|projected|expected)\s+([^,.;]{10,80})', re.I),
+                'market_sizing': re.compile(r'\b(?:\$\d+(?:\.\d+)?\s*(?:million|billion|trillion|M|B|T)|market\s+size|addressable\s+market|tam|sam|som)\s+(?:market|opportunity|industry|sector|segment)?', re.I),
+                
+                # Innovation signals and technology advancement
+                'innovation_signals': re.compile(r'\b(?:breakthrough|innovation|advance(?:d|ment)?|novel|new|emerging|cutting-edge|state-of-the-art|revolutionary|disruptive|patent(?:ed)?|proprietary|technology|solution|approach|method|technique)\s+(?:in|for|to|that|which|using)\s+([^,.;]{10,80})', re.I),
+                'funding_signals': re.compile(r'\b(?:raised|funding|investment|venture|capital|series|round|IPO|acquisition|merger|valuation)\s+(?:of\s+)?\$\d+(?:\.\d+)?\s*(?:million|billion|M|B)', re.I),
+                
+                # Competitive intelligence
+                'competitive_intel': re.compile(r'\b(?:competitor(?:s)?|rival(?:s)?|alternative(?:s)?|compared\s+to|versus|vs\.?|market\s+leader(?:s)?|dominant\s+player(?:s)?|key\s+player(?:s)?)\s+([^,.;]{10,80})', re.I),
+                'partnerships': re.compile(r'\b(?:partner(?:ship)?|collaborat(?:e|ion)|alliance|joint\s+venture|strategic|agreement)\s+(?:with|between)\s+([A-Z][A-Za-z\s&]+(?:Inc\.|LLC|Corp\.|Company|Corporation|Ltd\.)?)', re.I)
+            }
         }
         
         # Common stop words for keyword extraction
@@ -130,6 +212,9 @@ class MVPHyperTagger:
         # Technical score
         technical_score = self._calculate_technical_score(content)
         
+        # Enhanced extraction for better fact targeting
+        enhanced_data = self._extract_enhanced_metadata(content)
+        
         # Create tags
         tags = DocumentTags(
             document_types=doc_types,
@@ -144,7 +229,20 @@ class MVPHyperTagger:
             technical_score=technical_score,
             timestamp=datetime.now(timezone.utc).isoformat(),
             file_hash=cache_key[:16],  # First 16 chars of hash
-            processing_time=time.time() - start_time
+            processing_time=time.time() - start_time,
+            # Enhanced fields
+            measurements=enhanced_data.get('measurements'),
+            time_references=enhanced_data.get('time_references'),
+            regulatory_framework=enhanced_data.get('regulatory_framework'),
+            logical_structures=enhanced_data.get('logical_structures'),
+            priority_fact_spans=enhanced_data.get('priority_fact_spans'),
+            stakeholder_roles=enhanced_data.get('stakeholder_roles'),
+            # Universal Business Intelligence fields
+            universal_entities=enhanced_data.get('universal_entities'),
+            pain_points=enhanced_data.get('pain_points'),
+            market_opportunities=enhanced_data.get('market_opportunities'),
+            innovation_signals=enhanced_data.get('innovation_signals'),
+            competitive_intelligence=enhanced_data.get('competitive_intelligence')
         )
         
         # Cache result
@@ -361,6 +459,173 @@ class MVPHyperTagger:
         score = min(1.0, tech_density * 10 + number_density * 5 + special_density * 2)
         return round(score, 2)
     
+    def _extract_enhanced_metadata(self, content: str) -> Dict[str, Any]:
+        """Extract enhanced metadata for better fact targeting."""
+        enhanced_data = {
+            'measurements': {},
+            'time_references': {},
+            'regulatory_framework': {},
+            'logical_structures': {},
+            'priority_fact_spans': [],
+            'stakeholder_roles': [],
+            # Universal Business Intelligence fields
+            'universal_entities': {},
+            'pain_points': [],
+            'market_opportunities': [],
+            'innovation_signals': [],
+            'competitive_intelligence': []
+        }
+        
+        # Extract measurements
+        measurements = {}
+        for measure_type, pattern in self.enhanced_patterns['measurements'].items():
+            matches = []
+            for match in pattern.finditer(content):
+                if measure_type in ['money', 'percentages']:
+                    matches.append(match.group(0))
+                else:
+                    matches.append(f"{match.group(1)} {measure_type[:-1]}")  # Remove 's' from type
+            if matches:
+                measurements[measure_type] = matches[:5]  # Limit to top 5
+        enhanced_data['measurements'] = measurements if measurements else None
+        
+        # Extract time references
+        time_refs = {}
+        for time_type, pattern in self.enhanced_patterns['time_references'].items():
+            matches = [match.group(0) for match in pattern.finditer(content)]
+            if matches:
+                time_refs[time_type] = matches[:5]
+        enhanced_data['time_references'] = time_refs if time_refs else None
+        
+        # Extract regulatory framework
+        regulatory = {}
+        for reg_type, pattern in self.enhanced_patterns['regulatory'].items():
+            matches = [match.group(0) for match in pattern.finditer(content)]
+            if matches:
+                regulatory[reg_type] = list(set(matches))[:5]  # Unique matches
+        enhanced_data['regulatory_framework'] = regulatory if regulatory else None
+        
+        # Extract logical structures
+        logical = {}
+        for logic_type, pattern in self.enhanced_patterns['logical'].items():
+            matches = []
+            for match in pattern.finditer(content):
+                if match.lastindex >= 2:
+                    matches.append(f"{match.group(1)} {match.group(2)}")
+                else:
+                    matches.append(match.group(0))
+            if matches:
+                logical[logic_type] = matches[:5]
+        enhanced_data['logical_structures'] = logical if logical else None
+        
+        # Extract stakeholder roles
+        stakeholders = []
+        for match in self.enhanced_patterns['stakeholders'].finditer(content):
+            stakeholders.append(match.group(1))
+        if stakeholders:
+            # Get unique stakeholders
+            unique_stakeholders = list(set([s.lower() for s in stakeholders]))
+            enhanced_data['stakeholder_roles'] = unique_stakeholders[:10]
+        else:
+            enhanced_data['stakeholder_roles'] = None
+        
+        # Identify priority fact spans (high-value locations for fact extraction)
+        priority_spans = self._identify_priority_fact_spans(content)
+        enhanced_data['priority_fact_spans'] = priority_spans if priority_spans else None
+        
+        # Extract Universal Business Intelligence entities for opportunity discovery
+        bi_patterns = self.enhanced_patterns['business_intelligence']
+        
+        # Universal entities (structured entity classification)
+        universal_entities = {}
+        for entity_type, pattern in bi_patterns.items():
+            if entity_type in ['persons', 'organizations', 'emails', 'urls', 'locations', 'phone_numbers']:
+                matches = []
+                for match in pattern.finditer(content):
+                    if match.lastindex and match.lastindex >= 1:
+                        matches.append(match.group(1))
+                    else:
+                        matches.append(match.group(0))
+                if matches:
+                    # Remove duplicates and limit results
+                    unique_matches = list(set(matches))[:10]
+                    universal_entities[entity_type] = unique_matches
+        enhanced_data['universal_entities'] = universal_entities if universal_entities else None
+        
+        # Pain points extraction
+        pain_points = []
+        for match in bi_patterns['pain_points'].finditer(content):
+            if match.lastindex >= 1:
+                pain_points.append(match.group(1).strip())
+        enhanced_data['pain_points'] = list(set(pain_points))[:10] if pain_points else None
+        
+        # Market opportunities extraction
+        market_opps = []
+        for match in bi_patterns['market_opportunities'].finditer(content):
+            if match.lastindex >= 1:
+                market_opps.append(match.group(1).strip())
+        # Also capture market sizing opportunities
+        for match in bi_patterns['market_sizing'].finditer(content):
+            market_opps.append(match.group(0))
+        enhanced_data['market_opportunities'] = list(set(market_opps))[:10] if market_opps else None
+        
+        # Innovation signals extraction
+        innovation_signals = []
+        for match in bi_patterns['innovation_signals'].finditer(content):
+            if match.lastindex >= 1:
+                innovation_signals.append(match.group(1).strip())
+        # Also capture funding signals as innovation indicators
+        for match in bi_patterns['funding_signals'].finditer(content):
+            innovation_signals.append(match.group(0))
+        enhanced_data['innovation_signals'] = list(set(innovation_signals))[:10] if innovation_signals else None
+        
+        # Competitive intelligence extraction
+        competitive_intel = []
+        for match in bi_patterns['competitive_intel'].finditer(content):
+            if match.lastindex >= 1:
+                competitive_intel.append(match.group(1).strip())
+        # Also capture partnerships as competitive indicators
+        for match in bi_patterns['partnerships'].finditer(content):
+            if match.lastindex >= 1:
+                competitive_intel.append(f"Partnership: {match.group(1)}")
+        enhanced_data['competitive_intelligence'] = list(set(competitive_intel))[:10] if competitive_intel else None
+        
+        return enhanced_data
+    
+    def _identify_priority_fact_spans(self, content: str) -> List[Dict]:
+        """Identify high-value spans likely to contain important facts."""
+        priority_spans = []
+        
+        # Look for requirement patterns with measurements
+        requirement_pattern = re.compile(r'\b(employer|employee|worker)s?\s+(?:shall|must)\s+([^.;]{20,150})', re.I)
+        for match in requirement_pattern.finditer(content):
+            # Check if this span contains measurements or regulations
+            span_text = match.group(0)
+            has_measurement = any(pattern.search(span_text) 
+                                for pattern in self.enhanced_patterns['measurements'].values())
+            has_regulation = any(pattern.search(span_text)
+                               for pattern in self.enhanced_patterns['regulatory'].values())
+            
+            if has_measurement or has_regulation:
+                priority_spans.append({
+                    'type': 'high_value_requirement',
+                    'span': [match.start(), match.end()],
+                    'preview': span_text[:80] + '...' if len(span_text) > 80 else span_text,
+                    'contains_measurement': has_measurement,
+                    'contains_regulation': has_regulation
+                })
+        
+        # Look for regulation + measurement combinations
+        regulation_measure_pattern = re.compile(r'(?:OSHA|CFR|Part\s+\d+)[^.;]{0,50}(\d+(?:\.\d+)?)\s*(?:feet|pounds|percent|employees)', re.I)
+        for match in regulation_measure_pattern.finditer(content):
+            priority_spans.append({
+                'type': 'regulation_with_measurement',
+                'span': [match.start(), match.end()],
+                'preview': match.group(0)
+            })
+        
+        return priority_spans[:10]  # Limit to top 10 priority spans
+    
     def format_tags_as_markdown(self, tags: DocumentTags) -> str:
         """Format tags as markdown header."""
         
@@ -374,6 +639,33 @@ class MVPHyperTagger:
         
         if tags.topics:
             header += f"topics: {', '.join(tags.topics)}\n"
+        
+        # Enhanced metadata fields
+        if tags.measurements:
+            header += "measurements:\n"
+            for measure_type, values in tags.measurements.items():
+                header += f"  {measure_type}: [{', '.join(values)}]\n"
+        
+        if tags.time_references:
+            header += "time_references:\n"
+            for time_type, values in tags.time_references.items():
+                header += f"  {time_type}: [{', '.join(values)}]\n"
+        
+        if tags.regulatory_framework:
+            header += "regulatory_framework:\n"
+            for reg_type, values in tags.regulatory_framework.items():
+                header += f"  {reg_type}: [{', '.join(values)}]\n"
+        
+        if tags.logical_structures:
+            header += "logical_structures:\n"
+            for logic_type, values in tags.logical_structures.items():
+                header += f"  {logic_type}: [{', '.join(values[:3])}]\n"  # Limit display to 3 items
+        
+        if tags.stakeholder_roles:
+            header += f"stakeholder_roles: [{', '.join(tags.stakeholder_roles)}]\n"
+        
+        if tags.priority_fact_spans:
+            header += f"priority_fact_spans: {len(tags.priority_fact_spans)} high-value spans identified\n"
         
         header += f"technical_score: {tags.technical_score}\n"
         header += f"confidence: {tags.confidence:.2f}\n"

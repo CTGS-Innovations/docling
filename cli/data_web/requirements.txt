@@ -1,0 +1,9 @@
+# For HTTP requests to static HTML pages
+requests==2.32.3
+
+# For JavaScript-rendered / dynamic sites
+playwright==1.47.0
+
+# Optional: tqdm for progress bars (nice to have)
+tqdm==4.66.5
+
