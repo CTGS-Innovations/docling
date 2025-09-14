@@ -1471,9 +1471,12 @@ def main():
         else:
             print(f"\n📊 Current: {stats['pages_per_second']:.1f} pages/sec (Target: 1000)")
         
-        if args.output:
-            output_dir = Path(args.output)
+        # Always save output if output directory is configured
+        if output_dir:
             output_dir.mkdir(parents=True, exist_ok=True)
+            
+            print(f"\n💾 SAVING OUTPUT FILES...")
+            saved_count = 0
             
             for result in stats['results']:
                 if result.success:
@@ -1482,8 +1485,11 @@ def main():
                         f.write(format_metadata_header(result.metadata))
                         f.write('\n\n')
                         f.write(result.text)
+                    saved_count += 1
             
-            print(f"\nOutputs saved to: {output_dir}")
+            print(f"✅ Saved {saved_count} markdown files to: {output_dir}")
+        else:
+            print("\n⚠️  No output directory configured - files not saved")
         
         processor.shutdown()
 
