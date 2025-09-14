@@ -26,6 +26,12 @@ import hashlib
 import collections
 from decimal import Decimal
 
+try:
+    import yaml
+    HAS_YAML = True
+except ImportError:
+    HAS_YAML = False
+
 # Core processing libraries
 try:
     import spacy
@@ -76,6 +82,20 @@ class ExtractedEntity:
 
 
 @dataclass
+class ExistingTaggerMetadata:
+    """Metadata from existing tagger system to guide extraction."""
+    document_types: List[str] = None        # e.g., ["safety: 83%", "legal: 6%"]
+    domains: List[str] = None               # e.g., ["safety: 23%", "compliance: 15%"]
+    keywords: List[str] = None              # e.g., ["osha", "workers", "safety"]
+    entities: List[str] = None              # e.g., ["OSH", "OSHA", "Health Act"]
+    topics: List[str] = None                # e.g., ["workplace safety", "hazard control"]
+    technical_score: float = 0.0            # Technical complexity score
+    confidence: float = 0.0                 # Overall classification confidence
+    word_count: int = 0                     # Document word count
+    language: str = "en"                    # Document language
+
+
+@dataclass
 class SemanticMetadata:
     """Complete semantic metadata for a document."""
     document_path: str
@@ -86,6 +106,7 @@ class SemanticMetadata:
     processing_time: float
     timestamp: str
     file_hash: str
+    existing_tagger_metadata: Optional[ExistingTaggerMetadata] = None  # Integration with existing tagger
 
 
 class EntityType(Enum):
@@ -117,16 +138,18 @@ class FactType(Enum):
 
 
 class MVPHyperSemanticExtractor:
-    """Ultra-fast local knowledge extraction engine."""
+    """Ultra-fast local knowledge extraction engine with quality filtering."""
     
     def __init__(self, 
                  enable_spacy: bool = True,
                  spacy_model: str = "en_core_web_sm",
-                 cache_enabled: bool = True):
+                 cache_enabled: bool = True,
+                 min_fact_confidence: float = 0.6):
         
         self.enable_spacy = enable_spacy and HAS_SPACY
         self.cache_enabled = cache_enabled
         self.extraction_cache = {}
+        self.min_fact_confidence = min_fact_confidence
         
         # Initialize spaCy if available
         self.nlp = None
@@ -167,22 +190,22 @@ class MVPHyperSemanticExtractor:
             'dates': re.compile(r'\b(\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\w+ \d{1,2}, \d{4}|January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4}\b', re.I),
             'fiscal_year': re.compile(r'\bFY\s*(\d{4})\b', re.I),
             
-            # Safety and regulatory patterns
+            # Safety and regulatory patterns - enhanced for complete sentences
             'osha_numbers': re.compile(r'\bOSHA\s+(\d+)[-.]?(\d+)?\b', re.I),
-            'safety_requirements': re.compile(r'\b(must|shall|required to|should)\s+(.{10,100}?)(?:\.|\n)', re.I),
-            'hazard_types': re.compile(r'\b(hazard|risk|danger|threat|violence|injury|accident|incident)\s*:?\s*([^.\n]{10,80})', re.I),
+            'safety_requirements': re.compile(r'\b(must|shall|required to|should)\s+([^.!?]*(?:employee|employer|worker|person|organization|company)[^.!?]*?)(?:[.!?])', re.I),
+            'hazard_types': re.compile(r'\b(hazard|risk|danger|threat|violence|injury|accident|incident)(?:\s+(?:is|are|include|involve))?[s]?\s*:?\s*([A-Z][^.\n]{15,120}?)(?:[.!?])', re.I),
             'compliance_standards': re.compile(r'\b(standard|regulation|guideline|policy|procedure)\s+(\d+[-.]?\d*)\b', re.I),
-            'safety_controls': re.compile(r'\b(control|prevent|protect|reduce|eliminate|mitigate)\s+(.{10,80})(?:by|through|with)', re.I),
+            'safety_controls': re.compile(r'\b(?:to\s+)?(control|prevent|protect|reduce|eliminate|mitigate)\s+([^.]{15,100}?)(?:[.!?])', re.I),
             
-            # Technical patterns
-            'specifications': re.compile(r'\bspecification[s]?\s*:?\s*([^.\n]{10,100})', re.I),
-            'procedures': re.compile(r'\bprocedure[s]?\s*:?\s*([^.\n]{10,100})', re.I),
-            'requirements': re.compile(r'\brequirement[s]?\s*:?\s*([^.\n]{10,100})', re.I),
+            # Technical patterns - enhanced for complete thoughts
+            'specifications': re.compile(r'\bspecification[s]?\s*(?:for|of|include|require)?\s*:?\s*([A-Z][^.\n]{20,150}?)(?:[.!?])', re.I),
+            'procedures': re.compile(r'\bprocedure[s]?\s*(?:for|to|must|shall|should|include)?\s*:?\s*([A-Z][^.\n]{20,150}?)(?:[.!?])', re.I),
+            'requirements': re.compile(r'\brequirement[s]?\s*(?:for|to|include|specify)?\s*:?\s*([A-Z][^.\n]{20,150}?)(?:[.!?])', re.I),
             
-            # Business patterns
-            'policies': re.compile(r'\bpolicy\s*:?\s*([^.\n]{10,100})', re.I),
-            'objectives': re.compile(r'\bobjective[s]?\s*:?\s*([^.\n]{10,100})', re.I),
-            'responsibilities': re.compile(r'\bresponsibilit[y|ies]+\s*:?\s*([^.\n]{10,100})', re.I),
+            # Business patterns - enhanced for complete thoughts
+            'policies': re.compile(r'\bpolicy\s*(?:for|on|regarding)?\s*:?\s*([A-Z][^.\n]{20,150}?)(?:[.!?])', re.I),
+            'objectives': re.compile(r'\bobjective[s]?\s*(?:is|are|include)?\s*:?\s*([A-Z][^.\n]{20,150}?)(?:[.!?])', re.I),
+            'responsibilities': re.compile(r'\bresponsibilit[y|ies]+\s*(?:include|are)?\s*:?\s*([A-Z][^.\n]{20,150}?)(?:[.!?])', re.I),
             
             # Votes
             'vote_counts': re.compile(r'\b(\d+)[–-](\d+)\b'),
@@ -283,30 +306,36 @@ class MVPHyperSemanticExtractor:
             cached.processing_time = 0.0  # Cached result
             return cached
         
+        # Parse existing tagger metadata from front matter if available
+        existing_metadata, clean_content = self._parse_existing_metadata(content)
+        
+        # Use clean content (without front matter) for extraction
+        content_for_extraction = clean_content if clean_content else content
+        
         # Initialize extraction containers
         facts = []
         entities = []
         relationships = []
         stats = {'extraction_methods_used': []}
         
-        # 1. Fast regex extraction (2,000-5,000 pages/sec)
-        regex_facts, regex_entities = self._extract_with_regex(content)
+        # 1. Fast regex extraction (2,000-5,000 pages/sec) - now guided by existing metadata
+        regex_facts, regex_entities = self._extract_with_regex(content_for_extraction, existing_metadata)
         facts.extend(regex_facts)
         entities.extend(regex_entities)
         stats['extraction_methods_used'].append('regex')
         stats['regex_facts'] = len(regex_facts)
         stats['regex_entities'] = len(regex_entities)
         
-        # 2. FlashText dictionary lookup (50,000+ matches/sec)
+        # 2. FlashText dictionary lookup (50,000+ matches/sec)  
         if self.keyword_processor:
-            dict_entities = self._extract_with_dictionaries(content)
+            dict_entities = self._extract_with_dictionaries(content_for_extraction)
             entities.extend(dict_entities)
             stats['extraction_methods_used'].append('flashtext')
             stats['dict_entities'] = len(dict_entities)
         
         # 3. spaCy NLP extraction (30-100 pages/sec)
         if self.enable_spacy and self.nlp:
-            nlp_facts, nlp_entities = self._extract_with_spacy(content)
+            nlp_facts, nlp_entities = self._extract_with_spacy(content_for_extraction)
             facts.extend(nlp_facts)
             entities.extend(nlp_entities)
             stats['extraction_methods_used'].append('spacy')
@@ -317,7 +346,13 @@ class MVPHyperSemanticExtractor:
         relationships = self._build_relationships(facts)
         stats['relationships'] = len(relationships)
         
-        # 5. Deduplicate and merge entities
+        # 5. Apply quality filtering to facts
+        pre_filter_fact_count = len(facts)
+        facts = self._filter_facts(facts)
+        stats['pre_filter_facts'] = pre_filter_fact_count
+        stats['facts_filtered_out'] = pre_filter_fact_count - len(facts)
+        
+        # 6. Deduplicate and merge entities
         entities = self._deduplicate_entities(entities)
         stats['final_entities'] = len(entities)
         stats['final_facts'] = len(facts)
@@ -333,7 +368,8 @@ class MVPHyperSemanticExtractor:
             extraction_stats=stats,
             processing_time=processing_time,
             timestamp=datetime.now(timezone.utc).isoformat(),
-            file_hash=cache_key[:16]
+            file_hash=cache_key[:16],
+            existing_tagger_metadata=existing_metadata
         )
         
         # Cache result
@@ -342,14 +378,241 @@ class MVPHyperSemanticExtractor:
         
         return metadata
     
-    def _extract_with_regex(self, content: str) -> Tuple[List[ExtractedFact], List[ExtractedEntity]]:
+    def _validate_fact_quality(self, fact: ExtractedFact) -> Tuple[bool, float]:
+        """Validate fact quality and return (is_valid, adjusted_confidence)."""
+        
+        if not fact.value or not isinstance(fact.value, str):
+            return False, 0.0
+        
+        value_text = fact.value.strip()
+        
+        # Quality filters
+        quality_score = 1.0
+        
+        # 1. Length validation
+        if len(value_text) < 15:  # Too short
+            return False, 0.0
+        if len(value_text) > 300:  # Too long, likely noise
+            quality_score *= 0.7
+        
+        # 2. Filter out connecting word fragments
+        connecting_starts = ['with', 'and', 'or', 'but', 'that', 'this', 'which', 'where', 'when', 'how', 'why', 'what']
+        if any(value_text.lower().startswith(word + ' ') for word in connecting_starts):
+            return False, 0.0
+        
+        # 3. Check for sentence completeness
+        if not self._is_complete_thought(value_text):
+            quality_score *= 0.5
+        
+        # 4. Information density check
+        info_density = self._calculate_information_density(value_text)
+        if info_density < 0.3:  # Too many generic/stop words
+            return False, 0.0
+        
+        quality_score *= info_density
+        
+        # 5. Specificity check
+        specificity = self._calculate_specificity(value_text)
+        quality_score *= specificity
+        
+        # Adjust confidence based on quality
+        adjusted_confidence = fact.confidence * quality_score
+        
+        # Apply minimum threshold
+        is_valid = adjusted_confidence >= self.min_fact_confidence
+        
+        return is_valid, adjusted_confidence
+    
+    def _is_complete_thought(self, text: str) -> bool:
+        """Check if text represents a complete thought/sentence."""
+        
+        # Basic checks for sentence completeness
+        text = text.strip()
+        
+        # Should not start with lowercase conjunctions or prepositions
+        bad_starts = ['and', 'or', 'but', 'with', 'by', 'for', 'in', 'on', 'at', 'to', 'of', 'from']
+        if any(text.lower().startswith(word + ' ') for word in bad_starts):
+            return False
+        
+        # Should have some structure (subject + verb indicators)
+        words = text.lower().split()
+        
+        # Look for verbs or action indicators
+        action_words = ['must', 'shall', 'should', 'will', 'can', 'may', 'require', 'establish', 'provide', 'ensure', 'maintain', 'follow', 'implement', 'conduct', 'perform']
+        has_action = any(word in words for word in action_words)
+        
+        # Look for entities/nouns
+        entity_indicators = ['worker', 'employee', 'employer', 'person', 'individual', 'organization', 'company', 'system', 'procedure', 'policy', 'requirement']
+        has_entity = any(word in words for word in entity_indicators)
+        
+        # Complete thought should have both action and entity
+        return has_action or has_entity or len(words) > 8  # Give longer texts benefit of doubt
+    
+    def _calculate_information_density(self, text: str) -> float:
+        """Calculate ratio of meaningful words to total words."""
+        
+        stop_words = {'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'this', 'that', 'these', 'those', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should'}
+        
+        words = text.lower().split()
+        if not words:
+            return 0.0
+        
+        meaningful_words = [word for word in words if word not in stop_words and len(word) > 2]
+        
+        return len(meaningful_words) / len(words)
+    
+    def _calculate_specificity(self, text: str) -> float:
+        """Calculate how specific vs generic the text is."""
+        
+        # Generic terms that indicate low specificity
+        generic_terms = ['thing', 'item', 'element', 'aspect', 'matter', 'issue', 'situation', 'condition', 'case', 'instance', 'example', 'way', 'method', 'approach', 'process', 'activity', 'action', 'step']
+        
+        # Specific terms that indicate high specificity
+        specific_terms = ['osha', 'regulation', 'standard', 'requirement', 'procedure', 'policy', 'training', 'equipment', 'safety', 'health', 'workplace', 'employee', 'employer', 'hazard', 'risk', 'control', 'protection', 'compliance']
+        
+        words = text.lower().split()
+        
+        generic_count = sum(1 for word in words if word in generic_terms)
+        specific_count = sum(1 for word in words if word in specific_terms)
+        
+        if not words:
+            return 0.5
+        
+        # High generic ratio = low specificity
+        generic_ratio = generic_count / len(words)
+        specific_ratio = specific_count / len(words)
+        
+        # Calculate specificity score (0-1)
+        specificity = max(0.1, 1.0 - generic_ratio + specific_ratio)
+        
+        return min(1.0, specificity)
+    
+    def _filter_facts(self, facts: List[ExtractedFact]) -> List[ExtractedFact]:
+        """Filter facts based on quality validation."""
+        
+        filtered_facts = []
+        
+        for fact in facts:
+            is_valid, adjusted_confidence = self._validate_fact_quality(fact)
+            
+            if is_valid:
+                # Update confidence with quality-adjusted score
+                fact.confidence = adjusted_confidence
+                filtered_facts.append(fact)
+        
+        return filtered_facts
+    
+    def _parse_existing_metadata(self, content: str) -> Tuple[Optional[ExistingTaggerMetadata], Optional[str]]:
+        """Parse existing tagger metadata from markdown front matter."""
+        
+        if not content.strip().startswith('---'):
+            return None, content
+        
+        try:
+            # Find the end of front matter
+            lines = content.split('\n')
+            if len(lines) < 3 or lines[0] != '---':
+                return None, content
+            
+            end_idx = -1
+            for i, line in enumerate(lines[1:], 1):
+                if line.strip() == '---':
+                    end_idx = i
+                    break
+            
+            if end_idx == -1:
+                return None, content
+            
+            # Extract front matter and content
+            front_matter_lines = lines[1:end_idx]
+            remaining_content = '\n'.join(lines[end_idx + 1:])
+            
+            # Parse the front matter manually since it's not standard YAML
+            metadata = ExistingTaggerMetadata()
+            
+            for line in front_matter_lines:
+                if ':' not in line:
+                    continue
+                    
+                key, value = line.split(':', 1)
+                key = key.strip()
+                value = value.strip()
+                
+                if key == 'document_types':
+                    # Parse: [safety: 83%, legal: 6%, financial: 4%]
+                    if value.startswith('[') and value.endswith(']'):
+                        value = value[1:-1]  # Remove brackets
+                        metadata.document_types = [item.strip() for item in value.split(',')]
+                
+                elif key == 'domains':
+                    # Parse: [safety: 23%, compliance: 15%, legal: 15%]
+                    if value.startswith('[') and value.endswith(']'):
+                        value = value[1:-1]
+                        metadata.domains = [item.strip() for item in value.split(',')]
+                
+                elif key == 'keywords':
+                    # Parse: osha, workers, safety, health, employers, employees, state, workplace, complaint, protection
+                    metadata.keywords = [item.strip() for item in value.split(',')]
+                
+                elif key == 'entities':
+                    # Parse: OSH, Occupational Safety, OSHA, Health Act, PDF
+                    metadata.entities = [item.strip() for item in value.split(',')]
+                
+                elif key == 'topics':
+                    # Parse: workplace safety, hazard control, ppe requirements, emergency procedures, incident reporting
+                    metadata.topics = [item.strip() for item in value.split(',')]
+                
+                elif key == 'technical_score':
+                    try:
+                        metadata.technical_score = float(value)
+                    except ValueError:
+                        pass
+                
+                elif key == 'confidence':
+                    try:
+                        metadata.confidence = float(value)
+                    except ValueError:
+                        pass
+                
+                elif key == 'word_count':
+                    try:
+                        metadata.word_count = int(value)
+                    except ValueError:
+                        pass
+                
+                elif key == 'language':
+                    metadata.language = value
+            
+            return metadata, remaining_content
+            
+        except Exception as e:
+            # If parsing fails, return original content
+            print(f"Warning: Failed to parse front matter: {e}")
+            return None, content
+    
+    def _extract_with_regex(self, content: str, existing_metadata: Optional[ExistingTaggerMetadata] = None) -> Tuple[List[ExtractedFact], List[ExtractedEntity]]:
         """Ultra-fast regex-based extraction - 2,000-5,000 pages/sec with domain-specific patterns."""
         
         facts = []
         entities = []
         
-        # First classify document type to determine extraction focus
-        doc_type = self._classify_document_domain(content)
+        # Use existing tagger classification if available, otherwise classify ourselves
+        if existing_metadata and existing_metadata.document_types and existing_metadata.confidence > 0.7:
+            # Use existing high-confidence classification
+            primary_doc_type = existing_metadata.document_types[0].lower()
+            if 'safety' in primary_doc_type:
+                doc_type = 'safety'
+            elif 'technical' in primary_doc_type:
+                doc_type = 'technical' 
+            elif 'business' in primary_doc_type:
+                doc_type = 'business'
+            elif 'legal' in primary_doc_type:
+                doc_type = 'legislative'
+            else:
+                doc_type = 'general'
+        else:
+            # Fallback to our own classification
+            doc_type = self._classify_document_domain(content)
         
         # Common extractions for all document types
         
@@ -401,18 +664,18 @@ class MVPHyperSemanticExtractor:
                 extraction_method="regex"
             ))
         
-        # Domain-specific extractions based on document type
+        # Domain-specific extractions based on document type, guided by existing metadata
         if doc_type == "safety":
-            self._extract_safety_facts(content, facts, entities)
+            self._extract_safety_facts(content, facts, entities, existing_metadata)
         elif doc_type == "technical":
-            self._extract_technical_facts(content, facts, entities)
+            self._extract_technical_facts(content, facts, entities, existing_metadata)
         elif doc_type == "business":
-            self._extract_business_facts(content, facts, entities)
+            self._extract_business_facts(content, facts, entities, existing_metadata)
         elif doc_type == "legislative":
-            self._extract_legislative_facts(content, facts, entities)
+            self._extract_legislative_facts(content, facts, entities, existing_metadata)
         else:
             # General extraction for unknown types
-            self._extract_general_facts(content, facts, entities)
+            self._extract_general_facts(content, facts, entities, existing_metadata)
         
         return facts, entities
     
@@ -446,8 +709,22 @@ class MVPHyperSemanticExtractor:
         
         return max(scores.items(), key=lambda x: x[1])[0]
     
-    def _extract_safety_facts(self, content: str, facts: List[ExtractedFact], entities: List[ExtractedEntity]):
-        """Extract safety-specific facts and entities."""
+    def _extract_safety_facts(self, content: str, facts: List[ExtractedFact], entities: List[ExtractedEntity], existing_metadata: Optional[ExistingTaggerMetadata] = None):
+        """Extract safety-specific facts and entities, enhanced with existing tagger metadata."""
+        
+        # Bootstrap entities from existing metadata
+        if existing_metadata and existing_metadata.entities:
+            for entity_text in existing_metadata.entities:
+                entity_id = entity_text.lower().replace(' ', '_')
+                entities.append(ExtractedEntity(
+                    entity_id=f"existing_{entity_id}",
+                    text=entity_text,
+                    entity_type=EntityType.ORGANIZATION.value,
+                    confidence=0.9,  # High confidence from existing tagger
+                    source_span=(0, 0),  # We don't have exact positions
+                    metadata={'source': 'existing_tagger'},
+                    extraction_method="existing_tagger"
+                ))
         
         # Extract OSHA numbers
         for match in self.patterns['osha_numbers'].finditer(content):
@@ -465,17 +742,33 @@ class MVPHyperSemanticExtractor:
                 extraction_method="regex"
             ))
         
-        # Extract safety requirements
+        # Extract safety requirements, enhanced with keyword context
         for match in self.patterns['safety_requirements'].finditer(content):
             requirement_text = match.group(2).strip()
+            
+            # Check if requirement is near existing keywords for higher confidence
+            confidence = 0.8
+            if existing_metadata and existing_metadata.keywords:
+                context_start = max(0, match.start() - 100)
+                context_end = min(len(content), match.end() + 100)
+                context = content[context_start:context_end].lower()
+                
+                keyword_matches = sum(1 for kw in existing_metadata.keywords 
+                                    if kw.lower() in context)
+                if keyword_matches > 0:
+                    confidence = min(0.95, confidence + 0.1 * keyword_matches)
+            
             facts.append(ExtractedFact(
                 fact_id=f"safety_req_{hash(requirement_text) % 10000}",
                 subject="safety_compliance",
                 predicate="requires",
                 value=requirement_text,
-                confidence=0.8,
+                confidence=confidence,
                 source_span=match.span(),
-                metadata={'requirement_type': match.group(1).lower()},
+                metadata={
+                    'requirement_type': match.group(1).lower(),
+                    'keyword_enhanced': confidence > 0.8
+                },
                 extraction_method="regex"
             ))
         
@@ -510,7 +803,7 @@ class MVPHyperSemanticExtractor:
                 extraction_method="regex"
             ))
     
-    def _extract_technical_facts(self, content: str, facts: List[ExtractedFact], entities: List[ExtractedEntity]):
+    def _extract_technical_facts(self, content: str, facts: List[ExtractedFact], entities: List[ExtractedEntity], existing_metadata: Optional[ExistingTaggerMetadata] = None):
         """Extract technical document facts."""
         
         # Extract specifications
@@ -539,7 +832,7 @@ class MVPHyperSemanticExtractor:
                 extraction_method="regex"
             ))
     
-    def _extract_business_facts(self, content: str, facts: List[ExtractedFact], entities: List[ExtractedEntity]):
+    def _extract_business_facts(self, content: str, facts: List[ExtractedFact], entities: List[ExtractedEntity], existing_metadata: Optional[ExistingTaggerMetadata] = None):
         """Extract business document facts."""
         
         # Extract policies
@@ -568,7 +861,7 @@ class MVPHyperSemanticExtractor:
                 extraction_method="regex"
             ))
     
-    def _extract_legislative_facts(self, content: str, facts: List[ExtractedFact], entities: List[ExtractedEntity]):
+    def _extract_legislative_facts(self, content: str, facts: List[ExtractedFact], entities: List[ExtractedEntity], existing_metadata: Optional[ExistingTaggerMetadata] = None):
         """Extract legislative document facts."""
         
         # Extract bill information and related facts
@@ -606,7 +899,7 @@ class MVPHyperSemanticExtractor:
                 extraction_method="regex"
             ))
     
-    def _extract_general_facts(self, content: str, facts: List[ExtractedFact], entities: List[ExtractedEntity]):
+    def _extract_general_facts(self, content: str, facts: List[ExtractedFact], entities: List[ExtractedEntity], existing_metadata: Optional[ExistingTaggerMetadata] = None):
         """Extract general facts when document type is unclear."""
         
         # Extract money amounts
@@ -798,7 +1091,8 @@ class MVPHyperSemanticExtractor:
             'processing_time': metadata.processing_time,
             'timestamp': metadata.timestamp,
             'file_hash': metadata.file_hash,
-            'extraction_version': '1.0.0'
+            'existing_tagger_metadata': asdict(metadata.existing_tagger_metadata) if metadata.existing_tagger_metadata else None,
+            'extraction_version': '1.1.0'  # Updated version with tagger integration
         }
         
         # Write JSON with pretty formatting

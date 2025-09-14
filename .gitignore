@@ -37,3 +37,5 @@ mvp-hyper/tagged_output/
 mvp-hyper/semantic_output_v2/
 mvp-hyper/semantic_output/
 mvp-hyper/test_output/
+mvp-hyper/test_tagged_performance
+mvp-hyper/semantic_quality_filtered
