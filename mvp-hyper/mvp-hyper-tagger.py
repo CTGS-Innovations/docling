@@ -432,6 +432,7 @@ def tag_output_directory(input_dir: Path, output_dir: Path = None,
     
     success_count = 0
     total_time = 0
+    total_pages_tagged = 0
     
     for i, file_path in enumerate(files, 1):
         try:
@@ -441,6 +442,7 @@ def tag_output_directory(input_dir: Path, output_dir: Path = None,
             # Tag document
             tags = tagger.tag_document(file_path, content)
             total_time += tags.processing_time
+            total_pages_tagged += tags.word_count // 250 or 1  # Estimate pages (250 words/page)
             
             # Output path
             if output_dir != input_dir:
@@ -461,8 +463,12 @@ def tag_output_directory(input_dir: Path, output_dir: Path = None,
         except Exception as e:
             print(f"  ❌ Error tagging {file_path.name}: {e}")
     
+    # Calculate tagging throughput
+    tagging_pages_per_sec = total_pages_tagged / total_time if total_time > 0 else 0
+    
     print(f"\n✅ Tagged {success_count}/{total_files} files in {total_time:.2f}s")
-    print(f"⚡ Average: {total_time/total_files*1000:.1f}ms per file")
+    print(f"⚡ Average: {total_time/total_files*1000:.1f}ms per file") 
+    print(f"📊 Tagging: {tagging_pages_per_sec:.1f} pages/sec")
     
     return success_count
 

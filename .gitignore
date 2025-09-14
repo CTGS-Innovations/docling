@@ -33,3 +33,4 @@ cli/data_osha/
 mvp-hyper/output/
 mvp-hyper/__pycache__/
 
+mvp-hyper/tagged_output/
