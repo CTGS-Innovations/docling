@@ -28,11 +28,13 @@ from datetime import datetime, timezone
 import importlib.util
 
 # Import existing components
-spec_core = importlib.util.spec_from_file_location("mvp_hyper_core", "mvp-hyper-core.py")
+import os
+current_dir = os.path.dirname(os.path.abspath(__file__))
+spec_core = importlib.util.spec_from_file_location("mvp_hyper_core", os.path.join(current_dir, "mvp-hyper-core.py"))
 mvp_hyper_core = importlib.util.module_from_spec(spec_core)
 spec_core.loader.exec_module(mvp_hyper_core)
 
-spec_semantic = importlib.util.spec_from_file_location("mvp_hyper_semantic", "mvp-hyper-semantic.py")
+spec_semantic = importlib.util.spec_from_file_location("mvp_hyper_semantic", os.path.join(current_dir, "mvp-hyper-semantic.py"))
 mvp_hyper_semantic = importlib.util.module_from_spec(spec_semantic)
 spec_semantic.loader.exec_module(mvp_hyper_semantic)
 

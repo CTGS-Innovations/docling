@@ -7,7 +7,9 @@ from pathlib import Path
 import json
 
 # Load the semantic extractor module
-spec = importlib.util.spec_from_file_location("mvp_hyper_semantic", "mvp-hyper-semantic.py")
+import os
+current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # Go up one level from tests/
+spec = importlib.util.spec_from_file_location("mvp_hyper_semantic", os.path.join(current_dir, "core", "mvp-hyper-semantic.py"))
 mvp_hyper_semantic = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mvp_hyper_semantic)
 

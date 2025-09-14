@@ -29,7 +29,11 @@ from typing import Dict, Tuple
 class MVPHyperPipeline:
     """Clean pipeline orchestrator for MVP Hyper system."""
     
-    def __init__(self, config_path: str = "mvp-hyper-pipeline-clean-config.yaml"):
+    def __init__(self, config_path: str = None):
+        if config_path is None:
+            # Default to .config directory within core
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            config_path = os.path.join(current_dir, ".config", "mvp-hyper-pipeline-clean-config.yaml")
         self.config_path = config_path
         self.performance_stats = {}
         self.config = self.load_config()
@@ -198,7 +202,11 @@ class MVPHyperPipeline:
         # Use the working config.yaml that we know works at 725 pages/sec
         # Pass input directories so mvp-hyper-core knows what to process
         # Add --quiet for clean pipeline output
-        command = f"python mvp-hyper-core.py {input_path} --output {output_path} --config config.yaml --quiet"
+        import os
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        config_path = os.path.join(current_dir, ".config", "config.yaml")
+        core_path = os.path.join(current_dir, "mvp-hyper-core.py")
+        command = f"python {core_path} {input_path} --output {output_path} --config {config_path} --quiet"
         success, elapsed, files = self.run_step(
             "conversion",
             command,
@@ -281,7 +289,14 @@ class MVPHyperPipeline:
     
     def step_enrichment(self, input_path: str, output_path: str) -> bool:
         """Step 3: Add domain-specific enrichment using mvp-hyper-tagger."""
-        command = f"python mvp-hyper-tagger.py {input_path} --output {output_path} --config {self.config_path}"
+        import os
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        tagger_path = os.path.join(current_dir, "mvp-hyper-tagger.py")
+        if os.path.isabs(self.config_path):
+            config_path = self.config_path
+        else:
+            config_path = os.path.join(current_dir, ".config", os.path.basename(self.config_path))
+        command = f"python {tagger_path} {input_path} {output_path}"
         success, elapsed, files = self.run_step(
             "enrichment",
             command,
@@ -291,7 +306,10 @@ class MVPHyperPipeline:
     
     def step_extraction(self, input_path: str) -> bool:
         """Step 4: Extract semantic facts to JSON using mvp-hyper-semantic."""
-        command = f"python mvp-hyper-semantic.py {input_path}"
+        import os
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        semantic_path = os.path.join(current_dir, "mvp-hyper-semantic.py")
+        command = f"python {semantic_path} {input_path}"
         success, elapsed, files = self.run_step(
             "extraction",
             command,

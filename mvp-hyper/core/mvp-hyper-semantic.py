@@ -55,7 +55,7 @@ except ImportError:
 
 # Try to import domain configurations
 try:
-    from mvp_semantic_domains import (
+    from core.mvp_semantic_domains import (
         DOMAIN_REGISTRY, 
         classify_document_domain,
         extract_domain_facts,
@@ -69,8 +69,23 @@ try:
     )
     HAS_DOMAIN_CONFIGS = True
 except ImportError:
-    HAS_DOMAIN_CONFIGS = False
-    print("⚠️  Domain configurations not found. Running core extraction only.")
+    try:
+        from mvp_semantic_domains import (
+            DOMAIN_REGISTRY, 
+            classify_document_domain,
+            extract_domain_facts,
+            extract_domain_entities,
+            extract_domain_values,
+            get_domain_profile,
+            enhance_facts_with_domain,
+            facts_to_json,
+            CoreFact,
+            DomainFact
+        )
+        HAS_DOMAIN_CONFIGS = True
+    except ImportError:
+        HAS_DOMAIN_CONFIGS = False
+        print("⚠️  Domain configurations not found. Running core extraction only.")
 
 
 @dataclass

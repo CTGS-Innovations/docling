@@ -13,10 +13,14 @@ import yaml
 import importlib.util
 
 # Import the main processor using importlib to handle hyphenated filename
-spec = importlib.util.spec_from_file_location("mvp_hyper_core", "/app/mvp-hyper-core.py")
+import os
+current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+spec = importlib.util.spec_from_file_location("mvp_hyper_core", os.path.join(current_dir, "core", "mvp-hyper-core.py"))
 mvp_hyper_core = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mvp_hyper_core)
 
+import sys
+sys.path.append(os.path.join(current_dir, "utils"))
 from config_loader import load_config
 
 UltraFastExtractor = mvp_hyper_core.UltraFastExtractor
@@ -27,7 +31,20 @@ def run_continuous_processing(duration_seconds: int = 30, progress_interval: int
     """Run continuous processing for specified duration with progress reporting."""
     
     # Load configuration
-    config = load_config("/app/config.yaml" if Path("/app/config.yaml").exists() else "config.yaml")
+    # Try multiple config paths for different environments
+    config_paths = [
+        "/app/config.yaml",  # Docker environment
+        os.path.join(current_dir, "core", ".config", "config.yaml"),  # New organized structure
+        "config.yaml"  # Fallback
+    ]
+    
+    config_file = None
+    for path in config_paths:
+        if Path(path).exists():
+            config_file = path
+            break
+    
+    config = load_config(config_file if config_file else "config.yaml")
     
     # Get all files to process
     all_files = config.get_input_files()

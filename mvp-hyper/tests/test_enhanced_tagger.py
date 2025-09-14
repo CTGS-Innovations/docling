@@ -6,7 +6,9 @@ import importlib.util
 from pathlib import Path
 
 # Load the tagger module
-spec = importlib.util.spec_from_file_location("mvp_hyper_tagger", "mvp-hyper-tagger.py")
+import os
+current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # Go up one level from tests/
+spec = importlib.util.spec_from_file_location("mvp_hyper_tagger", os.path.join(current_dir, "core", "mvp-hyper-tagger.py"))
 mvp_hyper_tagger = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mvp_hyper_tagger)
 

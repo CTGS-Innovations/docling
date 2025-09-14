@@ -13,11 +13,14 @@ import importlib.util
 import sys
 
 # Import modules with hyphens in filename
-spec_tagger = importlib.util.spec_from_file_location("mvp_hyper_tagger", "mvp-hyper-tagger.py")
+import os
+current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+spec_tagger = importlib.util.spec_from_file_location("mvp_hyper_tagger", os.path.join(current_dir, "core", "mvp-hyper-tagger.py"))
 mvp_hyper_tagger = importlib.util.module_from_spec(spec_tagger)
 spec_tagger.loader.exec_module(mvp_hyper_tagger)
 
-spec_semantic = importlib.util.spec_from_file_location("mvp_hyper_semantic", "mvp-hyper-semantic.py")
+spec_semantic = importlib.util.spec_from_file_location("mvp_hyper_semantic", os.path.join(current_dir, "core", "mvp-hyper-semantic.py"))
 mvp_hyper_semantic = importlib.util.module_from_spec(spec_semantic)
 spec_semantic.loader.exec_module(mvp_hyper_semantic)
 

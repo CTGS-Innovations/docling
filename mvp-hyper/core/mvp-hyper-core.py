@@ -1159,10 +1159,12 @@ def main():
     """Main entry point for testing."""
     
     import argparse
+    import sys
+    sys.path.append(os.path.join(os.path.dirname(__file__), "..", "utils"))
     from config_loader import load_config
     
     parser = argparse.ArgumentParser(description="Ultra-fast document processor")
-    parser.add_argument("--config", default="config.yaml", help="Configuration file")
+    parser.add_argument("--config", default=os.path.join(os.path.dirname(__file__), ".config", "config.yaml"), help="Configuration file")
     parser.add_argument("--test-config", action="store_true", 
                        help="Create test config for troubleshooting")
     parser.add_argument("input", nargs='*', help="Input file(s) or directory(ies) (overrides config)")
