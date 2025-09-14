@@ -2,153 +2,285 @@
 
 ## 🎯 Target: 1,000+ Pages Per Second
 
-Ultra-optimized document processing system designed for maximum throughput with minimal dependencies.
+Ultra-optimized document processing system designed for maximum throughput with minimal dependencies and resource constraints.
+
+## 📁 Project Structure
+
+```
+mvp-hyper/
+├── mvp-hyper-core.py          # Main processing engine
+├── config_loader.py           # Configuration management system
+├── config.yaml               # Default configuration file
+├── docker-config.yaml        # Resource-constrained config (1 CPU/1GB RAM)
+├── benchmark.py              # Performance benchmarking suite
+├── diagnose_pdfs.py          # PDF diagnostic tool
+├── clean.sh                  # Output directory cleanup script
+├── setup.sh                  # Dependency installation script
+├── run-docker-test.sh        # Docker resource-constrained testing
+├── Dockerfile               # Docker container definition
+├── docker-compose.yml       # Docker Compose setup
+├── test_config.yaml         # Test configuration (auto-generated)
+├── composite_data/          # Symbolic links to multiple data directories
+├── output/                  # Generated markdown files
+└── README.md               # This documentation
+```
 
 ## Features
 
+### Core Capabilities
 - **🚀 Ultra-Fast Extraction**: Target 1,000+ pages/second
-- **⚡ Parallel Processing**: Multi-core CPU utilization
-- **💾 Memory Mapping**: Zero-copy operations for large files
-- **🗄️ Smart Caching**: In-memory cache for repeated access
-- **📊 Minimal Metadata**: Fast extraction of essential metadata
-- **🔄 Batch Processing**: Process entire directories in parallel
+- **📄 Multi-Format Support**: PDF, DOCX, PPTX, XLSX, HTML, TXT, MD, CSV
+- **⚡ Universal Processing**: Handles any file type (text extraction or metadata)
+- **🔧 Configuration-Based**: YAML-driven processing with flexible settings
+- **💾 Smart Caching**: In-memory cache for repeated access
+- **📊 Real-time Progress**: Live processing updates with timing analysis
+- **🐳 Docker Support**: Containerized deployment with resource limits
 
-## Architecture
-
-```
-┌─────────────────────────────────────┐
-│         Input Documents             │
-└────────────┬────────────────────────┘
-             │
-             ▼
-┌─────────────────────────────────────┐
-│      Memory-Mapped Reading          │
-│         (mmap for <500MB)           │
-└────────────┬────────────────────────┘
-             │
-             ▼
-┌─────────────────────────────────────┐
-│     Parallel Page Extraction        │
-│   (ThreadPool with N workers)       │
-└────────────┬────────────────────────┘
-             │
-             ▼
-┌─────────────────────────────────────┐
-│        In-Memory Cache              │
-│    (xxhash/blake2b keying)         │
-└────────────┬────────────────────────┘
-             │
-             ▼
-┌─────────────────────────────────────┐
-│      Markdown Output with           │
-│     Metadata Header (YAML)          │
-└─────────────────────────────────────┘
-```
+### Processing Strategies
+- **PDF**: Fast text extraction with page limits and fallback methods
+- **Office Docs**: Native library extraction with ZIP fallbacks
+- **Text Files**: Direct UTF-8 reading with encoding detection
+- **Binary Files**: String extraction or intelligent skipping
+- **Unknown Files**: Progressive fallback strategies
 
 ## Quick Start
 
-### 1. Setup
+### 1. Installation
 ```bash
-# Install dependencies
+# Install Python dependencies
+pip install pymupdf pyyaml psutil openpyxl python-docx python-pptx beautifulsoup4
+
+# Or use setup script
 ./setup.sh
-
-# Or manually:
-pip install pymupdf
-pip install xxhash  # Optional, for faster caching
-pip install numba   # Optional, for JIT compilation
 ```
 
-### 2. Single File Processing
+### 2. Configuration-Based Processing (Recommended)
 ```bash
-# Process a single PDF
-./mvp-hyper-core.py document.pdf
+# Clean previous output
+./clean.sh
 
-# With output
-./mvp-hyper-core.py document.pdf --output output_dir/
+# Process using config.yaml (default)
+python mvp-hyper-core.py
 
-# With custom workers
-./mvp-hyper-core.py document.pdf --workers 16
+# Process with custom config
+python mvp-hyper-core.py --config docker-config.yaml
+
+# Create test config for troubleshooting
+python mvp-hyper-core.py --test-config
+python mvp-hyper-core.py --config test_config.yaml
 ```
 
-### 3. Batch Processing
+### 3. Command Line Processing (Legacy)
 ```bash
-# Process entire directory
-./mvp-hyper-core.py /path/to/pdfs/
+# Process multiple directories
+python mvp-hyper-core.py ~/data/pdfs ~/data/docs ~/data/office --output results/
 
-# With output directory
-./mvp-hyper-core.py /path/to/pdfs/ --output results/
+# Process single file
+python mvp-hyper-core.py document.pdf --output output/
+
+# Override config settings
+python mvp-hyper-core.py --workers 4 --config config.yaml
 ```
 
-### 4. Benchmark
+## Configuration System
+
+### Main Configuration Files
+
+#### `config.yaml` (Default Production Config)
+```yaml
+inputs:
+  files: []                    # Individual files to process
+  directories:                 # Directories to scan recursively
+    - "~/projects/docling/cli/data"
+    - "~/projects/docling/cli/data_complex"
+    - "~/projects/docling/cli/data_osha"
+
+processing:
+  max_workers: 8               # CPU cores to use
+  max_file_size_mb: 100        # Skip files larger than this
+  timeout_per_file: 10         # Timeout per file (seconds)
+  slow_file_threshold: 5.0     # Warn about files slower than this
+  
+  skip_extensions:             # File types to skip entirely
+    - ".jpg"
+    - ".png"
+    # ... (binary files)
+
+pdf:
+  max_pages_to_extract: 25     # Limit pages for speed
+  skip_if_pages_over: 100      # Skip PDFs with too many pages
+  skip_patterns:               # Skip PDFs matching these patterns
+    - "training-requirements"
+    - "shipyard-industry"
+
+output:
+  directory: "output"          # Output directory
+  save_performance_log: true   # Save detailed performance logs
+  save_error_log: true         # Save error logs
+
+debug:
+  progress_interval: 50        # Show progress every N files
+  timing_threshold: 1.0        # Warn about slow files
+  max_files_to_process: 0      # Limit for testing (0 = all)
+```
+
+#### `docker-config.yaml` (Resource-Constrained Config)
+- Optimized for 1 CPU core, 1GB RAM
+- Aggressive page limits (15 pages max)
+- Smaller file size limits (25MB max)
+- Skip PDFs with >75 pages
+
+### Configuration Commands
 ```bash
-# Run performance benchmark
-./benchmark.py --num-files 10
+# Use default config
+python mvp-hyper-core.py
 
-# Run stress test (60 seconds)
-./benchmark.py --stress --duration 60
+# Use custom config
+python mvp-hyper-core.py --config docker-config.yaml
 
-# Custom test directory
-./benchmark.py --test-dir /mnt/ramdisk/pdfs --num-files 100
+# Generate test config with problematic files
+python mvp-hyper-core.py --test-config
+
+# Override specific settings
+python mvp-hyper-core.py --workers 1 --output test_output/
 ```
 
-## Performance Optimizations
+## Docker Deployment
 
-### System-Level Optimizations
-
-1. **CPU Performance Mode**
+### Resource-Constrained Testing
 ```bash
-sudo cpupower frequency-set -g performance
+# Build and run with 1 CPU core, 1GB RAM limits
+./run-docker-test.sh
+
+# Manual Docker run
+docker build -t mvp-hyper:test .
+docker run --rm --cpus="1.0" --memory="1g" \
+  -v "$(pwd)/output:/app/output" \
+  -v "$(pwd)/docker-config.yaml:/app/config.yaml" \
+  mvp-hyper:test
 ```
 
-2. **Increase File Descriptors**
+### Docker Compose
 ```bash
-ulimit -n 65536
+# Run with docker-compose
+docker-compose up
+
+# Run with resource limits
+docker-compose --profile constrained up
 ```
 
-3. **Use RAM Disk for Testing**
+## Diagnostic Tools
+
+### PDF Analysis
 ```bash
-sudo mkdir -p /mnt/ramdisk
-sudo mount -t tmpfs -o size=2G tmpfs /mnt/ramdisk
-cp test_files/*.pdf /mnt/ramdisk/
+# Diagnose slow PDFs
+python diagnose_pdfs.py
+
+# Shows: file size, page count, complexity, extraction speeds
+# Identifies: why specific PDFs are slow
 ```
 
-4. **Disable CPU Throttling**
+### Performance Benchmarking
 ```bash
-echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+# Run comprehensive benchmark
+python benchmark.py --num-files 50
+
+# Run stress test
+python benchmark.py --stress --duration 60
+
+# Custom benchmark
+python benchmark.py --test-dir /path/to/test/files --num-files 100
 ```
 
-### Code-Level Optimizations
+### Progress Monitoring
+The system provides real-time feedback:
+```
+🔧 CONFIGURATION:
+  Workers: 1
+  Output: output
+  Total files found: 943
+  Config file: config.yaml
 
-The system uses several optimization techniques:
+🔄 PROCESSING 943 FILES:
+============================================================
+[  50/943] Processing: document.pdf (.pdf)
+  ⚠️  SLOW FILE: large-doc.pdf took 3.02s (.pdf)
+[ 100/943] Processing: spreadsheet.xlsx (.xlsx)
+  ⏭️  SKIPPED: image.jpg (.jpg) - binary file
+```
 
-1. **Memory Mapping**: Files <500MB are memory-mapped for zero-copy access
-2. **Parallel Extraction**: Pages are processed in parallel chunks
-3. **Smart Caching**: LRU cache with xxhash for ultra-fast lookups
-4. **Pre-allocated Buffers**: Memory pool to avoid allocation overhead
-5. **Batch Processing**: Multiple files processed simultaneously
+## Performance Analysis
 
-## Performance Metrics
+### Real-World Performance Results
 
-### Expected Performance
+#### Native Performance (Multi-core)
+```
+Total files: 943
+Successful: 934
+Pages/second: 515.4
+Top bottlenecks:
+  .pdf: 590 files, 12.46s total, 0.021s avg, 530.9 pages/sec
+  .xlsx: 1 files, 0.10s total, 0.099s avg, 40.3 pages/sec
+```
 
-| Configuration | Pages/Second | Files/Minute |
-|--------------|--------------|--------------|
-| Single Worker | 100-200 | 50-100 |
-| Half CPUs | 400-600 | 200-300 |
-| All CPUs | 800-1200 | 400-600 |
-| Oversubscribed | 1000-1500 | 500-750 |
+#### Docker Performance (1 core/1GB RAM)
+```
+Total files: 943
+Successful: 943
+Pages/second: 265.3
+Resource constraints impact: ~50% reduction
+Memory usage: <1GB sustained
+```
 
-### Factors Affecting Performance
+### Performance Bottlenecks Identified
 
-- **Storage Type**: NVMe SSD > SATA SSD > HDD
-- **File Size**: Smaller files process faster per page
-- **CPU Cores**: More cores = better parallelization
-- **Memory Speed**: Faster RAM improves memory-mapped performance
-- **Cache Hits**: Repeated files process at 10,000+ pages/second
+1. **High Page Count PDFs**
+   - `training-requirements-by-standard.pdf`: 270 pages (7.40s)
+   - `shipyard-industry-standards.pdf`: 340 pages (3.02s)
+   - **Solution**: Page limits (`max_pages_to_extract: 25`)
+
+2. **Large File Sizes**
+   - Files >10MB cause memory pressure
+   - **Solution**: File size limits (`max_file_size_mb: 25`)
+
+3. **Binary File Processing**
+   - Images, audio, video files slow down processing
+   - **Solution**: Skip binary extensions
+
+### Optimization Strategies
+
+#### For Speed (Target: 1000+ pages/sec)
+```yaml
+pdf:
+  max_pages_to_extract: 15     # Very aggressive page limiting
+  skip_if_pages_over: 50       # Skip moderate-sized PDFs
+processing:
+  max_workers: 8               # Use all CPU cores
+  max_file_size_mb: 50         # Skip large files
+```
+
+#### For Resource Constraints (1 core/1GB RAM)
+```yaml
+pdf:
+  max_pages_to_extract: 10     # Minimal page extraction
+  skip_if_pages_over: 25       # Skip most multi-page PDFs
+processing:
+  max_workers: 1               # Single core
+  max_file_size_mb: 10         # Very small files only
+```
+
+#### For Accuracy (Process everything)
+```yaml
+pdf:
+  max_pages_to_extract: 999999 # No page limits
+  skip_if_pages_over: 999999   # No file limits
+  skip_patterns: []            # Don't skip any patterns
+```
 
 ## Output Format
 
-Documents are output as Markdown with YAML metadata header:
+### Markdown Files
+Each processed document generates a markdown file:
 
 ```markdown
 ---
@@ -158,102 +290,163 @@ size_bytes: 1048576
 format: PDF
 title: Document Title
 author: Author Name
-subject: Document Subject
+extracted: text_content
 ---
 
 [Extracted text content...]
+
+[Note: Only extracted first 25 of 42 pages for speed]
 ```
+
+### Output Management
+```bash
+# Clean output before processing
+./clean.sh
+
+# Check output files
+ls -la output/ | head -10
+
+# Count generated files
+find output -name "*.md" | wc -l
+```
+
+## Advanced Features
+
+### File Processing Strategies
+
+#### Progressive Fallback System
+1. **Format-Specific Extraction** (PDF → PyMuPDF, DOCX → python-docx)
+2. **ZIP Fallback** (Office docs → direct XML parsing)
+3. **Text Extraction** (UTF-8 reading with encoding detection)
+4. **Binary String Extraction** (Extract readable strings from binary files)
+5. **Metadata Only** (File info when all else fails)
+
+#### Smart File Skipping
+```python
+# Automatic skipping based on:
+- File extension (.jpg, .png, .mp4, etc.)
+- File size (>100MB default)
+- Page count (>100 pages for PDFs)
+- Filename patterns ("training-requirements", etc.)
+- Processing time (>5 seconds default)
+```
+
+### Error Handling
+- **Fail Fast**: Don't hang on problematic files
+- **Per-page Error Handling**: Extract what's possible from corrupt PDFs
+- **Graceful Degradation**: Multiple fallback strategies
+- **Detailed Error Reporting**: Full error analysis in output
 
 ## Troubleshooting
 
-### Not Reaching 1000 Pages/Second?
+### Common Issues
 
-1. **Check CPU Frequency Scaling**
-   ```bash
-   cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-   # Should show "performance"
-   ```
+#### No Output Files Generated
+```bash
+# Check if output directory is configured
+python mvp-hyper-core.py  # Should show "💾 SAVING OUTPUT FILES..."
 
-2. **Verify PyMuPDF Installation**
-   ```bash
-   python3 -c "import fitz; print(fitz.version)"
-   # Should be latest version
-   ```
+# Verify output directory exists
+ls -la output/
 
-3. **Test with RAM Disk**
-   - Copy files to RAM disk to eliminate I/O bottleneck
-   
-4. **Profile the Code**
-   ```bash
-   python3 -m cProfile -o profile.stats mvp-hyper-core.py test.pdf
-   python3 -m pstats profile.stats
-   ```
-
-5. **Check System Resources**
-   ```bash
-   htop  # Monitor CPU usage
-   iotop # Monitor I/O usage
-   ```
-
-## Advanced Usage
-
-### Python API
-
-```python
-from mvp_hyper_core import UltraFastExtractor
-
-# Create extractor
-extractor = UltraFastExtractor(
-    num_workers=16,
-    use_mmap=True,
-    batch_size=100,
-    cache_size_mb=512
-)
-
-# Process single file
-result = extractor.extract_pdf_ultrafast(Path("document.pdf"))
-print(f"Speed: {result.pages_per_second:.1f} pages/sec")
-
-# Process batch
-results = extractor.process_batch(pdf_files)
-
-# Async processing
-import asyncio
-results = asyncio.run(extractor.process_batch_async(pdf_files))
-
-# Cleanup
-extractor.shutdown()
+# Check for permission issues
+mkdir -p output && chmod 755 output
 ```
 
-### Batch Processing with Statistics
+#### Low Performance (<500 pages/sec)
+```bash
+# Run diagnostics on slow PDFs
+python diagnose_pdfs.py
 
-```python
-from mvp_hyper_core import HyperBatchProcessor
+# Check CPU frequency scaling
+cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 
-processor = HyperBatchProcessor(num_extractors=4)
-stats = processor.process_directory(Path("/path/to/pdfs"))
-
-print(f"Pages/second: {stats['pages_per_second']:.1f}")
-print(f"Files/second: {stats['files_per_second']:.1f}")
-
-processor.shutdown()
+# Profile the application
+python -m cProfile mvp-hyper-core.py > profile.txt
 ```
 
-## Limitations
+#### Memory Issues (Docker)
+```bash
+# Monitor memory usage
+docker stats mvp-hyper-test
 
-- **Text Only**: Focuses on text extraction, no OCR or visual analysis
-- **PDF Focused**: Optimized for PDF, basic support for other formats
-- **Memory Usage**: Large batches may use significant memory
-- **No OCR**: Scanned PDFs without text layer won't extract
+# Use more aggressive limits
+# Edit docker-config.yaml:
+#   max_pages_to_extract: 5
+#   skip_if_pages_over: 25
+```
+
+### Performance Debugging
+
+#### Individual File Analysis
+```bash
+# Create test config with specific files
+python mvp-hyper-core.py --test-config
+
+# Edit test_config.yaml to include problem files:
+inputs:
+  files:
+    - "/path/to/slow/file.pdf"
+
+# Run single-threaded analysis
+python mvp-hyper-core.py --config test_config.yaml --workers 1
+```
+
+#### System Resource Monitoring
+```bash
+# Monitor during processing
+htop          # CPU usage
+iotop         # I/O usage
+free -h       # Memory usage
+df -h         # Disk space
+```
+
+## Deployment Scenarios
+
+### High-Performance Server (Multi-core, High RAM)
+```yaml
+processing:
+  max_workers: 32              # All CPU cores
+  max_file_size_mb: 500        # Large files OK
+pdf:
+  max_pages_to_extract: 100    # More complete extraction
+  skip_if_pages_over: 500      # Handle large documents
+```
+
+### Edge Device (1 core, 1GB RAM)
+```yaml
+processing:
+  max_workers: 1               # Single core only
+  max_file_size_mb: 10         # Small files only
+pdf:
+  max_pages_to_extract: 5      # Minimal extraction
+  skip_if_pages_over: 20       # Skip most PDFs
+```
+
+### Batch Processing Server (Focus on Throughput)
+```yaml
+processing:
+  max_workers: 16              # High parallelism
+  timeout_per_file: 2          # Fast timeout
+pdf:
+  max_pages_to_extract: 1      # First page only
+  skip_patterns:               # Skip known slow patterns
+    - "training"
+    - "manual"
+    - "specification"
+```
 
 ## Future Enhancements
 
-- [ ] GPU acceleration for batch operations
-- [ ] Distributed processing across machines
-- [ ] Advanced caching with Redis/Memcached
-- [ ] Streaming output for real-time processing
-- [ ] WebAssembly version for browser usage
+- [ ] **GPU Acceleration**: CUDA-based PDF processing
+- [ ] **Distributed Processing**: Multi-machine coordination
+- [ ] **Streaming Processing**: Real-time document processing
+- [ ] **ML-Based Classification**: Automatic document categorization
+- [ ] **OCR Integration**: Scanned document processing
+- [ ] **WebAssembly Version**: Browser-based processing
+- [ ] **Redis Caching**: Persistent distributed cache
+- [ ] **Kubernetes Deployment**: Cloud-native scaling
 
 ## License
 
-MIT
+MIT License - See LICENSE file for details.
