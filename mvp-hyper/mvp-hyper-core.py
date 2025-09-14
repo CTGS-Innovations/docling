@@ -131,9 +131,9 @@ class UltraFastExtractor:
             )
         
         try:
-            # Route to appropriate extractor based on file type
+            # Route to appropriate extractor based on file type  
             if file_ext == '.pdf':
-                return self._extract_pdf(file_path, start_time, cache_key)
+                return self._extract_pdf(file_path, start_time, cache_key, getattr(self, 'config', None))
             elif file_ext in ['.docx']:
                 return self._extract_docx(file_path, start_time, cache_key)
             elif file_ext in ['.pptx']:
@@ -220,7 +220,7 @@ class UltraFastExtractor:
         h.update(key_string.encode())
         return h.hexdigest()
     
-    def _extract_pdf(self, file_path: Path, start_time: float, cache_key: str) -> UltraFastResult:
+    def _extract_pdf(self, file_path: Path, start_time: float, cache_key: str, config=None) -> UltraFastResult:
         """Extract from PDF files - fail fast on errors."""
         if not HAS_PYMUPDF:
             return self._fail_fast_pdf(file_path, start_time, "PyMuPDF not available")
@@ -237,12 +237,30 @@ class UltraFastExtractor:
                     doc.close()
                     return self._fail_fast_pdf(file_path, start_time, "PDF has 0 pages")
                 
+                # Check page limits from config
+                max_pages_config = 999999  # Default: no limit
+                skip_if_over = 999999      # Default: no limit
+                
+                if config:
+                    max_pages_config = config.get('pdf.max_pages_to_extract', 999999)
+                    skip_if_over = config.get('pdf.skip_if_pages_over', 999999)
+                
+                # Skip if too many pages
+                if page_count > skip_if_over:
+                    doc.close()
+                    return self._fail_fast_pdf(file_path, start_time, 
+                                               f"PDF has {page_count} pages (limit: {skip_if_over})")
+                
+                # Limit pages to extract for speed
+                pages_to_extract = min(page_count, max_pages_config)
+                
                 # Extract text with error handling per page
                 try:
-                    if page_count > 10:
-                        text = self._extract_sequential_safe(doc)  # Use safe sequential for now
-                    else:
-                        text = self._extract_sequential_safe(doc)
+                    text = self._extract_sequential_safe(doc, pages_to_extract)
+                    
+                    # Add notice if we limited pages
+                    if pages_to_extract < page_count:
+                        text += f"\n\n[Note: Only extracted first {pages_to_extract} of {page_count} pages for speed]"
                 except Exception as text_error:
                     # If text extraction fails, try basic extraction
                     try:
@@ -306,11 +324,14 @@ class UltraFastExtractor:
             error=error_msg
         )
     
-    def _extract_sequential_safe(self, doc) -> str:
+    def _extract_sequential_safe(self, doc, max_pages=None) -> str:
         """Safe sequential extraction with per-page error handling."""
         texts = []
-        for i, page in enumerate(doc):
+        pages_to_process = min(len(doc), max_pages) if max_pages else len(doc)
+        
+        for i in range(pages_to_process):
             try:
+                page = doc[i]
                 text = page.get_text("text", flags=fitz.TEXT_PRESERVE_WHITESPACE)
                 texts.append(text or "")
             except Exception as e:
@@ -1218,6 +1239,8 @@ def main():
         # Multiple files processing
         print(f"\n📚 BATCH MODE - {len(all_files)} files")
         processor = HyperBatchProcessor(num_workers=max_workers)
+        # Pass config to extractor for PDF limits
+        processor.extractor.config = config
         
         # Show breakdown by file type
         file_types = {}

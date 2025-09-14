@@ -15,7 +15,7 @@ inputs:
 # File processing settings
 processing:
   # Maximum workers for parallel processing
-  max_workers: 8
+  max_workers: 1
   
   # Skip these file extensions completely
   skip_extensions:
@@ -58,14 +58,20 @@ processing:
 # PDF-specific settings
 pdf:
   # Skip PDFs with these patterns in filename (for troubleshooting)
-  skip_patterns:
-    - "training-requirements"  # These seem to be very slow
-    - "shipyard-industry"      # Another slow one
+  skip_patterns: []
+    # - "training-requirements"  # Uncomment to skip slow files
+    # - "shipyard-industry"
+  
+  # Limit pages for ultra-fast processing
+  max_pages_to_extract: 25  # Only extract first 20 pages for speed
+  
+  # Skip PDFs with more than this many pages
+  skip_if_pages_over: 100
   
   # Try different PDF loading strategies
   fallback_strategies:
     - "direct_file_open"
-    - "pdftotext_command"
+    - "pdftotext_command" 
     - "basic_text_only"
     - "skip_if_slow"
 
