@@ -46,3 +46,5 @@ mvp-hyper/semantic_enhanced_v2/
 mvp-hyper/corpus-tier1-balanced/
 mvp-hyper/test_input/
 cli/data_web/envS/
+mvp-hyper/--output
+mvp-hyper/pipeline-output/

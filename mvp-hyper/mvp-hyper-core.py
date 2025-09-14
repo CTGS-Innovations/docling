@@ -1080,8 +1080,9 @@ Path: {file_path}"""
 class HyperBatchProcessor:
     """Batch processor for maximum throughput."""
     
-    def __init__(self, num_workers: int = None):
+    def __init__(self, num_workers: int = None, quiet: bool = False):
         self.num_workers = num_workers or mp.cpu_count()
+        self.quiet = quiet
         self.extractor = UltraFastExtractor(num_workers=self.num_workers)
     
     def process_directory(self, directory: Path, pattern: str = "*.*") -> Dict[str, Any]:
@@ -1171,6 +1172,7 @@ def main():
                        help="Enable document tagging with metadata (slower)")
     parser.add_argument("--tagged-output", help="Separate output directory for tagged files")
     parser.add_argument("--benchmark", action="store_true", help="Run in benchmark mode")
+    parser.add_argument("--quiet", action="store_true", help="Quiet mode for pipeline integration - minimal output")
     
     args = parser.parse_args()
     
@@ -1204,11 +1206,12 @@ def main():
     max_workers = args.workers if args.workers else config.get('processing.max_workers', mp.cpu_count())
     output_dir = Path(args.output) if args.output else Path(config.get('output.directory', 'output'))
     
-    print(f"🔧 CONFIGURATION:")
-    print(f"  Workers: {max_workers}")
-    print(f"  Output: {output_dir}")
-    print(f"  Total files found: {len(all_files)}")
-    print(f"  Config file: {args.config}")
+    if not args.quiet:
+        print(f"🔧 CONFIGURATION:")
+        print(f"  Workers: {max_workers}")
+        print(f"  Output: {output_dir}")
+        print(f"  Total files found: {len(all_files)}")
+        print(f"  Config file: {args.config}")
     
     if len(all_files) == 0:
         print("❌ No files found to process")
@@ -1216,14 +1219,16 @@ def main():
         
     if len(all_files) == 1:
         # Single file processing
-        print(f"\n📄 SINGLE FILE MODE")
+        if not args.quiet:
+            print(f"\n📄 SINGLE FILE MODE")
         extractor = UltraFastExtractor(num_workers=max_workers)
         result = extractor.extract_document_ultrafast(all_files[0])
         
-        print(f"File: {result.file_path}")
-        print(f"Pages: {result.page_count}")
-        print(f"Extraction time: {result.extraction_time:.3f}s")
-        print(f"Speed: {result.pages_per_second:.1f} pages/second")
+        if not args.quiet:
+            print(f"File: {result.file_path}")
+            print(f"Pages: {result.page_count}")
+            print(f"Extraction time: {result.extraction_time:.3f}s")
+            print(f"Speed: {result.pages_per_second:.1f} pages/second")
         
         if output_dir:
             output_path = output_dir / f"{all_files[0].stem}.md"
@@ -1240,8 +1245,9 @@ def main():
         
     else:
         # Multiple files processing
-        print(f"\n📚 BATCH MODE - {len(all_files)} files")
-        processor = HyperBatchProcessor(num_workers=max_workers)
+        if not args.quiet:
+            print(f"\n📚 BATCH MODE - {len(all_files)} files")
+        processor = HyperBatchProcessor(num_workers=max_workers, quiet=args.quiet)
         # Pass config to extractor for PDF limits
         processor.extractor.config = config
         
@@ -1251,12 +1257,13 @@ def main():
             ext = f.suffix.lower() or 'no_extension'
             file_types[ext] = file_types.get(ext, 0) + 1
         
-        print("File breakdown:")
-        for ext, count in sorted(file_types.items()):
-            print(f"  {ext}: {count} files")
-        
-        # Analyze potentially problematic file types
-        print("\n🔍 FILE TYPE ANALYSIS:")
+        if not args.quiet:
+            print("File breakdown:")
+            for ext, count in sorted(file_types.items()):
+                print(f"  {ext}: {count} files")
+            
+            # Analyze potentially problematic file types
+            print("\n🔍 FILE TYPE ANALYSIS:")
         
         # Known fast formats
         fast_formats = {'.txt', '.md', '.csv', '.html', '.htm'}
@@ -1272,17 +1279,19 @@ def main():
         binary_count = sum(count for ext, count in file_types.items() if ext in binary_formats)
         unknown_count = len(all_files) - fast_count - doc_count - binary_count
         
-        print(f"  📄 Fast text files: {fast_count} files")
-        print(f"  📚 Document files: {doc_count} files") 
-        print(f"  💾 Binary files: {binary_count} files")
-        print(f"  ❓ Unknown/other: {unknown_count} files")
+        if not args.quiet:
+            print(f"  📄 Fast text files: {fast_count} files")
+            print(f"  📚 Document files: {doc_count} files") 
+            print(f"  💾 Binary files: {binary_count} files")
+            print(f"  ❓ Unknown/other: {unknown_count} files")
         
         # Show the most common extensions
         sorted_types = sorted(file_types.items(), key=lambda x: x[1], reverse=True)
-        print(f"\n📊 TOP FILE EXTENSIONS:")
-        for ext, count in sorted_types[:10]:
-            percentage = (count / len(all_files)) * 100
-            print(f"  {ext or 'no_extension'}: {count} files ({percentage:.1f}%)")
+        if not args.quiet:
+            print(f"\n📊 TOP FILE EXTENSIONS:")
+            for ext, count in sorted_types[:10]:
+                percentage = (count / len(all_files)) * 100
+                print(f"  {ext or 'no_extension'}: {count} files ({percentage:.1f}%)")
         
         # Identify potentially slow formats
         slow_formats = []
@@ -1290,7 +1299,7 @@ def main():
             if ext not in fast_formats and count > 10:
                 slow_formats.append((ext, count))
         
-        if slow_formats:
+        if not args.quiet and slow_formats:
             print(f"\n⚠️  POTENTIALLY SLOW FORMATS (>10 files):")
             for ext, count in slow_formats[:5]:
                 print(f"  {ext or 'no_extension'}: {count} files - may be causing slowdown")
@@ -1303,8 +1312,9 @@ def main():
         start_time = time.perf_counter()
         results = []
         
-        print(f"\n🔄 PROCESSING {len(all_files)} FILES:")
-        print("=" * 60)
+        if not args.quiet:
+            print(f"\n🔄 PROCESSING {len(all_files)} FILES:")
+            print("=" * 60)
         
         # Define file types to skip (will be too slow/pointless)
         skip_extensions = {'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.tif',
@@ -1320,12 +1330,14 @@ def main():
             
             # Show progress every 50 files or for first 20
             if i % 50 == 0 or i <= 20:
-                print(f"[{i:4d}/{len(all_files)}] Processing: {file_path.name} ({file_ext or 'no ext'})")
+                if not args.quiet:
+                    print(f"[{i:4d}/{len(all_files)}] Processing: {file_path.name} ({file_ext or 'no ext'})")
             
             # Skip obviously problematic file types
             if file_ext in skip_extensions:
                 if i <= 20 or i % 100 == 0:  # Show some skips
-                    print(f"  ⏭️  SKIPPED: {file_path.name} ({file_ext}) - binary file")
+                    if not args.quiet:
+                        print(f"  ⏭️  SKIPPED: {file_path.name} ({file_ext}) - binary file")
                 skipped_count += 1
                 results.append(UltraFastResult(
                     file_path=str(file_path),
@@ -1367,13 +1379,36 @@ def main():
                 ))
                 
         total_time = time.perf_counter() - start_time
-        print(f"\n✅ Completed processing {len(results)} files in {total_time:.2f}s")
-        if skipped_count > 0:
-            print(f"⏭️  Skipped {skipped_count} binary files for speed")
+        if not args.quiet:
+            print(f"\n✅ Completed processing {len(results)} files in {total_time:.2f}s")
+            if skipped_count > 0:
+                print(f"⏭️  Skipped {skipped_count} binary files for speed")
         
         # Calculate statistics
         successful = [r for r in results if r.success]
         total_pages = sum(r.page_count for r in successful)
+        
+        # Generate performance by file extension for quiet mode
+        by_extension = {}
+        for result in successful:
+            file_path = Path(result.file_path)
+            ext = file_path.suffix.lower() or 'no_extension'
+            
+            if ext not in by_extension:
+                by_extension[ext] = {
+                    'count': 0,
+                    'total_time': 0,
+                    'total_pages': 0
+                }
+            
+            by_extension[ext]['count'] += 1
+            by_extension[ext]['total_time'] += result.extraction_time
+            by_extension[ext]['total_pages'] += result.page_count
+        
+        # Calculate averages and pages/sec for each extension
+        for ext, data in by_extension.items():
+            data['avg_time'] = data['total_time'] / data['count'] if data['count'] > 0 else 0
+            data['pages_per_second'] = data['total_pages'] / data['total_time'] if data['total_time'] > 0 else 0
         
         stats = {
             "total_files": len(all_files),
@@ -1384,22 +1419,24 @@ def main():
             "files_per_second": len(all_files) / total_time if total_time > 0 else 0,
             "pages_per_second": total_pages / total_time if total_time > 0 else 0,
             "average_pages_per_file": total_pages / len(successful) if successful else 0,
+            "by_extension": by_extension,
             "results": results
         }
         
-        print("\n" + "="*60)
-        print("ULTRA-FAST PROCESSING COMPLETE")
-        print("="*60)
-        print(f"Total files: {stats['total_files']}")
-        print(f"Successful: {stats['successful_files']}")
-        print(f"Failed: {stats['failed_files']}")
-        print(f"Total pages: {stats['total_pages']}")
-        print(f"Total time: {stats['total_time']:.2f}s")
-        print(f"Files/second: {stats['files_per_second']:.1f}")
-        print(f"Pages/second: {stats['pages_per_second']:.1f}")
+        if not args.quiet:
+            print("\n" + "="*60)
+            print("ULTRA-FAST PROCESSING COMPLETE")
+            print("="*60)
+            print(f"Total files: {stats['total_files']}")
+            print(f"Successful: {stats['successful_files']}")
+            print(f"Failed: {stats['failed_files']}")
+            print(f"Total pages: {stats['total_pages']}")
+            print(f"Total time: {stats['total_time']:.2f}s")
+            print(f"Files/second: {stats['files_per_second']:.1f}")
+            print(f"Pages/second: {stats['pages_per_second']:.1f}")
         
         # Show failure analysis - SHOW ALL FAILURES
-        if stats['failed_files'] > 0:
+        if not args.quiet and stats['failed_files'] > 0:
             print(f"\n❌ FAILURE ANALYSIS - ALL {stats['failed_files']} FAILURES:")
             failed_results = [r for r in stats['results'] if not r.success]
             
@@ -1419,7 +1456,7 @@ def main():
                 print("")
         
         # Show success analysis
-        if stats['successful_files'] > 0:
+        if not args.quiet and stats['successful_files'] > 0:
             print(f"\n✅ SUCCESS ANALYSIS:")
             successful_results = [r for r in stats['results'] if r.success]
             
@@ -1469,16 +1506,44 @@ def main():
                 print(f"\n  🚀 Fastest: {fastest[0]} ({fastest[3]:.3f}s avg)")
                 print(f"  🐌 Slowest: {slowest[0]} ({slowest[3]:.3f}s avg)")
         
-        if stats['pages_per_second'] >= 1000:
-            print("\n🚀 TARGET ACHIEVED: 1000+ pages/second!")
+        if not args.quiet:
+            if stats['pages_per_second'] >= 1000:
+                print("\n🚀 TARGET ACHIEVED: 1000+ pages/second!")
+            else:
+                print(f"\n📊 Current: {stats['pages_per_second']:.1f} pages/sec (Target: 1000)")
         else:
+            # Quiet mode: Show clean performance summary for pipeline
+            if stats.get('by_extension'):
+                print(f"\n📊 PERFORMANCE BY FILE TYPE:")
+                print("  Top time consumers:")
+                ext_stats = []
+                for ext, data in stats['by_extension'].items():
+                    count = data['count']
+                    total_time = data['total_time']
+                    avg_time = data['avg_time']
+                    pages_per_sec = data.get('pages_per_second', count / total_time if total_time > 0 else 0)
+                    ext_stats.append((ext, count, total_time, avg_time, pages_per_sec))
+                
+                # Sort by total time (most time consuming first)
+                ext_stats.sort(key=lambda x: x[2], reverse=True)
+                
+                for ext, count, total_time, avg_time, pps in ext_stats[:8]:  # Top 8
+                    print(f"    {ext}: {count} files, {total_time:.2f}s total, {avg_time:.3f}s avg, {pps:.1f} pages/sec")
+                
+                if len(ext_stats) > 1:
+                    fastest = min(ext_stats, key=lambda x: x[3])
+                    slowest = max(ext_stats, key=lambda x: x[3])
+                    print(f"\n  🚀 Fastest: {fastest[0]} ({fastest[3]:.3f}s avg)")
+                    print(f"  🐌 Slowest: {slowest[0]} ({slowest[3]:.3f}s avg)")
+            
             print(f"\n📊 Current: {stats['pages_per_second']:.1f} pages/sec (Target: 1000)")
         
         # Always save output if output directory is configured
         if output_dir:
             output_dir.mkdir(parents=True, exist_ok=True)
             
-            print(f"\n💾 SAVING OUTPUT FILES...")
+            if not args.quiet:
+                print(f"\n💾 SAVING OUTPUT FILES...")
             saved_count = 0
             
             for result in stats['results']:
@@ -1490,7 +1555,8 @@ def main():
                         f.write(result.text)
                     saved_count += 1
             
-            print(f"✅ Saved {saved_count} markdown files to: {output_dir}")
+            if not args.quiet:
+                print(f"✅ Saved {saved_count} markdown files to: {output_dir}")
             
             # Optional tagging step (sidecar process)
             if args.enable_tagging:

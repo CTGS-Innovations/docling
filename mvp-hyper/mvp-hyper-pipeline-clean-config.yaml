@@ -1,0 +1,120 @@
+# MVP Hyper Pipeline Clean Configuration
+# =====================================
+# Clean orchestration configuration for existing working components
+
+# Input sources
+inputs:
+  # Individual files for testing
+  files: []
+  
+  # Directories to scan recursively 
+  directories:
+    - "~/projects/docling/cli/data"
+    - "~/projects/docling/cli/data_complex" 
+    - "~/projects/docling/cli/data_osha"
+
+# File processing settings (from your original config)
+processing:
+  # Maximum workers for parallel processing
+  max_workers: 1
+  
+  # Skip these file extensions completely
+  skip_extensions:
+    - ".jpg"
+    - ".jpeg" 
+    - ".png"
+    - ".gif"
+    - ".bmp"
+    - ".tiff"
+    - ".tif"
+    - ".mp3"
+    - ".mp4" 
+    - ".wav"
+    - ".avi"
+    - ".mov"
+    - ".wmv"
+    - ".flv"
+    - ".zip"
+    - ".tar"
+    - ".gz"
+    - ".bz2"
+    - ".rar"
+    - ".7z"
+    - ".exe"
+    - ".dll"
+    - ".so"
+    - ".dylib"
+    - ".bin"
+    - ".dat"
+  
+  # Skip files larger than this (in MB)
+  max_file_size_mb: 100
+  
+  # Timeout per file (in seconds)
+  timeout_per_file: 10
+  
+  # Skip files that take longer than this (in seconds)
+  slow_file_threshold: 5.0
+
+# PDF-specific settings (from your original config)
+pdf:
+  # Skip PDFs with these patterns in filename (for troubleshooting)
+  skip_patterns: []
+  
+  # Limit pages for ultra-fast processing
+  max_pages_to_extract: 25  # Only extract first 25 pages for speed
+  
+  # Skip PDFs with more than this many pages
+  skip_if_pages_over: 100
+  
+  # Try different PDF loading strategies
+  fallback_strategies:
+    - "direct_file_open"
+    - "pdftotext_command" 
+    - "basic_text_only"
+    - "skip_if_slow"
+
+# Clean Pipeline Steps Configuration
+# ==================================
+
+pipeline:
+  # Global pipeline settings
+  output_directory: "pipeline-output"
+  enable_caching: true
+  performance_logging: true
+  
+  # Step targets for performance measurement
+  performance_targets:
+    conversion: 700      # pages/sec for mvp-hyper-core
+    classification: 2000 # pages/sec for keyword-based classification
+    enrichment: 1500     # pages/sec for mvp-hyper-tagger
+    extraction: 300      # pages/sec for mvp-hyper-semantic
+
+# Output configuration
+output:
+  directory: "pipeline-output"  # Default output directory
+  
+  # File formats to generate
+  formats:
+    enhanced_markdown: true    # Original markdown with enriched front matter
+    semantic_json: true        # Facts and entities as JSON
+    performance_stats: true    # Processing metrics
+  
+  # File naming conventions
+  file_naming:
+    enhanced_suffix: ""        # No suffix - enhance original file
+    semantic_suffix: ".metadata.json"
+    stats_suffix: ".stats.json"
+  
+  # Save detailed logs for troubleshooting
+  save_performance_log: true
+  save_error_log: true
+
+# Debugging
+debug:
+  # Show progress every N files
+  progress_interval: 50
+  # Show detailed timing for files slower than this
+  timing_threshold: 1.0
+  # Stop processing after N files (for testing, 0 = process all)
+  max_files_to_process: 0
