@@ -63,45 +63,18 @@ class PreciseVisualExtractor:
     def _setup_docling_converter(self) -> DocumentConverter:
         """Setup Docling converter with optimal layout detection for visual elements."""
         try:
-            # Configure pipeline for enhanced layout detection
-            pipeline_options = PdfPipelineOptions()
+            # Use basic Docling configuration for now
+            print("🤖 Setting up Docling converter with default configuration...")
             
-            # Debug: Print available attributes
-            print("📋 Available PdfPipelineOptions attributes:")
-            for attr in dir(pipeline_options):
-                if not attr.startswith('_'):
-                    print(f"  - {attr}")
+            # Create converter with basic options
+            converter = DocumentConverter()
             
-            # Try different attribute names for layout model
-            if hasattr(pipeline_options, 'layout_model_spec'):
-                pipeline_options.layout_model_spec = DOCLING_LAYOUT_EGRET_LARGE
-            elif hasattr(pipeline_options, 'layout_options'):
-                if hasattr(pipeline_options.layout_options, 'model_spec'):
-                    pipeline_options.layout_options.model_spec = DOCLING_LAYOUT_EGRET_LARGE
-            
-            # Higher resolution for better detection
-            if hasattr(pipeline_options, 'images_scale'):
-                pipeline_options.images_scale = 2.0
-            
-            # Enable formula enrichment
-            if hasattr(pipeline_options, 'do_formula_enrichment'):
-                pipeline_options.do_formula_enrichment = True
-            
-            print("✅ Docling pipeline configured successfully")
-            
-            # Create converter with enhanced options
-            converter = DocumentConverter(
-                format_options={InputFormat.PDF: pipeline_options}
-            )
-            
+            print("✅ Docling converter ready")
             return converter
             
         except Exception as e:
             print(f"❌ Error setting up Docling converter: {e}")
-            print("⚠️ Falling back to default Docling configuration...")
-            
-            # Fallback to basic configuration
-            return DocumentConverter()
+            raise
     
     def extract(self):
         """Main extraction using Docling's professional layout detection."""
@@ -110,7 +83,6 @@ class PreciseVisualExtractor:
         print(f"📄 PDF: {self.pdf_path.name}")  
         print(f"📁 Output: {self.output_dir}")
         print(f"🔍 Extracting: {', '.join(sorted(self.extract_types))}")
-        print(f"🤖 Using: Docling EGRET-LARGE layout detection")
         print(f"{'='*60}\n")
         
         start_time = time.time()
@@ -286,6 +258,100 @@ class PreciseVisualExtractor:
         except Exception as e:
             print(f"  ⚠️ Failed to extract {element_type}: {e}")
             return None
+    
+    def _extract_enriched_formula(self, page, text_item, prov, page_num: int) -> Dict:
+        """Extract a formula image from enriched document element."""
+        try:
+            bbox = prov.bbox
+            
+            # Convert normalized coordinates to page coordinates
+            page_width = page.rect.width
+            page_height = page.rect.height
+            
+            x0 = bbox.l * page_width / 100.0
+            y0 = bbox.t * page_height / 100.0
+            x1 = bbox.r * page_width / 100.0
+            y1 = bbox.b * page_height / 100.0
+            
+            # Add generous padding for formulas
+            padding_x = 80
+            padding_y = 30
+            
+            x0_final = max(0, x0 - padding_x)
+            y0_final = max(0, y0 - padding_y)
+            x1_final = min(page_width, x1 + padding_x)
+            y1_final = min(page_height, y1 + padding_y)
+            
+            # Create element ID
+            count = self.stats["formulas"] + 1
+            element_id = f"FML_P{page_num:03d}_N{count:03d}_enriched"
+            
+            # Extract high-resolution image
+            rect = fitz.Rect(x0_final, y0_final, x1_final, y1_final)
+            mat = fitz.Matrix(3.0, 3.0)
+            pix = page.get_pixmap(matrix=mat, clip=rect)
+            
+            # Save image
+            image_path = self.output_dir / f"{element_id}.png"
+            pix.save(str(image_path))
+            
+            width = int(x1_final - x0_final)
+            height = int(y1_final - y0_final)
+            
+            # Get enriched text if available
+            enriched_text = ""
+            if hasattr(text_item, 'text'):
+                enriched_text = text_item.text
+            
+            print(f"  ✅ {element_id}: enriched formula {width}x{height}px")
+            
+            return {
+                "id": element_id,
+                "type": "formula",
+                "page": page_num,
+                "bbox": [x0_final, y0_final, x1_final, y1_final],
+                "docling_bbox": [x0, y0, x1, y1],
+                "width": width,
+                "height": height,
+                "confidence": 0.9,
+                "method": "docling_enriched",
+                "file": image_path.name,
+                "enriched_text": enriched_text[:100] if enriched_text else ""
+            }
+            
+        except Exception as e:
+            print(f"  ⚠️ Failed to extract enriched formula: {e}")
+            return None
+    
+    def _deduplicate_elements(self, elements: List[Dict]) -> List[Dict]:
+        """Remove duplicate element detections."""
+        if not elements:
+            return elements
+        
+        # Sort by confidence descending
+        elements_sorted = sorted(elements, key=lambda x: x.get("confidence", 0), reverse=True)
+        
+        deduplicated = []
+        for current in elements_sorted:
+            current_bbox = current["bbox"]
+            is_duplicate = False
+            
+            # Check against already kept elements
+            for kept in deduplicated:
+                kept_bbox = kept["bbox"]
+                
+                # Calculate overlap
+                overlap_ratio = self._calculate_bbox_overlap(current_bbox, kept_bbox)
+                
+                # If significant overlap, consider duplicate
+                if overlap_ratio > 0.7:
+                    is_duplicate = True
+                    break
+            
+            if not is_duplicate:
+                deduplicated.append(current)
+        
+        return deduplicated
     
     def _detect_visual_tables(self, page, page_num: int) -> List[Dict]:
         """Detect tables drawn with actual lines/borders."""

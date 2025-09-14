@@ -27,3 +27,6 @@ cli/visual_optimization_results.json
 cli/data/
 
 cli/all.tar
+cli/data_complex/
+cli/data_osha/
+

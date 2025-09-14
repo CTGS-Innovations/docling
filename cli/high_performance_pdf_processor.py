@@ -104,7 +104,7 @@ class HighPerformancePDFProcessor:
                  text_only_mode: bool = False, force_strategy: Optional[str] = None):
         # Initialize components
         self.complexity_analyzer = PDFComplexityAnalyzer()
-        self.text_extractor = FastTextExtractor()
+        self.text_extractor = FastTextExtractor(text_only_mode=text_only_mode)  # Pass text_only_mode flag
         self.document_tagger = UniversalDocumentTagger()
         
         # Configuration parameters
@@ -917,14 +917,17 @@ def main():
         return
     
     # Configure processor based on arguments
+    # If strategy is 'fast' or --no-visual is set, enable text_only_mode
+    text_only = args.text_only or args.strategy == 'fast' or args.no_visual
+    
     processor_config = {
         'max_visual_workers': args.visual_workers,
         'visual_batch_timeout': args.timeout,
-        'enable_visual_processing': not args.no_visual,
+        'enable_visual_processing': not args.no_visual and args.strategy != 'fast',
         'enable_document_tagging': not args.no_tagging,
         'enable_tables': not args.no_tables,
         'enable_images': not args.no_images,
-        'text_only_mode': args.text_only,
+        'text_only_mode': text_only,
         'force_strategy': args.strategy
     }
     

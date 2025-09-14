@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+      "pymupdf": {
+        "command": "npx",
+        "args": [
+          "mcp-remote",
+          "https://gitmcp.io/pymupdf/PyMuPDF"
+        ]
+      }
+    }
+  }

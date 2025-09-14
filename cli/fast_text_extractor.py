@@ -108,8 +108,31 @@ class VisualPlaceholder:
 class FastTextExtractor:
     """Ultra-fast text extraction for immediate results."""
     
-    def __init__(self):
+    def __init__(self, log_to_file=False, text_only_mode=False):
         self.placeholder_counter = 0
+        self.log_to_file = log_to_file
+        self.log_file = None
+        self.text_only_mode = text_only_mode  # Skip all image extraction when True
+        
+        if self.log_to_file:
+            # Create output directory and log file
+            from datetime import datetime
+            output_dir = Path('/home/corey/projects/docling/cli/output/latest')
+            output_dir.mkdir(parents=True, exist_ok=True)
+            
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            self.log_file = output_dir / f"extraction_log_{timestamp}.txt"
+            
+            # Initialize log file
+            with open(self.log_file, 'w') as f:
+                f.write(f"=== FAST TEXT EXTRACTION LOG - {datetime.now()} ===\n\n")
+    
+    def _log(self, message: str):
+        """Log message to both console and file if enabled."""
+        print(message)
+        if self.log_to_file and self.log_file:
+            with open(self.log_file, 'a') as f:
+                f.write(message + '\n')
         
     def extract(self, file_path: Path) -> ExtractionResult:
         """
@@ -208,17 +231,23 @@ class FastTextExtractor:
         for page_num in range(page_count):
             page = doc[page_num]
             
-            # First, detect mathematical and table regions BEFORE text extraction
-            math_regions, table_regions, figure_regions = self._detect_special_regions(page, page_num + 1)
-            
-            # Extract text blocks with preserved regions
-            page_text = self._extract_text_with_preservation(page, math_regions, table_regions, figure_regions, page_num + 1)
-            
-            # Create placeholders for all detected regions
-            page_placeholders = math_regions + table_regions + figure_regions
-            
-            text_content.append(page_text)
-            visual_placeholders.extend(page_placeholders)
+            if self.text_only_mode:
+                # FAST PATH: Skip all detection in text-only mode
+                page_text = page.get_text("text", sort=True)
+                text_content.append(page_text)
+            else:
+                # FULL PATH: Detect and preserve special regions
+                # First, detect mathematical and table regions BEFORE text extraction
+                math_regions, table_regions, figure_regions = self._detect_special_regions(page, page_num + 1)
+                
+                # Extract text blocks with preserved regions
+                page_text = self._extract_text_with_preservation(page, math_regions, table_regions, figure_regions, page_num + 1)
+                
+                # Create placeholders for all detected regions
+                page_placeholders = math_regions + table_regions + figure_regions
+                
+                text_content.append(page_text)
+                visual_placeholders.extend(page_placeholders)
         
         doc.close()
         
@@ -253,6 +282,10 @@ class FastTextExtractor:
             textpage = page.get_textpage()
             page_text = textpage.get_text_range()
             text_content.append(page_text)
+            
+            # Skip all detection in text-only mode
+            if self.text_only_mode:
+                continue
             
             # Detect figure references in text (charts, maps, diagrams)
             import re
@@ -1199,6 +1232,10 @@ class FastTextExtractor:
                 placeholder = self._create_placeholder("formula", page_num, f"Mathematical expression: {block_text[:50]}")
                 placeholder["bbox"] = [float(block_bbox[0]), float(block_bbox[1]), float(block_bbox[2]), float(block_bbox[3])]
                 placeholder["original_text"] = block_text
+                
+                # EXTRACT MATHEMATICAL REGION AS IMAGE
+                self._extract_bbox_as_image(page, block_bbox, placeholder, page_num, "formula")
+                
                 math_regions.append(placeholder)
             
             # 2. Detect table-like structures
@@ -1206,71 +1243,23 @@ class FastTextExtractor:
                 placeholder = self._create_placeholder("table", page_num, f"Table structure")
                 placeholder["bbox"] = [float(block_bbox[0]), float(block_bbox[1]), float(block_bbox[2]), float(block_bbox[3])]
                 placeholder["original_text"] = block_text
+                
+                # EXTRACT TABLE REGION AS IMAGE
+                self._extract_bbox_as_image(page, block_bbox, placeholder, page_num, "table")
+                
                 table_regions.append(placeholder)
         
-        # STEP 2: Detect actual embedded images/charts (the missing piece!)
-        images = page.get_images()
+        # STEP 2: DISABLED - Skip embedded images/charts for now
+        # We're focusing only on formulas and tables
+        self._log(f"🚫 Skipping embedded image detection (focusing on formulas/tables only)")
         
-        for img_index, img in enumerate(images):
-            # Get image metadata
-            xref = img[0]  # Image reference number
-            
-            try:
-                # Get image rectangle (position and size)
-                img_rect = page.get_image_rects(xref)
-                
-                if img_rect:
-                    # Use the first rectangle if multiple found
-                    bbox = img_rect[0]  # [x0, y0, x1, y1]
-                    
-                    # Calculate image dimensions
-                    width = bbox[2] - bbox[0]
-                    height = bbox[3] - bbox[1]
-                    
-                    # Only capture substantial images (filter out tiny icons/decorations)
-                    if width > 50 and height > 50:  # Minimum size threshold
-                        
-                        # Look for nearby text to determine image type
-                        image_type = self._classify_image_by_context(page, bbox, text_dict)
-                        
-                        # Create more descriptive placeholder
-                        description = f"{image_type.title()} on page {page_num} ({int(width)}x{int(height)} pixels)"
-                        
-                        placeholder = self._create_placeholder(image_type, page_num, description)
-                        placeholder["bbox"] = [float(bbox[0]), float(bbox[1]), float(bbox[2]), float(bbox[3])]  # Convert Rect to list
-                        placeholder["image_index"] = img_index
-                        placeholder["image_xref"] = xref
-                        placeholder["dimensions"] = {"width": float(width), "height": float(height)}
-                        
-                        figure_regions.append(placeholder)
-                        
-                        print(f"📊 Detected {image_type}: {int(width)}x{int(height)} at {bbox} on page {page_num}")
-                        
-            except Exception as e:
-                print(f"⚠️  Could not process image {img_index} on page {page_num}: {e}")
-                continue
+        # STEP 3: DISABLED - Skip figure captions for now
+        # We're focusing only on formulas and tables  
+        self._log(f"🚫 Skipping figure caption detection (focusing on formulas/tables only)")
         
-        # STEP 3: Look for figure captions in text (keep existing logic)
-        for block in text_dict.get("blocks", []):
-            if "lines" not in block:
-                continue
-                
-            block_text = ""
-            for line in block["lines"]:
-                for span in line.get("spans", []):
-                    block_text += span.get("text", "")
-                block_text += "\n"
-            
-            if self._is_figure_content(block_text):
-                block_bbox = block["bbox"]
-                element_type = self._determine_figure_type(block_text)
-                    
-                placeholder = self._create_placeholder(element_type, page_num, block_text.strip())
-                placeholder["bbox"] = [float(block_bbox[0]), float(block_bbox[1]), float(block_bbox[2]), float(block_bbox[3])]
-                placeholder["original_text"] = block_text
-                placeholder["is_caption"] = True  # Mark as caption, not actual visual
-                
-                figure_regions.append(placeholder)
+        # STEP 4: DISABLED - Keep ALL detected regions (even overlapping)
+        # This ensures we catch everything, even if some regions overlap
+        self._log(f"📋 Keeping all detected regions without merging:")
         
         return math_regions, table_regions, figure_regions
     
@@ -1337,7 +1326,7 @@ class FastTextExtractor:
         """Detect if a text block contains mathematical content."""
         import re
         
-        # Check for mathematical symbols
+        # Check for mathematical symbols (Unicode)
         math_symbols = ['∑', '∫', '∏', '√', '±', '∞', '≈', '≤', '≥', '≠', '∂', '∇', 
                        '∀', '∃', '∈', '∉', '⊂', '⊃', '∪', '∩', '∧', '∨', '¬', '→', '↔',
                        'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'λ', 'μ', 'π', 'σ', 'φ', 'ψ', 'ω']
@@ -1345,26 +1334,86 @@ class FastTextExtractor:
         if any(symbol in text for symbol in math_symbols):
             return True
         
+        # Check for common math patterns (VERY AGGRESSIVE DETECTION)
+        math_patterns = [
+            # Basic equations and expressions
+            r'\b[a-zA-Z]\s*[=≈]\s*[0-9\-+\s\(\)]+',  # x = 123, y = -5, etc.
+            r'\([^)]*[+\-*/][^)]*\)',  # (a + b), (x - y), etc.
+            r'\b[a-zA-Z]\^[0-9]+\b',  # x^2, a^3
+            r'\b[a-zA-Z]_[0-9]+\b',   # x_1, y_2  
+            r'\b\d+\s*[+\-×÷*/]\s*\d+',  # 5 + 3, 2 * 4
+            
+            # Mathematical functions
+            r'\bsin\b|\bcos\b|\btan\b|\blog\b|\bln\b|\bexp\b',  # trig/log functions
+            r'\b[f|g|h]\([^)]*\)',    # function notation f(x)
+            r'\bmax\b|\bmin\b|\bsum\b|\bprod\b',  # mathematical operators
+            
+            # Advanced math
+            r'\bd[xy]/d[xy]\b',       # derivatives
+            r'∂[^∂]*∂',               # partial derivatives
+            r'\bE\[.*\]',            # expectation notation
+            r'\bP\(.*\)',            # probability notation
+            
+            # AGGRESSIVE: Any line with variables and operators
+            r'\b[a-zA-Z]\s*[+\-*/=]\s*[a-zA-Z0-9]',  # a + b, x = y, etc.
+            r'\b\d+[a-zA-Z]',        # 2x, 3y (coefficients)
+            r'\b[a-zA-Z]\d+',        # x2, y3 (variables with numbers)
+            r'[≤≥<>]\s*\d+',         # inequalities
+            r'\b\d+\.\d+\b',         # decimal numbers (often in formulas)
+            r'\b[A-Z][a-z]*\s*=',    # Variable definitions (Velocity =, etc.)
+            r'\(\d+\)',              # numbered equations (1), (2)
+            r'\[[0-9]+\]',           # equation references [1], [2]
+            
+            # Mathematical relationships
+            r'\bif\s+.*\bthen\b',    # conditional statements
+            r'\bwhere\s+[a-zA-Z]',   # variable definitions
+            r'\blet\s+[a-zA-Z]',     # variable declarations
+            r'\bfor\s+[a-zA-Z]\s*[∈=]',  # for loops in math
+            r'\∀|\∃',                # quantifiers
+        ]
+        
+        for pattern in math_patterns:
+            if re.search(pattern, text, re.IGNORECASE):
+                return True
+        
         # Check for subscript/superscript patterns
         if re.search(r'[a-zA-Z][₀₁₂₃₄₅₆₇₈₉]|[a-zA-Z][⁰¹²³⁴⁵⁶⁷⁸⁹]', text):
             return True
             
-        # Check for equation-like patterns
-        if re.search(r'[=≡≈].*[a-zA-Z].*[+\-*/]', text):
-            return True
-            
         # Check for font characteristics (italic math fonts)
+        math_font_count = 0
+        total_spans = 0
+        
         for line in block.get("lines", []):
             for span in line.get("spans", []):
+                total_spans += 1
                 font = span.get("font", "").lower()
-                if "math" in font or "italic" in font:
-                    return True
+                # Common math fonts in PDFs
+                if any(math_font in font for math_font in ["math", "italic", "symbol", "times-italic", "cambria-math"]):
+                    math_font_count += 1
+        
+        # If >20% of text uses math fonts, likely mathematical (lowered threshold)
+        if total_spans > 0 and math_font_count / total_spans > 0.2:
+            return True
         
         return False
     
     def _is_table_content(self, text: str, block) -> bool:
         """Detect if content represents a table structure."""
+        import re
+        
         lines = text.strip().split('\n')
+        
+        # Basic length check
+        if len(lines) < 2:
+            return False
+        
+        # Check for explicit table indicators
+        table_keywords = ['table', 'column', 'row', 'header', 'data', 'results']
+        if any(keyword in text.lower() for keyword in table_keywords):
+            # If table keywords found, check for structured data
+            if self._has_structured_layout(lines, block):
+                return True
         
         # Look for consistent column structures
         if len(lines) >= 3:
@@ -1374,11 +1423,64 @@ class FastTextExtractor:
                 if len(set(pipe_counts)) == 1 and pipe_counts[0] >= 2:  # Consistent pipe count
                     return True
             
-            # Check for space-aligned columns (at least 3 columns)
+            # Check for space-aligned columns (at least 2 columns)
             tab_counts = [line.count('\t') for line in lines]
-            if any(count >= 2 for count in tab_counts):
+            if any(count >= 1 for count in tab_counts):  # Lowered threshold
+                return True
+            
+            # Check for consistent spacing patterns (table-like alignment)
+            spacing_patterns = []
+            for line in lines:
+                # Find sequences of multiple spaces (potential column separators)
+                spaces = re.findall(r'\s{2,}', line)
+                spacing_patterns.append(len(spaces))
+            
+            # If most lines have similar spacing patterns, likely a table
+            if spacing_patterns and len(set(spacing_patterns)) <= 2 and max(spacing_patterns) >= 2:
+                return True
+            
+            # Check for numeric data in columns
+            numeric_lines = 0
+            for line in lines:
+                numbers_in_line = len(re.findall(r'\b\d+\.?\d*\b', line))
+                if numbers_in_line >= 2:  # At least 2 numbers per line
+                    numeric_lines += 1
+            
+            # If >30% of lines contain multiple numbers, likely tabular data (lowered threshold)
+            if numeric_lines / len(lines) > 0.3:
+                return True
+            
+        # AGGRESSIVE: Any text block with consistent indentation might be tabular
+        if len(lines) >= 2:
+            indentations = []
+            for line in lines:
+                leading_spaces = len(line) - len(line.lstrip())
+                indentations.append(leading_spaces)
+            
+            # If we have 2+ different consistent indentation levels, might be structured data
+            unique_indents = len(set(indentations))
+            if unique_indents >= 2 and unique_indents <= 4:  # 2-4 indentation levels
                 return True
         
+        return False
+    
+    def _has_structured_layout(self, lines: List[str], block) -> bool:
+        """Check if text block has structured layout suggesting a table."""
+        # Look at font/positioning consistency across lines
+        if not block.get("lines"):
+            return False
+        
+        # Check for consistent left margins (aligned columns)
+        left_margins = []
+        for line_data in block["lines"]:
+            if line_data.get("spans"):
+                first_span = line_data["spans"][0]
+                left_margins.append(first_span.get("bbox", [0])[0])
+        
+        # If we have consistent left alignment, check for other column positions
+        if len(set(left_margins)) <= 2:  # Maximum 2 different left margins
+            return True
+            
         return False
     
     def _is_figure_content(self, text: str) -> bool:
@@ -1537,6 +1639,128 @@ class FastTextExtractor:
         math_expressions.sort(key=len, reverse=True)
         
         return math_expressions
+    
+    def _merge_overlapping_regions(self, regions: List[Dict], page_num: int, region_type: str) -> List[Dict]:
+        """Merge overlapping regions to prevent duplicate extractions."""
+        if not regions:
+            return regions
+        
+        # Sort regions by vertical position (top to bottom)
+        regions.sort(key=lambda r: r["bbox"][1])  # Sort by y0 coordinate
+        
+        merged_regions = []
+        current_group = [regions[0]]
+        
+        for region in regions[1:]:
+            current_bottom = current_group[-1]["bbox"][3]  # y1 of last region in group
+            region_top = region["bbox"][1]  # y0 of current region
+            
+            # Check for vertical overlap or proximity (within 40 points)
+            if region_top <= current_bottom + 40:
+                current_group.append(region)
+            else:
+                # Process current group
+                if len(current_group) > 1:
+                    merged_region = self._create_merged_region(current_group, page_num, region_type)
+                    merged_regions.append(merged_region)
+                else:
+                    merged_regions.extend(current_group)
+                
+                # Start new group
+                current_group = [region]
+        
+        # Process final group
+        if len(current_group) > 1:
+            merged_region = self._create_merged_region(current_group, page_num, region_type)
+            merged_regions.append(merged_region)
+        else:
+            merged_regions.extend(current_group)
+        
+        print(f"📋 {region_type.title()} regions: {len(regions)} → {len(merged_regions)} (after merging)")
+        return merged_regions
+    
+    def _create_merged_region(self, regions: List[Dict], page_num: int, region_type: str) -> Dict:
+        """Create a single merged region from multiple overlapping regions."""
+        # Calculate merged bounding box
+        min_x = min(r["bbox"][0] for r in regions)
+        min_y = min(r["bbox"][1] for r in regions)
+        max_x = max(r["bbox"][2] for r in regions)
+        max_y = max(r["bbox"][3] for r in regions)
+        
+        # Combine original text
+        combined_text = "\n".join(r.get("original_text", "") for r in regions if r.get("original_text"))
+        
+        # Create merged placeholder
+        merged_region = self._create_placeholder(
+            region_type, 
+            page_num, 
+            f"Merged {region_type} region ({len(regions)} elements)"
+        )
+        
+        merged_region["bbox"] = [float(min_x), float(min_y), float(max_x), float(max_y)]
+        merged_region["original_text"] = combined_text
+        merged_region["merged_from"] = [r["placeholder_id"] for r in regions]
+        
+        return merged_region
+    
+    def _extract_bbox_as_image(self, page, bbox, placeholder, page_num: int, element_type: str):
+        """Extract the bounding box region as an image file and save to output folder."""
+        # Skip image extraction in text-only mode
+        if self.text_only_mode:
+            self._log(f"⚡ Text-only mode: skipping image extraction for {element_type}")
+            return
+        
+        try:
+            # Create output directory
+            output_dir = Path('/home/corey/projects/docling/cli/output/latest')
+            output_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Generate filename
+            placeholder_id = placeholder["placeholder_id"]
+            filename = f"{placeholder_id}_page{page_num}_{element_type}.png"
+            output_path = output_dir / filename
+            
+            # NORMALIZE TO FULL PAGE WIDTH WITH PADDING
+            page_rect = page.rect
+            page_width = page_rect.width
+            page_height = page_rect.height
+            
+            # Convert bbox from list/tuple [x0, y0, x1, y1] to Rect if needed
+            if isinstance(bbox, (list, tuple)):
+                bbox_rect = fitz.Rect(bbox[0], bbox[1], bbox[2], bbox[3])
+            else:
+                bbox_rect = bbox
+            
+            # Expand to full page width, add vertical padding for context
+            normalized_bbox = fitz.Rect(
+                0,  # Start at left margin
+                max(0, bbox_rect.y0 - 20),  # Add 20pt padding above
+                page_width,  # Extend to full page width
+                min(page_height, bbox_rect.y1 + 20)  # Add 20pt padding below
+            )
+            
+            # Extract the normalized region as pixmap (image)
+            mat = fitz.Matrix(2, 2)  # 2x scaling for better quality
+            pix = page.get_pixmap(matrix=mat, clip=normalized_bbox)
+            
+            # Save as PNG
+            pix.save(str(output_path))
+            pix = None  # Free memory
+            
+            # Store the extracted image path and normalized bbox in placeholder
+            placeholder["extracted_image_path"] = str(output_path)
+            placeholder["normalized_bbox"] = [float(normalized_bbox.x0), float(normalized_bbox.y0), 
+                                            float(normalized_bbox.x1), float(normalized_bbox.y1)]
+            
+            original_height = bbox_rect.y1 - bbox_rect.y0
+            normalized_height = normalized_bbox.y1 - normalized_bbox.y0
+            
+            self._log(f"💾 Extracted {element_type} image: {filename}")
+            self._log(f"   📏 Original: {bbox_rect.width:.0f}x{original_height:.0f} → Normalized: {page_width:.0f}x{normalized_height:.0f}")
+            
+        except Exception as e:
+            self._log(f"⚠️  Failed to extract image for {placeholder_id}: {e}")
+            placeholder["extraction_error"] = str(e)
 
     def _create_placeholder(self, element_type: str, page_number: int, description: str) -> Dict[str, Any]:
         """Create a visual placeholder for later processing."""
@@ -1627,7 +1851,7 @@ def main():
     """Extract text from specified file or run test on data directory."""
     import sys
     
-    extractor = FastTextExtractor()
+    extractor = FastTextExtractor(log_to_file=True)
     
     # Check if specific file was provided
     if len(sys.argv) > 1:
@@ -1663,6 +1887,11 @@ def main():
             if len(result.text_content) > 500:
                 preview += "..."
             print(f"\n📝 Text Preview:\n{preview}")
+            
+            # Show log file location
+            if extractor.log_file:
+                print(f"\n📋 Detailed log saved to: {extractor.log_file}")
+                print(f"💾 Extracted images saved to: /home/corey/projects/docling/cli/output/latest/")
             
         else:
             print(f"   ❌ Failed: {result.error_message}")
