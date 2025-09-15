@@ -92,10 +92,7 @@ class MVPHyperPipeline:
     
     def run_step(self, step_name: str, command: str, description: str) -> Tuple[bool, float, int]:
         """Run a pipeline step and measure performance."""
-        print(f"\n{'='*70}")
-        print(f"🚀 {step_name.upper()}: {description}")
-        print(f"{'='*70}")
-        print(f"Command: {command}")
+        print(f"\n🔸 {step_name.upper()}: {description}")
         
         start_time = time.time()
         
@@ -263,6 +260,23 @@ class MVPHyperPipeline:
                 doc_types = ['general']
                 confidence_scores['general'] = 0.5
             
+            # Calculate all domain scores for percentage breakdown
+            all_domain_scores = {
+                'safety': safety_score,
+                'technical': tech_score, 
+                'business': business_score,
+                'research': research_score
+            }
+            
+            # Convert to percentages
+            total_score = sum(all_domain_scores.values()) or 1  # Avoid division by zero
+            domain_percentages = {domain: (score / total_score) * 100 
+                                for domain, score in all_domain_scores.items()}
+            
+            # Get top three domains by percentage
+            top_three_domains = sorted(domain_percentages.items(), key=lambda x: x[1], reverse=True)[:3]
+            top_three_formatted = {domain: f"{percentage:.1f}%" for domain, percentage in top_three_domains if percentage > 0}
+            
             # Determine primary domain
             primary_domain = max(confidence_scores.items(), key=lambda x: x[1])[0] if confidence_scores else 'general'
             
@@ -274,13 +288,13 @@ class MVPHyperPipeline:
                     front_matter = parts[1]
                     body = parts[2]
                     
-                    # Add classification metadata
-                    classification_data = f"\n# Classification (Step 2)\ndocument_types: {doc_types}\nprimary_domain: {primary_domain}\nclassification_confidence: {max(confidence_scores.values()) if confidence_scores else 0.5:.2f}\n"
+                    # Add classification metadata with domain breakdown
+                    classification_data = f"\n# Classification (Step 2)\ndocument_types: {doc_types}\nprimary_domain: {primary_domain}\nclassification_confidence: {max(confidence_scores.values()) if confidence_scores else 0.5:.2f}\ndomain_percentages: {dict(top_three_formatted)}\n"
                     new_front_matter = front_matter.rstrip() + classification_data
                     content = f"---{new_front_matter}---{body}"
             else:
-                # Add new front matter
-                classification_data = f"# Classification (Step 2)\ndocument_types: {doc_types}\nprimary_domain: {primary_domain}\nclassification_confidence: {max(confidence_scores.values()) if confidence_scores else 0.5:.2f}\n"
+                # Add new front matter with domain breakdown
+                classification_data = f"# Classification (Step 2)\ndocument_types: {doc_types}\nprimary_domain: {primary_domain}\nclassification_confidence: {max(confidence_scores.values()) if confidence_scores else 0.5:.2f}\ndomain_percentages: {dict(top_three_formatted)}\n"
                 content = f"---\n{classification_data}---\n\n{content}"
             
             # Write enhanced file back to same location
@@ -298,9 +312,7 @@ class MVPHyperPipeline:
             'pages_per_sec': pages_per_sec
         }
         
-        print(f"✅ Completed: {files_processed} files enhanced in-place in {elapsed:.2f}s")
-        print(f"⚡ Performance: {pages_per_sec:.1f} pages/sec (Target: 2000+)")
-        print(f"📁 Files location: {markdown_dir}")
+        print(f"✅ Classification: {files_processed} files, {pages_per_sec:.1f} pages/sec (Target: 2000+)")
         
         return True
     
@@ -426,9 +438,7 @@ class MVPHyperPipeline:
             'pages_per_sec': pages_per_sec
         }
         
-        print(f"✅ Completed: {files_processed} files enriched in-place in {elapsed:.2f}s")
-        print(f"⚡ Performance: {pages_per_sec:.1f} pages/sec (Target: 1500+)")
-        print(f"📁 Files location: {markdown_dir}")
+        print(f"✅ Enrichment: {files_processed} files, {pages_per_sec:.1f} pages/sec (Target: 1500+)")
         
         return True
     
@@ -549,9 +559,7 @@ class MVPHyperPipeline:
             'total_facts': total_facts
         }
         
-        print(f"✅ Completed: {files_processed} files → {total_facts} facts in {elapsed:.2f}s")
-        print(f"⚡ Performance: {pages_per_sec:.1f} pages/sec (Target: 300+)")
-        print(f"📁 Semantic files: {working_dir}")
+        print(f"✅ Extraction: {files_processed} files → {total_facts} facts, {pages_per_sec:.1f} pages/sec (Target: 300+)")
         
         return True
     
@@ -596,6 +604,11 @@ class MVPHyperPipeline:
         
         # Print performance summary
         self.print_performance_summary(total_time)
+        
+        # Show final output location
+        print(f"\n📁 All output files: {output_dir}")
+        print(f"   • {len(list(Path(output_dir).glob('*.md')))} markdown files")
+        print(f"   • {len(list(Path(output_dir).glob('*.semantic.json')))} semantic JSON files")
     
     def print_performance_summary(self, total_time: float):
         """Print a summary of performance metrics."""
