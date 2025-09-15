@@ -1,0 +1,76 @@
+{
+  "timestamp": "20250914_222413",
+  "focus": "Comprehensive NLP library performance comparison",
+  "libraries_tested": [
+    "spacy",
+    "hanlp",
+    "stanza"
+  ],
+  "system_info": {
+    "cpu_count": 16,
+    "memory_gb": 11.671562194824219,
+    "available_libraries": {
+      "spacy": "3.8.7",
+      "hanlp": "2.1.2",
+      "stanza": "1.10.1"
+    }
+  },
+  "results": [
+    {
+      "library": "enhanced_regex",
+      "version": "1.0",
+      "configuration": "Domain-specific patterns",
+      "pages_per_sec": 670.7031099160779,
+      "processing_time": 0.12076878547668457,
+      "total_pages": 81,
+      "entities_found": 937,
+      "patterns_matched": 937,
+      "memory_usage_mb": 0.64453125,
+      "setup_time": 0.0,
+      "accuracy_score": 0.0,
+      "error_message": null
+    },
+    {
+      "library": "spacy",
+      "version": "3.8.7",
+      "configuration": "NER-only + patterns",
+      "pages_per_sec": 15.526395756607062,
+      "processing_time": 5.216922283172607,
+      "total_pages": 81,
+      "entities_found": 7111,
+      "patterns_matched": 937,
+      "memory_usage_mb": 53.890625,
+      "setup_time": 0.2608160972595215,
+      "accuracy_score": 0.0,
+      "error_message": null
+    },
+    {
+      "library": "hanlp",
+      "version": "2.1.2",
+      "configuration": "error",
+      "pages_per_sec": 0,
+      "processing_time": 0,
+      "total_pages": 0,
+      "entities_found": 0,
+      "patterns_matched": 0,
+      "memory_usage_mb": 0,
+      "setup_time": 0,
+      "accuracy_score": 0.0,
+      "error_message": "The identifier en resolves to a nonexistent meta file en/config.json. "
+    },
+    {
+      "library": "stanza",
+      "version": "1.10.1",
+      "configuration": "English NER + patterns",
+      "pages_per_sec": 51.59214734390632,
+      "processing_time": 1.5700063705444336,
+      "total_pages": 81,
+      "entities_found": 55,
+      "patterns_matched": 937,
+      "memory_usage_mb": 7.98828125,
+      "setup_time": 9.312479734420776,
+      "accuracy_score": 0.0,
+      "error_message": null
+    }
+  ]
+}

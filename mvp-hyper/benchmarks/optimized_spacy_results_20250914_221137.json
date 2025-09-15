@@ -1,0 +1,171 @@
+{
+  "timestamp": "20250914_221137",
+  "optimization_focus": "spaCy performance tuning with Context7 recommendations",
+  "system_info": {
+    "cpu_count": 16,
+    "memory_gb": 11.671562194824219,
+    "spacy_available": true
+  },
+  "results": [
+    {
+      "configuration": "Minimal NER (batch=500)",
+      "pages_per_sec": 15.486699750130427,
+      "processing_time": 5.230294466018677,
+      "total_pages": 81,
+      "entities_found": 1193,
+      "patterns_matched": 340,
+      "memory_usage_mb": 63.7109375,
+      "batch_size": 500,
+      "n_processes": 1,
+      "disabled_components": [
+        "tagger",
+        "parser",
+        "lemmatizer",
+        "attribute_ruler"
+      ]
+    },
+    {
+      "configuration": "Minimal NER (batch=1000)",
+      "pages_per_sec": 15.785938572033546,
+      "processing_time": 5.131148815155029,
+      "total_pages": 81,
+      "entities_found": 1193,
+      "patterns_matched": 340,
+      "memory_usage_mb": 33.046875,
+      "batch_size": 1000,
+      "n_processes": 1,
+      "disabled_components": [
+        "tagger",
+        "parser",
+        "lemmatizer",
+        "attribute_ruler"
+      ]
+    },
+    {
+      "configuration": "Minimal NER (batch=2000)",
+      "pages_per_sec": 15.923489698410958,
+      "processing_time": 5.086824655532837,
+      "total_pages": 81,
+      "entities_found": 1193,
+      "patterns_matched": 340,
+      "memory_usage_mb": -0.1015625,
+      "batch_size": 2000,
+      "n_processes": 1,
+      "disabled_components": [
+        "tagger",
+        "parser",
+        "lemmatizer",
+        "attribute_ruler"
+      ]
+    },
+    {
+      "configuration": "Minimal NER (batch=5000)",
+      "pages_per_sec": 15.895717978296414,
+      "processing_time": 5.095711946487427,
+      "total_pages": 81,
+      "entities_found": 1193,
+      "patterns_matched": 340,
+      "memory_usage_mb": 4.8984375,
+      "batch_size": 5000,
+      "n_processes": 1,
+      "disabled_components": [
+        "tagger",
+        "parser",
+        "lemmatizer",
+        "attribute_ruler"
+      ]
+    },
+    {
+      "configuration": "Memory Zones (batch=2000)",
+      "pages_per_sec": 15.856069208797424,
+      "processing_time": 5.108453989028931,
+      "total_pages": 81,
+      "entities_found": 1193,
+      "patterns_matched": 340,
+      "memory_usage_mb": -4.28515625,
+      "batch_size": 2000,
+      "n_processes": 1,
+      "disabled_components": [
+        "tagger",
+        "parser",
+        "lemmatizer",
+        "attribute_ruler"
+      ]
+    },
+    {
+      "configuration": "Memory Zones (batch=5000)",
+      "pages_per_sec": 15.782817443619194,
+      "processing_time": 5.1321635246276855,
+      "total_pages": 81,
+      "entities_found": 1193,
+      "patterns_matched": 340,
+      "memory_usage_mb": 2.75,
+      "batch_size": 5000,
+      "n_processes": 1,
+      "disabled_components": [
+        "tagger",
+        "parser",
+        "lemmatizer",
+        "attribute_ruler"
+      ]
+    },
+    {
+      "configuration": "Multi-Process 2 CPUs (batch=2000)",
+      "pages_per_sec": 15.08800538683144,
+      "processing_time": 5.368502855300903,
+      "total_pages": 81,
+      "entities_found": 1193,
+      "patterns_matched": 340,
+      "memory_usage_mb": 64.90234375,
+      "batch_size": 2000,
+      "n_processes": 2,
+      "disabled_components": [
+        "tagger",
+        "parser",
+        "lemmatizer",
+        "attribute_ruler"
+      ]
+    },
+    {
+      "configuration": "Multi-Process 8 CPUs (batch=2000)",
+      "pages_per_sec": 15.60112177543634,
+      "processing_time": 5.19193434715271,
+      "total_pages": 81,
+      "entities_found": 1193,
+      "patterns_matched": 340,
+      "memory_usage_mb": -44.44921875,
+      "batch_size": 2000,
+      "n_processes": 8,
+      "disabled_components": [
+        "tagger",
+        "parser",
+        "lemmatizer",
+        "attribute_ruler"
+      ]
+    },
+    {
+      "configuration": "Regex Patterns Only",
+      "pages_per_sec": 1420.8703420240395,
+      "processing_time": 0.0570073127746582,
+      "total_pages": 81,
+      "entities_found": 0,
+      "patterns_matched": 340,
+      "memory_usage_mb": 8.36328125,
+      "batch_size": 0,
+      "n_processes": 0,
+      "disabled_components": []
+    },
+    {
+      "configuration": "No Enhancement (Baseline)",
+      "pages_per_sec": 1396.4118473945102,
+      "processing_time": 0.05800580978393555,
+      "total_pages": 81,
+      "entities_found": 0,
+      "patterns_matched": 340,
+      "memory_usage_mb": 0.0,
+      "batch_size": 0,
+      "n_processes": 0,
+      "disabled_components": []
+    }
+  ]
+}

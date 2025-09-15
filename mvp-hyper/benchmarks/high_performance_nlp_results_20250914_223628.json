@@ -1,0 +1,87 @@
+{
+  "timestamp": "20250914_223628",
+  "focus": "High-performance deterministic automata comparison",
+  "target_performance": "1000+ pages/sec",
+  "system_info": {
+    "cpu_count": 16,
+    "memory_gb": 11.671562194824219,
+    "available_libraries": {
+      "pyahocorasick": true,
+      "hyperscan": true,
+      "marisa_trie": true,
+      "flashtext": true,
+      "blingfire": true
+    }
+  },
+  "total_documents": 740,
+  "results": [
+    {
+      "library": "pyahocorasick",
+      "version": "unknown",
+      "configuration": "OSHA dictionaries (standards, orgs, chemicals)",
+      "pages_per_sec": 1816.0751102066513,
+      "processing_time": 0.4074721336364746,
+      "setup_time": 0.00010204315185546875,
+      "total_pages": 740,
+      "entities_found": 15553,
+      "memory_usage_mb": 21.77734375,
+      "setup_memory_mb": 0.0,
+      "error_message": null
+    },
+    {
+      "library": "hyperscan",
+      "error_message": "module 'hyperscan' has no attribute 'compile_multi'",
+      "pages_per_sec": 0,
+      "processing_time": 0,
+      "entities_found": 0
+    },
+    {
+      "library": "marisa-trie",
+      "version": "1.3.1",
+      "configuration": "Static trie (49 terms)",
+      "pages_per_sec": 505.55817962338847,
+      "processing_time": 1.463728666305542,
+      "setup_time": 0.0002491474151611328,
+      "total_pages": 740,
+      "entities_found": 2511,
+      "memory_usage_mb": 1.53515625,
+      "setup_memory_mb": 0.125,
+      "term_count": 49,
+      "error_message": null
+    },
+    {
+      "library": "flashtext",
+      "version": "2.7",
+      "configuration": "Keyword processor (49 keywords)",
+      "pages_per_sec": 272.2609549425147,
+      "processing_time": 2.7179806232452393,
+      "setup_time": 6.651878356933594e-05,
+      "total_pages": 740,
+      "entities_found": 17744,
+      "memory_usage_mb": 0.0,
+      "setup_memory_mb": 0.0,
+      "keyword_count": 49,
+      "error_message": null
+    },
+    {
+      "library": "blingfire",
+      "version": "0.1.8",
+      "configuration": "Fast tokenization + sentence segmentation",
+      "pages_per_sec": 295.0277311061759,
+      "processing_time": 2.5082387924194336,
+      "setup_time": 0.0,
+      "total_pages": 740,
+      "tokens_found": 9104564,
+      "sentences_found": 63019,
+      "memory_usage_mb": 25.8828125,
+      "error_message": null
+    },
+    {
+      "library": "ripgrep_sidecar",
+      "error_message": "[Errno 2] No such file or directory: 'rg'",
+      "pages_per_sec": 0,
+      "processing_time": 0,
+      "entities_found": 0
+    }
+  ]
+}

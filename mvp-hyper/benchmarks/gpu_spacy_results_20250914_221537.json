@@ -1,0 +1,60 @@
+{
+  "timestamp": "20250914_221537",
+  "focus": "GPU vs CPU spaCy performance comparison",
+  "system_info": {
+    "cpu_count": 16,
+    "memory_gb": 11.671562194824219,
+    "gpu_support": true,
+    "spacy_version": "3.8.7"
+  },
+  "results": [
+    {
+      "configuration": "NER-Only CPU (batch=1000)",
+      "device": "CPU",
+      "pages_per_sec": 16.616360034304357,
+      "processing_time": 5.416348695755005,
+      "total_pages": 90,
+      "entities_found": 1287,
+      "patterns_matched": 417,
+      "memory_usage_mb": 66.66015625,
+      "batch_size": 1000,
+      "gpu_activated": true
+    },
+    {
+      "configuration": "NER-Only CPU (batch=2000)",
+      "device": "CPU",
+      "pages_per_sec": 16.62327047794582,
+      "processing_time": 5.41409707069397,
+      "total_pages": 90,
+      "entities_found": 1287,
+      "patterns_matched": 417,
+      "memory_usage_mb": 35.01953125,
+      "batch_size": 2000,
+      "gpu_activated": true
+    },
+    {
+      "configuration": "NER-Only CPU (batch=5000)",
+      "device": "CPU",
+      "pages_per_sec": 16.904757511830145,
+      "processing_time": 5.323945045471191,
+      "total_pages": 90,
+      "entities_found": 1287,
+      "patterns_matched": 417,
+      "memory_usage_mb": -16.2578125,
+      "batch_size": 5000,
+      "gpu_activated": true
+    },
+    {
+      "configuration": "Regex Patterns Only",
+      "device": "CPU",
+      "pages_per_sec": 1477.7753158238825,
+      "processing_time": 0.06090235710144043,
+      "total_pages": 90,
+      "entities_found": 0,
+      "patterns_matched": 417,
+      "memory_usage_mb": 0.74609375,
+      "batch_size": 0,
+      "gpu_activated": true
+    }
+  ]
+}
