@@ -665,8 +665,8 @@ Examples:
         """
     )
     
-    parser.add_argument("input", help="Input directory (PDFs for conversion, markdown for other steps)")
-    parser.add_argument("--output", default="pipeline-output", help="Output base directory")
+    parser.add_argument("input", nargs='?', help="Input directory (PDFs for conversion, markdown for other steps)")
+    parser.add_argument("--output", default="output", help="Output base directory")
     parser.add_argument("--config", default="mvp-hyper-pipeline-progressive-config.yaml", help="Configuration file")
     
     # Step selection
@@ -678,6 +678,27 @@ Examples:
     
     # Initialize pipeline
     pipeline = MVPHyperPipeline(args.config)
+    
+    # Handle default input directory for operations
+    if args.input is None:
+        if args.step in ['classification', 'enrichment', 'extraction']:
+            # For in-place operations, work on output directory
+            args.input = args.output
+        elif args.step == 'conversion' or args.full or (not args.step):
+            # For conversion or full pipeline, use directories from config
+            if pipeline.config and 'inputs' in pipeline.config and 'directories' in pipeline.config['inputs']:
+                input_dirs = pipeline.config['inputs']['directories']
+                if input_dirs:
+                    # Join multiple directories for command line
+                    expanded_dirs = [str(Path(d).expanduser()) for d in input_dirs]
+                    args.input = ' '.join(expanded_dirs)
+                    print(f"Using input directories from config: {', '.join(input_dirs)}")
+                else:
+                    print("Error: No input directories found in configuration file")
+                    return
+            else:
+                print("Error: No input directories configuration found")
+                return
     
     # Run requested operations
     if args.full or (not args.step):

@@ -26,17 +26,17 @@ High-performance document processing pipeline with progressive enhancement strat
 python core/mvp-hyper-pipeline-progressive.py ~/projects/docling/cli/data_osha --output output  --full --config core/.config/mvp-hyper-pipeline-progressive-config.yaml
 
 # Individual steps (all work in same directory)
-# Step 1: Convert PDFs to markdown  
-/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py input/ --output results --step conversion
+# Step 1: Convert PDFs to markdown (uses config input directories)
+/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py --step conversion --config core/.config/mvp-hyper-pipeline-progressive-config.yaml
 
-# Step 2: Classify documents (in-place enhancement)
-/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py results --step classification
+# Step 2: Classify documents (in-place enhancement - works on output/ directory)
+/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py --step classification --config core/.config/mvp-hyper-pipeline-progressive-config.yaml
 
-# Step 3: Add domain tags (in-place enhancement)  
-/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py results --step enrichment
+# Step 3: Add domain tags (in-place enhancement - works on output/ directory)  
+/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py --step enrichment --config core/.config/mvp-hyper-pipeline-progressive-config.yaml
 
-# Step 4: Extract semantic facts (creates .semantic.json alongside .md)
-/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py results --step extraction
+# Step 4: Extract semantic facts (creates .semantic.json alongside .md in output/ directory)
+/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py --step extraction --config core/.config/mvp-hyper-pipeline-progressive-config.yaml
 ```
 
 **🎯 Key Advantages:**
@@ -169,17 +169,17 @@ This means you need to first convert PDFs to markdown using `mvp-hyper-core.py`.
 
 **Step-by-Step Testing:**
 ```bash
-# 1. Convert PDFs to markdown
-/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py input/ --output test-results --step conversion
+# 1. Convert PDFs to markdown (uses config directories, outputs to test-results/)
+/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py --output test-results --step conversion --config core/.config/mvp-hyper-pipeline-progressive-config.yaml
 
-# 2. Add classification (in-place)
-/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py test-results --step classification
+# 2. Add classification (in-place on test-results/)
+/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py --output test-results --step classification --config core/.config/mvp-hyper-pipeline-progressive-config.yaml
 
-# 3. Add enrichment (in-place) 
-/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py test-results --step enrichment
+# 3. Add enrichment (in-place on test-results/) 
+/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py --output test-results --step enrichment --config core/.config/mvp-hyper-pipeline-progressive-config.yaml
 
-# 4. Extract semantic facts (creates .semantic.json alongside .md)
-/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py test-results --step extraction
+# 4. Extract semantic facts (creates .semantic.json alongside .md in test-results/)
+/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py --output test-results --step extraction --config core/.config/mvp-hyper-pipeline-progressive-config.yaml
 ```
 
 **✅ Expected Output Structure:**
@@ -252,17 +252,17 @@ The pipeline is designed for benchmark-tier performance testing with:
 
 **Step-by-Step Processing (Progressive):**
 ```bash
-# 1. Convert PDFs to markdown
-/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py input_docs/ --output results --step conversion
+# 1. Convert PDFs to markdown (uses config directories, outputs to results/)
+/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py --output results --step conversion --config core/.config/mvp-hyper-pipeline-progressive-config.yaml
 
-# 2. Classify documents (enhances files in-place)  
-/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py results --step classification
+# 2. Classify documents (enhances files in-place in results/)  
+/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py --output results --step classification --config core/.config/mvp-hyper-pipeline-progressive-config.yaml
 
-# 3. Add domain enrichment (enhances files in-place)
-/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py results --step enrichment
+# 3. Add domain enrichment (enhances files in-place in results/)
+/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py --output results --step enrichment --config core/.config/mvp-hyper-pipeline-progressive-config.yaml
 
-# 4. Extract semantic facts (creates .semantic.json alongside .md)
-/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py results --step extraction
+# 4. Extract semantic facts (creates .semantic.json alongside .md in results/)
+/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-progressive.py --output results --step extraction --config core/.config/mvp-hyper-pipeline-progressive-config.yaml
 ```
 
 ### Performance Testing (Progressive)
