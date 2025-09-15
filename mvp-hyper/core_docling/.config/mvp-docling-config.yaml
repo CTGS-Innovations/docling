@@ -1,0 +1,251 @@
+# MVP Docling Core Configuration
+# ==============================
+# Configuration for Docling-based document conversion
+
+# Input sources
+inputs:
+  # Individual files for testing
+  files: []
+  
+  # Directories to scan recursively 
+  directories:
+    - "~/projects/docling/cli/data"
+    - "~/projects/docling/cli/data_complex" 
+    - "~/projects/docling/cli/data_osha"
+
+# Docling Core Configuration
+# ==========================
+
+docling:
+  # Core processing settings
+  processing:
+    # Use GPU acceleration if available
+    use_gpu: false
+    
+    # Number of CPU threads to use (0 = auto-detect)
+    cpu_threads: 8
+    
+    # Batch processing settings
+    batch_size: 50
+    max_concurrent_files: 4
+    
+    # Performance thresholds
+    fallback_threshold: 5.0  # Switch to fallback after N seconds
+    timeout_per_file: 15.0   # Maximum time per file
+  
+  # Document conversion options
+  conversion:
+    # PDF-specific options
+    pdf:
+      generate_page_images: false    # Skip images for speed
+      extract_tables: true           # Keep table extraction (Docling strength)
+      extract_figures: false         # Skip figures for speed
+      max_pages_per_document: 25     # Limit pages for performance testing
+      
+      # Pipeline selection
+      pipeline_type: "standard"      # Options: "standard", "fast", "vlm"
+      
+      # Quality vs Speed settings
+      ocr_enabled: true              # Enable OCR for scanned documents
+      layout_analysis: true          # Analyze document layout
+      font_analysis: false           # Skip detailed font analysis for speed
+    
+    # Other document types
+    docx:
+      preserve_formatting: true
+      extract_embedded_objects: false
+    
+    pptx:
+      extract_slide_notes: true
+      preserve_animations: false
+    
+    xlsx:
+      extract_formulas: false
+      max_rows_per_sheet: 1000
+  
+  # Output formatting
+  output:
+    format: "markdown"               # Primary output format
+    
+    # Markdown-specific options
+    markdown:
+      preserve_tables: true          # Keep table formatting
+      include_metadata: true         # Add document metadata
+      heading_style: "atx"           # Use # style headings
+      line_breaks: "preserve"        # Preserve original line breaks
+      
+    # Content filtering
+    content:
+      min_text_length: 10            # Skip very short text blocks
+      remove_headers_footers: true   # Remove repetitive headers/footers
+      clean_whitespace: true         # Normalize whitespace
+      
+  # Error handling and fallbacks
+  fallback:
+    enabled: true
+    
+    # Fallback chain
+    strategies:
+      - "docling_fast_mode"          # Try Docling with speed optimizations
+      - "pymupdf_extraction"         # Fall back to PyMuPDF
+      - "basic_text_only"            # Last resort: basic text extraction
+    
+    # When to trigger fallback
+    triggers:
+      - "timeout"                    # File processing timeout
+      - "memory_error"               # Out of memory
+      - "conversion_failure"         # Docling conversion fails
+      - "slow_processing"            # Processing too slow
+    
+    # Fallback thresholds
+    thresholds:
+      processing_time: 5.0           # seconds
+      memory_usage_mb: 2048          # MB
+      error_count: 3                 # consecutive errors
+
+# File Processing Settings
+# ========================
+
+processing:
+  # File filtering
+  include_extensions:
+    - ".pdf"
+    - ".docx"
+    - ".pptx" 
+    - ".xlsx"
+    - ".doc"
+    - ".ppt"
+    - ".xls"
+  
+  # Size and complexity limits
+  limits:
+    max_file_size_mb: 100
+    max_pages_per_file: 100
+    max_processing_time: 30
+  
+  # Skip patterns
+  skip_patterns:
+    - ".*test.*"                     # Skip test files
+    - ".*temp.*"                     # Skip temporary files
+    - ".*backup.*"                   # Skip backup files
+  
+  # Quality control
+  quality:
+    min_text_extraction_ratio: 0.1   # Minimum text/file size ratio
+    validate_output: true            # Validate output before saving
+    check_for_corruption: true       # Check for corrupted files
+
+# Performance Monitoring
+# ======================
+
+monitoring:
+  # Performance tracking
+  track_metrics: true
+  metrics_to_track:
+    - "processing_time"
+    - "pages_per_second"
+    - "memory_usage"
+    - "conversion_method"
+    - "success_rate"
+    - "fallback_usage"
+  
+  # Logging
+  logging:
+    level: "INFO"                    # DEBUG, INFO, WARNING, ERROR
+    log_performance: true
+    log_fallbacks: true
+    log_errors: true
+    
+    # Log file settings
+    save_logs: true
+    log_directory: "./logs"
+    max_log_size_mb: 50
+
+# Optimization Settings
+# ====================
+
+optimization:
+  # Memory management
+  memory:
+    enable_gc: true                  # Enable garbage collection
+    gc_frequency: 10                 # Files between GC runs
+    max_memory_usage_mb: 4096        # Maximum memory usage
+  
+  # CPU optimization
+  cpu:
+    use_multiprocessing: false       # Docling handles this internally
+    process_pool_size: 0             # Let Docling decide
+    thread_pool_size: 4              # Thread pool for I/O
+  
+  # Caching
+  cache:
+    enable_file_cache: true          # Cache processed files
+    cache_directory: "./cache"
+    max_cache_size_mb: 1024
+    cache_expiry_days: 7
+
+# Comparison and Testing
+# =====================
+
+comparison:
+  # Enable comparison mode
+  enable_comparison: false
+  
+  # What to compare
+  compare_with:
+    - "pymupdf"                      # Compare with PyMuPDF
+    - "original_mvp_hyper"           # Compare with original MVP
+  
+  # Comparison metrics
+  metrics:
+    - "processing_speed"
+    - "text_quality"
+    - "table_preservation"
+    - "layout_preservation"
+    - "memory_usage"
+  
+  # Output comparison results
+  save_comparison: true
+  comparison_directory: "./comparison_results"
+
+# Debug Settings
+# ==============
+
+debug:
+  # Debug modes
+  enabled: false
+  verbose: false
+  
+  # What to debug
+  debug_conversion: false
+  debug_fallbacks: true
+  debug_performance: true
+  
+  # Output debug info
+  save_debug_info: false
+  debug_directory: "./debug"
+  
+  # Testing limits
+  max_files_for_testing: 10         # Limit files when debugging
+  test_mode: false                  # Enable test mode
+
+# Notes for Performance Comparison
+# ================================
+# 
+# Key Areas to Compare:
+# 1. Raw Processing Speed (pages/sec)
+# 2. Markdown Quality (table preservation, formatting)
+# 3. Memory Usage and Resource Efficiency
+# 4. Error Handling and Robustness
+# 5. Support for Different Document Types
+# 
+# Expected Trade-offs:
+# - Docling: Higher quality, slower speed
+# - Original MVP: Higher speed, basic quality
+# - Hybrid: Best of both with intelligent fallbacks
+# 
+# Success Metrics:
+# - Maintain >80% of original speed
+# - Improve markdown quality significantly
+# - Reduce extraction errors
+# - Better handling of complex documents

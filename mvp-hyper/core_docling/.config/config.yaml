@@ -1,0 +1,49 @@
+# Simple Docling Configuration (Compatibility)
+# =============================================
+# Simplified config file for compatibility with existing scripts
+
+# Input sources - same structure as original
+inputs:
+  files: []
+  directories:
+    - "~/projects/docling/cli/data"
+    - "~/projects/docling/cli/data_complex" 
+    - "~/projects/docling/cli/data_osha"
+
+# Basic processing settings
+processing:
+  max_workers: 4
+  skip_extensions:
+    - ".jpg"
+    - ".jpeg"
+    - ".png"
+    - ".gif"
+    - ".mp3"
+    - ".mp4"
+    - ".zip"
+    - ".tar"
+    - ".gz"
+    - ".exe"
+  max_file_size_mb: 100
+  timeout_per_file: 15
+  slow_file_threshold: 5.0
+
+# Docling settings (simplified)
+docling:
+  use_gpu: false
+  fallback_threshold: 5.0
+  max_pages: 25
+
+# PDF settings (for fallback compatibility)
+pdf:
+  max_pages_to_extract: 25
+  skip_if_pages_over: 100
+
+# Output
+output:
+  directory: "../output/docling"
+
+# Debug
+debug:
+  progress_interval: 10
+  max_files_to_process: 0

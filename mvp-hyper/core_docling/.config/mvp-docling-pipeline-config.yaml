@@ -1,0 +1,218 @@
+# MVP Docling Progressive Pipeline Configuration
+# ============================================
+# In-place enhancement strategy using Docling for conversion
+
+# Input sources
+inputs:
+  # Individual files for testing
+  files: []
+  
+  # Directories to scan recursively 
+  directories:
+    - "~/projects/docling/cli/data"
+    - "~/projects/docling/cli/data_complex" 
+    - "~/projects/docling/cli/data_osha"
+
+# File processing settings
+processing:
+  # Maximum workers for parallel processing
+  max_workers: 4  # Increased for Docling's potential multi-threading
+  
+  # Skip these file extensions completely
+  skip_extensions:
+    - ".jpg"
+    - ".jpeg" 
+    - ".png"
+    - ".gif"
+    - ".bmp"
+    - ".tiff"
+    - ".tif"
+    - ".mp3"
+    - ".mp4" 
+    - ".wav"
+    - ".avi"
+    - ".mov"
+    - ".wmv"
+    - ".flv"
+    - ".zip"
+    - ".tar"
+    - ".gz"
+    - ".bz2"
+    - ".rar"
+    - ".7z"
+    - ".exe"
+    - ".dll"
+    - ".so"
+    - ".dylib"
+    - ".bin"
+    - ".dat"
+  
+  # Skip files larger than this (in MB)
+  max_file_size_mb: 100
+  
+  # Timeout per file (in seconds)
+  timeout_per_file: 15  # Increased for Docling processing
+  
+  # Skip files that take longer than this (in seconds)
+  slow_file_threshold: 10.0  # Increased threshold
+
+# Docling-specific settings
+docling:
+  # Use GPU acceleration if available
+  use_gpu: false
+  
+  # Fallback threshold - switch to PyMuPDF if Docling takes longer than this
+  fallback_threshold: 5.0  # seconds
+  
+  # PDF processing options
+  pdf_options:
+    generate_page_images: false  # Skip images for speed
+    extract_tables: true         # Keep table extraction
+    extract_figures: false       # Skip figures for speed
+    max_pages_per_doc: 25       # Limit pages for performance
+  
+  # Pipeline selection
+  pipeline_type: "standard"  # Options: "standard", "vlm", "fast"
+  
+  # Performance tuning
+  batch_size: 50              # Files to process in batch
+  max_concurrent_files: 4     # Concurrent file processing
+
+# PDF-specific settings (for fallback)
+pdf:
+  # Skip PDFs with these patterns in filename (for troubleshooting)
+  skip_patterns: []
+  
+  # Limit pages for ultra-fast processing
+  max_pages_to_extract: 25  # Only extract first 25 pages for speed
+  
+  # Skip PDFs with more than this many pages
+  skip_if_pages_over: 100
+  
+  # Try different PDF loading strategies
+  fallback_strategies:
+    - "docling_standard"      # Try Docling first
+    - "docling_fast"          # Try Docling fast mode
+    - "pymupdf_fallback"      # PyMuPDF fallback
+    - "skip_if_slow"          # Skip if all methods are slow
+
+# Progressive Enhancement Pipeline Configuration
+# ==============================================
+
+pipeline:
+  # Enhancement strategy: "in-place" vs "multi-directory"
+  strategy: "in-place"
+  
+  # Global pipeline settings
+  output_directory: "../output/docling_pipeline"
+  enable_caching: true
+  performance_logging: true
+  
+  # Directory structure for progressive pipeline
+  directories:
+    markdown: "markdown"      # All markdown files (progressively enhanced)
+    semantic: "semantic"      # Semantic extraction output
+    stats: "stats"           # Performance statistics
+  
+  # Step configuration with progressive enhancement
+  steps:
+    conversion:
+      enabled: true
+      target_speed: 500       # Lower target due to Docling's higher quality
+      output: "markdown"      # Output to markdown directory
+      description: "Document to Markdown conversion with Docling"
+      method: "docling"
+      
+    classification:
+      enabled: true
+      target_speed: 2000      # pages/sec target
+      mode: "in-place"        # Enhance existing files
+      description: "Add document types and primary domain"
+      metadata_added:
+        - "document_types"
+        - "primary_domain"
+        - "classification_confidence"
+      
+    enrichment:
+      enabled: true
+      target_speed: 1500      # pages/sec target
+      mode: "in-place"        # Enhance existing files
+      description: "Add domain-specific tags and entities"
+      metadata_added:
+        - "organizations"
+        - "regulations"
+        - "domain_tags"
+      
+    extraction:
+      enabled: true
+      target_speed: 300       # pages/sec target
+      output: "semantic"      # Separate output directory
+      use_context: true       # Use classification + enrichment
+      description: "Extract semantic facts using full context"
+      output_format: "json"
+      max_facts_per_doc: 50
+  
+  # Performance targets for measurement
+  performance_targets:
+    conversion: 500          # pages/sec for Docling (lower due to quality)
+    classification: 2000     # pages/sec for keyword-based classification
+    enrichment: 1500         # pages/sec for domain tagging
+    extraction: 300          # pages/sec for semantic extraction
+
+# Output configuration
+output:
+  directory: "../output/docling_pipeline"  # Default output directory
+  
+  # File formats to generate
+  formats:
+    enhanced_markdown: true    # Progressively enhanced markdown
+    semantic_json: true        # Facts and entities as JSON
+    performance_stats: true    # Processing metrics
+  
+  # File naming conventions
+  file_naming:
+    markdown_suffix: ""        # No suffix - enhance original file
+    semantic_suffix: ".semantic.json"
+    stats_suffix: ".stats.json"
+  
+  # Progressive enhancement tracking
+  track_enhancement_history: true
+  enhancement_metadata_section: "Pipeline Metadata"
+  
+  # Save detailed logs for troubleshooting
+  save_performance_log: true
+  save_error_log: true
+
+# Debugging
+debug:
+  # Show progress every N files
+  progress_interval: 10
+  # Show detailed timing for files slower than this
+  timing_threshold: 2.0  # Slightly higher due to Docling complexity
+  # Stop processing after N files (for testing, 0 = process all)
+  max_files_to_process: 0
+  # Show enhancement details
+  verbose_enhancement: false
+  # Show Docling vs fallback usage
+  show_conversion_method: true
+
+# Performance Comparison Notes
+# ============================
+# Docling Benefits:
+# 1. Higher quality markdown output with better structure
+# 2. Superior table extraction and formatting
+# 3. Better handling of complex layouts and figures
+# 4. More accurate text extraction from challenging PDFs
+# 5. Better preservation of document semantics
+
+# Performance Trade-offs:
+# 1. Slower than pure PyMuPDF extraction (quality vs speed)
+# 2. Uses more memory and CPU resources
+# 3. May require GPU for optimal performance on complex documents
+# 4. Fallback mechanism ensures we don't sacrifice too much speed
+
+# Hybrid Strategy:
+# 1. Use Docling for quality when performance is acceptable
+# 2. Fall back to PyMuPDF for speed when Docling is too slow
+# 3. Track usage of each method for performance analysis
+# 4. Allow tuning of fallback threshold based on requirements
