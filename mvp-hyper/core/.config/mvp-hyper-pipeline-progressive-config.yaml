@@ -1,0 +1,181 @@
+# MVP Hyper Progressive Pipeline Configuration
+# ============================================
+# In-place enhancement strategy for efficient processing
+
+# Input sources
+inputs:
+  # Individual files for testing
+  files: []
+  
+  # Directories to scan recursively 
+  directories:
+    - "~/projects/docling/cli/data"
+    - "~/projects/docling/cli/data_complex" 
+    - "~/projects/docling/cli/data_osha"
+
+# File processing settings
+processing:
+  # Maximum workers for parallel processing
+  max_workers: 1
+  
+  # Skip these file extensions completely
+  skip_extensions:
+    - ".jpg"
+    - ".jpeg" 
+    - ".png"
+    - ".gif"
+    - ".bmp"
+    - ".tiff"
+    - ".tif"
+    - ".mp3"
+    - ".mp4" 
+    - ".wav"
+    - ".avi"
+    - ".mov"
+    - ".wmv"
+    - ".flv"
+    - ".zip"
+    - ".tar"
+    - ".gz"
+    - ".bz2"
+    - ".rar"
+    - ".7z"
+    - ".exe"
+    - ".dll"
+    - ".so"
+    - ".dylib"
+    - ".bin"
+    - ".dat"
+  
+  # Skip files larger than this (in MB)
+  max_file_size_mb: 100
+  
+  # Timeout per file (in seconds)
+  timeout_per_file: 10
+  
+  # Skip files that take longer than this (in seconds)
+  slow_file_threshold: 5.0
+
+# PDF-specific settings
+pdf:
+  # Skip PDFs with these patterns in filename (for troubleshooting)
+  skip_patterns: []
+  
+  # Limit pages for ultra-fast processing
+  max_pages_to_extract: 25  # Only extract first 25 pages for speed
+  
+  # Skip PDFs with more than this many pages
+  skip_if_pages_over: 100
+  
+  # Try different PDF loading strategies
+  fallback_strategies:
+    - "direct_file_open"
+    - "pdftotext_command" 
+    - "basic_text_only"
+    - "skip_if_slow"
+
+# Progressive Enhancement Pipeline Configuration
+# ==============================================
+
+pipeline:
+  # Enhancement strategy: "in-place" vs "multi-directory"
+  strategy: "in-place"
+  
+  # Global pipeline settings
+  output_directory: "../output/pipeline"
+  enable_caching: true
+  performance_logging: true
+  
+  # Directory structure for progressive pipeline
+  directories:
+    markdown: "markdown"      # All markdown files (progressively enhanced)
+    semantic: "semantic"      # Semantic extraction output
+    stats: "stats"           # Performance statistics
+  
+  # Step configuration with progressive enhancement
+  steps:
+    conversion:
+      enabled: true
+      target_speed: 700       # pages/sec target
+      output: "markdown"      # Output to markdown directory
+      description: "PDF to Markdown conversion"
+      
+    classification:
+      enabled: true
+      target_speed: 2000      # pages/sec target
+      mode: "in-place"        # Enhance existing files
+      description: "Add document types and primary domain"
+      metadata_added:
+        - "document_types"
+        - "primary_domain"
+        - "classification_confidence"
+      
+    enrichment:
+      enabled: true
+      target_speed: 1500      # pages/sec target
+      mode: "in-place"        # Enhance existing files
+      description: "Add domain-specific tags and entities"
+      metadata_added:
+        - "organizations"
+        - "regulations"
+        - "domain_tags"
+      
+    extraction:
+      enabled: true
+      target_speed: 300       # pages/sec target
+      output: "semantic"      # Separate output directory
+      use_context: true       # Use classification + enrichment
+      description: "Extract semantic facts using full context"
+      output_format: "json"
+      max_facts_per_doc: 50
+  
+  # Performance targets for measurement
+  performance_targets:
+    conversion: 700          # pages/sec for mvp-hyper-core
+    classification: 2000     # pages/sec for keyword-based classification
+    enrichment: 1500         # pages/sec for domain tagging
+    extraction: 300          # pages/sec for semantic extraction
+
+# Output configuration
+output:
+  directory: "../output/pipeline"  # Default output directory
+  
+  # File formats to generate
+  formats:
+    enhanced_markdown: true    # Progressively enhanced markdown
+    semantic_json: true        # Facts and entities as JSON
+    performance_stats: true    # Processing metrics
+  
+  # File naming conventions
+  file_naming:
+    markdown_suffix: ""        # No suffix - enhance original file
+    semantic_suffix: ".semantic.json"
+    stats_suffix: ".stats.json"
+  
+  # Progressive enhancement tracking
+  track_enhancement_history: true
+  enhancement_metadata_section: "Pipeline Metadata"
+  
+  # Save detailed logs for troubleshooting
+  save_performance_log: true
+  save_error_log: true
+
+# Debugging
+debug:
+  # Show progress every N files
+  progress_interval: 10
+  # Show detailed timing for files slower than this
+  timing_threshold: 1.0
+  # Stop processing after N files (for testing, 0 = process all)
+  max_files_to_process: 0
+  # Show enhancement details
+  verbose_enhancement: false
+
+# Benefits of Progressive Enhancement Strategy
+# ============================================
+# 1. Storage Efficiency: No duplicate markdown files across steps
+# 2. Progressive Context: Each step builds on previous metadata
+# 3. Better Semantic Extraction: Uses full context from all prior steps
+# 4. Cleaner Output: Only two main directories (markdown + semantic)
+# 5. Easier Debugging: Can inspect progressive enhancement in single file
+# 6. Performance: Reduced I/O from not copying files between steps
