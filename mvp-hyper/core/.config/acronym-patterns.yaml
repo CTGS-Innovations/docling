@@ -1,0 +1,224 @@
+# Acronym and Short Term Patterns
+# =================================
+# Regex patterns for short terms that need word boundaries
+# These are processed separately from the AC dictionary to avoid false positives
+
+# Two-letter acronyms with word boundaries
+two_letter_acronyms:
+  geographic:
+    US:
+      pattern: '\bUS\b'
+      description: "United States"
+    UK:
+      pattern: '\bUK\b'
+      description: "United Kingdom"
+    EU:
+      pattern: '\bEU\b'
+      description: "European Union"
+    
+  us_states:
+    CA:
+      pattern: '\bCA\b'
+      description: "California"
+    NY:
+      pattern: '\bNY\b'
+      description: "New York"
+    TX:
+      pattern: '\bTX\b'
+      description: "Texas"
+    FL:
+      pattern: '\bFL\b'
+      description: "Florida"
+    IL:
+      pattern: '\bIL\b'
+      description: "Illinois"
+    PA:
+      pattern: '\bPA\b'
+      description: "Pennsylvania"
+    OH:
+      pattern: '\bOH\b'
+      description: "Ohio"
+    GA:
+      pattern: '\bGA\b'
+      description: "Georgia"
+    NC:
+      pattern: '\bNC\b'
+      description: "North Carolina"
+    MI:
+      pattern: '\bMI\b'
+      description: "Michigan"
+
+  technical:
+    IT:
+      pattern: '\bIT\b'
+      description: "Information Technology"
+    AI:
+      pattern: '\bAI\b'
+      description: "Artificial Intelligence"
+    ML:
+      pattern: '\bML\b'
+      description: "Machine Learning"
+    CI:
+      pattern: '\bCI\b'
+      description: "Continuous Integration"
+    CD:
+      pattern: '\bCD\b'
+      description: "Continuous Deployment"
+    QA:
+      pattern: '\bQA\b'
+      description: "Quality Assurance"
+    UI:
+      pattern: '\bUI\b'
+      description: "User Interface"
+    UX:
+      pattern: '\bUX\b'
+      description: "User Experience"
+    DB:
+      pattern: '\bDB\b'
+      description: "Database"
+
+# Three-letter organizational acronyms
+three_letter_orgs:
+  safety_regulatory:
+    EPA:
+      pattern: '\bEPA\b'
+      description: "Environmental Protection Agency"
+    FDA:
+      pattern: '\bFDA\b'
+      description: "Food and Drug Administration"
+    CDC:
+      pattern: '\bCDC\b'
+      description: "Centers for Disease Control"
+    WHO:
+      pattern: '\bWHO\b'
+      description: "World Health Organization"
+    DOL:
+      pattern: '\bDOL\b'
+      description: "Department of Labor"
+    DOT:
+      pattern: '\bDOT\b'
+      description: "Department of Transportation"
+    HHS:
+      pattern: '\bHHS\b'
+      description: "Health and Human Services"
+    
+  technical:
+    API:
+      pattern: '\bAPI\b'
+      description: "Application Programming Interface"
+    SDK:
+      pattern: '\bSDK\b'
+      description: "Software Development Kit"
+    SQL:
+      pattern: '\bSQL\b'
+      description: "Structured Query Language"
+    CSS:
+      pattern: '\bCSS\b'
+      description: "Cascading Style Sheets"
+    XML:
+      pattern: '\bXML\b'
+      description: "Extensible Markup Language"
+    JSON:
+      pattern: '\bJSON\b'
+      description: "JavaScript Object Notation"
+    AWS:
+      pattern: '\bAWS\b'
+      description: "Amazon Web Services"
+    GCP:
+      pattern: '\bGCP\b'
+      description: "Google Cloud Platform"
+
+  business:
+    CEO:
+      pattern: '\bCEO\b'
+      description: "Chief Executive Officer"
+    CFO:
+      pattern: '\bCFO\b'
+      description: "Chief Financial Officer"
+    CTO:
+      pattern: '\bCTO\b'
+      description: "Chief Technology Officer"
+    COO:
+      pattern: '\bCOO\b'
+      description: "Chief Operating Officer"
+    ROI:
+      pattern: '\bROI\b'
+      description: "Return on Investment"
+    KPI:
+      pattern: '\bKPI\b'
+      description: "Key Performance Indicator"
+    B2B:
+      pattern: '\bB2B\b'
+      description: "Business to Business"
+    B2C:
+      pattern: '\bB2C\b'
+      description: "Business to Consumer"
+
+# Four-letter safety/regulatory acronyms
+four_letter_safety:
+  OSHA:
+    pattern: '\bOSHA\b'
+    description: "Occupational Safety and Health Administration"
+  MSHA:
+    pattern: '\bMSHA\b'
+    description: "Mine Safety and Health Administration"
+  NFPA:
+    pattern: '\bNFPA\b'
+    description: "National Fire Protection Association"
+  ANSI:
+    pattern: '\bANSI\b'
+    description: "American National Standards Institute"
+  ASTM:
+    pattern: '\bASTM\b'
+    description: "American Society for Testing and Materials"
+  ACGIH:
+    pattern: '\bACGIH\b'
+    description: "American Conference of Governmental Industrial Hygienists"
+
+# Special patterns for compound acronyms
+compound_patterns:
+  safety_standards:
+    PPE:
+      pattern: '\bPPE\b'
+      description: "Personal Protective Equipment"
+    LOTO:
+      pattern: '\bLOTO\b'
+      description: "Lockout/Tagout"
+    SDS:
+      pattern: '\bSDS\b'
+      description: "Safety Data Sheet"
+    MSDS:
+      pattern: '\bMSDS\b'
+      description: "Material Safety Data Sheet"
+    SCBA:
+      pattern: '\bSCBA\b'
+      description: "Self-Contained Breathing Apparatus"
+    
+  certifications:
+    ISO:
+      pattern: '\bISO\b(?:\s*\d{4,5})?'  # Matches ISO with optional standard number
+      description: "International Organization for Standardization"
+    IEEE:
+      pattern: '\bIEEE\b(?:\s*\d{3,4})?'  # IEEE with optional standard
+      description: "Institute of Electrical and Electronics Engineers"
+
+# Pattern matching rules
+rules:
+  # Only match complete words (word boundaries required)
+  word_boundaries: required
+  
+  # Case sensitivity for acronyms
+  case_sensitive: true
+  
+  # Context hints to improve accuracy
+  context_clues:
+    - "If preceded by 'the', likely an organization"
+    - "If followed by 'standard' or 'regulation', likely regulatory"
+    - "If in all caps in a sentence, likely an acronym"
+    
+# Usage notes
+notes:
+  - "These patterns supplement the AC dictionary for short terms"
+  - "Word boundaries prevent false positives"
+  - "Case sensitivity helps distinguish acronyms from common words"
+  - "Can be extended with more context-aware patterns"

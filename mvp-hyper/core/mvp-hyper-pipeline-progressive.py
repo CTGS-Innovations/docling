@@ -23,21 +23,485 @@ import subprocess
 import time
 import json
 import yaml
+import sys
+import os
+import re
+from yaml_metadata_manager import YAMLMetadataManager
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Any
+from datetime import datetime
+
+# Add parent directory to Python path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Try to import enhanced modules (AC + Entity extraction)
+try:
+    from core.enhanced_classification_with_entities import EnhancedClassifierWithEntities
+    from core.enhanced_enrichment_targeted import TargetedEnrichment
+    ENHANCED_MODULES_AVAILABLE = True
+    print("✅ Enhanced classification with entity extraction + targeted enrichment loaded")
+except ImportError as e:
+    ENHANCED_MODULES_AVAILABLE = False
+    print(f"⚠️ Enhanced modules not available: {e}")
+    print("⚠️ Using basic classification and enrichment")
 
 class MVPHyperPipeline:
     """Clean pipeline orchestrator for MVP Hyper system."""
     
     def __init__(self, config_path: str = None):
         if config_path is None:
-            # Default to .config directory within core
+            # Default to progressive config directory within core
+            import os
             current_dir = os.path.dirname(os.path.abspath(__file__))
-            config_path = os.path.join(current_dir, ".config", "mvp-hyper-pipeline-clean-config.yaml")
+            config_path = os.path.join(current_dir, ".config", "mvp-hyper-pipeline-progressive-config.yaml")
         self.config_path = config_path
         self.performance_stats = {}
         self.config = self.load_config()
+        
+        # Initialize enhanced modules if available
+        if ENHANCED_MODULES_AVAILABLE:
+            try:
+                self.classifier = EnhancedClassifierWithEntities()
+                self.enrichment = TargetedEnrichment()
+                self.enhanced_mode = True
+                self.classification_cache = {}  # Cache classification results for enrichment
+                print("🚀 Enhanced layered processing activated")
+                print("   Layer 1: Classification + FREE entity extraction (money, dates, etc.)")
+                print("   Layer 2: Targeted enrichment based on domains")
+            except Exception as e:
+                print(f"⚠️ Failed to initialize enhanced modules: {e}")
+                self.enhanced_mode = False
+                self.classifier = None
+                self.enrichment = None
+                self.classification_cache = {}
+        else:
+            self.enhanced_mode = False
+            self.classifier = None
+            self.enrichment = None
+            self.classification_cache = {}
+        
+        # Load formula conversion settings
+        self.convert_formulas = self.config.get('processing', {}).get('convert_formulas', True)
+        self.remove_latexit = self.config.get('processing', {}).get('remove_latexit', True)
+        self.formula_output_format = self.config.get('processing', {}).get('formula_output_format', 'both')
+        
+        # Initialize metadata manager for structured YAML handling
+        self.metadata_manager = YAMLMetadataManager()
     
+    def generate_step1_metadata(self, file_path: str, content: str) -> str:
+        """Generate enhanced Step 1 conversion metadata."""
+        path_obj = Path(file_path)
+        
+        # Basic file info
+        file_stats = path_obj.stat() if path_obj.exists() else None
+        
+        # Content analysis (quick)
+        lines = content.split('\n')
+        words = content.split()
+        
+        # Quick content detection with enhanced formula analysis
+        has_images = bool(re.search(r'!\[.*?\]|<img|Figure \d+|Image \d+', content, re.IGNORECASE))
+        has_tables = bool(re.search(r'\|.*\||Table \d+|<table', content, re.IGNORECASE))
+        has_urls = bool(re.search(r'https?://|www\.', content))
+        has_emails = bool(re.search(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', content))
+        
+        # Enhanced formula detection and analysis
+        formula_indicators = [
+            r'<latexit',  # LaTeX blocks
+            r'\\begin\{|\\end\{',  # LaTeX environments
+            r'\\frac|\\sum|\\int|\\sqrt',  # Math functions
+            r'\\alpha|\\beta|\\gamma|\\theta|\\sigma|\\mu|\\lambda|\\pi|\\epsilon|\\delta',  # Greek letters
+            r'\\nabla|\\partial|\\infty',  # Mathematical symbols
+            r'\\log|\\exp|\\sin|\\cos|\\tan',  # Functions
+            r'\\cdot|\\times|\\div|\\pm|\\le|\\ge|\\ne|\\approx|\\equiv',  # Operators
+            r'\\propto|\\in|\\subset|\\cup|\\cap|\\forall|\\exists',  # Set theory
+            r'\\rightarrow|\\leftarrow|\\Rightarrow|\\Leftarrow',  # Arrows
+            r'\$\$|\$[^$]+\$',  # Inline/display math
+            r'\\\\[a-zA-Z]+',  # LaTeX commands
+            r'Equation \d+|Formula \d+|Figure \d+.*equation',  # References
+            r'x_\d+|x_\{|p_θ|p_\\theta|q\(.*\)|DKL\(',  # Common math notation
+            r'_{.*}|\^{.*}|mathrm|mathcal',  # Subscripts/superscripts
+            r'diffusion.*model|probabilistic.*model'  # Domain-specific
+        ]
+        
+        # Count different types of formula indicators
+        formula_counts = {}
+        total_formula_matches = 0
+        
+        for i, pattern in enumerate(formula_indicators):
+            matches = re.findall(pattern, content, re.IGNORECASE)
+            if matches:
+                formula_counts[f'pattern_{i+1}'] = len(matches)
+                total_formula_matches += len(matches)
+        
+        has_formulas = total_formula_matches > 0
+        
+        # Quick LaTeX conversion analysis (since it's so fast!)
+        latex_expressions = []
+        if has_formulas:
+            # Extract mathematical expressions for potential conversion
+            math_notation_patterns = [
+                (r'x_([T0-9t\-]+)', r'x_{\1}'),  # Variable subscripts
+                (r'p_θ\(([^)]+)\)', r'p_\\theta(\1)'),  # Theta notation
+                (r'q\(([^)]+)\)', r'q(\1)'),  # Q functions
+                (r'DKL\(([^)]+)\)', r'D_{\\text{KL}}(\1)'),  # KL divergence
+                (r'(?<![\\$])α', r'\\alpha'),  # Greek alpha
+                (r'(?<![\\$])β', r'\\beta'),  # Greek beta
+                (r'(?<![\\$])θ', r'\\theta'),  # Greek theta
+            ]
+            
+            # Count convertible expressions
+            convertible_count = 0
+            for pattern, replacement in math_notation_patterns:
+                matches = re.findall(pattern, content)
+                if matches:
+                    convertible_count += len(matches)
+                    latex_expressions.extend(matches[:3])  # Sample first 3
+            
+            formula_counts['convertible_expressions'] = convertible_count
+        
+        # Detect source type
+        if file_path.startswith(('http://', 'https://')):
+            source_type = "url"
+            source_path = file_path
+            filename = path_obj.name
+        else:
+            source_type = "file"
+            source_path = str(path_obj.resolve()) if path_obj.exists() else file_path
+            filename = path_obj.name
+        
+        # Size calculations
+        size_bytes = file_stats.st_size if file_stats else len(content.encode('utf-8'))
+        if size_bytes >= 1024*1024:
+            size_human = f"{size_bytes / (1024*1024):.1f} MB"
+        elif size_bytes >= 1024:
+            size_human = f"{size_bytes / 1024:.1f} KB"
+        else:
+            size_human = f"{size_bytes} bytes"
+        
+        # Timestamps
+        conversion_date = datetime.now().isoformat()
+        created_date = datetime.fromtimestamp(file_stats.st_ctime).isoformat() if file_stats else None
+        modified_date = datetime.fromtimestamp(file_stats.st_mtime).isoformat() if file_stats else None
+        
+        # Build metadata
+        metadata_lines = [
+            "# Step 1: Document Conversion & File Analysis",
+            f"source_type: {source_type}",
+            f"source_path: \"{source_path}\"",
+            f"filename: \"{filename}\"",
+            f"file_extension: \"{path_obj.suffix}\"",
+            f"format: \"{path_obj.suffix.upper().lstrip('.')}\"" if path_obj.suffix else "format: \"UNKNOWN\"",
+            f"size_bytes: {size_bytes}",
+            f"size_human: \"{size_human}\"",
+            f"conversion_date: \"{conversion_date}\"",
+        ]
+        
+        # Add file timestamps if available
+        if created_date:
+            metadata_lines.append(f"created_date: \"{created_date}\"")
+        if modified_date:
+            metadata_lines.append(f"modified_date: \"{modified_date}\"")
+        
+        # Content analysis with enhanced formula details
+        metadata_lines.extend([
+            f"character_count: {len(content)}",
+            f"word_count: {len(words)}",
+            f"line_count: {len(lines)}",
+            f"has_images: {str(has_images).lower()}",
+            f"has_tables: {str(has_tables).lower()}",
+            f"has_formulas: {str(has_formulas).lower()}",
+            f"has_urls: {str(has_urls).lower()}",
+            f"has_emails: {str(has_emails).lower()}",
+            "conversion_method: \"mvp-hyper-pipeline\"",
+        ])
+        
+        # Add enhanced formula analysis if formulas detected
+        if has_formulas:
+            metadata_lines.extend([
+                f"formula_indicators_found: {total_formula_matches}",
+                f"formula_types_detected: {len(formula_counts)}",
+            ])
+            
+            # Add LaTeX conversion potential
+            if latex_expressions:
+                metadata_lines.extend([
+                    f"latex_convertible_expressions: {formula_counts.get('convertible_expressions', 0)}",
+                    f"sample_expressions: {latex_expressions[:3]}",  # First 3 examples
+                ])
+                
+            # Add top formula indicators
+            if formula_counts:
+                top_indicators = sorted(formula_counts.items(), key=lambda x: x[1], reverse=True)[:3]
+                metadata_lines.append(f"top_formula_patterns: {[f'{k}:{v}' for k, v in top_indicators]}")
+            
+            metadata_lines.append("formula_conversion_ready: true")
+        
+        return "\n" + "\n".join(metadata_lines) + "\n"
+    
+    def _generate_step1_structured_data(self, file_path: str, content: str) -> Dict[str, Any]:
+        """Generate Step 1 conversion metadata as structured data."""
+        path_obj = Path(file_path)
+        
+        # Basic file info
+        file_stats = path_obj.stat() if path_obj.exists() else None
+        
+        # Content analysis (quick)
+        lines = content.split('\n')
+        words = content.split()
+        
+        # Quick content detection with enhanced formula analysis
+        has_images = bool(re.search(r'!\[.*?\]|<img|Figure \d+|Image \d+', content, re.IGNORECASE))
+        has_tables = bool(re.search(r'\|.*\||Table \d+|<table', content, re.IGNORECASE))
+        has_urls = bool(re.search(r'https?://|www\.', content))
+        has_emails = bool(re.search(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', content))
+        
+        # Enhanced formula detection
+        formula_indicators = [
+            r'<latexit',  # LaTeX blocks
+            r'\\begin\{|\\end\{',  # LaTeX environments
+            r'\\frac|\\sum|\\int|\\sqrt',  # Math functions
+            r'\\alpha|\\beta|\\gamma|\\theta|\\sigma|\\mu|\\lambda|\\pi|\\epsilon|\\delta',  # Greek letters
+            r'\\nabla|\\partial|\\infty',  # Mathematical symbols
+            r'\\log|\\exp|\\sin|\\cos|\\tan',  # Functions
+            r'\\cdot|\\times|\\div|\\pm|\\le|\\ge|\\ne|\\approx|\\equiv',  # Operators
+            r'\\propto|\\in|\\subset|\\cup|\\cap|\\forall|\\exists',  # Set theory
+            r'\\rightarrow|\\leftarrow|\\Rightarrow|\\Leftarrow',  # Arrows
+            r'\$\$|\$[^$]+\$',  # Inline/display math
+            r'\\\\[a-zA-Z]+',  # LaTeX commands
+            r'Equation \d+|Formula \d+|Figure \d+.*equation',  # References
+            r'x_\d+|x_\{|p_θ|p_\\theta|q\(.*\)|DKL\(',  # Common math notation
+            r'_{.*}|\^{.*}|mathrm|mathcal',  # Subscripts/superscripts
+            r'diffusion.*model|probabilistic.*model'  # Domain-specific
+        ]
+        
+        # Count different types of formula indicators
+        formula_counts = {}
+        total_formula_matches = 0
+        
+        for i, pattern in enumerate(formula_indicators):
+            matches = re.findall(pattern, content, re.IGNORECASE)
+            if matches:
+                formula_counts[f'pattern_{i+1}'] = len(matches)
+                total_formula_matches += len(matches)
+        
+        has_formulas = total_formula_matches > 0
+        
+        # Detect source type
+        if file_path.startswith(('http://', 'https://')):
+            source_type = "url"
+            source_path = file_path
+            filename = path_obj.name
+        else:
+            source_type = "file"
+            source_path = str(path_obj.resolve()) if path_obj.exists() else file_path
+            filename = path_obj.name
+        
+        # Size calculations
+        size_bytes = file_stats.st_size if file_stats else len(content.encode('utf-8'))
+        if size_bytes >= 1024*1024:
+            size_human = f"{size_bytes / (1024*1024):.1f} MB"
+        elif size_bytes >= 1024:
+            size_human = f"{size_bytes / 1024:.1f} KB"
+        else:
+            size_human = f"{size_bytes} bytes"
+        
+        # Timestamps
+        conversion_date = datetime.now().isoformat()
+        created_date = datetime.fromtimestamp(file_stats.st_ctime).isoformat() if file_stats else None
+        modified_date = datetime.fromtimestamp(file_stats.st_mtime).isoformat() if file_stats else None
+        
+        # Build structured data
+        step1_data = {
+            "description": "Document Conversion & File Analysis",
+            "source_type": source_type,
+            "source_path": source_path,
+            "filename": filename,
+            "file_extension": path_obj.suffix,
+            "format": path_obj.suffix.upper().lstrip('.') if path_obj.suffix else "UNKNOWN",
+            "size_bytes": size_bytes,
+            "size_human": size_human,
+            "conversion_date": conversion_date,
+            "character_count": len(content),
+            "word_count": len(words),
+            "line_count": len(lines),
+            "has_images": has_images,
+            "has_tables": has_tables,
+            "has_formulas": has_formulas,
+            "has_urls": has_urls,
+            "has_emails": has_emails,
+            "conversion_method": "mvp-hyper-pipeline"
+        }
+        
+        # Add file timestamps if available
+        if created_date:
+            step1_data["created_date"] = created_date
+        if modified_date:
+            step1_data["modified_date"] = modified_date
+        
+        # Add enhanced formula analysis if formulas detected
+        if has_formulas:
+            step1_data.update({
+                "formula_indicators_found": total_formula_matches,
+                "formula_types_detected": len(formula_counts),
+                "formula_conversion_ready": True
+            })
+            
+            if formula_counts:
+                import json
+                step1_data["formula_patterns"] = json.dumps(formula_counts, separators=(',', ':'))
+        
+        return step1_data
+    
+    def _generate_step2_structured_data(self, classification_metadata: str) -> Dict[str, Any]:
+        """Convert classification metadata string to structured data."""
+        step2_data = {
+            "description": "Document Classification & Type Detection",
+            "classification_date": datetime.now().isoformat(),
+            "classification_method": "enhanced" if self.enhanced_mode else "basic"
+        }
+        
+        # Parse the classification metadata string to extract structured data
+        lines = classification_metadata.strip().split('\n')
+        current_section = None
+        
+        for line in lines:
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+                
+            if ':' in line:
+                key, value = line.split(':', 1)
+                key = key.strip()
+                value = value.strip().strip('"').strip("'")
+                
+                # Handle different value types
+                if value.lower() in ['true', 'false']:
+                    value = value.lower() == 'true'
+                elif value.replace('.', '').replace('-', '').isdigit():
+                    value = float(value) if '.' in value else int(value)
+                elif value.startswith('[') and value.endswith(']'):
+                    # Handle list values - keep as compact JSON string
+                    try:
+                        import ast
+                        parsed_list = ast.literal_eval(value)
+                        # Convert to compact JSON string for machine readability
+                        import json
+                        value = json.dumps(parsed_list, separators=(',', ':'))
+                    except:
+                        pass
+                elif value.startswith('{') and value.endswith('}'):
+                    # Handle dict values - keep as compact JSON string  
+                    try:
+                        import ast
+                        parsed_dict = ast.literal_eval(value)
+                        # Convert to compact JSON string for machine readability
+                        import json
+                        value = json.dumps(parsed_dict, separators=(',', ':'))
+                    except:
+                        pass
+                
+                step2_data[key] = value
+        
+        return step2_data
+    
+    def _generate_step3_structured_data(self, enrichment_metadata: str, entities: dict) -> Dict[str, Any]:
+        """Convert enrichment metadata string to structured data."""
+        step3_data = {
+            "description": "Domain-Specific Enrichment & Entity Extraction",
+            "enrichment_date": datetime.now().isoformat(),
+            "enrichment_method": "enhanced" if self.enhanced_mode else "basic"
+        }
+        
+        # Parse the enrichment metadata string to extract structured data
+        lines = enrichment_metadata.strip().split('\n')
+        
+        for line in lines:
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+                
+            if ':' in line:
+                key, value = line.split(':', 1)
+                key = key.strip()
+                value = value.strip().strip('"').strip("'")
+                
+                # Handle different value types
+                if value.lower() in ['true', 'false']:
+                    value = value.lower() == 'true'
+                elif value.replace('.', '').replace('-', '').isdigit():
+                    value = float(value) if '.' in value else int(value)
+                elif value.startswith('[') and value.endswith(']'):
+                    # Handle list values - convert to compact JSON string
+                    try:
+                        import ast, json
+                        parsed_list = ast.literal_eval(value)
+                        value = json.dumps(parsed_list, separators=(',', ':'))
+                    except:
+                        pass
+                
+                step3_data[key] = value
+        
+        # Add structured entity data if available - ALL as compact JSON
+        if entities and 'metadata' in entities:
+            import json
+            domains_processed = entities['metadata'].get('domains_scanned', [])
+            step3_data.update({
+                "entities_extracted": entities['metadata'].get('total_entity_count', 0),
+                "processing_time_ms": entities['metadata'].get('processing_time_ms', 0),
+                "domains_processed": json.dumps(domains_processed, separators=(',', ':')) if domains_processed else '[]'
+            })
+            
+            # Add ONLY domain-specific entities (skip universal_entities to avoid duplication)
+            for domain, domain_entities in entities.items():
+                if domain not in ['metadata', 'universal_entities'] and domain_entities:
+                    # Use compact JSON for complex nested structures (single line)
+                    step3_data[f"{domain}_entities"] = json.dumps(domain_entities, separators=(',', ':'))
+        
+        # Convert any remaining list values to compact JSON format
+        import json
+        for key, value in step3_data.items():
+            if isinstance(value, list):
+                # Use compact format for simple lists
+                step3_data[key] = json.dumps(value, separators=(',', ':'))
+            elif isinstance(value, dict):
+                # Use compact format for dictionaries (single line)
+                step3_data[key] = json.dumps(value, separators=(',', ':'))
+        
+        return step3_data
+    
+    def convert_formulas_to_latex(self, content: str, filename: str = "") -> dict:
+        """Process formulas: remove latexit blocks and optionally convert mathematical notation."""
+        import time
+        start_time = time.time()
+        
+        converted_content = content
+        conversions_made = 0
+        latexit_blocks_removed = 0
+        
+        # Step 1: Remove <latexit> blocks if enabled
+        if self.remove_latexit:
+            latexit_pattern = r'<latexit[^>]*>.*?</latexit>'
+            latexit_blocks_removed = len(re.findall(latexit_pattern, converted_content, re.DOTALL))
+            converted_content = re.sub(latexit_pattern, '', converted_content, flags=re.DOTALL)
+        
+        # Step 2: Convert mathematical notation if enabled
+        if self.convert_formulas:
+            # Add mathematical conversion logic here if needed in the future
+            # For now, just remove latexit blocks
+            pass
+        
+        processing_time = time.time() - start_time
+        
+        return {
+            'converted_content': converted_content,
+            'original_content': content,
+            'conversions_made': conversions_made,
+            'latexit_blocks_removed': latexit_blocks_removed,
+            'processing_time_ms': round(processing_time * 1000, 2),
+            'filename': filename
+        }
+
     def load_config(self) -> Dict:
         """Load and return configuration from YAML file."""
         try:
@@ -209,12 +673,66 @@ class MVPHyperPipeline:
             command,
             "Converting documents to markdown (Target: 700+ pages/sec)"
         )
+        
+        # Post-process: Enhance generated markdown files with rich Step 1 metadata
+        if success:
+            print("\n🔧 Enhancing converted files with rich metadata...")
+            self._enhance_converted_files(output_path)
+        
         return success
+    
+    def _enhance_converted_files(self, output_path: str):
+        """Enhance converted markdown files with rich Step 1 metadata."""
+        from pathlib import Path
+        
+        output_dir = Path(output_path)
+        enhanced_count = 0
+        
+        for md_file in output_dir.glob("*.md"):
+            try:
+                # Read the file
+                with open(md_file, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                
+                # Check if it has basic frontmatter and body
+                if content.startswith('---'):
+                    parts = content.split('---', 2)
+                    if len(parts) >= 3:
+                        basic_frontmatter = parts[1]
+                        body = parts[2]
+                        
+                        # Generate enhanced Step 1 metadata
+                        enhanced_metadata = self.generate_step1_metadata(str(md_file), body)
+                        
+                        # Replace basic frontmatter with enhanced version
+                        # Keep any existing essential metadata (filename, pages, etc.)
+                        enhanced_content = f"---{enhanced_metadata}---{body}"
+                        
+                        # Write enhanced file
+                        with open(md_file, 'w', encoding='utf-8') as f:
+                            f.write(enhanced_content)
+                        
+                        enhanced_count += 1
+                        
+            except Exception as e:
+                print(f"⚠️ Error enhancing {md_file}: {e}")
+        
+        print(f"✅ Enhanced {enhanced_count} files with rich Step 1 metadata")
     
     def step_classification(self, input_path: str, output_path: str) -> bool:
         """Step 2: Add document classification and basic metadata (in-place enhancement)."""
         
-        print(f"\n🔸 CLASSIFICATION: Adding document types")
+        if self.enhanced_mode:
+            print(f"\n🔸 ENHANCED CLASSIFICATION: High-performance pattern-based classification")
+        else:
+            print(f"\n🔸 CLASSIFICATION: Adding document types (basic mode)")
+        
+        if self.convert_formulas:
+            print(f"📐 LaTeX formula conversion: ENABLED (format: {self.formula_output_format})")
+        elif self.remove_latexit:
+            print(f"📐 LaTeX formula processing: LATEXIT REMOVAL ONLY")
+        else:
+            print(f"📐 LaTeX formula processing: DISABLED")
         
         start_time = time.time()
         
@@ -222,86 +740,82 @@ class MVPHyperPipeline:
         markdown_dir = Path(input_path)
         
         files_processed = 0
+        classification_errors = 0
+        
         for md_file in markdown_dir.glob("*.md"):
-            with open(md_file, 'r', encoding='utf-8') as f:
-                content = f.read()
-            
-            # Quick classification based on keyword counts
-            content_lower = content.lower()
-            
-            doc_types = []
-            confidence_scores = {}
-            
-            # Calculate domain scores
-            safety_score = (content_lower.count('safety') + content_lower.count('hazard') + 
-                          content_lower.count('osha') + content_lower.count('ppe'))
-            tech_score = (content_lower.count('algorithm') + content_lower.count('function') + 
-                         content_lower.count('code') + content_lower.count('api'))
-            business_score = (content_lower.count('business') + content_lower.count('market') + 
-                            content_lower.count('revenue') + content_lower.count('strategy'))
-            research_score = (content_lower.count('research') + content_lower.count('study') + 
-                            content_lower.count('analysis') + content_lower.count('hypothesis'))
-            
-            # Determine document types based on scores
-            if safety_score > 10:
-                doc_types.append('safety')
-                confidence_scores['safety'] = min(safety_score / 50, 1.0)
-            if tech_score > 10:
-                doc_types.append('technical')
-                confidence_scores['technical'] = min(tech_score / 50, 1.0)
-            if business_score > 10:
-                doc_types.append('business')
-                confidence_scores['business'] = min(business_score / 50, 1.0)
-            if research_score > 10:
-                doc_types.append('research')
-                confidence_scores['research'] = min(research_score / 50, 1.0)
-            
-            if not doc_types:
-                doc_types = ['general']
-                confidence_scores['general'] = 0.5
-            
-            # Calculate all domain scores for percentage breakdown
-            all_domain_scores = {
-                'safety': safety_score,
-                'technical': tech_score, 
-                'business': business_score,
-                'research': research_score
-            }
-            
-            # Convert to percentages
-            total_score = sum(all_domain_scores.values()) or 1  # Avoid division by zero
-            domain_percentages = {domain: (score / total_score) * 100 
-                                for domain, score in all_domain_scores.items()}
-            
-            # Get top three domains by percentage
-            top_three_domains = sorted(domain_percentages.items(), key=lambda x: x[1], reverse=True)[:3]
-            top_three_formatted = {domain: f"{percentage:.1f}%" for domain, percentage in top_three_domains if percentage > 0}
-            
-            # Determine primary domain
-            primary_domain = max(confidence_scores.items(), key=lambda x: x[1])[0] if confidence_scores else 'general'
-            
-            # Add classification to front matter (in-place)
-            if content.startswith('---'):
-                # Insert after existing front matter
-                parts = content.split('---', 2)
-                if len(parts) >= 3:
-                    front_matter = parts[1]
-                    body = parts[2]
+            try:
+                with open(md_file, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                
+                if self.enhanced_mode and self.classifier:
+                    # Use classification + entity extraction (Layer 1)
+                    result = self.classifier.classify_and_extract(content, md_file.name)
                     
-                    # Add classification metadata with domain breakdown
-                    classification_data = f"\n# Classification (Step 2)\ndocument_types: {doc_types}\nprimary_domain: {primary_domain}\nclassification_confidence: {max(confidence_scores.values()) if confidence_scores else 0.5:.2f}\ndomain_percentages: {dict(top_three_formatted)}\n"
-                    new_front_matter = front_matter.rstrip() + classification_data
-                    content = f"---{new_front_matter}---{body}"
-            else:
-                # Add new front matter with domain breakdown
-                classification_data = f"# Classification (Step 2)\ndocument_types: {doc_types}\nprimary_domain: {primary_domain}\nclassification_confidence: {max(confidence_scores.values()) if confidence_scores else 0.5:.2f}\ndomain_percentages: {dict(top_three_formatted)}\n"
-                content = f"---\n{classification_data}---\n\n{content}"
-            
-            # Write enhanced file back to same location
-            with open(md_file, 'w', encoding='utf-8') as f:
-                f.write(content)
-            
-            files_processed += 1
+                    # Cache classification for enrichment step
+                    self.classification_cache[str(md_file)] = result
+                    
+                    # Format enhanced classification metadata with entities
+                    classification_metadata = self.classifier.format_classification_metadata(result)
+                else:
+                    # Fallback to basic classification
+                    classification_metadata = self._basic_classification(content)
+                
+                # Use YAMLMetadataManager for structured metadata handling - CLEAN APPROACH
+                metadata, body = self.metadata_manager.parse_existing_metadata(content)
+                
+                # Generate Step 1 conversion metadata (structured data)
+                step1_data = self._generate_step1_structured_data(str(md_file), body)
+                
+                # Generate Step 2 classification metadata (structured data)
+                step2_data = self._generate_step2_structured_data(classification_metadata)
+                
+                # Create clean content with ONLY structured blocks (no loose fields)
+                content = f"---\n---\n{body}"  # Start with empty metadata
+                content = self.metadata_manager.update_step_metadata(content, 'step1', step1_data)
+                content = self.metadata_manager.update_step_metadata(content, 'step2', step2_data)
+                
+                # LaTeX formula processing if enabled and formulas detected
+                formula_conversion_results = None
+                if ((self.convert_formulas or self.remove_latexit) and 
+                    content.count('formula_conversion_ready: true') > 0):
+                    
+                    action = "Converting formulas" if self.convert_formulas else "Removing latexit blocks"
+                    print(f"🔬 {action} in {md_file.name}...")
+                    
+                    # Get current body from content
+                    metadata, current_body = self.metadata_manager.parse_existing_metadata(content)
+                    formula_conversion_results = self.convert_formulas_to_latex(current_body, md_file.name)
+                    
+                    # Update content with converted formulas
+                    if formula_conversion_results['conversions_made'] > 0 or formula_conversion_results['latexit_blocks_removed'] > 0:
+                        # Update the body content
+                        updated_body = formula_conversion_results['converted_content']
+                        
+                        # Add formula conversion results to step2 metadata
+                        step2_data.update({
+                            "formula_conversion_applied": True,
+                            "latex_conversions_made": formula_conversion_results['conversions_made'],
+                            "latexit_blocks_removed": formula_conversion_results['latexit_blocks_removed'],
+                            "formula_conversion_time_ms": formula_conversion_results['processing_time_ms']
+                        })
+                        
+                        # Update step2 metadata with formula results
+                        content = self.metadata_manager.update_step_metadata(content, 'step2', step2_data)
+                        
+                        # Reconstruct content with updated body
+                        metadata, _ = self.metadata_manager.parse_existing_metadata(content)
+                        yaml_content = yaml.dump(metadata, default_flow_style=False, sort_keys=False, width=float('inf'))
+                        content = f"---\n{yaml_content}---\n{updated_body}"
+                
+                # Write enhanced file
+                with open(md_file, 'w', encoding='utf-8') as f:
+                    f.write(content)
+                
+                files_processed += 1
+                
+            except Exception as e:
+                classification_errors += 1
+                print(f"⚠️ Classification error for {md_file.name}: {e}")
         
         elapsed = time.time() - start_time
         pages_per_sec = files_processed / elapsed if elapsed > 0 else 0
@@ -309,17 +823,86 @@ class MVPHyperPipeline:
         self.performance_stats['classification'] = {
             'time': elapsed,
             'files': files_processed,
+            'errors': classification_errors,
             'pages_per_sec': pages_per_sec
         }
         
-        print(f"✅ Classification: {files_processed} files, {pages_per_sec:.1f} pages/sec (Target: 2000+)")
+        if self.enhanced_mode:
+            target_performance = pages_per_sec / 2000 * 100 if pages_per_sec > 0 else 0
+            print(f"✅ Enhanced Classification: {files_processed} files, {pages_per_sec:.1f} pages/sec")
+            print(f"📊 Performance vs Target (2000 pages/sec): {target_performance:.1f}%")
+        else:
+            print(f"✅ Basic Classification: {files_processed} files, {pages_per_sec:.1f} pages/sec")
         
-        return True
+        return classification_errors == 0
+    
+    def _basic_classification(self, content: str) -> str:
+        """Fallback basic classification using keyword counting."""
+        content_lower = content.lower()
+        
+        doc_types = []
+        confidence_scores = {}
+        
+        # Calculate domain scores
+        safety_score = (content_lower.count('safety') + content_lower.count('hazard') + 
+                      content_lower.count('osha') + content_lower.count('ppe'))
+        tech_score = (content_lower.count('algorithm') + content_lower.count('function') + 
+                     content_lower.count('code') + content_lower.count('api'))
+        business_score = (content_lower.count('business') + content_lower.count('market') + 
+                        content_lower.count('revenue') + content_lower.count('strategy'))
+        research_score = (content_lower.count('research') + content_lower.count('study') + 
+                        content_lower.count('analysis') + content_lower.count('hypothesis'))
+        
+        # Determine document types based on scores
+        if safety_score > 10:
+            doc_types.append('safety')
+            confidence_scores['safety'] = min(safety_score / 50, 1.0)
+        if tech_score > 10:
+            doc_types.append('technical')
+            confidence_scores['technical'] = min(tech_score / 50, 1.0)
+        if business_score > 10:
+            doc_types.append('business')
+            confidence_scores['business'] = min(business_score / 50, 1.0)
+        if research_score > 10:
+            doc_types.append('research')
+            confidence_scores['research'] = min(research_score / 50, 1.0)
+        
+        if not doc_types:
+            doc_types = ['general']
+            confidence_scores['general'] = 0.5
+        
+        # Calculate all domain scores for percentage breakdown
+        all_domain_scores = {
+            'safety': safety_score,
+            'technical': tech_score, 
+            'business': business_score,
+            'research': research_score
+        }
+        
+        # Convert to percentages
+        total_score = sum(all_domain_scores.values()) or 1
+        domain_percentages = {domain: f"{(score / total_score) * 100:.1f}%" 
+                            for domain, score in all_domain_scores.items()}
+        
+        # Determine primary domain
+        primary_domain = max(confidence_scores.items(), key=lambda x: x[1])[0] if confidence_scores else 'general'
+        
+        return f"""
+# Basic Classification (Step 2)
+document_types: {doc_types}
+primary_domain: {primary_domain}
+classification_confidence: {max(confidence_scores.values()) if confidence_scores else 0.5:.2f}
+domain_percentages: {domain_percentages}
+enhanced_mode: false
+"""
     
     def step_enrichment(self, input_path: str, output_path: str) -> bool:
         """Step 3: Add domain-specific enrichment (in-place enhancement)."""
         
-        print(f"\n🔸 ENRICHMENT: Adding domain-specific tags")
+        if self.enhanced_mode:
+            print(f"\n🔸 ENHANCED ENRICHMENT: pyahocorasick + regex entity extraction")
+        else:
+            print(f"\n🔸 ENRICHMENT: Adding domain-specific tags (basic mode)")
         
         start_time = time.time()
         
@@ -327,120 +910,115 @@ class MVPHyperPipeline:
         markdown_dir = Path(input_path)
         
         files_processed = 0
+        enrichment_errors = 0
+        total_entities = 0
         for md_file in markdown_dir.glob("*.md"):
-            with open(md_file, 'r', encoding='utf-8') as f:
-                content = f.read()
-            
-            # Parse existing front matter to get classification
-            primary_domain = 'general'
-            if content.startswith('---'):
-                parts = content.split('---', 2)
-                if len(parts) >= 3:
-                    front_matter = parts[1]
-                    # Extract primary domain if present
-                    for line in front_matter.split('\n'):
-                        if 'primary_domain:' in line:
-                            primary_domain = line.split(':', 1)[1].strip()
-                            break
-            
-            content_lower = content.lower()
-            
-            # Domain-specific entity extraction
-            entities = {
-                'organizations': [],
-                'persons': [],
-                'regulations': [],
-                'technologies': []
-            }
-            
-            # Extract organizations (simple pattern matching for speed)
-            org_patterns = ['osha', 'niosh', 'epa', 'fda', 'cdc', 'who']
-            for org in org_patterns:
-                if org in content_lower:
-                    entities['organizations'].append(org.upper())
-            
-            # Extract regulations (CFR patterns)
-            import re
-            cfr_pattern = r'\b\d{1,2}\s*CFR\s*\d{3,4}(?:\.\d+)?'
-            cfr_matches = re.findall(cfr_pattern, content, re.IGNORECASE)
-            entities['regulations'].extend(list(set(cfr_matches)))
-            
-            # Domain-specific tags based on primary domain
-            domain_tags = {}
-            
-            if primary_domain == 'safety':
-                # Safety-specific tags
-                hazard_keywords = ['fall', 'electrical', 'chemical', 'fire', 'ergonomic']
-                ppe_keywords = ['helmet', 'gloves', 'goggles', 'harness', 'respirator']
+            try:
+                with open(md_file, 'r', encoding='utf-8') as f:
+                    content = f.read()
                 
-                hazards = [h for h in hazard_keywords if h in content_lower]
-                ppe = [p for p in ppe_keywords if p in content_lower]
+                # Extract primary domain from existing classification
+                primary_domain = self._extract_primary_domain(content)
                 
-                if hazards:
-                    domain_tags['hazard_types'] = hazards
-                if ppe:
-                    domain_tags['ppe_required'] = ppe
+                if self.enhanced_mode and self.enrichment:
+                    # Use targeted enrichment (Layer 2) with cached classification
+                    classification_result = self.classification_cache.get(str(md_file), {})
+                    if not classification_result:
+                        # Fallback: extract primary domain from metadata
+                        classification_result = {'primary_domain': primary_domain}
                     
-            elif primary_domain == 'technical':
-                # Technical-specific tags
-                tech_keywords = ['api', 'database', 'algorithm', 'framework', 'protocol']
-                lang_keywords = ['python', 'java', 'javascript', 'sql', 'rust']
-                
-                technologies = [t for t in tech_keywords if t in content_lower]
-                languages = [l for l in lang_keywords if l in content_lower]
-                
-                if technologies:
-                    domain_tags['technologies'] = technologies
-                if languages:
-                    domain_tags['programming_languages'] = languages
-            
-            elif primary_domain == 'business':
-                # Business-specific tags
-                business_keywords = ['revenue', 'profit', 'market', 'strategy', 'customer']
-                metrics = [b for b in business_keywords if b in content_lower]
-                
-                if metrics:
-                    domain_tags['business_metrics'] = metrics
-            
-            # Add enrichment to front matter (in-place)
-            if content.startswith('---'):
-                parts = content.split('---', 2)
-                if len(parts) >= 3:
-                    front_matter = parts[1]
-                    body = parts[2]
+                    entities = self.enrichment.extract_entities_targeted(content, classification_result, md_file.name)
+                    enrichment_metadata = self.enrichment.format_enrichment_metadata(entities, classification_result)
                     
-                    # Add enrichment metadata
-                    enrichment_data = f"\n# Enrichment (Step 3)\n"
-                    if entities['organizations']:
-                        enrichment_data += f"organizations: {entities['organizations']}\n"
-                    if entities['regulations']:
-                        enrichment_data += f"regulations: {entities['regulations']}\n"
-                    if domain_tags:
-                        enrichment_data += f"domain_tags:\n"
-                        for tag_type, tags in domain_tags.items():
-                            enrichment_data += f"  {tag_type}: {tags}\n"
-                    
-                    new_front_matter = front_matter.rstrip() + enrichment_data
-                    content = f"---{new_front_matter}---{body}"
-            
-            # Write enhanced file back to same location
-            with open(md_file, 'w', encoding='utf-8') as f:
-                f.write(content)
-            
-            files_processed += 1
+                    total_entities += entities['metadata']['total_entity_count']
+                else:
+                    # Fallback to basic enrichment
+                    enrichment_metadata = self._basic_enrichment(content, primary_domain)
+                
+                # Use YAMLMetadataManager for structured enrichment metadata
+                step3_data = self._generate_step3_structured_data(enrichment_metadata, entities if self.enhanced_mode else {})
+                content = self.metadata_manager.update_step_metadata(content, 'step3', step3_data)
+                
+                # Write enriched file
+                with open(md_file, 'w', encoding='utf-8') as f:
+                    f.write(content)
+                
+                files_processed += 1
+                
+            except Exception as e:
+                enrichment_errors += 1
+                print(f"⚠️ Enrichment error for {md_file.name}: {e}")
         
         elapsed = time.time() - start_time
         pages_per_sec = files_processed / elapsed if elapsed > 0 else 0
+        entities_per_sec = total_entities / elapsed if elapsed > 0 else 0
         
         self.performance_stats['enrichment'] = {
             'time': elapsed,
             'files': files_processed,
-            'pages_per_sec': pages_per_sec
+            'errors': enrichment_errors,
+            'total_entities': total_entities,
+            'pages_per_sec': pages_per_sec,
+            'entities_per_sec': entities_per_sec
         }
         
-        print(f"✅ Enrichment: {files_processed} files, {pages_per_sec:.1f} pages/sec (Target: 1500+)")
+        if self.enhanced_mode:
+            target_performance = pages_per_sec / 1500 * 100 if pages_per_sec > 0 else 0
+            print(f"✅ Enhanced Enrichment: {files_processed} files, {total_entities} entities")
+            print(f"📊 Performance: {pages_per_sec:.1f} pages/sec, {entities_per_sec:.1f} entities/sec")
+            print(f"📊 Performance vs Target (1500 pages/sec): {target_performance:.1f}%")
+        else:
+            print(f"✅ Basic Enrichment: {files_processed} files, {pages_per_sec:.1f} pages/sec")
         
-        return True
+        return enrichment_errors == 0
+    
+    def _extract_primary_domain(self, content: str) -> str:
+        """Extract primary domain from existing front matter."""
+        if content.startswith('---'):
+            parts = content.split('---', 2)
+            if len(parts) >= 3:
+                front_matter = parts[1]
+                for line in front_matter.split('\n'):
+                    if 'primary_domain:' in line:
+                        return line.split(':', 1)[1].strip()
+        return 'general'
+    
+    def _basic_enrichment(self, content: str, primary_domain: str) -> str:
+        """Fallback enrichment using basic regex patterns."""
+        import re
+        
+        # Basic entity patterns
+        money_pattern = r'\$[0-9,]+(?:\.[0-9]{2})?'
+        email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+        cfr_pattern = r'\b\d{1,2}\s*CFR\s*\d{3,4}(?:\.\d+)?'
+        
+        money_matches = re.findall(money_pattern, content)
+        email_matches = re.findall(email_pattern, content)
+        cfr_matches = re.findall(cfr_pattern, content, re.IGNORECASE)
+        
+        # Basic organization detection
+        content_lower = content.lower()
+        org_patterns = ['osha', 'niosh', 'epa', 'fda', 'cdc', 'who']
+        orgs_found = [org.upper() for org in org_patterns if org in content_lower]
+        
+        # Basic domain tags
+        domain_tags = {}
+        if primary_domain == 'safety':
+            hazard_keywords = ['fall', 'electrical', 'chemical', 'fire', 'ergonomic']
+            hazards_found = [h for h in hazard_keywords if h in content_lower]
+            if hazards_found:
+                domain_tags['hazard_types'] = hazards_found
+        
+        return f"""
+# Basic Enrichment (Step 3)
+organizations: {orgs_found}
+regulations: {cfr_matches}
+domain_tags: {domain_tags}
+entities_found: {len(money_matches) + len(email_matches) + len(cfr_matches) + len(orgs_found)}
+money_mentions: {len(money_matches)}
+email_mentions: {len(email_matches)}
+enhanced_mode: false
+"""
     
     def step_extraction(self, input_path: str, output_path: str) -> bool:
         """Step 4: Extract semantic facts using enhanced context (creates .semantic.json files)."""

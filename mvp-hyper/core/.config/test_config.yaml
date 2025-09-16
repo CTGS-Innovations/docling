@@ -3,11 +3,9 @@ debug:
   progress_interval: 1
   timing_threshold: 0.5
 inputs:
-  directories: []
-  files:
-  - ~/projects/docling/cli/data_osha/training-requirements-by-standard.pdf
-  - ~/projects/docling/cli/data_osha/2254-training-requirements-in-osha-standards.pdf
-  - ~/projects/docling/cli/data_osha/2268-shipyard-industry-standards.pdf
+  directories: 
+    - "../output"
+  files: []
 output:
   directory: test_output
 pdf:
@@ -19,3 +17,5 @@ processing:
   max_workers: 1
   slow_file_threshold: 2.0
   timeout_per_file: 30
+  convert_formulas: false
+  remove_latexit: true

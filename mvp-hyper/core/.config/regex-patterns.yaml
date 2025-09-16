@@ -1,0 +1,273 @@
+# Regex Patterns Configuration
+# ============================
+# High-performance regex patterns for entity extraction
+# Based on benchmark: 1,717 pages/sec with pure regex
+
+# Universal Entity Patterns
+universal_patterns:
+  MONEY:
+    pattern: '\$[0-9,]+(?:\.[0-9]{1,2})?(?:\s*(?:million|billion|thousand|M|B|K))?'
+    flags: "IGNORECASE"
+    description: "Currency amounts with optional scale indicators"
+    examples: ["$1.2M", "$70,000", "$5.50"]
+
+  DATE:
+    pattern: '\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4}|\d{1,2}/\d{1,2}/\d{2,4}|\d{4}-\d{1,2}-\d{1,2}'
+    flags: "IGNORECASE"
+    description: "Multiple date formats"
+    examples: ["March 15, 2024", "3/15/2024", "2024-03-15"]
+
+  PHONE:
+    pattern: '\b(?:\+?1[-.\s]?)?\(?[0-9]{3}\)?[-.\s]?[0-9]{3}[-.\s]?[0-9]{4}\b'
+    flags: "NONE"
+    description: "US phone numbers with various formats"
+    examples: ["(555) 123-4567", "555-123-4567", "+1-555-123-4567"]
+
+  EMAIL:
+    pattern: '\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    flags: "NONE"
+    description: "Standard email addresses"
+    examples: ["john.smith@company.com", "user@domain.org"]
+
+  URL:
+    pattern: 'https?://[^\s<>"{}|\\^`\[\]]+'
+    flags: "NONE"
+    description: "HTTP and HTTPS URLs"
+    examples: ["https://www.osha.gov", "http://example.com/page"]
+
+  PERCENT:
+    pattern: '\b\d{1,3}(?:\.\d+)?%'
+    flags: "NONE"
+    description: "Percentage values"
+    examples: ["25%", "12.5%", "100%"]
+
+  CARDINAL:
+    pattern: '\b\d{1,3}(?:,\d{3})*(?:\.\d+)?\b'
+    flags: "NONE"
+    description: "Numeric values with comma separators"
+    examples: ["1,000", "25.5", "1,234,567"]
+
+# Regulatory Patterns
+regulatory_patterns:
+  CFR_REGULATION:
+    pattern: '\b\d{1,2}\s*CFR\s*\d{3,4}(?:\.\d+)?(?:\([a-z]\))?'
+    flags: "IGNORECASE"
+    description: "Code of Federal Regulations citations"
+    examples: ["29 CFR 1926.95", "40 CFR 261.3(a)"]
+
+  OSHA_STANDARD:
+    pattern: '\b29\s*CFR\s*19\d{2}\.\d+'
+    flags: "IGNORECASE"
+    description: "OSHA-specific standards"
+    examples: ["29 CFR 1926.95", "29 CFR 1910.134"]
+
+  USC_CODE:
+    pattern: '\b\d{1,2}\s*U\.?S\.?C\.?\s*§?\s*\d+'
+    flags: "IGNORECASE"
+    description: "US Code citations"
+    examples: ["29 USC 651", "15 U.S.C. § 2051"]
+
+# Classification Patterns by Domain
+classification_patterns:
+  safety:
+    hazard_indicators:
+      pattern: '\b(?:hazard|risk|danger|unsafe|accident|injury|fatality)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "General safety hazard terms"
+
+    osha_specific:
+      pattern: '\b(?:OSHA|29\s*CFR|workplace\s*safety|safety\s*standard)\b'
+      flags: "IGNORECASE"
+      weight: 3
+      description: "OSHA-specific terminology"
+
+    ppe_mentions:
+      pattern: '\b(?:PPE|personal\s*protective|helmet|harness|respirator|safety\s*glasses)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Personal protective equipment"
+
+    incident_terms:
+      pattern: '\b(?:incident|accident|near\s*miss|violation|citation|inspection)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Safety incidents and enforcement"
+
+    chemical_safety:
+      pattern: '\b(?:chemical|toxic|exposure|SDS|MSDS|ventilation)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Chemical safety terminology"
+
+  technical:
+    programming:
+      pattern: '\b(?:function|class|algorithm|API|database|framework)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Programming and software development"
+
+    languages:
+      pattern: '\b(?:Python|Java|JavaScript|SQL|C\+\+|Rust|Go)\b'
+      flags: "NONE"
+      weight: 3
+      description: "Programming languages"
+
+    infrastructure:
+      pattern: '\b(?:server|cloud|deployment|container|microservice|DevOps)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Infrastructure and operations"
+
+    data_science:
+      pattern: '\b(?:machine\s*learning|AI|neural\s*network|model|dataset|analytics)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Data science and AI"
+
+    protocols:
+      pattern: '\b(?:HTTP|REST|GraphQL|TCP|UDP|SSL|TLS)\b'
+      flags: "NONE"
+      weight: 2
+      description: "Network protocols and standards"
+
+  business:
+    financial:
+      pattern: '\b(?:revenue|profit|budget|cost|ROI|investment|financial)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Financial and economic terms"
+
+    strategy:
+      pattern: '\b(?:strategy|market|competition|customer|business\s*model)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Business strategy and planning"
+
+    operations:
+      pattern: '\b(?:process|workflow|efficiency|productivity|operations)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Business operations"
+
+    metrics:
+      pattern: '\b(?:KPI|metric|performance|measurement|analytics|dashboard)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Business metrics and KPIs"
+
+    management:
+      pattern: '\b(?:leadership|management|team|organization|governance)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Management and leadership"
+
+  research:
+    methodology:
+      pattern: '\b(?:research|study|analysis|methodology|hypothesis|experiment)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Research methodology"
+
+    academic:
+      pattern: '\b(?:paper|journal|publication|peer\s*review|citation|abstract)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Academic and scholarly work"
+
+    statistical:
+      pattern: '\b(?:statistics|correlation|regression|significance|p-value|sample)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Statistical analysis"
+
+    data_collection:
+      pattern: '\b(?:survey|interview|observation|data\s*collection|questionnaire)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Data collection methods"
+
+    findings:
+      pattern: '\b(?:findings|results|conclusion|discussion|implications|limitations)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Research findings and conclusions"
+
+  regulatory:
+    regulations:
+      pattern: '\b(?:\d{1,2}\s*CFR\s*\d{3,4}(?:\.\d+)?|USC|regulation|compliance|standard)\b'
+      flags: "IGNORECASE"
+      weight: 3
+      description: "Regulatory references"
+
+    legal_terms:
+      pattern: '\b(?:law|legal|statute|rule|requirement|mandate|shall|must)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Legal terminology"
+
+    enforcement:
+      pattern: '\b(?:penalty|fine|violation|enforcement|audit|inspection)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Enforcement and compliance"
+
+    agencies:
+      pattern: '\b(?:OSHA|EPA|FDA|CPSC|NIOSH|DOL|Department\s*of\s*Labor)\b'
+      flags: "IGNORECASE"
+      weight: 3
+      description: "Regulatory agencies"
+
+    procedures:
+      pattern: '\b(?:procedure|protocol|guideline|policy|directive|instruction)\b'
+      flags: "IGNORECASE"
+      weight: 2
+      description: "Procedures and guidelines"
+
+# Document Structure Patterns
+structure_patterns:
+  technical_doc:
+    pattern: '\b(?:README|API|documentation|specification|manual|guide)\b'
+    flags: "IGNORECASE"
+    description: "Technical documentation indicators"
+
+  report:
+    pattern: '\b(?:report|summary|findings|analysis|executive\s*summary)\b'
+    flags: "IGNORECASE"
+    description: "Report and analysis documents"
+
+  policy:
+    pattern: '\b(?:policy|procedure|guideline|standard|requirement)\b'
+    flags: "IGNORECASE"
+    description: "Policy and procedure documents"
+
+  training:
+    pattern: '\b(?:training|course|lesson|module|learning|education)\b'
+    flags: "IGNORECASE"
+    description: "Training and educational materials"
+
+  form:
+    pattern: '\b(?:form|application|checklist|template|worksheet)\b'
+    flags: "IGNORECASE"
+    description: "Forms and templates"
+
+# Person Name Patterns
+person_patterns:
+  title_names:
+    pattern: '\b(?:Dr\.|Mr\.|Ms\.|Mrs\.|Director|Manager|Supervisor|Chief|President|CEO|CFO|CTO)\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*'
+    flags: "NONE"
+    description: "Names with professional titles"
+
+  name_email:
+    pattern: '\b([A-Z][a-z]+\s+[A-Z][a-z]+)(?:\s+<[^>]+@[^>]+>|\s+\([^)]+@[^)]+\))'
+    flags: "NONE"
+    description: "Names associated with email addresses"
+
+# Configuration metadata
+metadata:
+  version: "1.0"
+  last_updated: "2024-09-15"
+  description: "Regex patterns for high-performance entity extraction"
+  performance_baseline: "1717 pages/sec with pure regex"
+  total_patterns: 40+
+  domains: 6

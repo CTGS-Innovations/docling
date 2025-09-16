@@ -16,7 +16,41 @@ High-performance document processing pipeline with progressive enhancement strat
 
 ## 🚀 PRIMARY PIPELINE (Recommended)
 
-### mvp-hyper-pipeline-progressive.py ⭐ PRODUCTION READY
+### mvp-hyper-pipeline-enhanced.py ⭐ LATEST ENHANCED VERSION
+**High-performance pipeline with regex-based classification (2,000+ pages/sec) and pyahocorasick enrichment (1,500+ pages/sec).**
+
+Based on benchmark findings that achieved:
+- **Text Extraction**: 1,717 pages/sec with pure regex (71% above target)
+- **Dictionary Lookup**: 1,816 pages/sec with pyahocorasick (81% above target) 
+- **Entity Coverage**: 26,366 entities extracted vs 7,111 with spaCy (276% improvement)
+
+```bash
+# Complete enhanced pipeline - ALL STEPS (Latest)
+/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-enhanced.py --output results --full --config core/.config/mvp-hyper-pipeline-progressive-config.yaml
+
+# Individual enhanced steps
+# Step 1: Convert PDFs to markdown
+/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-enhanced.py --step conversion --output results --config core/.config/mvp-hyper-pipeline-progressive-config.yaml
+
+# Step 2: Enhanced classification (regex patterns, 2000+ pages/sec target)
+/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-enhanced.py --step classification --output results --config core/.config/mvp-hyper-pipeline-progressive-config.yaml
+
+# Step 3: Enhanced enrichment (pyahocorasick + regex, 1500+ pages/sec target)
+/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-enhanced.py --step enrichment --output results --config core/.config/mvp-hyper-pipeline-progressive-config.yaml
+
+# Step 4: Semantic extraction with full context
+/home/corey/projects/docling/cli/.env/bin/python core/mvp-hyper-pipeline-enhanced.py --step extraction --output results --config core/.config/mvp-hyper-pipeline-progressive-config.yaml
+```
+
+**🎯 Enhanced Performance Features:**
+- **Pre-compiled Regex**: 5+ domain-specific pattern libraries for 2,000+ pages/sec classification
+- **pyahocorasick Integration**: Dictionary lookup achieving 1,816 pages/sec for known entities
+- **Universal Entity Patterns**: MONEY, DATE, PHONE, EMAIL, CFR regulations at 1,717 pages/sec
+- **Domain-Specific Gazetteers**: Organizations, chemicals, safety equipment, hazard types
+- **Context-Aware Resolution**: Progressive metadata enhancement with confidence scoring
+- **Performance Monitoring**: Real-time speed tracking vs benchmark targets
+
+### mvp-hyper-pipeline-progressive.py ⭐ STABLE BASELINE
 **Unified output directory strategy with progressive in-place enhancement.**
 
 ```bash

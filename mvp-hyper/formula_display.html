@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaTeX Formula Display</title>
+    
+    <!-- MathJax Configuration -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    
+    <!-- Load MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: #fff;
+        }
+        
+        .formula-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .formula-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        .formula-display {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: white;
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+        
+        .description {
+            font-style: italic;
+            color: #666;
+            margin-top: 10px;
+        }
+        
+        .diffusion-chain {
+            font-size: 1.2em;
+            margin: 25px 0;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .paper-info {
+            text-align: center;
+            font-style: italic;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Diffusion Probabilistic Models - Mathematical Formulas</h1>
+    
+    <div class="paper-info">
+        From "Denoising Diffusion Probabilistic Models" by Ho, Jain & Abbeel (2020)
+    </div>
+
+    <div class="formula-section">
+        <div class="formula-title">Diffusion Process Chain</div>
+        <div class="formula-display diffusion-chain">
+            $x_T \leftarrow \cdots \leftarrow x_t \leftarrow x_{t-1} \leftarrow \cdots \leftarrow x_0$
+        </div>
+        <div class="description">
+            The forward diffusion process that gradually adds noise to data $x_0$ until it becomes pure noise $x_T$.
+        </div>
+    </div>
+
+    <div class="formula-section">
+        <div class="formula-title">Reverse Process Distribution</div>
+        <div class="formula-display">
+            $p_\theta(x_{t-1}|x_t)$
+        </div>
+        <div class="description">
+            The learned reverse process that denoises from timestep $t$ to $t-1$. This is parameterized by neural network parameters $\theta$.
+        </div>
+    </div>
+
+    <div class="formula-section">
+        <div class="formula-title">Forward Process Distribution</div>
+        <div class="formula-display">
+            $q(x_t|x_{t-1})$
+        </div>
+        <div class="description">
+            The fixed forward process that adds Gaussian noise from timestep $t-1$ to $t$.
+        </div>
+    </div>
+
+    <div class="formula-section">
+        <div class="formula-title">Complete Diffusion Framework</div>
+        <div class="formula-display">
+            $$\begin{align}
+            \text{Forward process: } &q(x_{1:T}|x_0) = \prod_{t=1}^T q(x_t|x_{t-1}) \\
+            \text{Reverse process: } &p_\theta(x_{0:T}) = p(x_T) \prod_{t=1}^T p_\theta(x_{t-1}|x_t) \\
+            \text{Training objective: } &\mathbb{E}_{q(x_{1:T}|x_0)} \left[ \log \frac{q(x_{1:T}|x_0)}{p_\theta(x_{0:T})} \right]
+            \end{align}$$
+        </div>
+        <div class="description">
+            The complete mathematical framework showing the forward process $q$, reverse process $p_\theta$, and variational training objective.
+        </div>
+    </div>
+
+    <div class="formula-section">
+        <div class="formula-title">Key Properties</div>
+        <div class="formula-display">
+            $$\begin{align}
+            q(x_t|x_0) &= \mathcal{N}(x_t; \sqrt{\bar{\alpha}_t} x_0, (1-\bar{\alpha}_t) I) \\
+            p_\theta(x_{t-1}|x_t) &= \mathcal{N}(x_{t-1}; \mu_\theta(x_t, t), \Sigma_\theta(x_t, t)) \\
+            \bar{\alpha}_t &= \prod_{s=1}^t \alpha_s, \quad \alpha_t = 1 - \beta_t
+            \end{align}$$
+        </div>
+        <div class="description">
+            Direct sampling from any timestep, parameterization of the reverse process, and the noise schedule relationships.
+        </div>
+    </div>
+
+    <script>
+        // Force MathJax to re-render after page load
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>
