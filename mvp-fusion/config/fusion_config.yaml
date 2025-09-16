@@ -1,0 +1,100 @@
+# MVP-Fusion Configuration
+# ========================
+# High-Performance Document Processing Pipeline
+# Optimized for raw speed while maintaining output quality
+
+# Global Performance Settings
+performance:
+  # Aggressive performance mode
+  mode: "extreme"  # Options: "balanced", "aggressive", "extreme"
+  
+  # Target performance metrics
+  target_pages_per_sec: 10000  # 50x improvement target
+  max_memory_usage_gb: 16      # Memory limit for processing
+  
+  # Processing strategy
+  enable_vectorization: true    # SIMD operations
+  enable_parallel_processing: true
+  max_workers: 16              # All CPU cores
+  
+  # Batch processing for efficiency
+  batch_size: 32               # Process 32 documents simultaneously
+  batch_timeout_seconds: 10    # Max time per batch
+
+# Input Configuration
+inputs:
+  # File sources
+  files: []
+  
+  # Directory sources - using same test data as MVP-Hyper
+  directories:
+    - "~/projects/docling/cli/data"
+    - "~/projects/docling/cli/data_complex"
+    - "~/projects/docling/cli/data_osha"
+  
+  # Skip file extensions for speed
+  skip_extensions:
+    - ".jpg"
+    - ".jpeg"
+    - ".png"
+    - ".gif"
+    - ".mp3"
+    - ".mp4"
+    - ".zip"
+    - ".tar"
+    - ".exe"
+  
+  # Performance limits
+  max_file_size_mb: 10.0       # Larger than MVP-Hyper for better throughput
+  timeout_per_file: 5          # Faster timeout for efficiency
+
+# Fusion Engine Configuration
+fusion_engine:
+  # Multi-engine strategy
+  engines:
+    aho_corasick:
+      enabled: true
+      priority: 1                # Highest priority - fastest
+      target_chars_per_sec: 50000000  # 50M chars/sec
+      
+    flpc_rust:
+      enabled: true
+      priority: 2                # Second priority
+      target_chars_per_sec: 69000000  # 69M chars/sec
+      
+    python_re:
+      enabled: false             # Disabled - fallback only
+      priority: 3                # Fallback for compatibility
+  
+  # Pattern routing strategy
+  routing:
+    # Use content analysis to select optimal engine
+    smart_routing: true
+    
+    # Route simple keywords to AC, complex patterns to FLPC
+    keyword_threshold: 0.8       # 80% keywords -> AC automaton
+    complexity_threshold: 0.3    # 30% complex -> FLPC regex
+    
+    # Early termination for speed
+    early_termination: true
+    confidence_threshold: 0.95   # Stop when 95% confident
+
+# Pattern Configuration
+patterns:
+  # Pattern set selection
+  pattern_sets:
+    universal_entities: true     # Money, dates, emails, phones
+    domain_keywords: true        # Safety, compliance, regulations
+    technical_terms: true        # Measurements, versions, URLs
+    
+  # Pattern optimization
+  optimization:
+    precompile_patterns: true    # Compile all patterns at startup
+    cache_results: true          # Cache pattern matches
+    cache_size_mb: 512           # 512MB pattern cache
+    
+  # Performance tuning
+  performance:
+    max_patterns_per_engine: 20  # Limit patterns per engine
+    pattern_timeout_ms: 100      # 100ms timeout per pattern
+    enable_pattern_profiling: true

@@ -1,0 +1,252 @@
+# Content Routing Rules Configuration
+# ===================================
+# Smart routing rules for MVP-Fusion pattern selection
+
+# Content Analysis Rules
+# ======================
+
+content_analysis:
+  # Document type detection
+  document_types:
+    # Technical documents (complex patterns needed)
+    technical:
+      indicators:
+        - "CFR"
+        - "regulation"
+        - "standard"
+        - "specification"
+        - "protocol"
+      pattern_set: "complete"
+      engine_preference: "flpc_rust"
+      confidence_boost: 0.1
+      
+    # Safety documents (keyword-heavy)  
+    safety:
+      indicators:
+        - "safety"
+        - "hazard"
+        - "OSHA"
+        - "PPE"
+        - "emergency"
+      pattern_set: "osha_focused"
+      engine_preference: "aho_corasick"
+      confidence_boost: 0.15
+      
+    # Environmental documents
+    environmental:
+      indicators:
+        - "EPA"
+        - "environmental"
+        - "pollution"
+        - "emission"
+        - "waste"
+      pattern_set: "environmental_focused"
+      engine_preference: "aho_corasick"
+      confidence_boost: 0.1
+      
+    # Simple text documents
+    simple:
+      indicators:
+        - low_complexity_score: true
+        - word_count_below: 1000
+        - entity_density_below: 0.1
+      pattern_set: "minimal"
+      engine_preference: "aho_corasick"
+      confidence_boost: 0.2
+
+# Engine Selection Rules
+# ======================
+
+engine_selection:
+  # Primary routing criteria
+  routing_criteria:
+    # Content complexity analysis
+    complexity_based:
+      # Simple keyword matching -> Aho-Corasick
+      keyword_heavy:
+        threshold: 0.8              # 80% of target patterns are keywords
+        engine: "aho_corasick"
+        expected_speedup: 10        # 10x faster than regex
+        
+      # Complex pattern matching -> FLPC
+      regex_heavy:
+        threshold: 0.3              # 30% of patterns need regex
+        engine: "flpc_rust"
+        expected_speedup: 14.9      # 14.9x faster than Python re
+        
+      # Mixed content -> Hybrid processing
+      mixed_content:
+        keyword_threshold: 0.5      # 50-80% keywords
+        regex_threshold: 0.2        # 20-30% regex
+        strategy: "hybrid"          # Use both engines
+        
+    # Performance-based routing
+    performance_based:
+      # File size considerations
+      small_files:
+        size_threshold_kb: 100      # Files < 100KB
+        prefer_engine: "aho_corasick"  # Lower overhead
+        batch_size: 64              # Larger batches for small files
+        
+      large_files:
+        size_threshold_mb: 5        # Files > 5MB
+        prefer_engine: "flpc_rust"  # Better for large content
+        batch_size: 8               # Smaller batches for large files
+        enable_streaming: true      # Stream large files
+        
+    # Quality-based routing
+    quality_based:
+      # High accuracy requirements
+      high_accuracy:
+        accuracy_threshold: 0.98    # 98% accuracy required
+        prefer_engine: "flpc_rust"  # More precise regex matching
+        enable_validation: true     # Double-check results
+        
+      # Balanced accuracy/speed
+      balanced:
+        accuracy_threshold: 0.95    # 95% accuracy acceptable
+        strategy: "fastest_first"   # Try fastest engine first
+        fallback_enabled: true      # Fallback to slower if needed
+
+# Adaptive Routing
+# ================
+
+adaptive_routing:
+  # Learning from performance
+  performance_learning:
+    enable_learning: true
+    learning_window_docs: 1000      # Learn from last 1000 documents
+    adaptation_frequency: 100       # Adapt every 100 documents
+    
+    # Performance metrics to track
+    track_metrics:
+      - "processing_time_per_doc"
+      - "entities_found_per_doc"
+      - "accuracy_score"
+      - "memory_usage"
+      
+    # Adaptation thresholds
+    adaptation_thresholds:
+      performance_degradation: 0.1  # 10% degradation triggers adaptation
+      accuracy_degradation: 0.02    # 2% accuracy loss triggers review
+      
+  # Dynamic pattern set selection
+  dynamic_patterns:
+    enable_dynamic: true
+    
+    # Expand pattern set if low coverage
+    expand_triggers:
+      low_entity_coverage: 0.5      # <50% expected entities found
+      low_confidence: 0.8           # <80% confidence in results
+      
+    # Reduce pattern set if over-processing
+    reduce_triggers:
+      high_processing_time: 2.0     # >2x expected processing time
+      low_pattern_hit_rate: 0.1     # <10% patterns finding matches
+
+# Fallback Strategies
+# ===================
+
+fallback_strategies:
+  # Engine failure handling
+  engine_failures:
+    # If Aho-Corasick fails
+    aho_corasick_fallback:
+      primary_fallback: "flpc_rust"
+      secondary_fallback: "python_re"
+      failure_threshold: 3          # 3 failures triggers fallback
+      
+    # If FLPC fails
+    flpc_rust_fallback:
+      primary_fallback: "python_re"
+      secondary_fallback: "aho_corasick"  # For simple patterns only
+      failure_threshold: 2          # 2 failures triggers fallback
+      
+  # Performance degradation handling
+  performance_fallback:
+    # If processing too slow
+    slow_processing:
+      time_threshold_multiplier: 3  # 3x expected time
+      fallback_action: "reduce_patterns"
+      emergency_pattern_set: "minimal"
+      
+    # If memory usage too high
+    high_memory:
+      memory_threshold_gb: 8        # 8GB memory usage
+      fallback_action: "reduce_batch_size"
+      emergency_batch_size: 4
+      
+  # Quality degradation handling
+  quality_fallback:
+    # If accuracy drops
+    low_accuracy:
+      accuracy_threshold: 0.9       # 90% accuracy minimum
+      fallback_action: "increase_validation"
+      enable_double_processing: true
+
+# Pattern Priority Rules
+# ======================
+
+pattern_priorities:
+  # High priority patterns (process first)
+  high_priority:
+    - "regulation"                  # CFR numbers
+    - "money"                      # Financial information
+    - "organizations"              # Regulatory bodies
+    weight: 1.0
+    timeout_ms: 200                # Longer timeout for important patterns
+    
+  # Medium priority patterns
+  medium_priority:
+    - "date"
+    - "email"
+    - "safety_keywords"
+    weight: 0.7
+    timeout_ms: 100
+    
+  # Low priority patterns (process if time permits)
+  low_priority:
+    - "percent"
+    - "time"
+    - "version"
+    - "range"
+    weight: 0.3
+    timeout_ms: 50                 # Shorter timeout for nice-to-have patterns
+    
+  # Early termination rules
+  early_termination:
+    enable_early_termination: true
+    confidence_threshold: 0.95     # Stop if 95% confident
+    coverage_threshold: 0.9        # Stop if 90% expected entities found
+    time_threshold_ms: 500         # Stop after 500ms regardless
+
+# Optimization Rules
+# ==================
+
+optimization_rules:
+  # Pattern ordering optimization
+  pattern_ordering:
+    order_by: "hit_rate_desc"       # Order by hit rate (most successful first)
+    reorder_frequency: 1000         # Reorder every 1000 documents
+    
+  # Batch optimization
+  batch_optimization:
+    optimize_batch_size: true
+    target_batch_time_ms: 500       # Target 500ms per batch
+    adjust_batch_size_frequency: 100
+    
+  # Cache optimization
+  cache_optimization:
+    optimize_cache_size: true
+    target_hit_rate: 0.95          # Target 95% cache hit rate
+    cache_eviction: "lru"          # Least Recently Used eviction
+    
+  # Resource optimization
+  resource_optimization:
+    monitor_cpu_usage: true
+    cpu_threshold: 0.8             # 80% CPU usage threshold
+    scale_workers_dynamically: true
+    
+    monitor_memory_usage: true
+    memory_threshold_gb: 12        # 12GB memory threshold
+    enable_garbage_collection: true

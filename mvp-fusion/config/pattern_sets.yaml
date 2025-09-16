@@ -1,0 +1,264 @@
+# Pattern Sets Configuration
+# =========================
+# Optimized pattern definitions for MVP-Fusion
+# Separated by engine type for maximum performance
+
+# Aho-Corasick Keywords (Simple String Matching)
+# ===============================================
+# These are processed at 50M+ chars/sec with AC automaton
+
+aho_corasick_patterns:
+  # Safety and Compliance Keywords
+  safety_keywords:
+    - "safety"
+    - "hazard"
+    - "risk"
+    - "danger"
+    - "warning"
+    - "caution"
+    - "emergency"
+    - "accident"
+    - "incident"
+    - "injury"
+    - "fatality"
+    - "compliance"
+    - "regulation"
+    - "standard"
+    - "requirement"
+    - "mandatory"
+    - "prohibited"
+    - "restricted"
+    - "approved"
+    - "certified"
+    
+  # Regulatory Organizations
+  organizations:
+    - "OSHA"
+    - "EPA"
+    - "NIOSH"
+    - "FDA"
+    - "NFPA"
+    - "ANSI"
+    - "ISO"
+    - "DOT"
+    - "FAA"
+    - "CDC"
+    - "MSHA"
+    - "CPSC"
+    
+  # Domain-Specific Terms
+  workplace_safety:
+    - "PPE"
+    - "personal protective equipment"
+    - "hard hat"
+    - "safety glasses"
+    - "respirator"
+    - "harness"
+    - "lockout"
+    - "tagout"
+    - "LOTO"
+    - "confined space"
+    - "fall protection"
+    - "scaffolding"
+    - "ladder safety"
+    - "excavation"
+    - "trenching"
+    
+  environmental:
+    - "pollution"
+    - "contamination"
+    - "emission"
+    - "discharge"
+    - "waste"
+    - "recycling"
+    - "environmental impact"
+    - "air quality"
+    - "water quality"
+    - "soil contamination"
+    - "groundwater"
+    - "hazardous material"
+    - "toxic"
+    - "carcinogen"
+    
+  medical:
+    - "exposure"
+    - "dose"
+    - "threshold"
+    - "limit"
+    - "permissible"
+    - "occupational health"
+    - "industrial hygiene"
+    - "ergonomics"
+    - "repetitive strain"
+    - "noise exposure"
+    - "hearing protection"
+    - "respiratory protection"
+
+# FLPC Rust Regex Patterns (Complex Pattern Matching)  
+# ===================================================
+# These are processed at 69M chars/sec with FLPC
+
+flpc_regex_patterns:
+  # Universal Entities (Complex Patterns)
+  universal_entities:
+    money:
+      pattern: '(?i)\$[\d,]+(?:\.?\d{0,2})?(?:\s*(?:million|billion|thousand|M|B|K))?|[\d,]+(?:\.?\d{0,2})?\s*(?:dollars?|USD|EUR|GBP|pounds?|euros?)'
+      description: "Money amounts with currency"
+      priority: high
+      
+    date:
+      pattern: '(?i)\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(?:st|nd|rd|th)?,?\s+\d{4}|\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\b\d{4}[/-]\d{1,2}[/-]\d{1,2}'
+      description: "Various date formats"
+      priority: high
+      
+    email:
+      pattern: '\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+      description: "Email addresses"
+      priority: medium
+      
+    phone:
+      pattern: '\b(?:\+?1[-.\s]?)?\(?[0-9]{3}\)?[-.\s]?[0-9]{3}[-.\s]?[0-9]{4}\b|\b\d{3}[-.\s]\d{3}[-.\s]\d{4}\b'
+      description: "Phone numbers"
+      priority: medium
+      
+    percent:
+      pattern: '\b\d{1,3}(?:\.\d{1,2})?%'
+      description: "Percentage values"
+      priority: low
+      
+    time:
+      pattern: '(?i)\b\d{1,2}:\d{2}(?::\d{2})?(?:\s*(?:AM|PM|am|pm))?\b|\b\d{1,2}\s*(?:AM|PM|am|pm)\b'
+      description: "Time expressions"
+      priority: low
+      
+    url:
+      pattern: 'https?://[^\s<>"{}|\\^`\[\]]+'
+      description: "URLs and web links"
+      priority: medium
+      
+    version:
+      pattern: '\bv?\d+\.\d+(?:\.\d+)?(?:-[a-zA-Z0-9]+)?'
+      description: "Version numbers"
+      priority: low
+      
+    measurement:
+      pattern: '(?i)\b\d+(?:\.\d+)?\s*(?:mg|g|kg|lbs?|oz|ml|l|gal|ft|feet|inches?|meters?|m|cm|mm|°[CF]|degrees?)'
+      description: "Measurements and units"
+      priority: medium
+      
+    range:
+      pattern: '(?i)\b\d+\s*-\s*\d+\b|\b\d+\s*to\s*\d+\b'
+      description: "Numeric ranges"
+      priority: low
+      
+    regulation:
+      pattern: '(?i)\b\d{1,2}\s*CFR\s*\d{3,4}(?:\.\d+)?(?:\([a-z]\))?'
+      description: "CFR regulation numbers"
+      priority: high
+
+# Pattern Performance Configuration
+# ================================
+
+pattern_performance:
+  # Engine assignment strategy
+  assignment_strategy:
+    # Route based on pattern complexity
+    simple_keywords: "aho_corasick"      # Simple string matching
+    complex_regex: "flpc_rust"           # Complex regex patterns
+    fallback: "python_re"                # Compatibility fallback
+    
+  # Performance optimization
+  optimization:
+    # Pre-compilation
+    precompile_all: true                 # Compile all patterns at startup
+    compile_timeout_seconds: 30          # Max compilation time
+    
+    # Caching
+    enable_pattern_cache: true
+    cache_size_patterns: 1000            # Cache 1000 compiled patterns
+    cache_ttl_minutes: 60                # 1 hour cache TTL
+    
+    # Parallel processing
+    parallel_pattern_execution: true
+    max_parallel_patterns: 8             # Process 8 patterns simultaneously
+    
+  # Pattern routing rules
+  routing_rules:
+    # Content-based routing
+    content_analysis:
+      keyword_density_threshold: 0.8     # 80% keywords -> AC
+      regex_complexity_threshold: 0.3    # 30% complex -> FLPC
+      
+    # Performance-based routing  
+    performance_routing:
+      prefer_fastest: true                # Always prefer fastest engine
+      fallback_on_timeout: true          # Fallback if pattern times out
+      timeout_ms: 100                     # 100ms pattern timeout
+      
+    # Quality-based routing
+    quality_routing:
+      maintain_accuracy: true             # Don't sacrifice accuracy for speed
+      accuracy_threshold: 0.98            # 98% minimum accuracy
+
+# Pattern Set Selection
+# ====================
+
+pattern_sets:
+  # Default pattern set (balanced performance/coverage)
+  default:
+    aho_corasick: 
+      - safety_keywords
+      - organizations
+      - workplace_safety
+    flpc_regex:
+      - money
+      - date
+      - email
+      - regulation
+      
+  # Minimal pattern set (maximum speed)
+  minimal:
+    aho_corasick:
+      - safety_keywords
+      - organizations
+    flpc_regex:
+      - money
+      - date
+      
+  # Complete pattern set (maximum coverage)
+  complete:
+    aho_corasick:
+      - safety_keywords
+      - organizations  
+      - workplace_safety
+      - environmental
+      - medical
+    flpc_regex:
+      - money
+      - date
+      - email
+      - phone
+      - percent
+      - time
+      - url
+      - version
+      - measurement
+      - range
+      - regulation
+      
+  # Domain-specific pattern sets
+  osha_focused:
+    aho_corasick:
+      - safety_keywords
+      - workplace_safety
+    flpc_regex:
+      - regulation
+      - measurement
+      
+  environmental_focused:
+    aho_corasick:
+      - environmental
+      - organizations
+    flpc_regex:
+      - measurement
+      - regulation
