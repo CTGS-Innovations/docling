@@ -24,6 +24,16 @@ from typing import List, Dict, Any, Union
 import yaml
 from .in_memory_document import InMemoryDocument, MemoryOverflowError
 
+# Import Aho-Corasick engine for high-performance pattern matching
+try:
+    import sys
+    sys.path.append(str(Path(__file__).parent.parent))
+    from knowledge.aho_corasick_engine import AhoCorasickLayeredClassifier
+    AHOCORASICK_AVAILABLE = True
+except ImportError:
+    AHOCORASICK_AVAILABLE = False
+    print("⚠️  Aho-Corasick engine not available, falling back to regex patterns")
+
 
 class FusionPipeline:
     """
@@ -40,6 +50,16 @@ class FusionPipeline:
         self.stages_to_run = config.get('pipeline', {}).get('stages_to_run', ['convert'])
         self.memory_limit_mb = config.get('pipeline', {}).get('memory_limit_mb', 100)
         self.service_memory_limit_mb = config.get('pipeline', {}).get('service_memory_limit_mb', 1024)
+        
+        # Initialize Aho-Corasick engine for high-performance classification
+        self.ac_classifier = None
+        if AHOCORASICK_AVAILABLE:
+            try:
+                self.ac_classifier = AhoCorasickLayeredClassifier()
+                print("✅ Aho-Corasick engine initialized for government/regulatory + AI domains")
+            except Exception as e:
+                print(f"⚠️  Aho-Corasick initialization failed: {e}, using regex fallback")
+                self.ac_classifier = None
         
     def process_files(self, extractor, file_paths: List[Path], output_dir: Path, 
                      max_workers: int = 2) -> tuple[List[InMemoryDocument], float, Dict[str, Any]]:
@@ -264,39 +284,51 @@ class FusionPipeline:
         start_time = time.perf_counter()
         layer_timings = {}
         
-        # Initialize classification result
-        classification_data = {
-            'description': 'Layered Classification & Progressive Intelligence',
-            'classification_date': time.strftime('%Y-%m-%dT%H:%M:%S'),
-            'classification_method': 'mvp-fusion-layered',
-            'layered_architecture': True,
-            'early_termination': False,
-            'layers_processed': []
-        }
+        # Initialize clean layered structure (no redundancy)
+        classification_data = {}
         
         # LAYER 1: FILE METADATA (Free - already available)
         layer1_start = time.perf_counter()
         file_metadata = self._layer1_file_metadata(filename, content)
-        classification_data.update(file_metadata)
-        classification_data['layers_processed'].append('layer1_file_metadata')
+        classification_data['file_metadata'] = file_metadata['file_metadata']
         layer_timings['layer1_file_metadata'] = (time.perf_counter() - layer1_start) * 1000
         
         # LAYER 2: DOCUMENT STRUCTURE (Free from existing regex patterns)
         layer2_start = time.perf_counter()
         structure_data = self._layer2_document_structure(content)
-        classification_data.update(structure_data)
-        classification_data['layers_processed'].append('layer2_document_structure')
+        classification_data['document_structure'] = structure_data['document_structure']
+        classification_data['structural_complexity_score'] = structure_data['structural_complexity_score']
+        classification_data['structure_based_routing'] = structure_data['structure_based_routing']
         layer_timings['layer2_document_structure'] = (time.perf_counter() - layer2_start) * 1000
         
-        # LAYER 3: DOMAIN CLASSIFICATION (<15ms target)
+        # LAYER 3: DOMAIN CLASSIFICATION (<15ms target) - Aho-Corasick or Regex
         layer3_start = time.perf_counter()
-        domain_data = self._layer3_domain_classification(content)
-        classification_data.update(domain_data)
-        classification_data['layers_processed'].append('layer3_domain_classification')
+        if self.ac_classifier:
+            # Use high-performance Aho-Corasick classification
+            domain_data = self.ac_classifier.layer3_domain_classification_ac(content)
+        else:
+            # Fallback to regex classification
+            domain_data = self._layer3_domain_classification(content)
+        
+        # Clean domain and document type structure
+        classification_data['domains'] = domain_data['domains']
+        classification_data['primary_domain'] = domain_data['primary_domain']
+        classification_data['primary_domain_confidence'] = domain_data['primary_domain_confidence']
+        
+        # Add document types if available (from Aho-Corasick)
+        if 'document_types' in domain_data:
+            classification_data['document_types'] = domain_data['document_types']
+            classification_data['primary_document_type'] = domain_data['primary_document_type']
+            classification_data['primary_doctype_confidence'] = domain_data['primary_doctype_confidence']
+        
+        classification_data['domain_routing'] = domain_data['domain_routing']
+        classification_data['classification_method'] = domain_data.get('classification_method', 'regex')
         layer_timings['layer3_domain_classification'] = (time.perf_counter() - layer3_start) * 1000
         
         # Early termination check - if domain confidence is low, skip heavy layers
         primary_domain_confidence = max(domain_data['domains'].values()) if domain_data['domains'] else 0
+        layers_processed = ['layer1_file_metadata', 'layer2_document_structure', 'layer3_domain_classification']
+        
         if primary_domain_confidence < 20.0:  # Low confidence threshold
             classification_data['early_termination'] = True
             classification_data['termination_reason'] = f'Low domain confidence: {primary_domain_confidence}%'
@@ -304,22 +336,51 @@ class FusionPipeline:
             # LAYER 4: ENTITY EXTRACTION (<20ms target)
             layer4_start = time.perf_counter()
             entity_data = self._layer4_entity_extraction(content)
-            classification_data.update(entity_data)
-            classification_data['layers_processed'].append('layer4_entity_extraction')
+            
+            # Clean entity structure
+            classification_data['entities'] = entity_data['universal_entities']
+            classification_data['entity_insights'] = {
+                'has_financial_data': entity_data['has_financial_data'],
+                'has_regulations': entity_data['has_regulations'],
+                'has_contact_info': entity_data['has_contact_info'],
+                'has_temporal_data': entity_data['has_temporal_data'],
+                'has_external_references': entity_data['has_external_references'],
+                'has_technical_measurements': entity_data['has_technical_measurements'],
+                'total_entities_found': entity_data['total_entities_found'],
+                'entity_density': entity_data['entity_density']
+            }
+            layers_processed.append('layer4_entity_extraction')
             layer_timings['layer4_entity_extraction'] = (time.perf_counter() - layer4_start) * 1000
             
             # LAYER 5: DEEP DOMAIN ENTITIES (Conditional - only for high-confidence domains)
             if primary_domain_confidence >= 60.0:  # High confidence threshold
                 layer5_start = time.perf_counter()
-                deep_entity_data = self._layer5_deep_domain_entities(content, domain_data['domains'])
-                classification_data.update(deep_entity_data)
-                classification_data['layers_processed'].append('layer5_deep_domain_entities')
+                if self.ac_classifier:
+                    # Use high-performance Aho-Corasick entity extraction
+                    deep_entity_data = self.ac_classifier.layer5_deep_domain_entities_ac(content, domain_data['domains'])
+                else:
+                    # Fallback to regex entity extraction
+                    deep_entity_data = self._layer5_deep_domain_entities(content, domain_data['domains'])
+                
+                # Clean deep entity structure
+                if deep_entity_data.get('deep_domain_entities'):
+                    classification_data['deep_domain_entities'] = deep_entity_data['deep_domain_entities']
+                    classification_data['deep_domain_specialization'] = deep_entity_data['deep_domain_specialization']
+                    classification_data['deep_entities_found'] = deep_entity_data['deep_entities_found']
+                
+                layers_processed.append('layer5_deep_domain_entities')
                 layer_timings['layer5_deep_domain_entities'] = (time.perf_counter() - layer5_start) * 1000
         
-        # Final performance summary
+        # Final performance summary (clean structure)
         total_time_ms = (time.perf_counter() - start_time) * 1000
-        classification_data['processing_time_ms'] = round(total_time_ms, 2)
-        classification_data['layer_timings_ms'] = {k: round(v, 2) for k, v in layer_timings.items()}
+        
+        # Add performance section at the end
+        classification_data['performance'] = {
+            'processing_time_ms': round(total_time_ms, 2),
+            'layers_processed': layers_processed,
+            'layer_timings_ms': {k: round(v, 2) for k, v in layer_timings.items()},
+            'early_termination': classification_data.get('early_termination', False)
+        }
         
         return classification_data
     
@@ -458,9 +519,10 @@ class FusionPipeline:
     
     def _layer1_file_metadata(self, filename: str, content: str) -> Dict[str, Any]:
         """
-        Layer 1: File Metadata (Free - already available)
+        Layer 1: File Metadata (Free - already available during conversion)
         
         Extract basic file properties and statistics that guide later layers.
+        This replaces the separate conversion metadata section.
         Performance: ~0.1ms (essentially free)
         """
         from pathlib import Path
@@ -475,7 +537,9 @@ class FusionPipeline:
                 'file_extension': file_path.suffix.lower(),
                 'content_length_chars': content_length,
                 'estimated_pages': max(1, content_length // 3000),  # Rough estimate
-                'processing_priority': 'high' if content_length < 50000 else 'normal'
+                'processing_priority': 'high' if content_length < 50000 else 'normal',
+                'conversion_date': time.strftime('%Y-%m-%dT%H:%M:%S'),
+                'processing_method': 'mvp-fusion-layered-classification'
             }
         }
     

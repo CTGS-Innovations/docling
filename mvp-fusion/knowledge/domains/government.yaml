@@ -1,0 +1,92 @@
+# Government/Regulatory Domain Patterns
+# High priority for OSHA validation
+
+government:
+  weight: 2.0
+  keywords:
+    osha: 3.0
+    epa: 2.5
+    sec: 2.5
+    fda: 2.5
+    nhtsa: 2.0
+    government: 2.0
+    federal: 1.5
+    agency: 1.5
+    department: 1.5
+    bureau: 1.0
+    administration: 1.0
+  entities:
+    agencies: ["osha", "epa", "sec", "fda", "nhtsa", "dot", "faa", "fcc"]
+    departments: ["labor", "energy", "health", "transportation", "commerce"]
+    levels: ["federal", "state", "local", "municipal", "county"]
+
+regulatory:
+  weight: 2.5
+  keywords:
+    regulation: 3.0
+    compliance: 3.0
+    "29 cfr": 3.0
+    "40 cfr": 3.0
+    cfr: 2.5
+    standard: 2.0
+    requirement: 2.0
+    mandate: 1.5
+    directive: 1.5
+    code: 1.0
+  entities:
+    standards: ["iso", "ansi", "astm", "nfpa", "osha", "epa"]
+    cfr_sections: ["29 cfr 1926", "29 cfr 1910", "40 cfr 260", "17 cfr 240"]
+    compliance_types: ["safety", "environmental", "financial", "quality"]
+
+legal:
+  weight: 1.5
+  keywords:
+    legal: 2.0
+    law: 2.0
+    contract: 2.0
+    liability: 1.5
+    lawsuit: 1.5
+    court: 1.5
+    attorney: 1.0
+    litigation: 1.0
+  entities:
+    document_types: ["contract", "agreement", "policy", "procedure", "lawsuit"]
+    legal_areas: ["employment", "environmental", "safety", "corporate", "regulatory"]
+
+safety:
+  weight: 2.0
+  keywords:
+    safety: 3.0
+    hazard: 2.5
+    "hard hat": 2.5
+    "safety goggles": 2.5
+    harness: 2.0
+    ppe: 2.5
+    "protective equipment": 2.0
+    "fall protection": 2.5
+    scaffold: 2.0
+    ladder: 2.0
+    injury: 1.5
+    accident: 1.5
+    "safety training": 2.0
+  entities:
+    safety_equipment: ["hard hat", "safety goggles", "harness", "gloves", "respirator", "steel toes"]
+    hazard_types: ["fall hazard", "electrical hazard", "chemical exposure", "noise exposure", "heat stress"]
+    injury_types: ["fracture", "laceration", "burn", "sprain", "contusion", "concussion"]
+    safety_procedures: ["lockout tagout", "confined space", "hot work", "fall protection"]
+
+construction:
+  weight: 1.5
+  keywords:
+    construction: 2.5
+    building: 2.0
+    contractor: 2.0
+    scaffold: 2.0
+    excavation: 1.5
+    concrete: 1.5
+    steel: 1.5
+    "construction site": 2.0
+  entities:
+    equipment: ["crane", "excavator", "bulldozer", "forklift", "cement mixer"]
+    materials: ["concrete", "steel", "lumber", "rebar", "drywall", "insulation"]
+    phases: ["foundation", "framing", "roofing", "electrical", "plumbing", "finishing"]

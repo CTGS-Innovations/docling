@@ -1,0 +1,60 @@
+# Science & Health Domain Patterns
+
+health_medical:
+  weight: 1.0
+  keywords:
+    health: 2.0
+    medical: 2.0
+    doctor: 1.5
+    medicine: 1.5
+    treatment: 1.5
+    diagnosis: 1.5
+    patient: 1.0
+    hospital: 1.0
+    healthcare: 1.0
+  entities:
+    conditions: ["diabetes", "hypertension", "cancer", "covid", "flu"]
+    specialties: ["cardiology", "neurology", "oncology", "pediatrics"]
+    treatments: ["surgery", "medication", "therapy", "vaccination"]
+
+science_research:
+  weight: 1.0
+  keywords:
+    science: 2.0
+    research: 2.0
+    study: 1.5
+    experiment: 1.5
+    laboratory: 1.0
+    scientific: 1.0
+    discovery: 1.0
+  entities:
+    fields: ["physics", "chemistry", "biology", "astronomy", "geology"]
+    methods: ["peer review", "hypothesis", "methodology", "analysis"]
+
+environmental:
+  weight: 1.0
+  keywords:
+    environment: 2.0
+    "climate change": 2.5
+    sustainability: 2.0
+    "renewable energy": 2.0
+    carbon: 1.5
+    pollution: 1.5
+    ecosystem: 1.0
+    conservation: 1.0
+  entities:
+    issues: ["global warming", "deforestation", "plastic pollution", "biodiversity loss"]
+    solutions: ["solar power", "wind energy", "recycling", "electric vehicles"]
+
+psychology:
+  weight: 1.0
+  keywords:
+    psychology: 2.0
+    "mental health": 2.5
+    therapy: 2.0
+    behavior: 1.5
+    cognitive: 1.0
+    emotional: 1.0
+  entities:
+    conditions: ["anxiety", "depression", "adhd", "ptsd", "bipolar"]
+    treatments: ["cbt", "therapy", "medication", "mindfulness", "counseling"]

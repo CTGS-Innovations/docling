@@ -1,0 +1,48 @@
+# Instructional Document Type Patterns
+
+instructional:
+  weight: 2.0
+  keywords:
+    "how to": 3.0
+    instructions: 2.5
+    "step by step": 2.5
+    tutorial: 2.0
+    guide: 2.0
+    training: 2.0
+    "best practices": 1.5
+    procedure: 1.5
+    method: 1.0
+    directions: 1.5
+    walkthrough: 1.5
+  entities:
+    instruction_types: ["guide", "tutorial", "manual", "walkthrough", "procedure"]
+    formats: ["step-by-step", "illustrated", "video", "interactive", "checklist"]
+
+manual:
+  weight: 2.0
+  keywords:
+    manual: 3.0
+    handbook: 2.5
+    reference: 2.0
+    documentation: 1.5
+    specifications: 1.5
+    "user guide": 2.0
+    "operating instructions": 2.0
+    "technical manual": 2.5
+  entities:
+    manual_types: ["user manual", "technical manual", "service manual", "installation guide"]
+    sections: ["overview", "setup", "operation", "troubleshooting", "maintenance"]
+
+brochure:
+  weight: 1.0
+  keywords:
+    brochure: 3.0
+    flyer: 2.0
+    pamphlet: 2.0
+    overview: 1.5
+    introduction: 1.0
+    "fact sheet": 2.0
+    leaflet: 1.5
+  entities:
+    marketing_types: ["promotional", "informational", "educational", "product overview"]
+    formats: ["tri-fold", "bi-fold", "single page", "multi-page"]

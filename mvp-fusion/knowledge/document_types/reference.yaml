@@ -1,0 +1,48 @@
+# Reference Document Type Patterns
+
+reference:
+  weight: 1.0
+  keywords:
+    reference: 2.0
+    appendix: 2.0
+    glossary: 2.0
+    index: 1.5
+    catalog: 1.5
+    "reference guide": 2.5
+    "quick reference": 2.0
+    dictionary: 2.0
+  entities:
+    reference_types: ["glossary", "index", "appendix", "bibliography", "catalog"]
+    formats: ["alphabetical", "categorical", "chronological", "numerical"]
+
+report:
+  weight: 1.5
+  keywords:
+    report: 2.5
+    analysis: 2.0
+    findings: 2.0
+    results: 1.5
+    summary: 1.5
+    conclusion: 1.0
+    "annual report": 2.5
+    "technical report": 2.0
+    "research report": 2.0
+  entities:
+    report_types: ["annual", "quarterly", "technical", "research", "incident", "audit"]
+    sections: ["executive summary", "methodology", "findings", "recommendations", "conclusion"]
+
+research:
+  weight: 1.5
+  keywords:
+    research: 2.5
+    study: 2.0
+    experiment: 2.0
+    methodology: 1.5
+    hypothesis: 1.5
+    "peer review": 1.5
+    "research paper": 2.5
+    "case study": 2.0
+    "white paper": 2.0
+  entities:
+    research_types: ["academic", "clinical", "market", "technical", "feasibility"]
+    methodologies: ["quantitative", "qualitative", "experimental", "observational", "longitudinal"]

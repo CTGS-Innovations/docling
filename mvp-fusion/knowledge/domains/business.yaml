@@ -1,0 +1,67 @@
+# Business & Finance Domain Patterns
+
+business:
+  weight: 1.0
+  keywords:
+    business: 2.0
+    entrepreneurship: 2.0
+    startup: 1.5
+    company: 1.5
+    management: 1.0
+    strategy: 1.0
+    marketing: 1.0
+  entities:
+    types: ["corporation", "llc", "partnership", "sole proprietorship"]
+    functions: ["sales", "marketing", "hr", "operations", "finance"]
+
+finance:
+  weight: 1.0
+  keywords:
+    finance: 2.0
+    investment: 2.0
+    "stock market": 2.0
+    banking: 1.5
+    cryptocurrency: 1.5
+    money: 1.0
+    economy: 1.0
+  entities:
+    instruments: ["stocks", "bonds", "etf", "mutual funds", "options"]
+    crypto: ["bitcoin", "ethereum", "blockchain", "defi", "nft"]
+
+real_estate:
+  weight: 1.0
+  keywords:
+    "real estate": 2.5
+    property: 2.0
+    housing: 1.5
+    mortgage: 1.5
+    rent: 1.0
+    "investment property": 1.0
+  entities:
+    types: ["residential", "commercial", "industrial", "land"]
+    processes: ["buying", "selling", "renting", "refinancing"]
+
+economics:
+  weight: 1.0
+  keywords:
+    economics: 2.0
+    inflation: 1.5
+    gdp: 1.5
+    recession: 1.5
+    "federal reserve": 1.5
+    "interest rates": 1.0
+  entities:
+    indicators: ["unemployment", "cpi", "gdp growth", "trade deficit"]
+
+shopping:
+  weight: 1.0
+  keywords:
+    shopping: 2.0
+    ecommerce: 2.0
+    "product review": 1.5
+    "online store": 1.5
+    retail: 1.0
+    discount: 1.0
+  entities:
+    platforms: ["amazon", "ebay", "shopify", "walmart", "target"]
+    categories: ["electronics", "clothing", "home", "beauty", "sports"]

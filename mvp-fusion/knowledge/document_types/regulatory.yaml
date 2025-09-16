@@ -1,0 +1,49 @@
+# Regulatory Document Type Patterns
+
+regulation:
+  weight: 2.5
+  keywords:
+    regulation: 3.0
+    "cfr": 3.0
+    "29 cfr": 3.0
+    "40 cfr": 3.0
+    requirement: 2.0
+    "shall": 2.0
+    "must": 2.0
+    compliance: 2.0
+    standard: 1.5
+    "regulatory text": 2.5
+    "code of federal regulations": 3.0
+  entities:
+    regulation_types: ["federal", "state", "local", "industry", "international"]
+    cfr_titles: ["29 cfr", "40 cfr", "17 cfr", "21 cfr", "49 cfr"]
+
+policy:
+  weight: 1.5
+  keywords:
+    policy: 3.0
+    procedure: 2.0
+    protocol: 2.0
+    guidelines: 2.0
+    directive: 1.5
+    "standard operating procedure": 2.5
+    "company policy": 2.0
+    "internal policy": 1.5
+  entities:
+    policy_types: ["corporate", "government", "internal", "public", "safety"]
+    sections: ["purpose", "scope", "responsibilities", "procedures", "enforcement"]
+
+standard:
+  weight: 2.0
+  keywords:
+    standard: 2.5
+    "iso standard": 3.0
+    "ansi standard": 2.5
+    "astm standard": 2.5
+    specification: 2.0
+    "technical standard": 2.0
+    "industry standard": 2.0
+    "quality standard": 2.0
+  entities:
+    standard_bodies: ["iso", "ansi", "astm", "ieee", "nist", "osha", "nfpa"]
+    standard_types: ["safety", "quality", "technical", "environmental", "performance"]

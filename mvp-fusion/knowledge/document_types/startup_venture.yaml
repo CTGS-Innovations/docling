@@ -1,0 +1,178 @@
+# Startup and Venture Ecosystem Document Types
+# For Scout's entrepreneurial intelligence and MVP development platform
+
+# Investment and Funding Documents
+pitch_deck:
+  weight: 3.0
+  keywords:
+    "pitch deck": 4.0
+    "investor presentation": 3.5
+    "funding round": 3.0
+    "series a": 3.0
+    "series b": 3.0
+    "seed round": 3.0
+    "traction slide": 2.5
+    "market size": 2.5
+    "go-to-market": 2.5
+    "revenue model": 2.5
+
+term_sheet:
+  weight: 3.0
+  keywords:
+    "term sheet": 4.0
+    "investment terms": 3.5
+    "valuation": 3.0
+    "equity stake": 3.0
+    "liquidation preference": 3.0
+    "anti-dilution": 2.5
+    "board seats": 2.5
+    "drag-along": 2.5
+    "tag-along": 2.5
+
+business_plan:
+  weight: 2.5
+  keywords:
+    "business plan": 4.0
+    "executive summary": 3.0
+    "market analysis": 2.5
+    "competitive analysis": 2.5
+    "financial projections": 3.0
+    "revenue forecast": 2.5
+    "customer acquisition": 2.5
+    "unit economics": 2.5
+
+# Legal and Corporate Documents
+cap_table:
+  weight: 2.5
+  keywords:
+    "cap table": 4.0
+    "capitalization table": 3.5
+    "equity distribution": 3.0
+    "share ownership": 3.0
+    "option pool": 2.5
+    "vesting schedule": 2.5
+    "dilution": 2.5
+
+shareholder_agreement:
+  weight: 2.5
+  keywords:
+    "shareholder agreement": 4.0
+    "voting rights": 3.0
+    "transfer restrictions": 2.5
+    "preemptive rights": 2.5
+    "information rights": 2.5
+
+operating_agreement:
+  weight: 2.0
+  keywords:
+    "operating agreement": 4.0
+    "llc agreement": 3.0
+    "member rights": 2.5
+    "profit sharing": 2.5
+    "management structure": 2.5
+
+# Product and Development Documents
+product_roadmap:
+  weight: 2.5
+  keywords:
+    "product roadmap": 4.0
+    "feature roadmap": 3.0
+    "development timeline": 2.5
+    "product strategy": 2.5
+    "sprint planning": 2.0
+    "milestone": 2.0
+    "release notes": 2.0
+
+mvp_spec:
+  weight: 3.0
+  keywords:
+    "mvp": 4.0
+    "minimum viable product": 4.0
+    "product spec": 3.0
+    "user stories": 2.5
+    "acceptance criteria": 2.5
+    "technical requirements": 2.5
+
+user_research:
+  weight: 2.0
+  keywords:
+    "user research": 3.5
+    "user interview": 3.0
+    "customer feedback": 2.5
+    "survey results": 2.5
+    "usability testing": 2.5
+    "persona": 2.0
+    "user journey": 2.0
+
+# Market and Strategy Documents
+market_research:
+  weight: 2.0
+  keywords:
+    "market research": 3.5
+    "market size": 3.0
+    "tam sam som": 3.0
+    "market opportunity": 2.5
+    "industry analysis": 2.5
+    "market trends": 2.0
+
+competitive_analysis:
+  weight: 2.0
+  keywords:
+    "competitive analysis": 3.5
+    "competitor research": 3.0
+    "competitive landscape": 2.5
+    "swot analysis": 2.5
+    "market positioning": 2.5
+
+go_to_market:
+  weight: 2.5
+  keywords:
+    "go-to-market": 4.0
+    "gtm strategy": 3.5
+    "customer acquisition": 3.0
+    "sales strategy": 2.5
+    "marketing strategy": 2.5
+    "channel strategy": 2.5
+    "pricing strategy": 2.5
+
+# Financial Documents
+financial_model:
+  weight: 2.5
+  keywords:
+    "financial model": 3.5
+    "revenue model": 3.0
+    "unit economics": 3.0
+    "ltv cac": 3.0
+    "burn rate": 2.5
+    "runway": 2.5
+    "cash flow": 2.5
+
+investor_update:
+  weight: 2.0
+  keywords:
+    "investor update": 4.0
+    "monthly update": 3.0
+    "board update": 3.0
+    "metrics update": 2.5
+    "kpi dashboard": 2.5
+    "growth metrics": 2.5
+
+# Hiring and Team Documents
+job_description:
+  weight: 1.5
+  keywords:
+    "job description": 3.5
+    "hiring": 2.5
+    "job posting": 3.0
+    "role requirements": 2.5
+    "compensation": 2.0
+    "equity package": 2.5
+
+employee_handbook:
+  weight: 1.5
+  keywords:
+    "employee handbook": 4.0
+    "company culture": 2.5
+    "employee policies": 2.5
+    "code of conduct": 2.0
+    "benefits": 2.0

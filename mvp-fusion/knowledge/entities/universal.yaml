@@ -1,0 +1,61 @@
+# Universal Entity Patterns
+# Entities found across all domains
+
+universal_entities:
+  
+  money:
+    patterns:
+      - '\$[\d,]+(?:\.\d{2})?'
+      - '\$\d+'
+      - 'USD \d+'
+      - '\d+\s*dollars?'
+    limit: 10
+    
+  phone:
+    patterns:
+      - '\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}'
+      - '\d{3}-\d{3}-\d{4}'
+      - '\(\d{3}\)\s*\d{3}-\d{4}'
+    limit: 10
+    
+  date:
+    patterns:
+      - '\b\d{1,2}/\d{1,2}/\d{4}\b'
+      - '\b\d{4}-\d{2}-\d{2}\b'
+      - '\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s*\d{4}\b'
+      - '\b\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4}\b'
+    limit: 10
+    
+  url:
+    patterns:
+      - 'https?://[^\s<>"{}|\\^`\[\]]+'
+      - 'www\.[^\s<>"{}|\\^`\[\]]+'
+    limit: 5
+    
+  email:
+    patterns:
+      - '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+    limit: 5
+    
+  measurement:
+    patterns:
+      - '\d+(?:\.\d+)?\s*(?:inches?|feet?|meters?|cm|mm|kg|lbs?|pounds?|tons?)\b'
+      - '\d+(?:\.\d+)?\s*(?:mph|kph|psi|degrees?)\b'
+    limit: 10
+
+regulatory_entities:
+  
+  regulation:
+    patterns:
+      - '\d+\s*CFR\s*\d+(?:\.\d+)*'
+      - 'ISO\s*\d+(?:[-:]\d+)*'
+      - 'ANSI\s*[A-Z]*\d+(?:\.\d+)*'
+      - 'ASTM\s*[A-Z]\d+(?:[-]\d+)*'
+      - 'NFPA\s*\d+'
+    limit: 10
+    
+  standard_id:
+    patterns:
+      - '[A-Z]{2,4}\s*\d+(?:[-:\.]\d+)*'
+      - 'Section\s+\d+(?:\.\d+)*'
+    limit: 10

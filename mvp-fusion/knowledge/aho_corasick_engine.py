@@ -25,14 +25,17 @@ class AhoCorasickKnowledgeEngine:
     - Optimized for AI agent knowledge feeding
     """
     
-    def __init__(self, patterns_file: str = "knowledge/ai_domain_patterns.yaml"):
-        self.patterns_file = patterns_file
+    def __init__(self, config_dir: str = "knowledge"):
+        self.config_dir = Path(config_dir)
         self.domain_patterns = {}
         self.domain_weights = {}
+        self.document_type_patterns = {}
+        self.document_type_weights = {}
         self.entity_patterns = {}
         
         # Aho-Corasick automatons
         self.domain_automaton = None
+        self.document_type_automaton = None
         self.entity_automaton = None
         
         # Performance tracking
@@ -40,53 +43,103 @@ class AhoCorasickKnowledgeEngine:
         self.last_search_time_ms = 0
         
         # Load and build automatons
-        self._load_patterns()
+        self._load_modular_patterns()
         self._build_automatons()
         
-    def _load_patterns(self):
-        """Load domain patterns from YAML configuration"""
-        patterns_path = Path(self.patterns_file)
-        if not patterns_path.exists():
-            raise FileNotFoundError(f"Patterns file not found: {self.patterns_file}")
-            
-        with open(patterns_path, 'r') as f:
-            config = yaml.safe_load(f)
-            
-        domains_config = config.get('domains', {})
+    def _load_modular_patterns(self):
+        """Load patterns from modular configuration files"""
+        total_domain_patterns = 0
+        total_doctype_patterns = 0
+        total_entity_patterns = 0
         
-        for domain_name, domain_config in domains_config.items():
-            # Store domain keywords with weights
-            keywords = domain_config.get('keywords', {})
-            self.domain_patterns[domain_name] = keywords
-            self.domain_weights[domain_name] = domain_config.get('weight', 1.0)
-            
-            # Store entity patterns
-            entities = domain_config.get('entities', {})
-            self.entity_patterns[domain_name] = entities
-            
-        print(f"📚 Loaded {len(self.domain_patterns)} domains with {sum(len(kw) for kw in self.domain_patterns.values())} total patterns")
+        # Load domain patterns from all domain files
+        domains_dir = self.config_dir / "domains"
+        if domains_dir.exists():
+            for domain_file in domains_dir.glob("*.yaml"):
+                with open(domain_file, 'r') as f:
+                    domain_config = yaml.safe_load(f)
+                
+                for domain_name, domain_data in domain_config.items():
+                    keywords = domain_data.get('keywords', {})
+                    self.domain_patterns[domain_name] = keywords
+                    self.domain_weights[domain_name] = domain_data.get('weight', 1.0)
+                    total_domain_patterns += len(keywords)
+                    
+                    # Store entity patterns
+                    entities = domain_data.get('entities', {})
+                    if entities:
+                        self.entity_patterns[domain_name] = entities
+                        total_entity_patterns += sum(len(e) if isinstance(e, list) else 1 for e in entities.values())
+        
+        # Load document type patterns from all document type files  
+        doctypes_dir = self.config_dir / "document_types"
+        if doctypes_dir.exists():
+            for doctype_file in doctypes_dir.glob("*.yaml"):
+                with open(doctype_file, 'r') as f:
+                    doctype_config = yaml.safe_load(f)
+                
+                for doctype_name, doctype_data in doctype_config.items():
+                    keywords = doctype_data.get('keywords', {})
+                    self.document_type_patterns[doctype_name] = keywords
+                    self.document_type_weights[doctype_name] = doctype_data.get('weight', 1.0)
+                    total_doctype_patterns += len(keywords)
+        
+        # Load universal entity patterns
+        entities_dir = self.config_dir / "entities"
+        if entities_dir.exists():
+            for entity_file in entities_dir.glob("*.yaml"):
+                with open(entity_file, 'r') as f:
+                    entity_config = yaml.safe_load(f)
+                
+                for category_name, category_data in entity_config.items():
+                    self.entity_patterns[category_name] = category_data
+                    if isinstance(category_data, dict):
+                        total_entity_patterns += sum(len(e) if isinstance(e, list) else 1 for e in category_data.values())
+        
+        print(f"📚 Loaded modular patterns:")
+        print(f"   🏛️  Domains: {len(self.domain_patterns)} ({total_domain_patterns} keywords)")
+        print(f"   📄 Document Types: {len(self.document_type_patterns)} ({total_doctype_patterns} keywords)")
+        print(f"   🔍 Entity Categories: {len(self.entity_patterns)} ({total_entity_patterns} total patterns)")
         
     def _build_automatons(self):
-        """Build Aho-Corasick automatons for domains and entities"""
+        """Build Aho-Corasick automatons for domains, document types, and entities"""
         build_start = time.perf_counter()
         
         # Build domain classification automaton
         self.domain_automaton = ahocorasick.Automaton()
-        pattern_id = 0
+        domain_pattern_id = 0
         
         for domain_name, keywords in self.domain_patterns.items():
             for keyword, weight in keywords.items():
-                # Store pattern with domain and weight info
                 pattern_info = {
-                    'domain': domain_name,
+                    'type': 'domain',
+                    'name': domain_name,
                     'keyword': keyword,
                     'weight': weight,
-                    'domain_weight': self.domain_weights[domain_name]
+                    'base_weight': self.domain_weights[domain_name]
                 }
-                self.domain_automaton.add_word(keyword.lower(), (pattern_id, pattern_info))
-                pattern_id += 1
+                self.domain_automaton.add_word(keyword.lower(), (domain_pattern_id, pattern_info))
+                domain_pattern_id += 1
         
         self.domain_automaton.make_automaton()
+        
+        # Build document type classification automaton
+        self.document_type_automaton = ahocorasick.Automaton()
+        doctype_pattern_id = 0
+        
+        for doctype_name, keywords in self.document_type_patterns.items():
+            for keyword, weight in keywords.items():
+                pattern_info = {
+                    'type': 'document_type',
+                    'name': doctype_name,
+                    'keyword': keyword,
+                    'weight': weight,
+                    'base_weight': self.document_type_weights[doctype_name]
+                }
+                self.document_type_automaton.add_word(keyword.lower(), (doctype_pattern_id, pattern_info))
+                doctype_pattern_id += 1
+        
+        self.document_type_automaton.make_automaton()
         
         # Build entity extraction automaton
         self.entity_automaton = ahocorasick.Automaton()
@@ -94,22 +147,24 @@ class AhoCorasickKnowledgeEngine:
         
         for domain_name, entity_categories in self.entity_patterns.items():
             for category_name, entity_list in entity_categories.items():
-                for entity in entity_list:
-                    entity_info = {
-                        'domain': domain_name,
-                        'category': category_name,
-                        'entity': entity
-                    }
-                    self.entity_automaton.add_word(entity.lower(), (entity_id, entity_info))
-                    entity_id += 1
+                if isinstance(entity_list, list):
+                    for entity in entity_list:
+                        entity_info = {
+                            'domain': domain_name,
+                            'category': category_name,
+                            'entity': entity
+                        }
+                        self.entity_automaton.add_word(entity.lower(), (entity_id, entity_info))
+                        entity_id += 1
         
         self.entity_automaton.make_automaton()
         
         self.build_time_ms = (time.perf_counter() - build_start) * 1000
         
-        print(f"⚡ Built Aho-Corasick automatons: {self.build_time_ms:.2f}ms")
-        print(f"   📊 Domain patterns: {pattern_id} total")
-        print(f"   🔍 Entity patterns: {entity_id} total")
+        print(f"⚡ Built modular Aho-Corasick automatons: {self.build_time_ms:.2f}ms")
+        print(f"   🏛️  Domain patterns: {domain_pattern_id}")
+        print(f"   📄 Document type patterns: {doctype_pattern_id}")
+        print(f"   🔍 Entity patterns: {entity_id}")
         
     def classify_domains(self, content: str) -> Dict[str, float]:
         """
@@ -125,9 +180,9 @@ class AhoCorasickKnowledgeEngine:
         
         # Single pass through content with Aho-Corasick
         for end_index, (pattern_id, pattern_info) in self.domain_automaton.iter(content_lower):
-            domain = pattern_info['domain']
+            domain = pattern_info['name']
             keyword_weight = pattern_info['weight']
-            domain_weight = pattern_info['domain_weight']
+            domain_weight = pattern_info['base_weight']
             
             # Weighted scoring: keyword_weight * domain_weight
             hit_score = keyword_weight * domain_weight
@@ -149,6 +204,42 @@ class AhoCorasickKnowledgeEngine:
         self.last_search_time_ms = (time.perf_counter() - search_start) * 1000
         
         return domain_scores
+        
+    def classify_document_types(self, content: str) -> Dict[str, float]:
+        """
+        Fast document type classification using Aho-Corasick pattern matching.
+        Returns document type confidence scores optimized for AI agents.
+        """
+        content_lower = content.lower()
+        
+        # Track document type hits and weights
+        doctype_hits = defaultdict(float)
+        total_weighted_hits = 0
+        
+        # Single pass through content with Aho-Corasick
+        for end_index, (pattern_id, pattern_info) in self.document_type_automaton.iter(content_lower):
+            doctype = pattern_info['name']
+            keyword_weight = pattern_info['weight']
+            doctype_weight = pattern_info['base_weight']
+            
+            # Weighted scoring: keyword_weight * doctype_weight
+            hit_score = keyword_weight * doctype_weight
+            doctype_hits[doctype] += hit_score
+            total_weighted_hits += hit_score
+        
+        # Convert to percentages
+        doctype_scores = {}
+        if total_weighted_hits > 0:
+            for doctype, score in doctype_hits.items():
+                percentage = (score / total_weighted_hits) * 100
+                doctype_scores[doctype] = round(percentage, 1)
+        else:
+            doctype_scores['document'] = 100.0
+            
+        # Sort by confidence (highest first)
+        doctype_scores = dict(sorted(doctype_scores.items(), key=lambda x: x[1], reverse=True))
+        
+        return doctype_scores
         
     def extract_entities(self, content: str, target_domains: List[str] = None) -> Dict[str, List[str]]:
         """
@@ -245,22 +336,27 @@ class AhoCorasickLayeredClassifier:
     Replaces regex patterns in Layers 3-5 with high-performance AC automaton.
     """
     
-    def __init__(self, patterns_file: str = "knowledge/ai_domain_patterns.yaml"):
-        self.ac_engine = AhoCorasickKnowledgeEngine(patterns_file)
+    def __init__(self, config_dir: str = "knowledge"):
+        self.ac_engine = AhoCorasickKnowledgeEngine(config_dir)
         
     def layer3_domain_classification_ac(self, content: str) -> Dict[str, Any]:
         """
-        Layer 3: High-performance domain classification using Aho-Corasick.
-        Replaces regex-based _classify_domains_with_scores method.
+        Layer 3: High-performance domain + document type classification using Aho-Corasick.
+        Replaces regex-based classification with modular patterns.
         """
         start_time = time.perf_counter()
         
-        # Use Aho-Corasick for domain classification
+        # Use Aho-Corasick for both domain and document type classification
         domain_scores = self.ac_engine.classify_domains(content)
+        document_type_scores = self.ac_engine.classify_document_types(content)
         
         # Determine primary domain and confidence
         primary_domain = max(domain_scores.keys(), key=lambda k: domain_scores[k]) if domain_scores else 'general'
         primary_domain_confidence = domain_scores.get(primary_domain, 0)
+        
+        # Determine primary document type
+        primary_document_type = max(document_type_scores.keys(), key=lambda k: document_type_scores[k]) if document_type_scores else 'document'
+        primary_doctype_confidence = document_type_scores.get(primary_document_type, 0)
         
         # Domain-based routing decisions
         routing_decisions = {
@@ -273,10 +369,13 @@ class AhoCorasickLayeredClassifier:
         
         return {
             'domains': domain_scores,
+            'document_types': document_type_scores,
             'primary_domain': primary_domain,
             'primary_domain_confidence': primary_domain_confidence,
+            'primary_document_type': primary_document_type,
+            'primary_doctype_confidence': primary_doctype_confidence,
             'domain_routing': routing_decisions,
-            'classification_method': 'aho_corasick',
+            'classification_method': 'aho_corasick_modular',
             'processing_time_ms': round(processing_time, 3),
             'ai_optimized': True
         }

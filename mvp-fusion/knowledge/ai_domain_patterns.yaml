@@ -4,6 +4,59 @@
 
 domains:
   
+  # GOVERNMENT/REGULATORY CLUSTER (High Priority for OSHA validation)
+  government:
+    weight: 2.0
+    keywords:
+      osha: 3.0
+      epa: 2.5
+      sec: 2.5
+      fda: 2.5
+      nhtsa: 2.0
+      government: 2.0
+      federal: 1.5
+      agency: 1.5
+      department: 1.5
+      bureau: 1.0
+      administration: 1.0
+    entities:
+      agencies: ["osha", "epa", "sec", "fda", "nhtsa", "dot", "faa", "fcc"]
+      departments: ["labor", "energy", "health", "transportation", "commerce"]
+      levels: ["federal", "state", "local", "municipal", "county"]
+
+  regulatory:
+    weight: 2.5
+    keywords:
+      regulation: 3.0
+      compliance: 3.0
+      "29 cfr": 3.0
+      "40 cfr": 3.0
+      cfr: 2.5
+      standard: 2.0
+      requirement: 2.0
+      mandate: 1.5
+      directive: 1.5
+      code: 1.0
+    entities:
+      standards: ["iso", "ansi", "astm", "nfpa", "osha", "epa"]
+      cfr_sections: ["29 cfr 1926", "29 cfr 1910", "40 cfr 260", "17 cfr 240"]
+      compliance_types: ["safety", "environmental", "financial", "quality"]
+
+  legal:
+    weight: 1.5
+    keywords:
+      legal: 2.0
+      law: 2.0
+      contract: 2.0
+      liability: 1.5
+      lawsuit: 1.5
+      court: 1.5
+      attorney: 1.0
+      litigation: 1.0
+    entities:
+      document_types: ["contract", "agreement", "policy", "procedure", "lawsuit"]
+      legal_areas: ["employment", "environmental", "safety", "corporate", "regulatory"]
+
   # TECHNOLOGY & COMPUTING
   technology:
     weight: 1.0
@@ -71,6 +124,45 @@ domains:
     entities:
       platforms: ["playstation", "xbox", "nintendo", "steam", "epic games"]
       genres: ["fps", "rpg", "mmo", "strategy", "puzzle", "simulation"]
+
+  # SPECIALIZED SAFETY (Document Type Classification)
+  safety:
+    weight: 2.0
+    keywords:
+      safety: 3.0
+      hazard: 2.5
+      "hard hat": 2.5
+      "safety goggles": 2.5
+      harness: 2.0
+      ppe: 2.5
+      "protective equipment": 2.0
+      "fall protection": 2.5
+      scaffold: 2.0
+      ladder: 2.0
+      injury: 1.5
+      accident: 1.5
+      "safety training": 2.0
+    entities:
+      safety_equipment: ["hard hat", "safety goggles", "harness", "gloves", "respirator", "steel toes"]
+      hazard_types: ["fall hazard", "electrical hazard", "chemical exposure", "noise exposure", "heat stress"]
+      injury_types: ["fracture", "laceration", "burn", "sprain", "contusion", "concussion"]
+      safety_procedures: ["lockout tagout", "confined space", "hot work", "fall protection"]
+
+  construction:
+    weight: 1.5
+    keywords:
+      construction: 2.5
+      building: 2.0
+      contractor: 2.0
+      scaffold: 2.0
+      excavation: 1.5
+      concrete: 1.5
+      steel: 1.5
+      "construction site": 2.0
+    entities:
+      equipment: ["crane", "excavator", "bulldozer", "forklift", "cement mixer"]
+      materials: ["concrete", "steel", "lumber", "rebar", "drywall", "insulation"]
+      phases: ["foundation", "framing", "roofing", "electrical", "plumbing", "finishing"]
 
   # HEALTH & SCIENCE
   health_medical:
@@ -353,6 +445,92 @@ domains:
       other: 0.5
     entities:
       types: ["reference", "general knowledge", "miscellaneous"]
+
+# DOCUMENT TYPES (Free performance - same Aho-Corasick pass)
+document_types:
+  
+  instructional:
+    weight: 2.0
+    keywords:
+      "how to": 3.0
+      instructions: 2.5
+      "step by step": 2.5
+      tutorial: 2.0
+      guide: 2.0
+      training: 2.0
+      "best practices": 1.5
+      procedure: 1.5
+      method: 1.0
+      
+  regulation:
+    weight: 2.5
+    keywords:
+      regulation: 3.0
+      "cfr": 3.0
+      "29 cfr": 3.0
+      "40 cfr": 3.0
+      requirement: 2.0
+      "shall": 2.0
+      "must": 2.0
+      compliance: 2.0
+      standard: 1.5
+      
+  manual:
+    weight: 2.0
+    keywords:
+      manual: 3.0
+      handbook: 2.5
+      reference: 2.0
+      documentation: 1.5
+      specifications: 1.5
+      "user guide": 2.0
+      
+  policy:
+    weight: 1.5
+    keywords:
+      policy: 3.0
+      procedure: 2.0
+      protocol: 2.0
+      guidelines: 2.0
+      directive: 1.5
+      
+  report:
+    weight: 1.5
+    keywords:
+      report: 2.5
+      analysis: 2.0
+      findings: 2.0
+      results: 1.5
+      summary: 1.5
+      conclusion: 1.0
+      
+  brochure:
+    weight: 1.0
+    keywords:
+      brochure: 3.0
+      flyer: 2.0
+      pamphlet: 2.0
+      overview: 1.5
+      introduction: 1.0
+      
+  reference:
+    weight: 1.0
+    keywords:
+      reference: 2.0
+      appendix: 2.0
+      glossary: 2.0
+      index: 1.5
+      catalog: 1.5
+      
+  research:
+    weight: 1.5
+    keywords:
+      research: 2.5
+      study: 2.0
+      experiment: 2.0
+      methodology: 1.5
+      hypothesis: 1.5
+      "peer review": 1.5
 
 # Configuration for Aho-Corasick optimization
 config:

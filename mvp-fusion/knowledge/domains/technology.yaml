@@ -1,0 +1,69 @@
+# Technology Domain Patterns
+# AI, Software, and Cybersecurity
+
+technology:
+  weight: 1.0
+  keywords:
+    software: 2.0
+    programming: 2.0  
+    algorithm: 2.0
+    database: 1.5
+    cloud: 1.5
+    api: 1.5
+    framework: 1.0
+    development: 1.0
+    code: 1.0
+    tech: 1.0
+  entities:
+    programming_languages: ["python", "javascript", "java", "c++", "go", "rust"]
+    frameworks: ["react", "angular", "vue", "django", "flask", "spring"]
+    cloud_services: ["aws", "azure", "gcp", "kubernetes", "docker"]
+
+artificial_intelligence:
+  weight: 1.0
+  keywords:
+    "artificial intelligence": 3.0
+    "machine learning": 3.0
+    "deep learning": 2.5
+    "neural network": 2.5
+    ai: 2.0
+    ml: 2.0
+    nlp: 2.0
+    "computer vision": 2.0
+    llm: 1.5
+    gpt: 1.5
+  entities:
+    ai_models: ["gpt", "bert", "transformer", "cnn", "rnn", "lstm"]
+    ml_frameworks: ["tensorflow", "pytorch", "scikit-learn", "keras"]
+    ai_companies: ["openai", "anthropic", "google", "microsoft", "meta"]
+
+cybersecurity:
+  weight: 1.0
+  keywords:
+    cybersecurity: 2.5
+    security: 2.0
+    encryption: 2.0
+    firewall: 1.5
+    malware: 1.5
+    phishing: 1.5
+    vulnerability: 1.5
+    breach: 1.5
+    hacking: 1.0
+    "penetration testing": 1.0
+  entities:
+    threats: ["malware", "ransomware", "phishing", "ddos", "sql injection"]
+    tools: ["antivirus", "firewall", "vpn", "ssl", "two-factor"]
+
+gaming:
+  weight: 1.0
+  keywords:
+    gaming: 2.0
+    "video games": 2.0
+    esports: 1.5
+    console: 1.5
+    "pc gaming": 1.5
+    "mobile games": 1.0
+    streaming: 1.0
+  entities:
+    platforms: ["playstation", "xbox", "nintendo", "steam", "epic games"]
+    genres: ["fps", "rpg", "mmo", "strategy", "puzzle", "simulation"]
