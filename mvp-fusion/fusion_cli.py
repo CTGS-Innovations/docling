@@ -472,9 +472,17 @@ Examples:
                 print(f"\n🚀 Starting batch processing...")
                 start_time = time.time()
                 
-                # Use pipeline for stage-based processing
-                from pipeline.fusion_pipeline import FusionPipeline
-                pipeline = FusionPipeline(config)
+                # Choose pipeline architecture based on configuration
+                use_shared_memory = config.get('pipeline', {}).get('use_shared_memory', False)
+                
+                if use_shared_memory:
+                    print("🏊 Using Shared Memory Pipeline (Edge Optimized)")
+                    from pipeline.shared_memory_pipeline import SharedMemoryFusionPipeline
+                    pipeline = SharedMemoryFusionPipeline(config)
+                else:
+                    print("🔄 Using Traditional In-Memory Pipeline")
+                    from pipeline.fusion_pipeline import FusionPipeline
+                    pipeline = FusionPipeline(config)
                 
                 batch_result = pipeline.process_files(extractor, all_files, output_dir or Path.cwd(), max_workers=max_workers)
                 if len(batch_result) == 3:
@@ -557,11 +565,19 @@ Examples:
                 # Add system resource information if available
                 if resource_summary:
                     print(f"\n💻 PROCESSING FOOTPRINT:")
-                    print(f"   🖥️  WORKERS: {resource_summary['cpu_workers_used']}/{resource_summary['cpu_cores_total']} cores (1 worker = 1 core)")
-                    print(f"   🧠 MEMORY: {resource_summary['memory_peak_mb']:.1f} MB peak usage")
-                    if resource_summary['memory_used_mb'] > 0:
-                        print(f"   📈 PROCESSING MEMORY: {resource_summary['memory_used_mb']:.1f} MB during extraction")
-                    print(f"   ⚡ EFFICIENCY: {resource_summary['efficiency_pages_per_worker']:.0f} pages/worker, {resource_summary['efficiency_mb_per_worker']:.1f} MB/worker")
+                    if 'shared_memory_architecture' in resource_summary:
+                        # Shared memory architecture stats
+                        print(f"   🏊 SHARED MEMORY: {resource_summary['current_memory_mb']:.1f}MB")
+                        print(f"   ⚡ MEMORY SAVINGS: {resource_summary['memory_efficiency_gain_percent']:.1f}%")
+                        print(f"   📊 DOCUMENTS IN POOL: {resource_summary['documents_in_shared_pool']}")
+                        print(f"   🌐 EDGE READY: {'✅ CloudFlare compatible' if resource_summary['edge_deployment_ready']['cloudflare_workers_compatible'] else '❌ Too large'}")
+                    elif 'cpu_workers_used' in resource_summary:
+                        # Traditional architecture stats
+                        print(f"   🖥️  WORKERS: {resource_summary['cpu_workers_used']}/{resource_summary['cpu_cores_total']} cores (1 worker = 1 core)")
+                        print(f"   🧠 MEMORY: {resource_summary['memory_peak_mb']:.1f} MB peak usage")
+                        if resource_summary.get('memory_used_mb', 0) > 0:
+                            print(f"   📈 PROCESSING MEMORY: {resource_summary['memory_used_mb']:.1f} MB during extraction")
+                        print(f"   ⚡ EFFICIENCY: {resource_summary['efficiency_pages_per_worker']:.0f} pages/worker, {resource_summary['efficiency_mb_per_worker']:.1f} MB/worker")
                 
                 print(f"   ✅ SUCCESS RATE: {(successful/len(results)*100):.1f}% ({successful}/{len(results)})")
             else:

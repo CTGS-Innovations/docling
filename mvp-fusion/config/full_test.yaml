@@ -106,6 +106,13 @@ extractor:
 
 # Pipeline Stages Configuration
 pipeline:
+  # Architecture selection
+  use_shared_memory: true        # Enable shared memory pool (edge optimized)
+  
+  # Memory limits for edge deployment (CloudFlare Workers ready)
+  memory_limit_mb: 100           # Per document memory limit
+  service_memory_limit_mb: 1024  # Total service memory limit (1GB)
+  
   # Stage control - enable/disable individual stages
   stages:
     convert: true      # Stage 1: PDF/Doc -> Markdown conversion
