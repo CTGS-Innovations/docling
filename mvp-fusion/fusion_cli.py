@@ -21,8 +21,7 @@ from typing import List, Dict, Any
 import json
 
 # Import fusion components
-from pipeline.fusion_pipeline import FusionPipeline
-from performance.fusion_metrics import FusionMetrics
+from ultra_fast_fusion import UltraFastFusion
 
 
 def setup_logging(verbose: bool = False):
@@ -40,41 +39,27 @@ def setup_logging(verbose: bool = False):
     )
 
 
-def process_single_file(pipeline: FusionPipeline, file_path: Path) -> Dict[str, Any]:
+def process_single_file(fusion: UltraFastFusion, file_path: Path) -> Dict[str, Any]:
     """Process a single file and return results."""
     print(f"Processing: {file_path}")
     
     start_time = time.time()
-    result = pipeline.process_document(file_path)
+    result = fusion.extract_document(file_path)
     processing_time = time.time() - start_time
     
-    if result['status'] == 'success':
-        metadata = result['processing_metadata']
+    if result.success:
         print(f"  ✅ Success - {processing_time:.3f}s")
-        print(f"     Pages/sec: {metadata['pages_per_sec']:.1f}")
-        # Only show entities if they exist (not in convert-only mode)
-        if 'entities_found' in metadata:
-            print(f"     Entities: {metadata['entities_found']}")
-        # Only show engine if it exists (not in convert-only mode) 
-        if 'engine_used' in metadata:
-            print(f"     Engine: {metadata['engine_used']}")
-        # Handle different output formats
-        if 'output_paths' in result:
-            print(f"     Outputs: {list(result['output_paths'].keys())}")
-        elif 'output_files' in result:
-            print(f"     Outputs: {list(result['output_files'].keys())}")
-            
-        # Show convert-only mode info
-        if result.get('conversion_only'):
-            print(f"     Mode: Convert-only ({metadata.get('chars_processed', 0)} chars)")
+        print(f"     Pages: {result.page_count}")
+        print(f"     Speed: {result.pages_per_second:.1f} pages/sec")
+        print(f"     Text length: {len(result.text):,} chars")
     else:
-        print(f"  ❌ Error: {result.get('error', 'Unknown error')}")
+        print(f"  ❌ Error: {result.error}")
     
     return result
 
 
-def process_directory(pipeline: FusionPipeline, directory: Path, 
-                     file_extensions: List[str] = None) -> List[Dict[str, Any]]:
+def process_directory(fusion: UltraFastFusion, directory: Path, 
+                     file_extensions: List[str] = None):
     """Process all files in a directory using high-speed batch processing."""
     if file_extensions is None:
         file_extensions = ['.txt', '.md', '.pdf', '.docx', '.doc']
@@ -95,9 +80,8 @@ def process_directory(pipeline: FusionPipeline, directory: Path,
     
     start_time = time.time()
     
-    # Process files in parallel batches (like MVP-Hyper)
-    file_paths = [str(f) for f in files]
-    results = pipeline.process_batch_files(file_paths)
+    # Process files in parallel batches using UltraFastFusion
+    results = fusion.process_batch(files)
     
     # Show progress during processing
     elapsed = time.time() - start_time
@@ -106,7 +90,7 @@ def process_directory(pipeline: FusionPipeline, directory: Path,
     
     # Final statistics
     total_time = time.time() - start_time
-    successful = sum(1 for r in results if r['status'] == 'success')
+    successful = sum(1 for r in results if r.success)
     failed = len(results) - successful
     
     print(f"\n📊 Processing Complete:")
@@ -119,8 +103,8 @@ def process_directory(pipeline: FusionPipeline, directory: Path,
     return results
 
 
-def run_performance_test(pipeline: FusionPipeline) -> Dict[str, Any]:
-    """Run performance benchmark test."""
+def run_performance_test(fusion: UltraFastFusion) -> Dict[str, Any]:
+    """Run performance benchmark test using UltraFastFusion."""
     print("🚀 Running MVP-Fusion Performance Test...")
     
     # Create test content
@@ -166,9 +150,18 @@ def run_performance_test(pipeline: FusionPipeline) -> Dict[str, Any]:
         start_time = time.time()
         scenario_results = []
         
-        for i in range(iterations):
-            result = pipeline.process_document(f"test_doc_{i}.txt", content)
-            scenario_results.append(result)
+        # Create temporary test file
+        test_file = Path(f"temp_test_doc.txt")
+        test_file.write_text(content)
+        
+        try:
+            for i in range(iterations):
+                result = fusion.extract_document(test_file)
+                scenario_results.append(result)
+        finally:
+            # Clean up test file
+            if test_file.exists():
+                test_file.unlink()
             
             if (i + 1) % 10 == 0:
                 elapsed = time.time() - start_time
@@ -177,17 +170,17 @@ def run_performance_test(pipeline: FusionPipeline) -> Dict[str, Any]:
         
         # Calculate statistics
         total_time = time.time() - start_time
-        successful = sum(1 for r in scenario_results if r['status'] == 'success')
+        successful = sum(1 for r in scenario_results if r.success)
         
         if successful > 0:
             avg_processing_time = sum(
-                r['processing_metadata']['total_time_ms'] 
-                for r in scenario_results if r['status'] == 'success'
+                r.extraction_time_ms 
+                for r in scenario_results if r.success
             ) / successful
             
-            total_entities = sum(
-                r['processing_metadata']['entities_found']
-                for r in scenario_results if r['status'] == 'success'
+            total_pages = sum(
+                r.page_count
+                for r in scenario_results if r.success
             )
             
             docs_per_sec = iterations / total_time
@@ -200,23 +193,29 @@ def run_performance_test(pipeline: FusionPipeline) -> Dict[str, Any]:
                 'docs_per_sec': docs_per_sec,
                 'chars_per_sec': chars_per_sec,
                 'avg_processing_time_ms': avg_processing_time,
-                'total_entities': total_entities,
+                'total_pages': total_pages,
                 'chars_per_doc': len(content)
             }
             
             print(f"  ✅ {successful}/{iterations} successful")
             print(f"  📊 Rate: {docs_per_sec:.1f} docs/sec")
             print(f"  ⚡ Speed: {chars_per_sec:,.0f} chars/sec")
-            print(f"  🎯 Entities: {total_entities} total")
+            print(f"  📚 Pages: {total_pages} total")
         else:
             results[scenario_name] = {'error': 'All tests failed'}
     
     return results
 
 
-def print_performance_summary(pipeline: FusionPipeline):
+def print_performance_summary(fusion: UltraFastFusion):
     """Print comprehensive performance summary."""
-    metrics = pipeline.get_performance_metrics()
+    # UltraFastFusion doesn't have built-in metrics, so we'll show basic info
+    print("\n" + "="*60)
+    print("🎯 MVP-FUSION PERFORMANCE SUMMARY")
+    print("="*60)
+    print(f"🔧 Engine: UltraFastFusion with {fusion.num_workers} workers")
+    print(f"💾 Cache size: {len(fusion.cache)} items")
+    return
     
     print("\n" + "="*60)
     print("🎯 MVP-FUSION PERFORMANCE SUMMARY")
@@ -317,26 +316,23 @@ Examples:
         # Load base configuration first
         config = _load_and_override_config(args)
         
-        # Initialize pipeline with final config
-        print("🔧 Initializing MVP-Fusion Pipeline...")
-        pipeline = FusionPipeline(config_dict=config)
+        # Initialize UltraFastFusion with config
+        print("🔧 Initializing UltraFastFusion...")
         
-        # Apply remaining CLI overrides that aren't in config
-        if args.output:
-            pipeline.output_directory = Path(args.output)
-            pipeline._setup_output_directories()
+        # Build UltraFastFusion config from CLI args
+        fusion_config = {
+            'performance': {
+                'max_workers': args.workers or config.get('performance', {}).get('max_workers', 4),
+                'memory_pool_mb': (args.memory_limit * 1024) if args.memory_limit else 256,
+                'cache_size': 100,
+            }
+        }
         
-        if args.workers:
-            pipeline.batch_processor.max_workers = args.workers
+        fusion = UltraFastFusion(fusion_config)
         
-        # Get final stage configuration
-        stages_to_run = config.get('pipeline', {}).get('stages_to_run', ['all'])
-        
-        print(f"✅ Pipeline initialized")
-        print(f"   Output directory: {pipeline.output_directory}")
-        print(f"   Strategy: {pipeline.strategy}")
-        print(f"   Max workers: {pipeline.batch_processor.max_workers}")
-        print(f"   Stages to run: {', '.join(stages_to_run)}")
+        print(f"✅ UltraFastFusion initialized")
+        print(f"   Workers: {fusion.num_workers}")
+        print(f"   Cache size: {len(fusion.cache)} items")
         
         # Execute command
         if args.file:
@@ -346,7 +342,7 @@ Examples:
                 print(f"❌ File not found: {file_path}")
                 sys.exit(1)
             
-            result = process_single_file(pipeline, file_path)
+            result = process_single_file(fusion, file_path)
             
         elif args.directory:
             # Process directory
@@ -355,11 +351,11 @@ Examples:
                 print(f"❌ Directory not found: {directory}")
                 sys.exit(1)
             
-            results = process_directory(pipeline, directory, args.extensions)
+            results = process_directory(fusion, directory, args.extensions)
             
         elif args.config_directories:
             # Process all directories from config
-            config_dirs = pipeline.config.get('inputs', {}).get('directories', [])
+            config_dirs = config.get('inputs', {}).get('directories', [])
             if not config_dirs:
                 print("❌ No directories specified in config file")
                 sys.exit(1)
@@ -376,15 +372,15 @@ Examples:
                     continue
                     
                 print(f"\n📂 Processing directory: {directory}")
-                extensions = pipeline.config.get('files', {}).get('supported_extensions', args.extensions)
-                results = process_directory(pipeline, directory, extensions)
+                extensions = config.get('files', {}).get('supported_extensions', args.extensions)
+                results = process_directory(fusion, directory, extensions)
                 all_results.extend(results if isinstance(results, list) else [results])
             
             print(f"\n✅ Processed {len(all_results)} total files across all directories")
             
         elif args.config and not args.file and not args.directory and not args.performance_test:
             # Auto-process directories from config file when only --config is provided
-            config_dirs = pipeline.config.get('inputs', {}).get('directories', [])
+            config_dirs = config.get('inputs', {}).get('directories', [])
             if config_dirs:
                 print(f"🗂️  Auto-processing {len(config_dirs)} directories from config:")
                 for config_dir in config_dirs:
@@ -398,8 +394,8 @@ Examples:
                         continue
                         
                     print(f"\n📂 Processing directory: {directory}")
-                    extensions = pipeline.config.get('files', {}).get('supported_extensions', args.extensions)
-                    results = process_directory(pipeline, directory, extensions)
+                    extensions = config.get('files', {}).get('supported_extensions', args.extensions)
+                    results = process_directory(fusion, directory, extensions)
                     all_results.extend(results if isinstance(results, list) else [results])
                 
                 print(f"\n✅ Processed {len(all_results)} total files across all directories")
@@ -409,7 +405,7 @@ Examples:
             
         elif args.performance_test:
             # Run performance test
-            test_results = run_performance_test(pipeline)
+            test_results = run_performance_test(fusion)
             
             print(f"\n🏆 Performance Test Results:")
             for scenario, result in test_results.items():
@@ -420,12 +416,17 @@ Examples:
         
         # Print performance summary
         if not args.quiet:
-            print_performance_summary(pipeline)
+            print_performance_summary(fusion)
         
-        # Export metrics if requested
+        # Export metrics if requested (UltraFastFusion doesn't have built-in metrics export)
         if args.export_metrics:
-            pipeline.metrics.export_metrics(args.export_metrics)
-            print(f"📊 Metrics exported to {args.export_metrics}")
+            metrics_data = {
+                'fusion_workers': fusion.num_workers,
+                'cache_size': len(fusion.cache)
+            }
+            with open(args.export_metrics, 'w') as f:
+                json.dump(metrics_data, f, indent=2)
+            print(f"📊 Basic metrics exported to {args.export_metrics}")
         
         print("\n🎉 MVP-Fusion processing complete!")
         

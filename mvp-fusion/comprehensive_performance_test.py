@@ -44,10 +44,11 @@ def comprehensive_test():
     print(f"🚀 COMPREHENSIVE PERFORMANCE TEST")
     print(f"📁 Found {len(all_files)} files (ALL file types)")
     
-    # Optimal config for performance
+    # Use MVP-Hyper's exact configuration
+    import multiprocessing as mp
     config = {
         'performance': {
-            'max_workers': 8,
+            'max_workers': mp.cpu_count(),  # MVP-Hyper uses CPU count, not fixed 8
             'memory_pool_mb': 512,
             'cache_size': 100,
         }
@@ -61,32 +62,64 @@ def comprehensive_test():
     print(f"✅ Init: {init_time:.3f}s")
     
     # Process all files
-    print(f"\n⚡ PROCESSING {len(all_files)} FILES")
+    # Create output directory (like MVP-Hyper does)
+    output_dir = Path("../output/fusion")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    
+    print(f"\n⚡ PROCESSING {len(all_files)} FILES (WITH THREADING)")
+    print(f"📝 Writing output to: {output_dir}")
     start_time = time.perf_counter()
     
-    results = []
+    # Use threading like MVP-Hyper does
+    print(f"🧵 Using ThreadPoolExecutor with {fusion.num_workers} workers")
+    results = fusion.process_batch(all_files)
+    
+    # Process results and write files
     total_pages = 0
     successful_extractions = 0
     individual_speeds = []
+    files_written = 0
     
-    for i, file_path in enumerate(all_files):
+    for i, result in enumerate(results):
         try:
-            file_start = time.perf_counter()
-            result = fusion.extract_document(file_path)
-            file_time = time.perf_counter() - file_start
-            
-            results.append(result)
             
             if result.success and result.text:
                 successful_extractions += 1
                 total_pages += result.page_count
                 individual_speeds.append(result.pages_per_second)
                 
+                # Write output file (like MVP-Hyper does)
+                try:
+                    file_path = Path(result.file_path)
+                    output_file = output_dir / f"{file_path.stem}.md"
+                    
+                    # Create markdown content with metadata header (like MVP-Hyper)
+                    markdown_content = f"""# {file_path.name}
+
+**File Type:** {file_path.suffix.upper()}
+**Pages:** {result.page_count}  
+**Processing Time:** {result.extraction_time_ms:.1f}ms
+**Speed:** {result.pages_per_second:.1f} pages/sec
+
+---
+
+{result.text}
+"""
+                    
+                    with open(output_file, 'w', encoding='utf-8') as f:
+                        f.write(markdown_content)
+                    
+                    files_written += 1
+                    
+                except Exception as write_error:
+                    print(f"⚠️  Write error for {result.file_path}: {write_error}")
+                
                 # Show progress every 50 files
                 if (i + 1) % 50 == 0:
                     avg_speed_so_far = statistics.mean(individual_speeds) if individual_speeds else 0
-                    print(f"  📊 Processed {i+1}/{len(all_files)} files, avg speed so far: {avg_speed_so_far:.1f} p/s")
+                    print(f"  📊 Processed {i+1}/{len(results)} files, avg speed so far: {avg_speed_so_far:.1f} p/s")
             else:
+                file_path = Path(result.file_path)
                 print(f"❌ {file_path.name}: {result.error or 'Unknown error'}")
                 
         except Exception as e:
@@ -124,6 +157,7 @@ def comprehensive_test():
     
     print(f"📁 Files processed: {len(results)}")
     print(f"✅ Successful extractions: {successful_extractions} ({success_rate:.1f}%)")
+    print(f"📝 Files written: {files_written}")
     print(f"📄 Total pages: {total_pages}")
     print(f"⏱️  Processing time: {total_processing_time:.2f}s")
     print()

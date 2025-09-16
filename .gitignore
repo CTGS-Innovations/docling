@@ -51,3 +51,8 @@ mvp-hyper/pipeline-output/
 mvp-hyper/output1
 mvp-fusion/.venv-fusion/
 output/
+mvp-fusion/.venv-clean/
+mvp-fusion/bin/
+mvp-fusion/lib/
+
+.gitignore
