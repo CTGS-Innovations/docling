@@ -26,11 +26,9 @@ inputs:
   # File sources
   files: []
   
-  # Directory sources - using same test data as MVP-Hyper
+  # Directory sources - single complex PDF folder for testing
   directories:
-    - "~/projects/docling/cli/data"
     - "~/projects/docling/cli/data_complex"
-    - "~/projects/docling/cli/data_osha"
   
   # Skip file extensions for speed
   skip_extensions:
@@ -98,6 +96,11 @@ patterns:
     max_patterns_per_engine: 20  # Limit patterns per engine
     pattern_timeout_ms: 100      # 100ms timeout per pattern
     enable_pattern_profiling: true
+
+# Extractor Configuration
+extractor:
+  name: "highspeed_markdown_general"    # Default: high-speed markdown extraction
+  description: "Default high-performance extractor for general documents"
 
 # Pipeline Stages Configuration
 pipeline:

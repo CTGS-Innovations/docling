@@ -17,23 +17,61 @@ MVP-Fusion represents a complete ground-up rewrite optimized for **extreme perfo
 
 ## Core Performance Philosophy
 
-### 1. **Zero-Copy Architecture**
+### 1. **Service-First Architecture**
+- **Single-file processing**: Service receives ONE file, processes completely
+- **No batch dependencies**: Each file is independent, complete pipeline
+- **Streaming output**: Results available immediately upon completion
+- **Stateless processing**: No cross-file dependencies or caching
+- **Production mindset**: Directory processing is testing only, not production pattern
+
+### 2. **Zero-Copy Architecture**
 - Memory-mapped file I/O
 - String views instead of string copies
 - In-place text processing where possible
 - Eliminate unnecessary data movement
 
-### 2. **Fusion Engine Strategy**
+### 3. **Fusion Engine Strategy**
 - **Aho-Corasick Automaton**: Keyword matching (80% of patterns)
 - **FLPC Rust Regex**: Complex patterns (20% of patterns)  
 - **Vectorized Processing**: SIMD operations where applicable
 - **Parallel Pattern Execution**: Multi-threaded regex processing
 
-### 3. **Aggressive Caching & Precomputation**
+### 4. **Aggressive Caching & Precomputation**
 - Pre-compiled pattern sets
 - Memoized classification results
 - Smart content fingerprinting
 - Pattern result caching
+
+---
+
+## Service Processing Flow
+
+### **Single-File Service Pipeline**
+```
+INPUT: document.pdf (service receives ONE file)
+    ↓
+CONVERT: PDF → Markdown + Base YAML
+    ↓  
+CLASSIFY: Add classification YAML section  
+    ↓
+ENRICH: Add enrichment YAML section
+    ↓
+EXTRACT: Generate semantic rules JSON
+    ↓
+OUTPUT: Enhanced markdown + JSON rules (complete)
+```
+
+### **Key Service Principles:**
+1. **Complete processing per file**: Each file goes through entire pipeline
+2. **No cross-file dependencies**: File N doesn't depend on File N-1
+3. **Immediate output**: Results available as soon as file completes
+4. **Parallel service calls**: Multiple files processed simultaneously in separate pipelines
+5. **Stateless operations**: No shared state between file processing calls
+
+### **Directory Testing ≠ Production Pattern**
+- **Testing**: Process directories to validate performance at scale
+- **Production**: Service receives individual files from clients
+- **Architecture**: Designed for file-by-file service processing
 
 ---
 

@@ -313,7 +313,8 @@ Examples:
                            help='Run performance benchmark')
     
     # Configuration options
-    parser.add_argument('--config', '-c', type=str, help='Configuration file path')
+    parser.add_argument('--config', '-c', type=str, default='config/config.yaml',
+                       help='Configuration file path (default: config/config.yaml)')
     parser.add_argument('--output', '-o', type=str, help='Output directory')
     parser.add_argument('--batch-size', '-b', type=int, default=32, 
                        help='Batch size for parallel processing')
@@ -328,10 +329,10 @@ Examples:
     parser.add_argument('--workers', '-w', type=int, 
                        help='Workers (cores): 1=524 p/s, 4=2014 p/s, 8=3454 p/s (sweet spot), 16=4160 p/s')
     parser.add_argument('--memory-limit', type=int, help='Memory limit in GB')
-    parser.add_argument('--extractor', '-e', type=str, default='highspeed_markdown_general',
+    parser.add_argument('--extractor', '-e', type=str,
                        choices=['highspeed_markdown_general', 'highaccuracy_markdown_general', 
                                'highspeed_json_pdf', 'specialized_markdown_legal'],
-                       help='Extraction engine to use (default: highspeed_markdown_general)')
+                       help='Extraction engine (default: from config file)')
     
     # Pipeline stage options
     parser.add_argument('--stages', nargs='+', 
@@ -363,7 +364,7 @@ Examples:
         config = _load_and_override_config(args)
         
         # Initialize configured extractor
-        extractor_name = args.extractor
+        extractor_name = args.extractor or config.get('extractor', {}).get('name', 'highspeed_markdown_general')
         extractor_config = {
             'page_limit': config.get('performance', {}).get('page_limit', 100)
         }
@@ -534,15 +535,17 @@ Examples:
                 true_failures = failed - skipped_large
                 warnings_count = sum(1 for r in results if r.success and hasattr(r, 'metadata') and r.metadata.get('warnings'))
                 
-                print(f"\n✅ PROCESSING COMPLETE - DATA TRANSFORMATION STORY:")
+                print(f"\n🚀 PROCESSING PERFORMANCE:")
+                print(f"   🚀 PAGES/SEC: {pages_per_sec:.0f}")
+                print(f"   ⚡ THROUGHPUT: {throughput_mb_sec:.1f} MB/sec raw document processing")
+                
+                print(f"\n✅ DATA TRANSFORMATION SUMMARY:")
                 print(f"   📊 INPUT: {input_mb:.0f} MB across {len(results)} files ({total_pages:,} pages)")
                 print(f"   📊 OUTPUT: {output_mb:.1f} MB in {output_file_count} markdown files")
                 if output_mb > 0:
                     print(f"   🗜️  COMPRESSION: {compression_ratio:.1f}x reduction (eliminated formatting, images, bloat)")
                 else:
                     print(f"   🗜️  COMPRESSION: Unable to calculate (output scanning issue)")
-                print(f"   ⚡ THROUGHPUT: {throughput_mb_sec:.1f} MB/sec of raw document processing")
-                print(f"   🚀 PERFORMANCE: {pages_per_sec:.0f} pages/sec")
                 print(f"   📁 RESULTS: {successful} successful")
                 if skipped_large > 0:
                     print(f"   ⏭️  SKIPPED: {skipped_large} files (>100 pages, too large for this mode)")
@@ -608,13 +611,20 @@ def _load_and_override_config(args) -> dict:
     
     # Step 1: Load base configuration
     config = {}
-    if args.config:
-        config_path = Path(args.config)
-        if config_path.exists():
-            with open(config_path, 'r') as f:
-                config = yaml.safe_load(f) or {}
-        else:
-            print(f"⚠️  Config file not found: {config_path}")
+    config_path = Path(args.config)
+    
+    if config_path.exists():
+        with open(config_path, 'r') as f:
+            config = yaml.safe_load(f) or {}
+        print(f"📋 Config: {config_path}")
+    else:
+        if args.config == 'config/config.yaml':  # Default config missing
+            print(f"❌ Default configuration file not found: {args.config}")
+            print(f"💡 Please create config/config.yaml or specify a config file with --config")
+            print(f"💡 Example: python fusion_cli.py --config /path/to/your/config.yaml")
+        else:  # User-specified config missing
+            print(f"❌ Configuration file not found: {args.config}")
+        sys.exit(1)
     
     # Step 2: Apply CLI overrides to config
     

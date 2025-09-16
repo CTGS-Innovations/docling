@@ -26,6 +26,11 @@ except ImportError:
 
 from .base_extractor import BaseExtractor, ExtractionResult
 
+# Import centralized YAML metadata engine
+import sys
+sys.path.append(str(Path(__file__).parent.parent))
+from metadata.yaml_metadata_engine import generate_conversion_yaml
+
 
 class LightweightResourceMonitor:
     """Lightweight resource monitoring focused on processing footprint only"""
@@ -126,12 +131,10 @@ def _extract_pdf_to_markdown(pdf_path_and_output_dir):
         # Extract text using blocks method (fastest approach)
         markdown_content = []
         
-        # Add markdown header with document metadata
-        markdown_content.append(f"# {pdf_path.name}\n")
-        markdown_content.append(f"**Pages:** {page_count}  ")
-        markdown_content.append(f"**Source:** {pdf_path.name}  ")
-        markdown_content.append(f"**Extracted:** {time.strftime('%Y-%m-%d %H:%M:%S')}  \n")
-        markdown_content.append("---\n\n")
+        # Generate comprehensive YAML frontmatter (single-pass, no re-reading)
+        yaml_metadata = generate_conversion_yaml(pdf_path, page_count)
+        markdown_content.append(yaml_metadata)
+        markdown_content.append(f"\n# {pdf_path.name}\n\n")
         
         # Process each page with optimal block extraction (suppress MuPDF errors)
         with redirect_stderr(error_buffer):
