@@ -20,9 +20,41 @@ from pathlib import Path
 from typing import List, Dict, Any
 import json
 
-# Import fusion components
-from ultra_fast_fusion import UltraFastFusion
+# Import extraction architecture
+from extraction import (
+    BaseExtractor,
+    HighSpeed_Markdown_General_Extractor,
+    HighAccuracy_Markdown_General_Extractor,
+    HighSpeed_JSON_PDF_Extractor,
+    Specialized_Markdown_Legal_Extractor
+)
 
+
+def get_available_extractors():
+    """Return mapping of extractor names to classes."""
+    return {
+        'highspeed_markdown_general': HighSpeed_Markdown_General_Extractor,
+        'highaccuracy_markdown_general': HighAccuracy_Markdown_General_Extractor,
+        'highspeed_json_pdf': HighSpeed_JSON_PDF_Extractor,
+        'specialized_markdown_legal': Specialized_Markdown_Legal_Extractor
+    }
+
+def create_extractor(extractor_name: str, config: dict = None):
+    """Factory function to create extractor by name."""
+    extractors = get_available_extractors()
+    
+    if extractor_name not in extractors:
+        available = list(extractors.keys())
+        raise ValueError(f"Unknown extractor '{extractor_name}'. Available: {available}")
+    
+    extractor_class = extractors[extractor_name]
+    
+    # Pass config parameters if the extractor supports them
+    if config and extractor_name == 'highspeed_markdown_general':
+        page_limit = config.get('page_limit', 100)
+        return extractor_class(page_limit=page_limit)
+    else:
+        return extractor_class()
 
 def setup_logging(verbose: bool = False):
     """Setup logging configuration."""
@@ -39,27 +71,21 @@ def setup_logging(verbose: bool = False):
     )
 
 
-def process_single_file(fusion: UltraFastFusion, file_path: Path) -> Dict[str, Any]:
+def process_single_file(extractor: BaseExtractor, file_path: Path, output_dir: Path = None, quiet: bool = False) -> Dict[str, Any]:
     """Process a single file and return results."""
-    print(f"Processing: {file_path}")
+    if not quiet:
+        print(f"Processing: {file_path.name}")
     
-    start_time = time.time()
-    result = fusion.extract_document(file_path)
-    processing_time = time.time() - start_time
+    result = extractor.extract_single(file_path, output_dir or Path.cwd())
     
-    if result.success:
-        print(f"  ✅ Success - {processing_time:.3f}s")
-        print(f"     Pages: {result.page_count}")
-        print(f"     Speed: {result.pages_per_second:.1f} pages/sec")
-        print(f"     Text length: {len(result.text):,} chars")
-    else:
+    if not quiet and not result.success:
         print(f"  ❌ Error: {result.error}")
     
     return result
 
 
-def process_directory(fusion: UltraFastFusion, directory: Path, 
-                     file_extensions: List[str] = None):
+def process_directory(extractor: BaseExtractor, directory: Path, 
+                     file_extensions: List[str] = None, output_dir: Path = None):
     """Process all files in a directory using high-speed batch processing."""
     if file_extensions is None:
         file_extensions = ['.txt', '.md', '.pdf', '.docx', '.doc']
@@ -73,20 +99,25 @@ def process_directory(fusion: UltraFastFusion, directory: Path,
         print(f"No files found in {directory} with extensions {file_extensions}")
         return []
     
-    print(f"Found {len(files)} files to process in {directory}")
+    print(f"📁 Found {len(files)} files in {directory.name}")
     
-    # Use batch processing like MVP-Hyper for maximum speed
-    print(f"Processing {len(files)} files with parallel batch processing...")
+    # Show progress indicator for large batches
+    if len(files) > 100:
+        print(f"🚀 Processing {len(files)} files (progress shown every 100 files)...")
+    else:
+        print(f"🚀 Processing {len(files)} files...")
     
     start_time = time.time()
     
-    # Process files in parallel batches using UltraFastFusion
-    results = fusion.process_batch(files)
+    # Use the extractor's optimized batch processing
+    results, total_time = extractor.extract_batch(files, output_dir or Path.cwd())
     
-    # Show progress during processing
-    elapsed = time.time() - start_time
-    rate = len(files) / elapsed if elapsed > 0 else 0
-    print(f"\nBatch processing complete: {len(files)} files in {elapsed:.2f}s ({rate:.1f} files/sec)")
+    # Clean summary
+    successful = sum(1 for r in results if r.success)
+    failed = len(results) - successful
+    rate = len(files) / total_time if total_time > 0 else 0
+    
+    print(f"✅ Completed: {successful} successful, {failed} failed ({rate:.0f} files/sec)")
     
     # Final statistics
     total_time = time.time() - start_time
@@ -103,8 +134,8 @@ def process_directory(fusion: UltraFastFusion, directory: Path,
     return results
 
 
-def run_performance_test(fusion: UltraFastFusion) -> Dict[str, Any]:
-    """Run performance benchmark test using UltraFastFusion."""
+def run_performance_test(extractor: BaseExtractor, max_workers: int) -> Dict[str, Any]:
+    """Run performance benchmark test using the configured extractor."""
     print("🚀 Running MVP-Fusion Performance Test...")
     
     # Create test content
@@ -156,7 +187,7 @@ def run_performance_test(fusion: UltraFastFusion) -> Dict[str, Any]:
         
         try:
             for i in range(iterations):
-                result = fusion.extract_document(test_file)
+                result = extractor.extract_single(test_file, Path.cwd())
                 scenario_results.append(result)
         finally:
             # Clean up test file
@@ -207,14 +238,17 @@ def run_performance_test(fusion: UltraFastFusion) -> Dict[str, Any]:
     return results
 
 
-def print_performance_summary(fusion: UltraFastFusion):
+def print_performance_summary(extractor: BaseExtractor, max_workers: int):
     """Print comprehensive performance summary."""
-    # UltraFastFusion doesn't have built-in metrics, so we'll show basic info
+    perf = extractor.get_performance_summary()
+    
     print("\n" + "="*60)
     print("🎯 MVP-FUSION PERFORMANCE SUMMARY")
     print("="*60)
-    print(f"🔧 Engine: UltraFastFusion with {fusion.num_workers} workers")
-    print(f"💾 Cache size: {len(fusion.cache)} items")
+    print(f"🔧 Engine: {extractor.__class__.__name__}")
+    print(f"⚡ Peak Performance: {perf.get('pages_per_second', 0):.0f} pages/sec")
+    print(f"📊 Efficiency: {perf.get('success_rate', 0)*100:.1f}% success rate")
+    print(f"🔧 Configuration: {max_workers} workers, {perf.get('total_files', 0)} files processed")
     return
     
     print("\n" + "="*60)
@@ -286,6 +320,10 @@ Examples:
     # Performance options
     parser.add_argument('--workers', '-w', type=int, help='Number of parallel workers')
     parser.add_argument('--memory-limit', type=int, help='Memory limit in GB')
+    parser.add_argument('--extractor', '-e', type=str, default='highspeed_markdown_general',
+                       choices=['highspeed_markdown_general', 'highaccuracy_markdown_general', 
+                               'highspeed_json_pdf', 'specialized_markdown_legal'],
+                       help='Extraction engine to use (default: highspeed_markdown_general)')
     
     # Pipeline stage options
     parser.add_argument('--stages', nargs='+', 
@@ -316,23 +354,27 @@ Examples:
         # Load base configuration first
         config = _load_and_override_config(args)
         
-        # Initialize UltraFastFusion with config
-        print("🔧 Initializing UltraFastFusion...")
-        
-        # Build UltraFastFusion config from CLI args
-        fusion_config = {
-            'performance': {
-                'max_workers': args.workers or config.get('performance', {}).get('max_workers', 4),
-                'memory_pool_mb': (args.memory_limit * 1024) if args.memory_limit else 256,
-                'cache_size': 100,
-            }
+        # Initialize configured extractor
+        extractor_name = args.extractor
+        extractor_config = {
+            'page_limit': config.get('performance', {}).get('page_limit', 100)
         }
+        extractor = create_extractor(extractor_name, extractor_config)
+        max_workers = args.workers or config.get('performance', {}).get('max_workers', 4)
         
-        fusion = UltraFastFusion(fusion_config)
+        print(f"🔧 MVP-Fusion Engine: {extractor.name}")
+        print(f"⚡ Performance: {extractor.description}")
+        print(f"🔧 Workers: {max_workers} | Formats: {len(extractor.get_supported_formats())}")
         
-        print(f"✅ UltraFastFusion initialized")
-        print(f"   Workers: {fusion.num_workers}")
-        print(f"   Cache size: {len(fusion.cache)} items")
+        # Determine output directory
+        output_dir = None
+        if args.output:
+            output_dir = Path(args.output)
+        elif config.get('output', {}).get('base_directory'):
+            output_dir = Path(config['output']['base_directory']).expanduser()
+        
+        if output_dir:
+            print(f"📁 Output directory: {output_dir}")
         
         # Execute command
         if args.file:
@@ -342,7 +384,7 @@ Examples:
                 print(f"❌ File not found: {file_path}")
                 sys.exit(1)
             
-            result = process_single_file(fusion, file_path)
+            result = process_single_file(extractor, file_path, output_dir)
             
         elif args.directory:
             # Process directory
@@ -351,7 +393,7 @@ Examples:
                 print(f"❌ Directory not found: {directory}")
                 sys.exit(1)
             
-            results = process_directory(fusion, directory, args.extensions)
+            results = process_directory(extractor, directory, args.extensions, output_dir)
             
         elif args.config_directories:
             # Process all directories from config
@@ -373,7 +415,7 @@ Examples:
                     
                 print(f"\n📂 Processing directory: {directory}")
                 extensions = config.get('files', {}).get('supported_extensions', args.extensions)
-                results = process_directory(fusion, directory, extensions)
+                results = process_directory(fusion, directory, extensions, output_dir)
                 all_results.extend(results if isinstance(results, list) else [results])
             
             print(f"\n✅ Processed {len(all_results)} total files across all directories")
@@ -382,30 +424,125 @@ Examples:
             # Auto-process directories from config file when only --config is provided
             config_dirs = config.get('inputs', {}).get('directories', [])
             if config_dirs:
-                print(f"🗂️  Auto-processing {len(config_dirs)} directories from config:")
+                # Collect all files from all directories first
+                print(f"🗂️  Scanning {len(config_dirs)} directories:")
                 for config_dir in config_dirs:
                     print(f"   - {config_dir}")
                 
-                all_results = []
+                all_files = []
+                extensions = config.get('files', {}).get('supported_extensions', args.extensions)
+                
                 for config_dir in config_dirs:
                     directory = Path(config_dir).expanduser()
                     if not directory.exists():
                         print(f"⚠️  Directory not found: {directory} (skipping)")
                         continue
-                        
-                    print(f"\n📂 Processing directory: {directory}")
-                    extensions = config.get('files', {}).get('supported_extensions', args.extensions)
-                    results = process_directory(fusion, directory, extensions)
-                    all_results.extend(results if isinstance(results, list) else [results])
+                    
+                    # Collect files from this directory
+                    files = []
+                    for ext in extensions:
+                        files.extend(directory.glob(f"**/*{ext}"))
+                    all_files.extend(files)
                 
-                print(f"\n✅ Processed {len(all_results)} total files across all directories")
+                if not all_files:
+                    print("❌ No files found in any directories")
+                    sys.exit(1)
+                
+                # Show summary before processing
+                file_types = {}
+                for file_path in all_files:
+                    ext = file_path.suffix.lower()
+                    file_types[ext] = file_types.get(ext, 0) + 1
+                
+                print(f"\n📊 PROCESSING SUMMARY:")
+                print(f"   Total files: {len(all_files)}")
+                print(f"   File types: {dict(file_types)}")
+                print(f"   Workers: {max_workers}")
+                
+                # Process everything in one batch
+                print(f"\n🚀 Starting batch processing...")
+                start_time = time.time()
+                results, extraction_time = extractor.extract_batch(all_files, output_dir or Path.cwd())
+                total_time = time.time() - start_time
+                
+                # Calculate comprehensive metrics
+                successful = sum(1 for r in results if r.success)
+                failed = len(results) - successful
+                total_pages = sum(r.pages for r in results if r.success)
+                
+                # Calculate input data sizes by scanning all attempted files directly
+                total_input_bytes = 0
+                skipped_large = 0
+                
+                # Scan all files that were attempted (not just results)
+                for file_path in all_files:
+                    try:
+                        input_size = file_path.stat().st_size
+                        total_input_bytes += input_size
+                    except:
+                        pass
+                
+                # Count skipped files from results
+                for result in results:
+                    if not result.success and result.error and "pages (>100 limit)" in result.error:
+                        skipped_large += 1
+                
+                # Calculate output size by scanning the output directory (free operation)
+                total_output_bytes = 0
+                output_file_count = 0
+                if output_dir and output_dir.exists():
+                    print(f"   🔍 DEBUG: Scanning output directory: {output_dir}")
+                    md_files = list(output_dir.glob("*.md"))
+                    print(f"   🔍 DEBUG: Found {len(md_files)} .md files")
+                    
+                    for md_file in md_files:
+                        try:
+                            file_size = md_file.stat().st_size
+                            total_output_bytes += file_size
+                            output_file_count += 1
+                        except Exception as e:
+                            print(f"   🔍 DEBUG: Error reading {md_file}: {e}")
+                    
+                    print(f"   🔍 DEBUG: Total output bytes calculated: {total_output_bytes}")
+                else:
+                    print(f"   🔍 DEBUG: Output directory issue - dir: {output_dir}, exists: {output_dir.exists() if output_dir else 'None'}")
+                
+                # Calculate metrics
+                input_mb = total_input_bytes / 1024 / 1024
+                output_mb = total_output_bytes / 1024 / 1024
+                throughput_mb_sec = input_mb / total_time if total_time > 0 else 0
+                compression_ratio = input_mb / output_mb if output_mb > 0 else 0
+                pages_per_sec = total_pages / total_time if total_time > 0 else 0
+                
+                # True failures vs skips and warnings
+                true_failures = failed - skipped_large
+                warnings_count = sum(1 for r in results if r.success and hasattr(r, 'metadata') and r.metadata.get('warnings'))
+                
+                print(f"\n✅ PROCESSING COMPLETE - DATA TRANSFORMATION STORY:")
+                print(f"   📊 INPUT: {input_mb:.0f} MB across {len(results)} files ({total_pages:,} pages)")
+                print(f"   📊 OUTPUT: {output_mb:.1f} MB in {output_file_count} markdown files")
+                if output_mb > 0:
+                    print(f"   🗜️  COMPRESSION: {compression_ratio:.1f}x reduction (eliminated formatting, images, bloat)")
+                else:
+                    print(f"   🗜️  COMPRESSION: Unable to calculate (output scanning issue)")
+                print(f"   ⚡ THROUGHPUT: {throughput_mb_sec:.1f} MB/sec of raw document processing")
+                print(f"   🚀 PERFORMANCE: {pages_per_sec:.0f} pages/sec")
+                print(f"   📁 RESULTS: {successful} successful")
+                if skipped_large > 0:
+                    print(f"   ⏭️  SKIPPED: {skipped_large} files (>100 pages, too large for this mode)")
+                if true_failures > 0:
+                    print(f"   ❌ FAILED: {true_failures} files (corrupted or unsupported)")
+                if warnings_count > 0:
+                    print(f"   ⚠️  WARNINGS: {warnings_count} files (minor PDF issues, but text extracted successfully)")
+                print(f"   ⏱️  TOTAL TIME: {total_time:.2f}s")
+                print(f"   ✅ SUCCESS RATE: {(successful/len(results)*100):.1f}% ({successful}/{len(results)})")
             else:
                 print("❌ No input specified and no directories in config file")
                 sys.exit(1)
             
         elif args.performance_test:
             # Run performance test
-            test_results = run_performance_test(fusion)
+            test_results = run_performance_test(extractor, max_workers)
             
             print(f"\n🏆 Performance Test Results:")
             for scenario, result in test_results.items():
@@ -414,21 +551,18 @@ Examples:
                     print(f"     Rate: {result['docs_per_sec']:.1f} docs/sec")
                     print(f"     Speed: {result['chars_per_sec']:,.0f} chars/sec")
         
-        # Print performance summary
-        if not args.quiet:
-            print_performance_summary(fusion)
+        # Processing complete - no additional summary needed
         
         # Export metrics if requested (UltraFastFusion doesn't have built-in metrics export)
         if args.export_metrics:
             metrics_data = {
-                'fusion_workers': fusion.num_workers,
-                'cache_size': len(fusion.cache)
+                'extractor_workers': max_workers,
+                'performance_metrics': extractor.get_performance_summary()
             }
             with open(args.export_metrics, 'w') as f:
                 json.dump(metrics_data, f, indent=2)
             print(f"📊 Basic metrics exported to {args.export_metrics}")
         
-        print("\n🎉 MVP-Fusion processing complete!")
         
     except KeyboardInterrupt:
         print("\n⚠️ Processing interrupted by user")
