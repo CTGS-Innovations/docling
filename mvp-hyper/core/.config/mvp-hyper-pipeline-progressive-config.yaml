@@ -8,15 +8,23 @@ inputs:
   files: []
   
   # Directories to scan recursively 
+  # Note: These contain source PDFs/DOCX files, not markdown
+  # For testing with markdown files, use the output directory
   directories:
     - "~/projects/docling/cli/data"
     - "~/projects/docling/cli/data_complex" 
     - "~/projects/docling/cli/data_osha"
+    
 
 # File processing settings
 processing:
-  # Maximum workers for parallel processing
-  max_workers: 1
+  # Maximum workers for parallel processing - use all 16 CPU cores  
+  max_workers: 16
+  
+  # LaTeX formula processing settings - DISABLED for performance
+  convert_formulas: false  # Convert mathematical notation to LaTeX in classification step
+  remove_latexit: false   # Remove <latexit> blocks to clean up files (disabled for speed)
+  formula_output_format: "both"  # Options: "markdown", "html", "both"
   
   # Skip these file extensions completely
   skip_extensions:
@@ -47,8 +55,11 @@ processing:
     - ".bin"
     - ".dat"
   
-  # Skip files larger than this (in MB)
-  max_file_size_mb: 100
+  # Truncate files larger than this (in MB) for classification performance
+  max_file_size_mb: 5.0
+  
+  # Maximum content to process from large files (in MB)
+  max_content_mb: 1.0
   
   # Timeout per file (in seconds)
   timeout_per_file: 10
@@ -73,6 +84,36 @@ pdf:
     - "pdftotext_command" 
     - "basic_text_only"
     - "skip_if_slow"
+
+# Classification and Enrichment Configuration
+# ===========================================
+
+classification:
+  # Dictionary file for domain classification
+  # Use "domain-dictionaries.yaml" for standard dictionary
+  # Use "domain-dictionaries-enhanced.yaml" for comprehensive dictionary (1000+ terms)
+  dictionary_file: "domain-dictionaries-enhanced.yaml"
+  
+  # Pattern files for entity extraction
+  regex_patterns_file: "regex-patterns.yaml"
+  acronym_patterns_file: "acronym-patterns.yaml"
+  
+  # Enable enhanced mode with entity extraction
+  enhanced_mode: true
+  
+  # Confidence thresholds
+  min_confidence: 0.3
+  default_domain: "general"
+
+enrichment:
+  # Dictionary file for enrichment (can be same or different from classification)
+  dictionary_file: "domain-dictionaries-enhanced.yaml"
+  
+  # Enable targeted enrichment based on classification
+  use_targeted_enrichment: true
+  
+  # Skip universal entities (already in classification)
+  skip_universal_entities: true
 
 # Progressive Enhancement Pipeline Configuration
 # ==============================================
@@ -167,7 +208,7 @@ debug:
   # Show detailed timing for files slower than this
   timing_threshold: 1.0
   # Stop processing after N files (for testing, 0 = process all)
-  max_files_to_process: 0
+  max_files_to_process: 5
   # Show enhancement details
   verbose_enhancement: false
 

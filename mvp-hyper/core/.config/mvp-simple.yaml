@@ -78,6 +78,36 @@ pdf:
     - "basic_text_only"
     - "skip_if_slow"
 
+# Classification and Enrichment Configuration
+# ===========================================
+
+classification:
+  # Dictionary file for domain classification
+  # Use "domain-dictionaries.yaml" for standard dictionary
+  # Use "domain-dictionaries-enhanced.yaml" for comprehensive dictionary (1000+ terms)
+  dictionary_file: "domain-dictionaries-enhanced.yaml"
+  
+  # Pattern files for entity extraction
+  regex_patterns_file: "regex-patterns.yaml"
+  acronym_patterns_file: "acronym-patterns.yaml"
+  
+  # Enable enhanced mode with entity extraction
+  enhanced_mode: true
+  
+  # Confidence thresholds
+  min_confidence: 0.3
+  default_domain: "general"
+
+enrichment:
+  # Dictionary file for enrichment (can be same or different from classification)
+  dictionary_file: "domain-dictionaries-enhanced.yaml"
+  
+  # Enable targeted enrichment based on classification
+  use_targeted_enrichment: true
+  
+  # Skip universal entities (already in classification)
+  skip_universal_entities: true
+
 # Progressive Enhancement Pipeline Configuration
 # ==============================================
 

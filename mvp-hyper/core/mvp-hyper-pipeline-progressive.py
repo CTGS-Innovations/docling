@@ -61,7 +61,7 @@ class MVPHyperPipeline:
         # Initialize enhanced modules if available
         if ENHANCED_MODULES_AVAILABLE:
             try:
-                self.classifier = EnhancedClassifierWithEntities()
+                self.classifier = EnhancedClassifierWithEntities(config=self.config)
                 self.enrichment = TargetedEnrichment()
                 self.enhanced_mode = True
                 self.classification_cache = {}  # Cache classification results for enrichment
@@ -748,24 +748,51 @@ class MVPHyperPipeline:
         
         for md_file in markdown_dir.glob("*.md"):
             try:
+                file_start_time = time.time()
+                
+                # Check file size - truncate large files for performance instead of skipping
+                file_size_mb = md_file.stat().st_size / (1024 * 1024)
+                max_file_size_mb = self.config.get('processing', {}).get('max_file_size_mb', 5.0)
+                max_content_mb = self.config.get('processing', {}).get('max_content_mb', 1.0)
+                
+                truncate_large_file = file_size_mb > max_file_size_mb
+                
+                # TIMING: File I/O
+                io_start = time.time()
                 with open(md_file, 'r', encoding='utf-8') as f:
-                    content = f.read()
+                    if truncate_large_file:
+                        # Read only the first N MB for large files
+                        max_chars = int(max_content_mb * 1024 * 1024)  # Rough estimate: 1 byte per char
+                        content = f.read(max_chars)
+                        print(f"✂️  TRUNCATED: {md_file.name} ({file_size_mb:.1f}MB → {len(content)/1024/1024:.1f}MB)")
+                    else:
+                        content = f.read()
+                io_time = time.time() - io_start
                 
                 if self.enhanced_mode and self.classifier:
-                    # Use classification + entity extraction (Layer 1)
+                    # TIMING: Classification + Entity Extraction
+                    classify_start = time.time()
                     result = self.classifier.classify_and_extract(content, md_file.name)
+                    classify_time = time.time() - classify_start
                     
                     # Cache classification for enrichment step
                     self.classification_cache[str(md_file)] = result
                     
-                    # Format enhanced classification metadata with entities
+                    # TIMING: Format metadata
+                    format_start = time.time()
                     classification_metadata = self.classifier.format_classification_metadata(result)
+                    format_time = time.time() - format_start
                 else:
                     # Fallback to basic classification
+                    classify_start = time.time()
                     classification_metadata = self._basic_classification(content)
+                    classify_time = time.time() - classify_start
+                    format_time = 0
                 
-                # Use YAMLMetadataManager for structured metadata handling - CLEAN APPROACH
+                # TIMING: YAML parsing
+                yaml_start = time.time()
                 metadata, body = self.metadata_manager.parse_existing_metadata(content)
+                yaml_time = time.time() - yaml_start
                 
                 # Generate Step 1 conversion metadata (structured data)
                 step1_data = self._generate_step1_structured_data(str(md_file), body)
@@ -811,9 +838,21 @@ class MVPHyperPipeline:
                         yaml_content = yaml.dump(metadata, default_flow_style=False, sort_keys=False, width=float('inf'))
                         content = f"---\n{yaml_content}---\n{updated_body}"
                 
-                # Write enhanced file
+                # TIMING: File write
+                write_start = time.time()
                 with open(md_file, 'w', encoding='utf-8') as f:
                     f.write(content)
+                write_time = time.time() - write_start
+                
+                # TIMING: Output timing data for slow files
+                total_file_time = time.time() - file_start_time
+                if total_file_time > self.config.get('debug', {}).get('timing_threshold', 1.0):
+                    print(f"🐌 SLOW FILE: {md_file.name} ({total_file_time:.2f}s total)")
+                    print(f"   📖 I/O Read: {io_time*1000:.1f}ms")
+                    print(f"   🧠 Classification: {classify_time*1000:.1f}ms")
+                    print(f"   📝 Format Metadata: {format_time*1000:.1f}ms")
+                    print(f"   ⚙️  YAML Parse: {yaml_time*1000:.1f}ms")
+                    print(f"   💾 Write: {write_time*1000:.1f}ms")
                 
                 files_processed += 1
                 

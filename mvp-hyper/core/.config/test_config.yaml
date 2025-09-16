@@ -18,4 +18,6 @@ processing:
   slow_file_threshold: 2.0
   timeout_per_file: 30
   convert_formulas: false
-  remove_latexit: true
+  remove_latexit: false
+  max_file_size_mb: 5.0
+  max_content_mb: 1.0

@@ -29,15 +29,27 @@ except ImportError:
 class EnhancedClassifierWithEntities:
     """Classification + universal entity extraction in one pass."""
     
-    def __init__(self, dictionaries_path: str = None, patterns_path: str = None):
+    def __init__(self, dictionaries_path: str = None, patterns_path: str = None, config: dict = None):
         """Initialize with dictionaries and universal patterns."""
         
         current_dir = os.path.dirname(os.path.abspath(__file__))
         
+        # Determine dictionary path from config or default
         if dictionaries_path is None:
-            dictionaries_path = os.path.join(current_dir, ".config", "domain-dictionaries.yaml")
+            if config and 'classification' in config and 'dictionary_file' in config['classification']:
+                dict_filename = config['classification']['dictionary_file']
+                dictionaries_path = os.path.join(current_dir, ".config", dict_filename)
+                print(f"🔧 Using config-specified dictionary: {dict_filename}")
+            else:
+                dictionaries_path = os.path.join(current_dir, ".config", "domain-dictionaries.yaml")
+                print(f"🔧 Using default dictionary: domain-dictionaries.yaml")
+        
         if patterns_path is None:
-            patterns_path = os.path.join(current_dir, ".config", "acronym-patterns.yaml")
+            if config and 'classification' in config and 'acronym_patterns_file' in config['classification']:
+                patterns_filename = config['classification']['acronym_patterns_file']
+                patterns_path = os.path.join(current_dir, ".config", patterns_filename)
+            else:
+                patterns_path = os.path.join(current_dir, ".config", "acronym-patterns.yaml")
         
         # Load configurations
         self.dictionary_config = self._load_yaml(dictionaries_path, "dictionaries")
