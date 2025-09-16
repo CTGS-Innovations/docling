@@ -426,6 +426,10 @@ class MVPHyperPipeline:
                 key = key.strip()
                 value = value.strip().strip('"').strip("'")
                 
+                # Skip universal_entities to avoid duplication with classification step
+                if key == 'universal_entities':
+                    continue
+                
                 # Handle different value types
                 if value.lower() in ['true', 'false']:
                     value = value.lower() == 'true'

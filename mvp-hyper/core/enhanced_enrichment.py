@@ -435,12 +435,13 @@ class EnhancedEnrichment:
         total_entities = entities['metadata']['total_entity_count']
         metadata_lines.append(f"total_entities_found: {total_entities}")
         
-        # Universal entities summary
-        if entities['universal']:
-            universal_summary = {}
-            for entity_type, data in entities['universal'].items():
-                universal_summary[entity_type] = data['count']
-            metadata_lines.append(f"universal_entities: {universal_summary}")
+        # Universal entities summary - SKIP to avoid duplication with classification step
+        # Universal entities are already captured in the classification step
+        # if entities['universal']:
+        #     universal_summary = {}
+        #     for entity_type, data in entities['universal'].items():
+        #         universal_summary[entity_type] = data['count']
+        #     metadata_lines.append(f"universal_entities: {universal_summary}")
         
         # Domain-specific entities summary
         if entities['domain_specific']:

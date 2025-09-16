@@ -207,17 +207,18 @@ class TargetedEnrichment:
                     )
                 }
         
-        # 2. Always extract universal entities (dates, money, etc.)
-        for entity_type, pattern in self.universal_patterns.items():
-            matches = pattern.findall(content)
-            if matches:
-                unique_matches = list(set(matches))[:30]  # Limit to 30
-                entities['universal'][entity_type] = {
-                    'count': len(matches),
-                    'unique_count': len(unique_matches),
-                    'examples': unique_matches[:10]
-                }
-                total_entity_count += len(matches)
+        # 2. Skip universal entities - already extracted in classification step
+        # Universal entities (dates, money, etc.) are handled in classification
+        # for entity_type, pattern in self.universal_patterns.items():
+        #     matches = pattern.findall(content)
+        #     if matches:
+        #         unique_matches = list(set(matches))[:30]  # Limit to 30
+        #         entities['universal'][entity_type] = {
+        #             'count': len(matches),
+        #             'unique_count': len(unique_matches),
+        #             'examples': unique_matches[:10]
+        #         }
+        #         total_entity_count += len(matches)
         
         # 3. Metadata
         processing_time = time.time() - start_time
