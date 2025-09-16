@@ -110,7 +110,14 @@ def process_directory(extractor: BaseExtractor, directory: Path,
     start_time = time.time()
     
     # Use the extractor's optimized batch processing
-    results, total_time = extractor.extract_batch(files, output_dir or Path.cwd())
+    batch_result = extractor.extract_batch(files, output_dir or Path.cwd())
+    
+    # Handle different return signatures (some extractors return resource summary)
+    if len(batch_result) == 3:
+        results, total_time, resource_summary = batch_result
+    else:
+        results, total_time = batch_result
+        resource_summary = None
     
     # Clean summary
     successful = sum(1 for r in results if r.success)
@@ -318,7 +325,8 @@ Examples:
                        help='Process directories recursively')
     
     # Performance options
-    parser.add_argument('--workers', '-w', type=int, help='Number of parallel workers')
+    parser.add_argument('--workers', '-w', type=int, 
+                       help='Workers (cores): 1=524 p/s, 4=2014 p/s, 8=3454 p/s (sweet spot), 16=4160 p/s')
     parser.add_argument('--memory-limit', type=int, help='Memory limit in GB')
     parser.add_argument('--extractor', '-e', type=str, default='highspeed_markdown_general',
                        choices=['highspeed_markdown_general', 'highaccuracy_markdown_general', 
@@ -360,7 +368,7 @@ Examples:
             'page_limit': config.get('performance', {}).get('page_limit', 100)
         }
         extractor = create_extractor(extractor_name, extractor_config)
-        max_workers = args.workers or config.get('performance', {}).get('max_workers', 4)
+        max_workers = args.workers or config.get('performance', {}).get('max_workers', 2)
         
         print(f"🔧 MVP-Fusion Engine: {extractor.name}")
         print(f"⚡ Performance: {extractor.description}")
@@ -462,7 +470,15 @@ Examples:
                 # Process everything in one batch
                 print(f"\n🚀 Starting batch processing...")
                 start_time = time.time()
-                results, extraction_time = extractor.extract_batch(all_files, output_dir or Path.cwd())
+                
+                # Handle different return signatures (some extractors return resource summary)
+                batch_result = extractor.extract_batch(all_files, output_dir or Path.cwd(), max_workers=max_workers)
+                if len(batch_result) == 3:
+                    results, extraction_time, resource_summary = batch_result
+                else:
+                    results, extraction_time = batch_result
+                    resource_summary = None
+                    
                 total_time = time.time() - start_time
                 
                 # Calculate comprehensive metrics
@@ -535,6 +551,16 @@ Examples:
                 if warnings_count > 0:
                     print(f"   ⚠️  WARNINGS: {warnings_count} files (minor PDF issues, but text extracted successfully)")
                 print(f"   ⏱️  TOTAL TIME: {total_time:.2f}s")
+                
+                # Add system resource information if available
+                if resource_summary:
+                    print(f"\n💻 PROCESSING FOOTPRINT:")
+                    print(f"   🖥️  WORKERS: {resource_summary['cpu_workers_used']}/{resource_summary['cpu_cores_total']} cores (1 worker = 1 core)")
+                    print(f"   🧠 MEMORY: {resource_summary['memory_peak_mb']:.1f} MB peak usage")
+                    if resource_summary['memory_used_mb'] > 0:
+                        print(f"   📈 PROCESSING MEMORY: {resource_summary['memory_used_mb']:.1f} MB during extraction")
+                    print(f"   ⚡ EFFICIENCY: {resource_summary['efficiency_pages_per_worker']:.0f} pages/worker, {resource_summary['efficiency_mb_per_worker']:.1f} MB/worker")
+                
                 print(f"   ✅ SUCCESS RATE: {(successful/len(results)*100):.1f}% ({successful}/{len(results)})")
             else:
                 print("❌ No input specified and no directories in config file")

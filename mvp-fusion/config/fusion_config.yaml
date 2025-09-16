@@ -15,7 +15,7 @@ performance:
   # Processing strategy
   enable_vectorization: true    # SIMD operations
   enable_parallel_processing: true
-  max_workers: 16              # All CPU cores
+  max_workers: 2               # Default 2 cores (1025 p/s, resource efficient)
   
   # Batch processing for efficiency
   batch_size: 32               # Process 32 documents simultaneously

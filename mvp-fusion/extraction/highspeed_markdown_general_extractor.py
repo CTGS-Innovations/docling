@@ -8,6 +8,7 @@ Optimized for 2000+ pages/second throughput with format-specific optimization.
 import os
 import sys
 import time
+import tracemalloc
 from pathlib import Path
 from concurrent.futures import ProcessPoolExecutor
 import multiprocessing as mp
@@ -24,6 +25,56 @@ except ImportError:
     raise ImportError("PyMuPDF (fitz) is required for ProductionExtractor")
 
 from .base_extractor import BaseExtractor, ExtractionResult
+
+
+class LightweightResourceMonitor:
+    """Lightweight resource monitoring focused on processing footprint only"""
+    
+    def __init__(self):
+        self.start_memory = None
+        self.peak_memory = 0
+        self.cpu_count = mp.cpu_count()
+        
+    def start_monitoring(self):
+        """Start lightweight memory tracking"""
+        tracemalloc.start()
+        self.start_memory = tracemalloc.get_traced_memory()[0]
+        self.peak_memory = self.start_memory
+        
+    def update_peak_memory(self):
+        """Update peak memory usage using tracemalloc"""
+        if tracemalloc.is_tracing():
+            current, peak = tracemalloc.get_traced_memory()
+            if peak > self.peak_memory:
+                self.peak_memory = peak
+            
+    def get_resource_summary(self, max_workers: int) -> Dict[str, Any]:
+        """Get lightweight resource usage summary"""
+        if self.start_memory is None:
+            return {}
+            
+        # Get final memory usage
+        if tracemalloc.is_tracing():
+            current_memory, peak_memory = tracemalloc.get_traced_memory()
+            tracemalloc.stop()
+        else:
+            current_memory = self.start_memory
+            peak_memory = self.peak_memory
+            
+        memory_used_mb = (peak_memory - self.start_memory) / 1024 / 1024
+        peak_memory_mb = peak_memory / 1024 / 1024
+        
+        # Simple worker count (1 worker = 1 core assumption)
+        actual_cores_used = max_workers
+        
+        return {
+            'cpu_cores_total': self.cpu_count,
+            'cpu_workers_used': actual_cores_used,
+            'memory_peak_mb': peak_memory_mb,
+            'memory_used_mb': memory_used_mb,
+            'efficiency_pages_per_worker': 0,  # Will be calculated later
+            'efficiency_mb_per_worker': 0      # Will be calculated later
+        }
 
 
 def _extract_pdf_to_markdown(pdf_path_and_output_dir):
@@ -186,7 +237,7 @@ class HighSpeed_Markdown_General_Extractor(BaseExtractor):
     
     def extract_batch(self, file_paths: List[Union[str, Path]], 
                      output_dir: Union[str, Path], 
-                     max_workers: int = None, **kwargs) -> tuple[List[ExtractionResult], float]:
+                     max_workers: int = None, **kwargs) -> tuple[List[ExtractionResult], float, Dict[str, Any]]:
         """
         Process multiple PDFs using ProcessPoolExecutor for maximum throughput.
         
@@ -194,9 +245,16 @@ class HighSpeed_Markdown_General_Extractor(BaseExtractor):
         - Process-level parallelism for CPU-bound extraction
         - Minimal memory overhead per process
         - Optimized PyMuPDF usage patterns
+        
+        Returns:
+            Tuple of (results_list, total_processing_time, resource_summary)
         """
         if max_workers is None:
             max_workers = mp.cpu_count()
+        
+        # Initialize lightweight resource monitoring
+        resource_monitor = LightweightResourceMonitor()
+        resource_monitor.start_monitoring()
         
         output_dir = Path(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -205,14 +263,14 @@ class HighSpeed_Markdown_General_Extractor(BaseExtractor):
         valid_files = [Path(fp) for fp in file_paths if self.can_process(fp)]
         
         if not valid_files:
-            return [], 0.0
+            return [], 0.0, {}
         
         # Prepare job arguments for multiprocessing
         job_args = [(pdf_path, output_dir) for pdf_path in valid_files]
         
         start_time = time.perf_counter()
         
-        # Execute with ProcessPoolExecutor for maximum speed with progress tracking
+        # Execute with ProcessPoolExecutor for optimal parallel processing
         with ProcessPoolExecutor(max_workers=max_workers) as executor:
             futures = [executor.submit(_extract_pdf_to_markdown, args) for args in job_args]
             result_dicts = []
@@ -220,6 +278,9 @@ class HighSpeed_Markdown_General_Extractor(BaseExtractor):
             # Show progress every 100 files for large batches
             for i, future in enumerate(futures):
                 result_dicts.append(future.result())
+                # Update peak memory usage periodically
+                if i % 10 == 0:
+                    resource_monitor.update_peak_memory()
                 if len(valid_files) > 100 and (i + 1) % 100 == 0:
                     print(f"   📊 Progress: {i + 1}/{len(valid_files)} files processed")
         
@@ -243,7 +304,19 @@ class HighSpeed_Markdown_General_Extractor(BaseExtractor):
         # Update performance metrics
         self.update_metrics(results, total_time)
         
-        return results, total_time
+        # Get system resource summary
+        resource_summary = resource_monitor.get_resource_summary(max_workers)
+        
+        # Calculate efficiency metrics
+        successful_results = [r for r in results if r.success]
+        total_pages = sum(r.pages for r in successful_results)
+        total_input_mb = sum(Path(r.file_path).stat().st_size for r in successful_results) / 1024 / 1024
+        
+        if resource_summary and total_pages > 0:
+            resource_summary['efficiency_pages_per_worker'] = total_pages / resource_summary['cpu_workers_used']
+            resource_summary['efficiency_mb_per_worker'] = total_input_mb / resource_summary['cpu_workers_used']
+        
+        return results, total_time, resource_summary
     
     def get_supported_formats(self) -> List[str]:
         """Return supported input formats"""
@@ -275,7 +348,7 @@ class HighSpeed_Markdown_General_Extractor(BaseExtractor):
         self.reset_metrics()
         
         # Run extraction
-        results, total_time = self.extract_batch(test_files, output_dir)
+        results, total_time, resource_summary = self.extract_batch(test_files, output_dir)
         
         # Calculate detailed metrics
         successful = [r for r in results if r.success]
