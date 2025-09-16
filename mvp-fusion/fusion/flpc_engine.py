@@ -248,15 +248,30 @@ class FLPCEngine:
         """Extract entities using a specific FLPC pattern."""
         compiled_pattern = pattern_info['compiled']
         
-        # Use finditer for match objects, then extract the text
-        matches = []
-        for match in compiled_pattern.finditer(text):
-            matched_text = match.group(0)
-            matches.append(matched_text)
-        
-        # Remove duplicates while preserving order
-        unique_matches = list(dict.fromkeys(matches))
-        return unique_matches
+        try:
+            # FLPC uses different API than Python re
+            if hasattr(compiled_pattern, 'find_matches'):
+                # FLPC API
+                match_results = compiled_pattern.find_matches(text)
+                matches = [text[match.start:match.end] for match in match_results]
+            elif hasattr(compiled_pattern, 'findall'):
+                # Standard Python re API
+                matches = compiled_pattern.findall(text)
+            else:
+                # Fallback - assume it's a standard Python pattern object
+                matches = compiled_pattern.findall(text)
+            
+            # Remove duplicates while preserving order
+            unique_matches = list(dict.fromkeys(matches)) if matches else []
+            return unique_matches
+            
+        except Exception as e:
+            self.logger.warning(f"FLPC pattern '{pattern_name}' execution failed: {e}")
+            # Fallback to Python re
+            import re
+            python_pattern = re.compile(pattern_info.get('pattern', ''), re.IGNORECASE)
+            matches = python_pattern.findall(text)
+            return list(dict.fromkeys(matches)) if matches else []
     
     def _update_metrics(self, chars_processed: int, processing_time: float, 
                        patterns_executed: int, entities_extracted: int):

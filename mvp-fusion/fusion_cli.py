@@ -244,9 +244,9 @@ def main():
 Examples:
   python fusion_cli.py --file document.pdf
   python fusion_cli.py --directory ~/documents/ --extensions .pdf .docx
-  python fusion_cli.py --config config/fusion_config.yaml --stages all
-  python fusion_cli.py --config config/fusion_config.yaml --convert-only
-  python fusion_cli.py --config config/fusion_config.yaml --stages convert classify
+  python fusion_cli.py --config-directories --config config/fusion_config.yaml --stages all
+  python fusion_cli.py --config-directories --config config/fusion_config.yaml --convert-only
+  python fusion_cli.py --config-directories --config config/fusion_config.yaml --stages convert classify
   python fusion_cli.py --performance-test --verbose
         """
     )
@@ -255,6 +255,8 @@ Examples:
     input_group = parser.add_mutually_exclusive_group(required=True)
     input_group.add_argument('--file', '-f', type=str, help='Process single file')
     input_group.add_argument('--directory', '-d', type=str, help='Process directory')
+    input_group.add_argument('--config-directories', action='store_true',
+                           help='Process all directories specified in config file')
     input_group.add_argument('--performance-test', '-t', action='store_true', 
                            help='Run performance benchmark')
     
@@ -339,6 +341,31 @@ Examples:
                 sys.exit(1)
             
             results = process_directory(pipeline, directory, args.extensions)
+            
+        elif args.config_directories:
+            # Process all directories from config
+            config_dirs = pipeline.config.get('inputs', {}).get('directories', [])
+            if not config_dirs:
+                print("❌ No directories specified in config file")
+                sys.exit(1)
+            
+            print(f"🗂️  Processing {len(config_dirs)} directories from config:")
+            for config_dir in config_dirs:
+                print(f"   - {config_dir}")
+            
+            all_results = []
+            for config_dir in config_dirs:
+                directory = Path(config_dir).expanduser()
+                if not directory.exists():
+                    print(f"⚠️  Directory not found: {directory} (skipping)")
+                    continue
+                    
+                print(f"\n📂 Processing directory: {directory}")
+                extensions = pipeline.config.get('files', {}).get('supported_extensions', args.extensions)
+                results = process_directory(pipeline, directory, extensions)
+                all_results.extend(results if isinstance(results, list) else [results])
+            
+            print(f"\n✅ Processed {len(all_results)} total files across all directories")
             
         elif args.performance_test:
             # Run performance test

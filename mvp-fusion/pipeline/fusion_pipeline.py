@@ -20,7 +20,15 @@ Performance Optimizations:
 """
 
 import time
+import threading
+from concurrent.futures import ThreadPoolExecutor
 import json
+try:
+    import fitz  # PyMuPDF for PDF processing
+    PYMUPDF_AVAILABLE = True
+except ImportError:
+    PYMUPDF_AVAILABLE = False
+    # Note: PyMuPDF is required for PDF processing
 import logging
 import yaml
 from pathlib import Path
@@ -113,15 +121,10 @@ class FusionPipeline:
         }
     
     def _setup_output_directories(self):
-        """Create necessary output directories."""
+        """Create output directory (no subfolders - files side-by-side)."""
         self.output_directory.mkdir(parents=True, exist_ok=True)
-        
-        # Create subdirectories
-        (self.output_directory / "markdown").mkdir(exist_ok=True)
-        (self.output_directory / "semantic").mkdir(exist_ok=True)
-        (self.output_directory / "stats").mkdir(exist_ok=True)
-        
-        self.logger.info(f"Output directories created at: {self.output_directory}")
+        # No subfolders - files will be placed directly in output directory
+        self.logger.info(f"Output directory created at: {self.output_directory}")
     
     def process_document(self, file_path: Union[str, Path], 
                         content: Optional[str] = None) -> Dict[str, Any]:
@@ -143,7 +146,7 @@ class FusionPipeline:
             if content is None:
                 if not file_path.exists():
                     raise FileNotFoundError(f"File not found: {file_path}")
-                content = file_path.read_text(encoding='utf-8', errors='ignore')
+                content = self._convert_file_to_text(file_path)
             
             # Step 1: Classification and Entity Extraction (FUSION ENGINE)
             classification_start = time.time()
@@ -557,21 +560,249 @@ class FusionPipeline:
     
     def _save_outputs(self, file_path: Path, enhanced_markdown: str, 
                      semantic_json: Dict[str, Any]) -> Dict[str, str]:
-        """Save outputs in MVP-Hyper compatible format."""
+        """Save outputs side-by-side (no subfolders)."""
         output_paths = {}
         
-        # Save enhanced markdown
-        markdown_path = self.output_directory / "markdown" / f"{file_path.stem}.md"
+        # Save enhanced markdown (side-by-side with source)
+        markdown_path = self.output_directory / f"{file_path.stem}.md"
         markdown_path.write_text(enhanced_markdown, encoding='utf-8')
         output_paths['markdown'] = str(markdown_path)
         
-        # Save semantic JSON
-        semantic_path = self.output_directory / "semantic" / f"{file_path.stem}.semantic.json"
+        # Save semantic JSON (side-by-side with markdown)
+        semantic_path = self.output_directory / f"{file_path.stem}.semantic.json"
         with open(semantic_path, 'w', encoding='utf-8') as f:
             json.dump(semantic_json, f, indent=2, ensure_ascii=False)
         output_paths['semantic'] = str(semantic_path)
         
         return output_paths
+    
+    def _convert_file_to_text(self, file_path: Path) -> str:
+        """Convert various file formats to text content."""
+        file_extension = file_path.suffix.lower()
+        
+        if file_extension == '.pdf':
+            # Use proven MVP-Hyper PDF extraction method
+            if not PYMUPDF_AVAILABLE:
+                self.logger.warning(f"PyMuPDF not available for {file_path.name}")
+                return f"[PDF - {file_path.name}] - PyMuPDF not available"
+            
+            try:
+                doc = fitz.open(str(file_path))
+                
+                try:
+                    page_count = len(doc)
+                    
+                    if page_count == 0:
+                        doc.close()
+                        return f"[PDF - {file_path.name}] - PDF has 0 pages"
+                    
+                    # Use parallel extraction for better performance
+                    if page_count > 4:  # Use parallel for larger documents
+                        text = self._extract_pdf_parallel(doc, page_count)
+                    else:
+                        # Sequential for small documents (less overhead)
+                        text = self._extract_pdf_sequential(doc, page_count)
+                    
+                    doc.close()
+                    
+                    if not text.strip():
+                        # Try basic extraction fallback like MVP-Hyper
+                        self.logger.info(f"No text with advanced method, trying basic extraction for {file_path.name}")
+                        text = self._extract_pdf_basic(doc, page_count)
+                        if not text.strip():
+                            return f"[PDF - {file_path.name}] - No extractable text content"
+                        
+                    return text.strip()
+                    
+                except Exception as e:
+                    doc.close()
+                    self.logger.error(f"Error processing PDF {file_path.name}: {e}")
+                    return f"[PDF - {file_path.name}] - Processing error: {str(e)}"
+                    
+            except Exception as e:
+                self.logger.error(f"Error opening PDF {file_path.name}: {e}")
+                return f"[PDF - {file_path.name}] - Cannot open file: {str(e)}"
+                    
+        elif file_extension in ['.docx', '.doc']:
+            # Microsoft Word documents (using MVP-Hyper proven method)
+            try:
+                import docx
+                doc = docx.Document(file_path)
+                
+                # Extract text from paragraphs and tables
+                text_parts = []
+                
+                # Extract paragraph text
+                for paragraph in doc.paragraphs:
+                    if paragraph.text.strip():
+                        text_parts.append(paragraph.text)
+                
+                # Extract table text
+                for table in doc.tables:
+                    for row in table.rows:
+                        row_text = []
+                        for cell in row.cells:
+                            if cell.text.strip():
+                                row_text.append(cell.text.strip())
+                        if row_text:
+                            text_parts.append(" | ".join(row_text))
+                
+                text = "\n".join(text_parts)
+                return text if text.strip() else f"[DOCX - {file_path.name}] - No extractable text content"
+                
+            except ImportError:
+                self.logger.warning("python-docx not available for Word document processing")
+                return f"[DOCX - {file_path.name}] - python-docx not available"
+            except Exception as e:
+                self.logger.error(f"Error processing DOCX {file_path.name}: {e}")
+                return f"[DOCX - {file_path.name}] - Processing error: {str(e)}"
+                
+        elif file_extension in ['.txt', '.md']:
+            # Plain text files - optimized reading
+            try:
+                # Use memory mapping for large files (faster than read_text)
+                if file_path.stat().st_size > 1024 * 1024:  # 1MB+
+                    import mmap
+                    with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                        with mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as mm:
+                            return mm.read().decode('utf-8', errors='ignore')
+                else:
+                    return file_path.read_text(encoding='utf-8', errors='ignore')
+            except Exception as e:
+                self.logger.warning(f"Optimized text reading failed for {file_path.name}, using fallback: {e}")
+                return file_path.read_text(encoding='utf-8', errors='ignore')
+            
+        elif file_extension == '.html':
+            # HTML files - optimized parsing
+            try:
+                from bs4 import BeautifulSoup
+                html_content = file_path.read_text(encoding='utf-8', errors='ignore')
+                # Use lxml parser if available (faster than html.parser)
+                try:
+                    soup = BeautifulSoup(html_content, 'lxml')
+                except:
+                    soup = BeautifulSoup(html_content, 'html.parser')
+                
+                # Extract text with better formatting preservation
+                text = soup.get_text(separator='\n', strip=True)
+                return text
+            except ImportError:
+                self.logger.warning("BeautifulSoup not available for HTML processing")
+                # Fallback: basic HTML tag removal
+                import re
+                html_content = file_path.read_text(encoding='utf-8', errors='ignore')
+                # Quick regex-based HTML tag removal (faster than BeautifulSoup)
+                text = re.sub(r'<[^>]+>', '', html_content)
+                text = re.sub(r'\s+', ' ', text)  # Normalize whitespace
+                return text.strip()
+                
+        else:
+            # Unknown format - try as text
+            try:
+                return file_path.read_text(encoding='utf-8', errors='ignore')
+            except UnicodeDecodeError:
+                self.logger.error(f"Unable to read file as text: {file_path}")
+                return f"[BINARY CONTENT - {file_path.name}] - Unable to extract text"
+    
+    def _extract_pdf_parallel(self, doc, page_count: int) -> str:
+        """Extract PDF text in parallel for maximum speed."""
+        from concurrent.futures import ThreadPoolExecutor
+        import threading
+        
+        def extract_page_chunk(start: int, end: int) -> str:
+            """Extract a chunk of pages using MVP-Hyper proven method."""
+            texts = []
+            for page_num in range(start, min(end, page_count)):
+                try:
+                    # MVP-Hyper method: direct indexing with TEXT_PRESERVE_WHITESPACE
+                    page = doc[page_num]
+                    page_text = page.get_text("text", flags=fitz.TEXT_PRESERVE_WHITESPACE)
+                    texts.append(page_text or "")
+                except Exception as e:
+                    # MVP-Hyper style error handling  
+                    texts.append(f"[Page {page_num+1} extraction failed: {str(e)[:50]}]")
+                    self.logger.warning(f"Error extracting page {page_num+1}: {e}")
+            return '\n'.join(texts)
+        
+        # Split pages into chunks for parallel processing
+        chunk_size = max(1, page_count // 4)  # 4 threads optimal for most systems
+        chunks = [(i, i + chunk_size) for i in range(0, page_count, chunk_size)]
+        
+        # Process chunks in parallel
+        text_parts = []
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            futures = [executor.submit(extract_page_chunk, start, end) for start, end in chunks]
+            for future in futures:
+                try:
+                    chunk_result = future.result(timeout=30)  # 30 second timeout per chunk
+                    if chunk_result.strip():
+                        text_parts.append(chunk_result)
+                except Exception as e:
+                    self.logger.warning(f"Parallel extraction chunk failed: {e}")
+                    continue
+        
+        return "\n".join(text_parts)
+    
+    def _extract_pdf_sequential(self, doc, page_count: int) -> str:
+        """Extract PDF text sequentially using proven MVP-Hyper method."""
+        texts = []
+        for page_num in range(page_count):
+            try:
+                page = doc[page_num]  # MVP-Hyper method: direct indexing
+                # Use TEXT_PRESERVE_WHITESPACE flag like MVP-Hyper
+                page_text = page.get_text("text", flags=fitz.TEXT_PRESERVE_WHITESPACE)
+                texts.append(page_text or "")
+            except Exception as e:
+                # MVP-Hyper style error handling
+                texts.append(f"[Page {page_num+1} extraction failed: {str(e)[:50]}]")
+                self.logger.warning(f"Error extracting page {page_num+1}: {e}")
+        return '\n'.join(texts)
+    
+    def _extract_pdf_basic(self, doc, page_count: int) -> str:
+        """Most basic PDF text extraction (MVP-Hyper fallback method)."""
+        texts = []
+        # Limit to first 100 pages for speed like MVP-Hyper
+        pages_to_process = min(page_count, 100)
+        for page_num in range(pages_to_process):
+            try:
+                page = doc[page_num]
+                text = page.get_text()  # Simplest method
+                texts.append(text or "")
+            except:
+                texts.append(f"[Page {page_num+1} failed]")
+        return '\n'.join(texts)
+    
+    def _convert_file_to_text_cached(self, file_path: Path) -> str:
+        """Convert file to text with high-performance caching."""
+        # Generate cache key based on file path and modification time
+        try:
+            stat = file_path.stat()
+            cache_key = f"{file_path}_{stat.st_mtime}_{stat.st_size}"
+            
+            # Thread-safe cache check
+            with self.cache_lock:
+                if cache_key in self.file_cache:
+                    self.logger.debug(f"Cache hit for {file_path.name}")
+                    return self.file_cache[cache_key]
+            
+            # Convert file (cache miss)
+            content = self._convert_file_to_text(file_path)
+            
+            # Store in cache (thread-safe)
+            with self.cache_lock:
+                self.file_cache[cache_key] = content
+                # Limit cache size to prevent memory issues (LRU-like behavior)
+                if len(self.file_cache) > 1000:
+                    # Remove oldest 100 entries
+                    oldest_keys = list(self.file_cache.keys())[:100]
+                    for old_key in oldest_keys:
+                        del self.file_cache[old_key]
+            
+            return content
+            
+        except Exception as e:
+            self.logger.warning(f"Caching failed for {file_path.name}: {e}")
+            return self._convert_file_to_text(file_path)
     
     def _update_stats(self, docs: int, time_taken: float, pages: int, errors: int):
         """Update processing statistics."""
