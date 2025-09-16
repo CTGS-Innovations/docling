@@ -293,15 +293,16 @@ class HighSpeed_Markdown_General_Extractor(BaseExtractor):
         results = []
         for rd in result_dicts:
             # Extract standard parameters and put the rest in kwargs
+            # Note: to_dict() maps file_path -> 'file' and output_path -> 'output'
             standard_params = {
                 'success': rd.get('success', False),
-                'file_path': rd.get('file_path', ''),
+                'file_path': rd.get('file_path', rd.get('file', '')),  # Check both keys
                 'pages': rd.get('pages', 0),
-                'output_path': rd.get('output_path'),
+                'output_path': rd.get('output_path', rd.get('output')),  # Check both keys
                 'error': rd.get('error')
             }
             # Put any extra fields in kwargs
-            kwargs = {k: v for k, v in rd.items() if k not in standard_params}
+            kwargs = {k: v for k, v in rd.items() if k not in standard_params and k not in ['file', 'output']}
             results.append(ExtractionResult(**standard_params, **kwargs))
         
         # Update performance metrics

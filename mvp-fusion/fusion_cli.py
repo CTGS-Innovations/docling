@@ -472,8 +472,11 @@ Examples:
                 print(f"\n🚀 Starting batch processing...")
                 start_time = time.time()
                 
-                # Handle different return signatures (some extractors return resource summary)
-                batch_result = extractor.extract_batch(all_files, output_dir or Path.cwd(), max_workers=max_workers)
+                # Use pipeline for stage-based processing
+                from pipeline.fusion_pipeline import FusionPipeline
+                pipeline = FusionPipeline(config)
+                
+                batch_result = pipeline.process_files(extractor, all_files, output_dir or Path.cwd(), max_workers=max_workers)
                 if len(batch_result) == 3:
                     results, extraction_time, resource_summary = batch_result
                 else:
@@ -543,7 +546,8 @@ Examples:
                 print(f"   📊 INPUT: {input_mb:.0f} MB across {len(results)} files ({total_pages:,} pages)")
                 print(f"   📊 OUTPUT: {output_mb:.1f} MB in {output_file_count} markdown files")
                 if output_mb > 0:
-                    print(f"   🗜️  COMPRESSION: {compression_ratio:.1f}x reduction (eliminated formatting, images, bloat)")
+                    compression_percent = ((input_mb - output_mb) / input_mb) * 100
+                    print(f"   🗜️  COMPRESSION: {compression_percent:.1f}% smaller (eliminated formatting, images, bloat)")
                 else:
                     print(f"   🗜️  COMPRESSION: Unable to calculate (output scanning issue)")
                 print(f"   📁 RESULTS: {successful} successful")
