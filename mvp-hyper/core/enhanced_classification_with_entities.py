@@ -203,7 +203,78 @@ class EnhancedClassifierWithEntities:
     
     def classify_and_extract(self, content: str, filename: str = "") -> Dict:
         """
-        Single pass classification + universal entity extraction.
+        STEP 1: Re-enable universal entity extraction only
+        """
+        start_time = time.time()
+        
+        # Initialize results
+        universal_entities = {}
+        
+        # 1. Extract universal entities (ENABLED)
+        total_universal_entities = 0
+        patterns_checked = 0
+        
+        print(f"      DEBUG: Starting entity extraction with {len(self.universal_patterns)} patterns for {filename}")
+        
+        for entity_type, pattern in self.universal_patterns.items():
+            patterns_checked += 1
+            matches = pattern.findall(content)
+            if matches:
+                unique_matches = list(set(matches))
+                universal_entities[entity_type] = {
+                    'count': len(matches),
+                    'unique': len(unique_matches),
+                    'examples': unique_matches[:5]  # Top 5 examples
+                }
+                total_universal_entities += len(matches)
+                print(f"      DEBUG: Found {len(matches)} {entity_type} entities: {unique_matches[:3]}")
+                
+                # Special handling for money to get total value
+                if entity_type == 'MONEY':
+                    total_value = self._calculate_money_total(unique_matches)
+                    if total_value > 0:
+                        universal_entities[entity_type]['total_value'] = f"${total_value:,.2f}"
+        
+        print(f"      DEBUG: Checked {patterns_checked} patterns, found {total_universal_entities} total entities")
+        
+        # 2. Generate insights based on entities
+        insights = {
+            'has_financial_data': 'MONEY' in universal_entities,
+            'has_dates': 'DATE' in universal_entities,
+            'has_regulations': 'REGULATION' in universal_entities,
+            'has_contact_info': 'EMAIL' in universal_entities or 'PHONE' in universal_entities,
+            'has_metrics': 'PERCENT' in universal_entities or 'MEASUREMENT' in universal_entities,
+            'entity_density': total_universal_entities / (len(content.split()) or 1)  # Entities per word
+        }
+        
+        processing_time = time.time() - start_time
+        
+        return {
+            # Minimal classification results (still disabled)
+            'document_types': ['general'],
+            'primary_domain': 'general',
+            'classification_confidence': 0.5,
+            'domain_scores': {'general': 1},
+            'domain_percentages': {'general': '100.0%'},
+            
+            # Universal entities (ENABLED!)
+            'universal_entities': universal_entities,
+            'total_universal_entities': total_universal_entities,
+            
+            # Insights based on entities
+            'insights': insights,
+            
+            # Metadata
+            'processing_time_ms': round(processing_time * 1000, 2),
+            'total_matches': 1,
+            'filename': filename,
+            'method': 'entities_only_test',
+            'enhanced_mode': True
+        }
+
+    def classify_and_extract_ORIGINAL_BACKUP(self, content: str, filename: str = "") -> Dict:
+        """
+        ORIGINAL VERSION - Single pass classification + universal entity extraction.
         
         This is Layer 1 doing double duty:
         1. Classify the document into domains

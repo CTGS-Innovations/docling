@@ -207,6 +207,10 @@ debug:
   progress_interval: 10
   # Show detailed timing for files slower than this
   timing_threshold: 1.0
+  # Show detailed per-file timing (can slow down pipeline if processing many files)
+  detailed_timing: true
+  # PERFORMANCE TEST: Use JSON sidecar files instead of YAML updates to avoid parsing bottleneck
+  use_json_sidecars: true
   # Stop processing after N files (for testing, 0 = process all)
   max_files_to_process: 5
   # Show enhancement details

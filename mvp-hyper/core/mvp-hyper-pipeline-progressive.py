@@ -10,12 +10,32 @@ Steps:
 3. ENRICHMENT: Add domain-specific tags and entities  
 4. EXTRACTION: Generate semantic facts as JSON
 
+REQUIRED DEPENDENCIES:
+=====================
+Core Files (same directory):
+- enhanced_classification_with_entities.py
+- enhanced_enrichment_targeted.py  
+- yaml_metadata_manager.py
+
+Configuration Files (.config/ subdirectory):
+- mvp-hyper-pipeline-progressive-config.yaml (main config)
+- domain-dictionaries-enhanced.yaml (classification dictionaries)
+- acronym-patterns.yaml (classification patterns)
+
+External Dependencies:
+- ahocorasick (pip install ahocorasick)
+- yaml (pip install pyyaml)
+- pathlib, re, json, datetime (standard library)
+
+Optional External Tools:
+- ../mvp-hyper-core (for PDF conversion step)
+
 Usage:
-  python mvp-hyper-pipeline-clean.py <input> --step conversion
-  python mvp-hyper-pipeline-clean.py <input> --step classification
-  python mvp-hyper-pipeline-clean.py <input> --step enrichment
-  python mvp-hyper-pipeline-clean.py <input> --step extraction
-  python mvp-hyper-pipeline-clean.py <input> --full  # Run all steps
+  python mvp-hyper-pipeline-progressive.py <input> --step conversion
+  python mvp-hyper-pipeline-progressive.py <input> --step classification
+  python mvp-hyper-pipeline-progressive.py <input> --step enrichment
+  python mvp-hyper-pipeline-progressive.py <input> --step extraction
+  python mvp-hyper-pipeline-progressive.py <input> --full  # Run all steps
 """
 
 import argparse
@@ -33,6 +53,60 @@ from datetime import datetime
 
 # Add parent directory to Python path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+def check_dependencies():
+    """Check and report status of all dependencies."""
+    print("🔍 Checking dependencies...")
+    
+    # Check core Python files
+    core_files = [
+        'enhanced_classification_with_entities.py',
+        'enhanced_enrichment_targeted.py', 
+        'yaml_metadata_manager.py'
+    ]
+    
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    missing_files = []
+    
+    for file in core_files:
+        if not Path(current_dir, file).exists():
+            missing_files.append(file)
+        else:
+            print(f"  ✅ {file}")
+    
+    # Check config files
+    config_dir = Path(current_dir, '.config')
+    config_files = [
+        'mvp-hyper-pipeline-progressive-config.yaml',
+        'domain-dictionaries-enhanced.yaml',
+        'acronym-patterns.yaml'
+    ]
+    
+    for file in config_files:
+        if not Path(config_dir, file).exists():
+            missing_files.append(f".config/{file}")
+        else:
+            print(f"  ✅ .config/{file}")
+    
+    # Check external dependencies
+    try:
+        import ahocorasick
+        print("  ✅ ahocorasick")
+    except ImportError:
+        print("  ❌ ahocorasick (pip install ahocorasick)")
+        
+    try:
+        import yaml
+        print("  ✅ yaml")
+    except ImportError:
+        print("  ❌ yaml (pip install pyyaml)")
+    
+    if missing_files:
+        print(f"\n❌ Missing dependencies: {', '.join(missing_files)}")
+        return False
+    else:
+        print("\n✅ All core dependencies found!")
+        return True
 
 # Try to import enhanced modules (AC + Entity extraction)
 try:
@@ -80,10 +154,21 @@ class MVPHyperPipeline:
             self.enrichment = None
             self.classification_cache = {}
         
-        # Load formula conversion settings
-        self.convert_formulas = self.config.get('processing', {}).get('convert_formulas', True)
-        self.remove_latexit = self.config.get('processing', {}).get('remove_latexit', True)
-        self.formula_output_format = self.config.get('processing', {}).get('formula_output_format', 'both')
+        # Load formula conversion settings - COMMENTED OUT FOR PERFORMANCE
+        # self.convert_formulas = self.config.get('processing', {}).get('convert_formulas', True)
+        # self.remove_latexit = self.config.get('processing', {}).get('remove_latexit', True)
+        # self.formula_output_format = self.config.get('processing', {}).get('formula_output_format', 'both')
+        
+        # PERFORMANCE: Disable all formula processing
+        self.convert_formulas = False
+        self.remove_latexit = False
+        self.formula_output_format = 'disabled'
+        
+        # Load debug timing setting
+        self.detailed_timing = self.config.get('debug', {}).get('detailed_timing', True)
+        
+        # PERFORMANCE TEST: Use JSON sidecar files instead of YAML updates
+        self.use_json_sidecars = self.config.get('debug', {}).get('use_json_sidecars', False)
         
         # Initialize metadata manager for structured YAML handling
         self.metadata_manager = YAMLMetadataManager()
@@ -105,60 +190,66 @@ class MVPHyperPipeline:
         has_urls = bool(re.search(r'https?://|www\.', content))
         has_emails = bool(re.search(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', content))
         
-        # Enhanced formula detection and analysis
-        formula_indicators = [
-            r'<latexit',  # LaTeX blocks
-            r'\\begin\{|\\end\{',  # LaTeX environments
-            r'\\frac|\\sum|\\int|\\sqrt',  # Math functions
-            r'\\alpha|\\beta|\\gamma|\\theta|\\sigma|\\mu|\\lambda|\\pi|\\epsilon|\\delta',  # Greek letters
-            r'\\nabla|\\partial|\\infty',  # Mathematical symbols
-            r'\\log|\\exp|\\sin|\\cos|\\tan',  # Functions
-            r'\\cdot|\\times|\\div|\\pm|\\le|\\ge|\\ne|\\approx|\\equiv',  # Operators
-            r'\\propto|\\in|\\subset|\\cup|\\cap|\\forall|\\exists',  # Set theory
-            r'\\rightarrow|\\leftarrow|\\Rightarrow|\\Leftarrow',  # Arrows
-            r'\$\$|\$[^$]+\$',  # Inline/display math
-            r'\\\\[a-zA-Z]+',  # LaTeX commands
-            r'Equation \d+|Formula \d+|Figure \d+.*equation',  # References
-            r'x_\d+|x_\{|p_θ|p_\\theta|q\(.*\)|DKL\(',  # Common math notation
-            r'_{.*}|\^{.*}|mathrm|mathcal',  # Subscripts/superscripts
-            r'diffusion.*model|probabilistic.*model'  # Domain-specific
-        ]
-        
-        # Count different types of formula indicators
+        # PERFORMANCE: Formula detection disabled
+        has_formulas = False
         formula_counts = {}
         total_formula_matches = 0
-        
-        for i, pattern in enumerate(formula_indicators):
-            matches = re.findall(pattern, content, re.IGNORECASE)
-            if matches:
-                formula_counts[f'pattern_{i+1}'] = len(matches)
-                total_formula_matches += len(matches)
-        
-        has_formulas = total_formula_matches > 0
-        
-        # Quick LaTeX conversion analysis (since it's so fast!)
         latex_expressions = []
-        if has_formulas:
-            # Extract mathematical expressions for potential conversion
-            math_notation_patterns = [
-                (r'x_([T0-9t\-]+)', r'x_{\1}'),  # Variable subscripts
-                (r'p_θ\(([^)]+)\)', r'p_\\theta(\1)'),  # Theta notation
-                (r'q\(([^)]+)\)', r'q(\1)'),  # Q functions
-                (r'DKL\(([^)]+)\)', r'D_{\\text{KL}}(\1)'),  # KL divergence
-                (r'(?<![\\$])α', r'\\alpha'),  # Greek alpha
-                (r'(?<![\\$])β', r'\\beta'),  # Greek beta
-                (r'(?<![\\$])θ', r'\\theta'),  # Greek theta
-            ]
-            
-            # Count convertible expressions
-            convertible_count = 0
-            for pattern, replacement in math_notation_patterns:
-                matches = re.findall(pattern, content)
-                if matches:
-                    convertible_count += len(matches)
-                    latex_expressions.extend(matches[:3])  # Sample first 3
-            
-            formula_counts['convertible_expressions'] = convertible_count
+        
+        # # Enhanced formula detection and analysis - COMMENTED OUT FOR PERFORMANCE
+        # formula_indicators = [
+        #     r'<latexit',  # LaTeX blocks
+        #     r'\\begin\{|\\end\{',  # LaTeX environments
+        #     r'\\frac|\\sum|\\int|\\sqrt',  # Math functions
+        #     r'\\alpha|\\beta|\\gamma|\\theta|\\sigma|\\mu|\\lambda|\\pi|\\epsilon|\\delta',  # Greek letters
+        #     r'\\nabla|\\partial|\\infty',  # Mathematical symbols
+        #     r'\\log|\\exp|\\sin|\\cos|\\tan',  # Functions
+        #     r'\\cdot|\\times|\\div|\\pm|\\le|\\ge|\\ne|\\approx|\\equiv',  # Operators
+        #     r'\\propto|\\in|\\subset|\\cup|\\cap|\\forall|\\exists',  # Set theory
+        #     r'\\rightarrow|\\leftarrow|\\Rightarrow|\\Leftarrow',  # Arrows
+        #     r'\$\$|\$[^$]+\$',  # Inline/display math
+        #     r'\\\\[a-zA-Z]+',  # LaTeX commands
+        #     r'Equation \d+|Formula \d+|Figure \d+.*equation',  # References
+        #     r'x_\d+|x_\{|p_θ|p_\\theta|q\(.*\)|DKL\(',  # Common math notation
+        #     r'_{.*}|\^{.*}|mathrm|mathcal',  # Subscripts/superscripts
+        #     r'diffusion.*model|probabilistic.*model'  # Domain-specific
+        # ]
+        # 
+        # # Count different types of formula indicators
+        # formula_counts = {}
+        # total_formula_matches = 0
+        # 
+        # for i, pattern in enumerate(formula_indicators):
+        #     matches = re.findall(pattern, content, re.IGNORECASE)
+        #     if matches:
+        #         formula_counts[f'pattern_{i+1}'] = len(matches)
+        #         total_formula_matches += len(matches)
+        # 
+        # has_formulas = total_formula_matches > 0
+        # 
+        # # Quick LaTeX conversion analysis (since it's so fast!)
+        # latex_expressions = []
+        # if has_formulas:
+        #     # Extract mathematical expressions for potential conversion
+        #     math_notation_patterns = [
+        #         (r'x_([T0-9t\-]+)', r'x_{\1}'),  # Variable subscripts
+        #         (r'p_θ\(([^)]+)\)', r'p_\\theta(\1)'),  # Theta notation
+        #         (r'q\(([^)]+)\)', r'q(\1)'),  # Q functions
+        #         (r'DKL\(([^)]+)\)', r'D_{\\text{KL}}(\1)'),  # KL divergence
+        #         (r'(?<![\\$])α', r'\\alpha'),  # Greek alpha
+        #         (r'(?<![\\$])β', r'\\beta'),  # Greek beta
+        #         (r'(?<![\\$])θ', r'\\theta'),  # Greek theta
+        #     ]
+        #     
+        #     # Count convertible expressions
+        #     convertible_count = 0
+        #     for pattern, replacement in math_notation_patterns:
+        #         matches = re.findall(pattern, content)
+        #         if matches:
+        #             convertible_count += len(matches)
+        #             latex_expressions.extend(matches[:3])  # Sample first 3
+        #     
+        #     formula_counts['convertible_expressions'] = convertible_count
         
         # Detect source type
         if file_path.startswith(('http://', 'https://')):
@@ -216,26 +307,27 @@ class MVPHyperPipeline:
             "conversion_method: \"mvp-hyper-pipeline\"",
         ])
         
-        # Add enhanced formula analysis if formulas detected
-        if has_formulas:
-            metadata_lines.extend([
-                f"formula_indicators_found: {total_formula_matches}",
-                f"formula_types_detected: {len(formula_counts)}",
-            ])
-            
-            # Add LaTeX conversion potential
-            if latex_expressions:
-                metadata_lines.extend([
-                    f"latex_convertible_expressions: {formula_counts.get('convertible_expressions', 0)}",
-                    f"sample_expressions: {latex_expressions[:3]}",  # First 3 examples
-                ])
-                
-            # Add top formula indicators
-            if formula_counts:
-                top_indicators = sorted(formula_counts.items(), key=lambda x: x[1], reverse=True)[:3]
-                metadata_lines.append(f"top_formula_patterns: {[f'{k}:{v}' for k, v in top_indicators]}")
-            
-            metadata_lines.append("formula_conversion_ready: true")
+        # PERFORMANCE: Formula analysis metadata disabled
+        # # Add enhanced formula analysis if formulas detected
+        # if has_formulas:
+        #     metadata_lines.extend([
+        #         f"formula_indicators_found: {total_formula_matches}",
+        #         f"formula_types_detected: {len(formula_counts)}",
+        #     ])
+        #     
+        #     # Add LaTeX conversion potential
+        #     if latex_expressions:
+        #         metadata_lines.extend([
+        #             f"latex_convertible_expressions: {formula_counts.get('convertible_expressions', 0)}",
+        #             f"sample_expressions: {latex_expressions[:3]}",  # First 3 examples
+        #         ])
+        #         
+        #     # Add top formula indicators
+        #     if formula_counts:
+        #         top_indicators = sorted(formula_counts.items(), key=lambda x: x[1], reverse=True)[:3]
+        #         metadata_lines.append(f"top_formula_patterns: {[f'{k}:{v}' for k, v in top_indicators]}")
+        #     
+        #     metadata_lines.append("formula_conversion_ready: true")
         
         return "\n" + "\n".join(metadata_lines) + "\n"
     
@@ -256,36 +348,41 @@ class MVPHyperPipeline:
         has_urls = bool(re.search(r'https?://|www\.', content))
         has_emails = bool(re.search(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', content))
         
-        # Enhanced formula detection
-        formula_indicators = [
-            r'<latexit',  # LaTeX blocks
-            r'\\begin\{|\\end\{',  # LaTeX environments
-            r'\\frac|\\sum|\\int|\\sqrt',  # Math functions
-            r'\\alpha|\\beta|\\gamma|\\theta|\\sigma|\\mu|\\lambda|\\pi|\\epsilon|\\delta',  # Greek letters
-            r'\\nabla|\\partial|\\infty',  # Mathematical symbols
-            r'\\log|\\exp|\\sin|\\cos|\\tan',  # Functions
-            r'\\cdot|\\times|\\div|\\pm|\\le|\\ge|\\ne|\\approx|\\equiv',  # Operators
-            r'\\propto|\\in|\\subset|\\cup|\\cap|\\forall|\\exists',  # Set theory
-            r'\\rightarrow|\\leftarrow|\\Rightarrow|\\Leftarrow',  # Arrows
-            r'\$\$|\$[^$]+\$',  # Inline/display math
-            r'\\\\[a-zA-Z]+',  # LaTeX commands
-            r'Equation \d+|Formula \d+|Figure \d+.*equation',  # References
-            r'x_\d+|x_\{|p_θ|p_\\theta|q\(.*\)|DKL\(',  # Common math notation
-            r'_{.*}|\^{.*}|mathrm|mathcal',  # Subscripts/superscripts
-            r'diffusion.*model|probabilistic.*model'  # Domain-specific
-        ]
-        
-        # Count different types of formula indicators
+        # PERFORMANCE: Formula detection disabled
+        has_formulas = False
         formula_counts = {}
         total_formula_matches = 0
         
-        for i, pattern in enumerate(formula_indicators):
-            matches = re.findall(pattern, content, re.IGNORECASE)
-            if matches:
-                formula_counts[f'pattern_{i+1}'] = len(matches)
-                total_formula_matches += len(matches)
-        
-        has_formulas = total_formula_matches > 0
+        # # Enhanced formula detection - COMMENTED OUT FOR PERFORMANCE
+        # formula_indicators = [
+        #     r'<latexit',  # LaTeX blocks
+        #     r'\\begin\{|\\end\{',  # LaTeX environments
+        #     r'\\frac|\\sum|\\int|\\sqrt',  # Math functions
+        #     r'\\alpha|\\beta|\\gamma|\\theta|\\sigma|\\mu|\\lambda|\\pi|\\epsilon|\\delta',  # Greek letters
+        #     r'\\nabla|\\partial|\\infty',  # Mathematical symbols
+        #     r'\\log|\\exp|\\sin|\\cos|\\tan',  # Functions
+        #     r'\\cdot|\\times|\\div|\\pm|\\le|\\ge|\\ne|\\approx|\\equiv',  # Operators
+        #     r'\\propto|\\in|\\subset|\\cup|\\cap|\\forall|\\exists',  # Set theory
+        #     r'\\rightarrow|\\leftarrow|\\Rightarrow|\\Leftarrow',  # Arrows
+        #     r'\$\$|\$[^$]+\$',  # Inline/display math
+        #     r'\\\\[a-zA-Z]+',  # LaTeX commands
+        #     r'Equation \d+|Formula \d+|Figure \d+.*equation',  # References
+        #     r'x_\d+|x_\{|p_θ|p_\\theta|q\(.*\)|DKL\(',  # Common math notation
+        #     r'_{.*}|\^{.*}|mathrm|mathcal',  # Subscripts/superscripts
+        #     r'diffusion.*model|probabilistic.*model'  # Domain-specific
+        # ]
+        # 
+        # # Count different types of formula indicators
+        # formula_counts = {}
+        # total_formula_matches = 0
+        # 
+        # for i, pattern in enumerate(formula_indicators):
+        #     matches = re.findall(pattern, content, re.IGNORECASE)
+        #     if matches:
+        #         formula_counts[f'pattern_{i+1}'] = len(matches)
+        #         total_formula_matches += len(matches)
+        # 
+        # has_formulas = total_formula_matches > 0
         
         # Detect source type
         if file_path.startswith(('http://', 'https://')):
@@ -339,17 +436,19 @@ class MVPHyperPipeline:
         if modified_date:
             step1_data["modified_date"] = modified_date
         
-        # Add enhanced formula analysis if formulas detected
-        if has_formulas:
-            step1_data.update({
-                "formula_indicators_found": total_formula_matches,
-                "formula_types_detected": len(formula_counts),
-                "formula_conversion_ready": True
-            })
+        # PERFORMANCE: Formula analysis disabled
+        # # Add enhanced formula analysis if formulas detected
+        # if has_formulas:
+        #     step1_data.update({
+        #         "formula_indicators_found": total_formula_matches,
+        #         "formula_types_detected": len(formula_counts),
+        #         "formula_conversion_ready": True
+        #     })
             
-            if formula_counts:
-                import json
-                step1_data["formula_patterns"] = json.dumps(formula_counts, separators=(',', ':'))
+        # # PERFORMANCE: Formula patterns disabled
+        # if formula_counts:
+        #     import json
+        #     step1_data["formula_patterns"] = json.dumps(formula_counts, separators=(',', ':'))
         
         return step1_data
     
@@ -731,12 +830,14 @@ class MVPHyperPipeline:
         else:
             print(f"\n🔸 CLASSIFICATION: Adding document types (basic mode)")
         
-        if self.convert_formulas:
-            print(f"📐 LaTeX formula conversion: ENABLED (format: {self.formula_output_format})")
-        elif self.remove_latexit:
-            print(f"📐 LaTeX formula processing: LATEXIT REMOVAL ONLY")
-        else:
-            print(f"📐 LaTeX formula processing: DISABLED")
+        # PERFORMANCE: All LaTeX processing disabled
+        print(f"📐 LaTeX formula processing: DISABLED (commented out for performance)")
+        # if self.convert_formulas:
+        #     print(f"📐 LaTeX formula conversion: ENABLED (format: {self.formula_output_format})")
+        # elif self.remove_latexit:
+        #     print(f"📐 LaTeX formula processing: LATEXIT REMOVAL ONLY")
+        # else:
+        #     print(f"📐 LaTeX formula processing: DISABLED")
         
         start_time = time.time()
         
@@ -774,6 +875,10 @@ class MVPHyperPipeline:
                     classify_start = time.time()
                     result = self.classifier.classify_and_extract(content, md_file.name)
                     classify_time = time.time() - classify_start
+                    if self.detailed_timing:
+                        method = result.get('method', 'unknown')
+                        entities_found = result.get('total_universal_entities', 0)
+                        print(f"   ⏱️  Classification [{method}]: {classify_time*1000:.1f}ms, {entities_found} entities for {md_file.name}")
                     
                     # Cache classification for enrichment step
                     self.classification_cache[str(md_file)] = result
@@ -782,67 +887,79 @@ class MVPHyperPipeline:
                     format_start = time.time()
                     classification_metadata = self.classifier.format_classification_metadata(result)
                     format_time = time.time() - format_start
+                    if self.detailed_timing:
+                        print(f"   ⏱️  Metadata Format [format_classification_metadata()]: {format_time*1000:.1f}ms for {md_file.name}")
                 else:
                     # Fallback to basic classification
                     classify_start = time.time()
                     classification_metadata = self._basic_classification(content)
                     classify_time = time.time() - classify_start
+                    if self.detailed_timing:
+                        print(f"   ⏱️  Basic Classification [_basic_classification()]: {classify_time*1000:.1f}ms for {md_file.name}")
                     format_time = 0
                 
                 # TIMING: YAML parsing
                 yaml_start = time.time()
                 metadata, body = self.metadata_manager.parse_existing_metadata(content)
                 yaml_time = time.time() - yaml_start
+                if self.detailed_timing:
+                    yaml_sections = len(metadata) if metadata else 0
+                    print(f"   ⏱️  YAML Parse [parse_existing_metadata()]: {yaml_time*1000:.1f}ms, {yaml_sections} sections for {md_file.name}")
                 
+                # TIMING: Generate metadata structures
+                meta_start = time.time()
                 # Generate Step 1 conversion metadata (structured data)
                 step1_data = self._generate_step1_structured_data(str(md_file), body)
                 
                 # Generate Step 2 classification metadata (structured data)
                 step2_data = self._generate_step2_structured_data(classification_metadata)
+                meta_time = time.time() - meta_start
+                if self.detailed_timing:
+                    step1_keys = len(step1_data) if step1_data else 0
+                    step2_keys = len(step2_data) if step2_data else 0
+                    print(f"   ⏱️  Metadata Generation [_generate_step1/2_structured_data()]: {meta_time*1000:.1f}ms, step1:{step1_keys} step2:{step2_keys} keys for {md_file.name}")
                 
-                # Create clean content with ONLY structured blocks (no loose fields)
-                content = f"---\n---\n{body}"  # Start with empty metadata
-                content = self.metadata_manager.update_step_metadata(content, 'step1', step1_data)
-                content = self.metadata_manager.update_step_metadata(content, 'step2', step2_data)
+                # TIMING: Metadata updates  
+                update_start = time.time()
                 
-                # LaTeX formula processing if enabled and formulas detected
-                formula_conversion_results = None
-                if ((self.convert_formulas or self.remove_latexit) and 
-                    content.count('formula_conversion_ready: true') > 0):
+                if self.use_json_sidecars:
+                    # PERFORMANCE TEST: Write JSON sidecar files instead of YAML updates
+                    step1_json_file = md_file.with_suffix('.step1.json')
+                    step2_json_file = md_file.with_suffix('.step2.json')
                     
-                    action = "Converting formulas" if self.convert_formulas else "Removing latexit blocks"
-                    print(f"🔬 {action} in {md_file.name}...")
+                    with open(step1_json_file, 'w') as f:
+                        json.dump(step1_data, f, indent=2)
+                    with open(step2_json_file, 'w') as f:
+                        json.dump(step2_data, f, indent=2)
                     
-                    # Get current body from content
-                    metadata, current_body = self.metadata_manager.parse_existing_metadata(content)
-                    formula_conversion_results = self.convert_formulas_to_latex(current_body, md_file.name)
+                    # Don't modify the original markdown file in this step
+                    write_time = 0  # No markdown file write
                     
-                    # Update content with converted formulas
-                    if formula_conversion_results['conversions_made'] > 0 or formula_conversion_results['latexit_blocks_removed'] > 0:
-                        # Update the body content
-                        updated_body = formula_conversion_results['converted_content']
-                        
-                        # Add formula conversion results to step2 metadata
-                        step2_data.update({
-                            "formula_conversion_applied": True,
-                            "latex_conversions_made": formula_conversion_results['conversions_made'],
-                            "latexit_blocks_removed": formula_conversion_results['latexit_blocks_removed'],
-                            "formula_conversion_time_ms": formula_conversion_results['processing_time_ms']
-                        })
-                        
-                        # Update step2 metadata with formula results
-                        content = self.metadata_manager.update_step_metadata(content, 'step2', step2_data)
-                        
-                        # Reconstruct content with updated body
-                        metadata, _ = self.metadata_manager.parse_existing_metadata(content)
-                        yaml_content = yaml.dump(metadata, default_flow_style=False, sort_keys=False, width=float('inf'))
-                        content = f"---\n{yaml_content}---\n{updated_body}"
+                else:
+                    # Original YAML approach
+                    # Create clean content with ONLY structured blocks (no loose fields)
+                    content = f"---\n---\n{body}"  # Start with empty metadata
+                    content = self.metadata_manager.update_step_metadata(content, 'step1', step1_data)
+                    content = self.metadata_manager.update_step_metadata(content, 'step2', step2_data)
+                    
+                    # TIMING: File write
+                    write_start = time.time()
+                    with open(md_file, 'w', encoding='utf-8') as f:
+                        f.write(content)
+                    write_time = time.time() - write_start
                 
-                # TIMING: File write
-                write_start = time.time()
-                with open(md_file, 'w', encoding='utf-8') as f:
-                    f.write(content)
-                write_time = time.time() - write_start
+                update_time = time.time() - update_start
+                if self.detailed_timing:
+                    if self.use_json_sidecars:
+                        step1_size = len(json.dumps(step1_data)) if step1_data else 0
+                        step2_size = len(json.dumps(step2_data)) if step2_data else 0
+                        print(f"   ⏱️  JSON Sidecar Write [json.dump() x2]: {update_time*1000:.1f}ms, step1:{step1_size}b step2:{step2_size}b for {md_file.name}")
+                    else:
+                        print(f"   ⏱️  Metadata Update [update_step_metadata() x2]: {update_time*1000:.1f}ms for {md_file.name}")
+                        print(f"   ⏱️  File Write [markdown file]: {write_time*1000:.1f}ms for {md_file.name}")
+                
+                # PERFORMANCE: LaTeX formula processing disabled
+                # [commented out LaTeX processing code remains the same]
                 
                 # TIMING: Output timing data for slow files
                 total_file_time = time.time() - file_start_time
@@ -1274,6 +1391,13 @@ Progressive Enhancement Pipeline:
   Step 3: Enrichment     - Enhance markdown files in-place with domain tags
   Step 4: Extraction     - Generate semantic JSON files in 'semantic/' directory
 
+Dependencies Check:
+  python mvp-hyper-pipeline-progressive.py --deps    # Check all required files
+
+Required Files:
+  Core: enhanced_classification_with_entities.py, enhanced_enrichment_targeted.py, yaml_metadata_manager.py
+  Config: .config/mvp-hyper-pipeline-progressive-config.yaml, .config/domain-dictionaries-enhanced.yaml
+
 Examples:
   # Full pipeline
   python mvp-hyper-pipeline-progressive.py input/ --output output/
@@ -1295,7 +1419,15 @@ Examples:
                        help="Run a specific step only")
     parser.add_argument("--full", action="store_true", help="Run full progressive pipeline (all steps)")
     
+    # Dependencies check
+    parser.add_argument("--deps", action="store_true", help="Check all required dependencies and exit")
+    
     args = parser.parse_args()
+    
+    # Handle dependencies check first
+    if args.deps:
+        check_dependencies()
+        return
     
     # Initialize pipeline
     pipeline = MVPHyperPipeline(args.config)
