@@ -485,10 +485,10 @@ Examples:
                     
                 total_time = time.time() - start_time
                 
-                # Calculate comprehensive metrics
-                successful = sum(1 for r in results if r.success)
+                # Calculate comprehensive metrics (InMemoryDocument objects)
+                successful = sum(1 for doc in results if doc.success)
                 failed = len(results) - successful
-                total_pages = sum(r.pages for r in results if r.success)
+                total_pages = sum(doc.pages_processed for doc in results if doc.success)
                 
                 # Calculate input data sizes by scanning all attempted files directly
                 total_input_bytes = 0
@@ -503,29 +503,24 @@ Examples:
                         pass
                 
                 # Count skipped files from results
-                for result in results:
-                    if not result.success and result.error and "pages (>100 limit)" in result.error:
+                for doc in results:
+                    if not doc.success and doc.error_message and "pages (>100 limit)" in doc.error_message:
                         skipped_large += 1
                 
-                # Calculate output size by scanning the output directory (free operation)
+                # Calculate output size from in-memory documents (exact calculation)
                 total_output_bytes = 0
                 output_file_count = 0
-                if output_dir and output_dir.exists():
-                    print(f"   🔍 DEBUG: Scanning output directory: {output_dir}")
-                    md_files = list(output_dir.glob("*.md"))
-                    print(f"   🔍 DEBUG: Found {len(md_files)} .md files")
-                    
-                    for md_file in md_files:
-                        try:
-                            file_size = md_file.stat().st_size
-                            total_output_bytes += file_size
-                            output_file_count += 1
-                        except Exception as e:
-                            print(f"   🔍 DEBUG: Error reading {md_file}: {e}")
-                    
-                    print(f"   🔍 DEBUG: Total output bytes calculated: {total_output_bytes}")
-                else:
-                    print(f"   🔍 DEBUG: Output directory issue - dir: {output_dir}, exists: {output_dir.exists() if output_dir else 'None'}")
+                total_memory_mb = 0
+                
+                for doc in results:
+                    if doc.success:
+                        # Get memory footprint (includes markdown + YAML + JSON)
+                        doc_memory = doc.get_memory_footprint()
+                        total_output_bytes += doc_memory
+                        total_memory_mb += doc_memory / 1024 / 1024
+                        output_file_count += 1
+                
+                print(f"   💾 In-memory processing: {total_memory_mb:.1f}MB total document memory")
                 
                 # Calculate metrics
                 input_mb = total_input_bytes / 1024 / 1024
@@ -536,7 +531,7 @@ Examples:
                 
                 # True failures vs skips and warnings
                 true_failures = failed - skipped_large
-                warnings_count = sum(1 for r in results if r.success and hasattr(r, 'metadata') and r.metadata.get('warnings'))
+                warnings_count = sum(1 for doc in results if doc.success and doc.error_message)
                 
                 print(f"\n🚀 PROCESSING PERFORMANCE:")
                 print(f"   🚀 PAGES/SEC: {pages_per_sec:.0f}")

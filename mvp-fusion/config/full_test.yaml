@@ -29,6 +29,8 @@ inputs:
   # Directory sources - single complex PDF folder for testing
   directories:
     - "~/projects/docling/cli/data_complex"
+    - "~/projects/docling/cli/data"
+    - "~/projects/docling/cli/data_osha"
   
   # Skip file extensions for speed
   skip_extensions:
@@ -104,10 +106,6 @@ extractor:
 
 # Pipeline Stages Configuration
 pipeline:
-  # Memory limits for edge deployment (CloudFlare Workers ready)
-  memory_limit_mb: 100           # Per document memory limit
-  service_memory_limit_mb: 1024  # Total service memory limit (1GB)
-  
   # Stage control - enable/disable individual stages
   stages:
     convert: true      # Stage 1: PDF/Doc -> Markdown conversion

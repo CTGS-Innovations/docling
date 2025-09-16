@@ -1,0 +1,147 @@
+#!/usr/bin/env python3
+"""
+In-Memory Document Processing for Edge-Optimized Services
+========================================================
+Designed for CloudFlare Workers / Edge deployment with 1GB RAM limit.
+Zero I/O between processing stages - everything stays in memory.
+"""
+
+import time
+import sys
+from pathlib import Path
+from typing import Dict, Any, Optional
+import yaml
+
+
+class MemoryOverflowError(Exception):
+    """Raised when document processing would exceed memory limits"""
+    pass
+
+
+class InMemoryDocument:
+    """
+    Edge-optimized document container for single-file service processing.
+    
+    Architecture:
+    - PDF → markdown content (in memory)
+    - Progressive YAML frontmatter building
+    - Semantic JSON generation
+    - Single final write operation
+    
+    Memory Budget: <100MB per document, <1GB total service limit
+    """
+    
+    def __init__(self, source_file_path: str, memory_limit_mb: int = 100):
+        self.source_file_path = source_file_path
+        self.source_filename = Path(source_file_path).name
+        self.source_stem = Path(source_file_path).stem
+        
+        # Content containers
+        self.markdown_content = ""
+        self.yaml_frontmatter = {}
+        self.semantic_json = {}
+        
+        # Memory management
+        self.memory_limit_bytes = memory_limit_mb * 1024 * 1024
+        self.processing_start_time = time.perf_counter()
+        
+        # Processing metadata
+        self.pages_processed = 0
+        self.stage_timings = {}
+        self.success = True
+        self.error_message = None
+        
+    def set_conversion_data(self, markdown_content: str, yaml_metadata: Dict[str, Any], pages: int):
+        """Set the initial conversion results"""
+        self.markdown_content = markdown_content
+        self.yaml_frontmatter = yaml_metadata.copy()
+        self.pages_processed = pages
+        self._check_memory_limit("after conversion")
+        
+    def add_classification_data(self, classification_data: Dict[str, Any]):
+        """Add classification section to YAML frontmatter"""
+        self.yaml_frontmatter['classification'] = classification_data
+        self._check_memory_limit("after classification")
+        
+    def add_enrichment_data(self, enrichment_data: Dict[str, Any]):
+        """Add enrichment section to YAML frontmatter"""
+        self.yaml_frontmatter['enrichment'] = enrichment_data
+        self._check_memory_limit("after enrichment")
+        
+    def set_semantic_data(self, semantic_json: Dict[str, Any]):
+        """Set the semantic extraction JSON"""
+        self.semantic_json = semantic_json
+        self._check_memory_limit("after extraction")
+        
+    def record_stage_timing(self, stage_name: str, time_ms: float):
+        """Record timing for a processing stage"""
+        self.stage_timings[stage_name] = time_ms
+        
+    def get_memory_footprint(self) -> int:
+        """Calculate current memory usage in bytes"""
+        markdown_bytes = len(self.markdown_content.encode('utf-8'))
+        yaml_bytes = len(str(self.yaml_frontmatter).encode('utf-8'))
+        json_bytes = len(str(self.semantic_json).encode('utf-8'))
+        
+        return markdown_bytes + yaml_bytes + json_bytes
+        
+    def _check_memory_limit(self, stage: str):
+        """Check if memory usage exceeds limits"""
+        current_memory = self.get_memory_footprint()
+        if current_memory > self.memory_limit_bytes:
+            memory_mb = current_memory / 1024 / 1024
+            limit_mb = self.memory_limit_bytes / 1024 / 1024
+            raise MemoryOverflowError(
+                f"Memory limit exceeded {stage}: {memory_mb:.1f}MB > {limit_mb:.1f}MB limit"
+            )
+    
+    def generate_final_markdown(self) -> str:
+        """Generate the final markdown file with complete YAML frontmatter"""
+        if not self.yaml_frontmatter:
+            return self.markdown_content
+            
+        # Serialize YAML frontmatter
+        yaml_content = yaml.dump(self.yaml_frontmatter, default_flow_style=False, sort_keys=False)
+        
+        # Combine YAML frontmatter with markdown content
+        if self.markdown_content.startswith('---'):
+            # Replace existing frontmatter
+            parts = self.markdown_content.split('---', 2)
+            if len(parts) >= 3:
+                markdown_body = parts[2]
+            else:
+                markdown_body = self.markdown_content
+        else:
+            # Add frontmatter to content without frontmatter
+            markdown_body = self.markdown_content
+            
+        return f"---\n{yaml_content}---{markdown_body}"
+    
+    def get_processing_summary(self) -> Dict[str, Any]:
+        """Get comprehensive processing summary"""
+        total_time_ms = (time.perf_counter() - self.processing_start_time) * 1000
+        memory_mb = self.get_memory_footprint() / 1024 / 1024
+        
+        return {
+            'source_file': self.source_filename,
+            'success': self.success,
+            'error': self.error_message,
+            'pages_processed': self.pages_processed,
+            'memory_used_mb': round(memory_mb, 2),
+            'total_time_ms': round(total_time_ms, 1),
+            'stage_timings': self.stage_timings.copy(),
+            'has_classification': 'classification' in self.yaml_frontmatter,
+            'has_enrichment': 'enrichment' in self.yaml_frontmatter,
+            'has_semantic_json': bool(self.semantic_json)
+        }
+    
+    def mark_failed(self, error_message: str):
+        """Mark document processing as failed"""
+        self.success = False
+        self.error_message = error_message
+        
+    def __str__(self):
+        return f"InMemoryDocument({self.source_filename}, {self.get_memory_footprint()/1024/1024:.1f}MB)"
+    
+    def __repr__(self):
+        return self.__str__()

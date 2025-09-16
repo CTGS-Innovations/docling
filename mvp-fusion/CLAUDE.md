@@ -56,4 +56,25 @@ mvp-fusion/
 - Single, obvious entry point for each capability
 
 ---
+
+## COMMUNICATION STYLE
+
+### **Rule #6: Clear Decision Points**
+When presenting options or asking questions:
+
+🔴 **DECISION NEEDED** 🔴
+- Use red blocks for critical decisions
+- Put the question/action at the top, not buried in text
+- Provide clear options (A, B, C)
+- Make the call-to-action obvious
+
+**Example:**
+```
+🔴 **DECISION NEEDED** 🔴
+Should I implement X or Y approach?
+Option A: Quick fix (5 min)
+Option B: Full refactor (30 min)
+```
+
+---
 **These rules prevent codebase clutter and maintain focus on performance and clarity.**
