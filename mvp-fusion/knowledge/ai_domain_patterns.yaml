@@ -1,0 +1,363 @@
+# AI-Optimized Domain Pattern Library
+# ====================================
+# 25 domains optimized for AI agent knowledge feeding
+
+domains:
+  
+  # TECHNOLOGY & COMPUTING
+  technology:
+    weight: 1.0
+    keywords:
+      software: 2.0
+      programming: 2.0  
+      algorithm: 2.0
+      database: 1.5
+      cloud: 1.5
+      api: 1.5
+      framework: 1.0
+      development: 1.0
+      code: 1.0
+      tech: 1.0
+    entities:
+      programming_languages: ["python", "javascript", "java", "c++", "go", "rust"]
+      frameworks: ["react", "angular", "vue", "django", "flask", "spring"]
+      cloud_services: ["aws", "azure", "gcp", "kubernetes", "docker"]
+    
+  artificial_intelligence:
+    weight: 1.0
+    keywords:
+      "artificial intelligence": 3.0
+      "machine learning": 3.0
+      "deep learning": 2.5
+      "neural network": 2.5
+      ai: 2.0
+      ml: 2.0
+      nlp: 2.0
+      "computer vision": 2.0
+      llm: 1.5
+      gpt: 1.5
+    entities:
+      ai_models: ["gpt", "bert", "transformer", "cnn", "rnn", "lstm"]
+      ml_frameworks: ["tensorflow", "pytorch", "scikit-learn", "keras"]
+      ai_companies: ["openai", "anthropic", "google", "microsoft", "meta"]
+
+  cybersecurity:
+    weight: 1.0
+    keywords:
+      cybersecurity: 2.5
+      security: 2.0
+      encryption: 2.0
+      firewall: 1.5
+      malware: 1.5
+      phishing: 1.5
+      vulnerability: 1.5
+      breach: 1.5
+      hacking: 1.0
+      "penetration testing": 1.0
+    entities:
+      threats: ["malware", "ransomware", "phishing", "ddos", "sql injection"]
+      tools: ["antivirus", "firewall", "vpn", "ssl", "two-factor"]
+
+  gaming:
+    weight: 1.0
+    keywords:
+      gaming: 2.0
+      "video games": 2.0
+      esports: 1.5
+      console: 1.5
+      "pc gaming": 1.5
+      "mobile games": 1.0
+      streaming: 1.0
+    entities:
+      platforms: ["playstation", "xbox", "nintendo", "steam", "epic games"]
+      genres: ["fps", "rpg", "mmo", "strategy", "puzzle", "simulation"]
+
+  # HEALTH & SCIENCE
+  health_medical:
+    weight: 1.0
+    keywords:
+      health: 2.0
+      medical: 2.0
+      doctor: 1.5
+      medicine: 1.5
+      treatment: 1.5
+      diagnosis: 1.5
+      patient: 1.0
+      hospital: 1.0
+      healthcare: 1.0
+    entities:
+      conditions: ["diabetes", "hypertension", "cancer", "covid", "flu"]
+      specialties: ["cardiology", "neurology", "oncology", "pediatrics"]
+      treatments: ["surgery", "medication", "therapy", "vaccination"]
+
+  science_research:
+    weight: 1.0
+    keywords:
+      science: 2.0
+      research: 2.0
+      study: 1.5
+      experiment: 1.5
+      laboratory: 1.0
+      scientific: 1.0
+      discovery: 1.0
+    entities:
+      fields: ["physics", "chemistry", "biology", "astronomy", "geology"]
+      methods: ["peer review", "hypothesis", "methodology", "analysis"]
+
+  environmental:
+    weight: 1.0
+    keywords:
+      environment: 2.0
+      "climate change": 2.5
+      sustainability: 2.0
+      "renewable energy": 2.0
+      carbon: 1.5
+      pollution: 1.5
+      ecosystem: 1.0
+      conservation: 1.0
+    entities:
+      issues: ["global warming", "deforestation", "plastic pollution", "biodiversity loss"]
+      solutions: ["solar power", "wind energy", "recycling", "electric vehicles"]
+
+  food_nutrition:
+    weight: 1.0
+    keywords:
+      nutrition: 2.0
+      diet: 2.0
+      food: 1.5
+      "healthy eating": 1.5
+      vitamins: 1.0
+      calories: 1.0
+      recipe: 1.0
+    entities:
+      nutrients: ["protein", "carbs", "fat", "fiber", "vitamin c", "calcium"]
+      diets: ["keto", "mediterranean", "vegan", "paleo", "intermittent fasting"]
+
+  # BUSINESS & FINANCE
+  business:
+    weight: 1.0
+    keywords:
+      business: 2.0
+      entrepreneurship: 2.0
+      startup: 1.5
+      company: 1.5
+      management: 1.0
+      strategy: 1.0
+      marketing: 1.0
+    entities:
+      types: ["corporation", "llc", "partnership", "sole proprietorship"]
+      functions: ["sales", "marketing", "hr", "operations", "finance"]
+
+  finance:
+    weight: 1.0
+    keywords:
+      finance: 2.0
+      investment: 2.0
+      "stock market": 2.0
+      banking: 1.5
+      cryptocurrency: 1.5
+      money: 1.0
+      economy: 1.0
+    entities:
+      instruments: ["stocks", "bonds", "etf", "mutual funds", "options"]
+      crypto: ["bitcoin", "ethereum", "blockchain", "defi", "nft"]
+
+  real_estate:
+    weight: 1.0
+    keywords:
+      "real estate": 2.5
+      property: 2.0
+      housing: 1.5
+      mortgage: 1.5
+      rent: 1.0
+      "investment property": 1.0
+    entities:
+      types: ["residential", "commercial", "industrial", "land"]
+      processes: ["buying", "selling", "renting", "refinancing"]
+
+  economics:
+    weight: 1.0
+    keywords:
+      economics: 2.0
+      inflation: 1.5
+      gdp: 1.5
+      recession: 1.5
+      "federal reserve": 1.5
+      "interest rates": 1.0
+    entities:
+      indicators: ["unemployment", "cpi", "gdp growth", "trade deficit"]
+
+  # LIFESTYLE & CONSUMER
+  shopping:
+    weight: 1.0
+    keywords:
+      shopping: 2.0
+      ecommerce: 2.0
+      "product review": 1.5
+      "online store": 1.5
+      retail: 1.0
+      discount: 1.0
+    entities:
+      platforms: ["amazon", "ebay", "shopify", "walmart", "target"]
+      categories: ["electronics", "clothing", "home", "beauty", "sports"]
+
+  travel:
+    weight: 1.0
+    keywords:
+      travel: 2.0
+      tourism: 2.0
+      vacation: 1.5
+      hotel: 1.5
+      flight: 1.5
+      destination: 1.0
+    entities:
+      types: ["business travel", "leisure", "adventure", "cruise", "road trip"]
+      services: ["booking", "airline", "accommodation", "rental car"]
+
+  automotive:
+    weight: 1.0
+    keywords:
+      automotive: 2.0
+      car: 2.0
+      vehicle: 1.5
+      "electric vehicle": 2.0
+      autonomous: 1.5
+      maintenance: 1.0
+    entities:
+      types: ["sedan", "suv", "truck", "hybrid", "electric", "motorcycle"]
+      brands: ["tesla", "ford", "toyota", "bmw", "mercedes", "honda"]
+
+  sports_fitness:
+    weight: 1.0
+    keywords:
+      sports: 2.0
+      fitness: 2.0
+      exercise: 1.5
+      workout: 1.5
+      athlete: 1.0
+      training: 1.0
+    entities:
+      sports: ["football", "basketball", "soccer", "tennis", "baseball", "golf"]
+      fitness: ["weightlifting", "cardio", "yoga", "pilates", "crossfit"]
+
+  # KNOWLEDGE & EDUCATION
+  education:
+    weight: 1.0
+    keywords:
+      education: 2.0
+      learning: 2.0
+      school: 1.5
+      university: 1.5
+      course: 1.0
+      student: 1.0
+    entities:
+      levels: ["elementary", "high school", "college", "graduate", "online"]
+      subjects: ["math", "science", "history", "literature", "art"]
+
+  news:
+    weight: 1.0
+    keywords:
+      news: 2.0
+      "current events": 2.0
+      "breaking news": 1.5
+      journalism: 1.0
+      media: 1.0
+    entities:
+      topics: ["politics", "world news", "local news", "sports news", "tech news"]
+      sources: ["cnn", "bbc", "reuters", "ap news", "npr"]
+
+  history:
+    weight: 1.0
+    keywords:
+      history: 2.0
+      historical: 1.5
+      ancient: 1.0
+      war: 1.0
+      civilization: 1.0
+    entities:
+      periods: ["ancient", "medieval", "renaissance", "modern", "contemporary"]
+      events: ["world war", "civil war", "revolution", "empire", "dynasty"]
+
+  how_to_diy:
+    weight: 1.0
+    keywords:
+      "how to": 2.5
+      diy: 2.0
+      tutorial: 2.0
+      guide: 1.5
+      instructions: 1.5
+      "step by step": 1.0
+    entities:
+      categories: ["home improvement", "cooking", "crafts", "repair", "gardening"]
+      tools: ["hammer", "screwdriver", "drill", "saw", "wrench"]
+
+  # CREATIVE & SOCIAL
+  arts_culture:
+    weight: 1.0
+    keywords:
+      art: 2.0
+      culture: 2.0
+      music: 1.5
+      painting: 1.0
+      sculpture: 1.0
+      museum: 1.0
+    entities:
+      forms: ["painting", "sculpture", "photography", "digital art", "performance"]
+      genres: ["classical", "contemporary", "abstract", "realism", "pop art"]
+
+  social_media:
+    weight: 1.0
+    keywords:
+      "social media": 2.5
+      "social network": 2.0
+      influencer: 1.5
+      viral: 1.5
+      trending: 1.0
+      hashtag: 1.0
+    entities:
+      platforms: ["facebook", "twitter", "instagram", "tiktok", "linkedin", "youtube"]
+      metrics: ["followers", "likes", "shares", "engagement", "reach"]
+
+  psychology:
+    weight: 1.0
+    keywords:
+      psychology: 2.0
+      "mental health": 2.5
+      therapy: 2.0
+      behavior: 1.5
+      cognitive: 1.0
+      emotional: 1.0
+    entities:
+      conditions: ["anxiety", "depression", "adhd", "ptsd", "bipolar"]
+      treatments: ["cbt", "therapy", "medication", "mindfulness", "counseling"]
+
+  politics_government:
+    weight: 1.0
+    keywords:
+      politics: 2.0
+      government: 2.0
+      election: 1.5
+      policy: 1.5
+      congress: 1.0
+      president: 1.0
+    entities:
+      systems: ["democracy", "republic", "federal", "state", "local"]
+      parties: ["democrat", "republican", "independent", "green", "libertarian"]
+
+  general:
+    weight: 0.5
+    keywords:
+      information: 1.0
+      general: 1.0
+      misc: 0.5
+      other: 0.5
+    entities:
+      types: ["reference", "general knowledge", "miscellaneous"]
+
+# Configuration for Aho-Corasick optimization
+config:
+  case_sensitive: false
+  word_boundaries: true
+  max_pattern_length: 50
+  min_confidence_threshold: 0.2
+  entity_extraction_limit: 10

@@ -250,54 +250,76 @@ class FusionPipeline:
     
     def _generate_classification_data(self, content: str, filename: str) -> Dict[str, Any]:
         """
-        Generate classification metadata for document content.
+        Layered Classification Architecture - Progressive Intelligence Building
         
-        Performance target: <50ms per file
-        Basic implementation - will be enhanced with Aho-Corasick later
+        Architecture:
+        - Layer 1: File Metadata (free)
+        - Layer 2: Document Structure (free from regex)  
+        - Layer 3: Domain Classification (<15ms target)
+        - Layer 4: Entity Extraction (<20ms target)
+        - Layer 5: Deep Domain Entities - conditional based on confidence
+        
+        Performance target: <50ms total with early termination
         """
         start_time = time.perf_counter()
+        layer_timings = {}
         
-        # Basic entity extraction using regex (placeholder for Aho-Corasick)
-        entities = {
-            'money': self._extract_money(content),
-            'phone': self._extract_phone(content), 
-            'regulation': self._extract_regulation(content),
-            'date': self._extract_dates(content),
-            'url': self._extract_urls(content),
-            'measurement': self._extract_measurements(content)
-        }
-        
-        # Count total entities found
-        total_entities = sum(len(v) for v in entities.values() if isinstance(v, list))
-        
-        # Determine document type based on content analysis
-        document_types = self._classify_document_type(content)
-        primary_domain = document_types[0] if document_types else "general"
-        
-        # Calculate processing time
-        processing_time_ms = (time.perf_counter() - start_time) * 1000
-        
+        # Initialize classification result
         classification_data = {
-            'description': 'Document Classification & Type Detection',
+            'description': 'Layered Classification & Progressive Intelligence',
             'classification_date': time.strftime('%Y-%m-%dT%H:%M:%S'),
-            'classification_method': 'mvp-fusion-basic',
-            'document_types': str(document_types),
-            'primary_domain': primary_domain,
-            'confidence': 0.8,  # Basic implementation confidence
-            'universal_entities_found': total_entities,
-            'processing_time_ms': round(processing_time_ms, 2),
-            'enhanced_mode': False  # Will be True when Aho-Corasick implemented
+            'classification_method': 'mvp-fusion-layered',
+            'layered_architecture': True,
+            'early_termination': False,
+            'layers_processed': []
         }
         
-        # Add entity lists if found
-        for entity_type, entity_list in entities.items():
-            if entity_list:
-                classification_data[entity_type] = str(entity_list)
-                
-        # Add flags for important entity types
-        classification_data['has_financial_data'] = bool(entities['money'])
-        classification_data['has_regulations'] = bool(entities['regulation'])
-        classification_data['has_contact_info'] = bool(entities['phone'])
+        # LAYER 1: FILE METADATA (Free - already available)
+        layer1_start = time.perf_counter()
+        file_metadata = self._layer1_file_metadata(filename, content)
+        classification_data.update(file_metadata)
+        classification_data['layers_processed'].append('layer1_file_metadata')
+        layer_timings['layer1_file_metadata'] = (time.perf_counter() - layer1_start) * 1000
+        
+        # LAYER 2: DOCUMENT STRUCTURE (Free from existing regex patterns)
+        layer2_start = time.perf_counter()
+        structure_data = self._layer2_document_structure(content)
+        classification_data.update(structure_data)
+        classification_data['layers_processed'].append('layer2_document_structure')
+        layer_timings['layer2_document_structure'] = (time.perf_counter() - layer2_start) * 1000
+        
+        # LAYER 3: DOMAIN CLASSIFICATION (<15ms target)
+        layer3_start = time.perf_counter()
+        domain_data = self._layer3_domain_classification(content)
+        classification_data.update(domain_data)
+        classification_data['layers_processed'].append('layer3_domain_classification')
+        layer_timings['layer3_domain_classification'] = (time.perf_counter() - layer3_start) * 1000
+        
+        # Early termination check - if domain confidence is low, skip heavy layers
+        primary_domain_confidence = max(domain_data['domains'].values()) if domain_data['domains'] else 0
+        if primary_domain_confidence < 20.0:  # Low confidence threshold
+            classification_data['early_termination'] = True
+            classification_data['termination_reason'] = f'Low domain confidence: {primary_domain_confidence}%'
+        else:
+            # LAYER 4: ENTITY EXTRACTION (<20ms target)
+            layer4_start = time.perf_counter()
+            entity_data = self._layer4_entity_extraction(content)
+            classification_data.update(entity_data)
+            classification_data['layers_processed'].append('layer4_entity_extraction')
+            layer_timings['layer4_entity_extraction'] = (time.perf_counter() - layer4_start) * 1000
+            
+            # LAYER 5: DEEP DOMAIN ENTITIES (Conditional - only for high-confidence domains)
+            if primary_domain_confidence >= 60.0:  # High confidence threshold
+                layer5_start = time.perf_counter()
+                deep_entity_data = self._layer5_deep_domain_entities(content, domain_data['domains'])
+                classification_data.update(deep_entity_data)
+                classification_data['layers_processed'].append('layer5_deep_domain_entities')
+                layer_timings['layer5_deep_domain_entities'] = (time.perf_counter() - layer5_start) * 1000
+        
+        # Final performance summary
+        total_time_ms = (time.perf_counter() - start_time) * 1000
+        classification_data['processing_time_ms'] = round(total_time_ms, 2)
+        classification_data['layer_timings_ms'] = {k: round(v, 2) for k, v in layer_timings.items()}
         
         return classification_data
     
@@ -314,7 +336,10 @@ class FusionPipeline:
     def _extract_regulation(self, content: str) -> List[str]:
         """Extract regulation references from content"""
         pattern = r'\d+\s*CFR\s*\d+(?:\.\d+)*'
-        return list(set(re.findall(pattern, content)))[:10]
+        matches = re.findall(pattern, content)
+        # Clean up whitespace and newlines
+        cleaned = [' '.join(match.split()) for match in matches]
+        return list(set(cleaned))[:10]
     
     def _extract_dates(self, content: str) -> List[str]:
         """Extract dates from content"""
@@ -336,18 +361,353 @@ class FusionPipeline:
     def _extract_measurements(self, content: str) -> List[str]:
         """Extract measurements from content"""
         pattern = r'\d+(?:\.\d+)?\s*(?:inches?|feet?|meters?|cm|mm|kg|lbs?|pounds?)\b'
-        return list(set(re.findall(pattern, content, re.IGNORECASE)))[:10]
+        matches = re.findall(pattern, content, re.IGNORECASE)
+        # Clean up whitespace and newlines
+        cleaned = [' '.join(match.split()) for match in matches]
+        return list(set(cleaned))[:10]
     
-    def _classify_document_type(self, content: str) -> List[str]:
-        """Classify document type based on content analysis"""
+    def _classify_domains_with_scores(self, content: str) -> Dict[str, float]:
+        """
+        Classify document into domains with percentage scores.
+        TODO: Replace with Aho-Corasick for 25+ domains
+        """
         content_lower = content.lower()
         
-        # Basic keyword-based classification
-        if any(word in content_lower for word in ['osha', 'safety', 'hazard', 'injury']):
-            return ['safety', 'compliance']
-        elif any(word in content_lower for word in ['regulation', 'cfr', 'compliance']):
-            return ['compliance', 'regulatory']
-        elif any(word in content_lower for word in ['legal', 'contract', 'agreement']):
-            return ['legal']
+        # Domain keyword patterns (will be Aho-Corasick patterns)
+        domain_keywords = {
+            'safety': ['osha', 'safety', 'hazard', 'injury', 'accident', 'ppe', 'protective'],
+            'compliance': ['compliance', 'regulation', 'cfr', 'requirement', 'standard'],
+            'regulatory': ['regulatory', 'regulation', 'rule', 'mandate', 'directive'],
+            'legal': ['legal', 'contract', 'agreement', 'liability', 'lawsuit'],
+            'medical': ['medical', 'health', 'diagnosis', 'treatment', 'patient'],
+            'financial': ['financial', 'revenue', 'profit', 'investment', 'budget'],
+            'technical': ['technical', 'engineering', 'specification', 'design', 'system'],
+            'construction': ['construction', 'building', 'contractor', 'scaffold', 'ladder'],
+            'environmental': ['environmental', 'epa', 'pollution', 'emission', 'waste']
+        }
+        
+        # Count keyword hits per domain
+        domain_hits = {}
+        total_hits = 0
+        
+        for domain, keywords in domain_keywords.items():
+            hits = sum(1 for keyword in keywords if keyword in content_lower)
+            if hits > 0:
+                domain_hits[domain] = hits
+                total_hits += hits
+        
+        # Convert to percentages
+        domain_scores = {}
+        if total_hits > 0:
+            for domain, hits in domain_hits.items():
+                percentage = (hits / total_hits) * 100
+                domain_scores[domain] = round(percentage, 1)
         else:
-            return ['general']
+            domain_scores['general'] = 100.0
+            
+        # Sort by percentage (highest first) - free since dict creation
+        domain_scores = dict(sorted(domain_scores.items(), key=lambda x: x[1], reverse=True))
+        
+        return domain_scores
+    
+    def _classify_document_types_with_scores(self, content: str) -> Dict[str, float]:
+        """
+        Classify document types with percentage scores.
+        TODO: Replace with Aho-Corasick for document types
+        """
+        content_lower = content.lower()
+        
+        # Document type patterns
+        doctype_keywords = {
+            'regulation': ['29 cfr', '40 cfr', 'regulation', 'regulatory', 'compliance'],
+            'guide': ['guide', 'guidance', 'how to', 'instructions', 'manual'],
+            'standard': ['standard', 'specification', 'requirement', 'shall', 'must'],
+            'report': ['report', 'analysis', 'findings', 'results', 'conclusion'],
+            'policy': ['policy', 'procedure', 'protocol', 'guidelines'],
+            'training': ['training', 'education', 'learning', 'course', 'certification'],
+            'reference': ['reference', 'appendix', 'glossary', 'definition', 'terminology']
+        }
+        
+        # Count keyword hits per document type
+        type_hits = {}
+        total_hits = 0
+        
+        for doctype, keywords in doctype_keywords.items():
+            hits = sum(1 for keyword in keywords if keyword in content_lower)
+            if hits > 0:
+                type_hits[doctype] = hits
+                total_hits += hits
+        
+        # Convert to percentages
+        type_scores = {}
+        if total_hits > 0:
+            for doctype, hits in type_hits.items():
+                percentage = (hits / total_hits) * 100
+                type_scores[doctype] = round(percentage, 1)
+        else:
+            type_scores['document'] = 100.0
+            
+        # Sort by percentage (highest first)
+        type_scores = dict(sorted(type_scores.items(), key=lambda x: x[1], reverse=True))
+        
+        return type_scores
+
+    # ========================================
+    # LAYERED CLASSIFICATION IMPLEMENTATION
+    # ========================================
+    
+    def _layer1_file_metadata(self, filename: str, content: str) -> Dict[str, Any]:
+        """
+        Layer 1: File Metadata (Free - already available)
+        
+        Extract basic file properties and statistics that guide later layers.
+        Performance: ~0.1ms (essentially free)
+        """
+        from pathlib import Path
+        
+        file_path = Path(filename)
+        content_length = len(content)
+        
+        return {
+            'file_metadata': {
+                'filename': file_path.name,
+                'file_stem': file_path.stem,
+                'file_extension': file_path.suffix.lower(),
+                'content_length_chars': content_length,
+                'estimated_pages': max(1, content_length // 3000),  # Rough estimate
+                'processing_priority': 'high' if content_length < 50000 else 'normal'
+            }
+        }
+    
+    def _layer2_document_structure(self, content: str) -> Dict[str, Any]:
+        """
+        Layer 2: Document Structure (Free from existing regex patterns)
+        
+        Extract structural elements that help classify document type and domain.
+        Performance: ~1-2ms (regex patterns already running)
+        """
+        content_lower = content.lower()
+        
+        # Structural indicators (very fast checks)
+        structure_indicators = {
+            'has_table_of_contents': 'table of contents' in content_lower or 'contents' in content_lower[:1000],
+            'has_sections': bool(re.search(r'(?:section|chapter)\s+\d+', content_lower)),
+            'has_numbered_lists': bool(re.search(r'^\s*\d+\.', content, re.MULTILINE)),
+            'has_bullet_points': bool(re.search(r'^\s*[•\-\*]', content, re.MULTILINE)),
+            'has_headers': bool(re.search(r'^#+\s', content, re.MULTILINE)),
+            'has_footnotes': 'footnote' in content_lower or bool(re.search(r'\[\d+\]', content)),
+            'has_citations': bool(re.search(r'\(\d{4}\)', content)) or 'et al' in content_lower,
+            'document_language': 'english'  # TODO: Add simple language detection
+        }
+        
+        # Document complexity scoring (helps route to appropriate layers)
+        complexity_score = sum([
+            int(structure_indicators['has_table_of_contents']) * 2,
+            int(structure_indicators['has_sections']) * 2,
+            int(structure_indicators['has_numbered_lists']),
+            int(structure_indicators['has_headers']),
+            int(structure_indicators['has_footnotes']),
+            int(structure_indicators['has_citations'])
+        ])
+        
+        return {
+            'document_structure': structure_indicators,
+            'structural_complexity_score': complexity_score,
+            'structure_based_routing': {
+                'route_to_deep_analysis': complexity_score >= 4,
+                'priority_processing': complexity_score <= 2
+            }
+        }
+    
+    def _layer3_domain_classification(self, content: str) -> Dict[str, Any]:
+        """
+        Layer 3: Domain Classification (<15ms target)
+        
+        Fast domain classification using Aho-Corasick patterns (currently regex).
+        This determines processing route for subsequent layers.
+        """
+        # Use existing domain classification logic
+        domain_scores = self._classify_domains_with_scores(content)
+        doctype_scores = self._classify_document_types_with_scores(content)
+        
+        # Determine primary domain and confidence
+        primary_domain = max(domain_scores.keys(), key=lambda k: domain_scores[k]) if domain_scores else 'general'
+        primary_domain_confidence = domain_scores.get(primary_domain, 0)
+        
+        # Domain-based routing decisions
+        routing_decisions = {
+            'skip_entity_extraction': primary_domain_confidence < 20.0,
+            'enable_deep_domain_extraction': primary_domain_confidence >= 60.0,
+            'domain_specialization_route': primary_domain if primary_domain_confidence >= 40.0 else 'general'
+        }
+        
+        return {
+            'domains': domain_scores,  # Native dict for semantic extraction
+            'document_types': doctype_scores,  # Native dict for semantic extraction
+            'primary_domain': primary_domain,
+            'primary_domain_confidence': primary_domain_confidence,
+            'domain_routing': routing_decisions
+        }
+    
+    def _layer4_entity_extraction(self, content: str) -> Dict[str, Any]:
+        """
+        Layer 4: Entity Extraction (<20ms target)
+        
+        Universal entity extraction using existing regex patterns.
+        TODO: Replace with Aho-Corasick for 25ms → 5ms performance gain.
+        """
+        # Use existing entity extraction logic
+        entities = {
+            'money': self._extract_money(content),
+            'phone': self._extract_phone(content), 
+            'regulation': self._extract_regulation(content),
+            'date': self._extract_dates(content),
+            'url': self._extract_urls(content),
+            'measurement': self._extract_measurements(content)
+        }
+        
+        # Count total entities found
+        total_entities = sum(len(v) for v in entities.values() if isinstance(v, list))
+        
+        # Entity-based insights for semantic extraction
+        entity_insights = {
+            'has_financial_data': bool(entities['money']),
+            'has_regulations': bool(entities['regulation']),
+            'has_contact_info': bool(entities['phone']),
+            'has_temporal_data': bool(entities['date']),
+            'has_external_references': bool(entities['url']),
+            'has_technical_measurements': bool(entities['measurement']),
+            'total_entities_found': total_entities,
+            'entity_density': total_entities / max(1, len(content) // 1000)  # Entities per KB
+        }
+        
+        # Add entity lists as native Python lists for semantic extraction
+        result = {'universal_entities': entities}
+        result.update(entity_insights)
+        
+        return result
+    
+    def _layer5_deep_domain_entities(self, content: str, domain_scores: Dict[str, float]) -> Dict[str, Any]:
+        """
+        Layer 5: Deep Domain Entities (Conditional - only for high-confidence domains)
+        
+        Domain-specific entity extraction for specialized vocabularies.
+        Only runs when primary domain confidence >= 60%.
+        Performance: <15ms target
+        """
+        primary_domain = max(domain_scores.keys(), key=lambda k: domain_scores[k])
+        
+        deep_entities = {}
+        
+        # Safety domain specialization
+        if primary_domain == 'safety':
+            deep_entities['safety_equipment'] = self._extract_safety_equipment(content)
+            deep_entities['hazard_types'] = self._extract_hazard_types(content)
+            deep_entities['injury_types'] = self._extract_injury_types(content)
+        
+        # Compliance domain specialization  
+        elif primary_domain == 'compliance' or primary_domain == 'regulatory':
+            deep_entities['compliance_standards'] = self._extract_compliance_standards(content)
+            deep_entities['regulatory_agencies'] = self._extract_regulatory_agencies(content)
+            deep_entities['penalty_amounts'] = self._extract_penalty_amounts(content)
+        
+        # Construction domain specialization
+        elif primary_domain == 'construction':
+            deep_entities['construction_equipment'] = self._extract_construction_equipment(content)
+            deep_entities['building_materials'] = self._extract_building_materials(content)
+            deep_entities['construction_phases'] = self._extract_construction_phases(content)
+        
+        # Medical domain specialization
+        elif primary_domain == 'medical':
+            deep_entities['medical_conditions'] = self._extract_medical_conditions(content)
+            deep_entities['medical_procedures'] = self._extract_medical_procedures(content)
+            deep_entities['medications'] = self._extract_medications(content)
+        
+        total_deep_entities = sum(len(v) for v in deep_entities.values() if isinstance(v, list))
+        
+        return {
+            'deep_domain_entities': deep_entities,
+            'deep_domain_specialization': primary_domain,
+            'deep_entities_found': total_deep_entities,
+            'domain_expertise_applied': True
+        }
+    
+    # ========================================
+    # DEEP DOMAIN ENTITY EXTRACTORS
+    # ========================================
+    
+    def _extract_safety_equipment(self, content: str) -> List[str]:
+        """Extract safety equipment mentions"""
+        pattern = r'\b(?:helmet|harness|goggles|gloves|respirator|hard hat|ppe|protective equipment)\b'
+        matches = re.findall(pattern, content, re.IGNORECASE)
+        return list(set([match.lower() for match in matches]))[:10]
+    
+    def _extract_hazard_types(self, content: str) -> List[str]:
+        """Extract hazard type mentions"""
+        pattern = r'\b(?:fall|slip|trip|electrical|chemical|biological|radiation|noise)\s+hazard\b'
+        matches = re.findall(pattern, content, re.IGNORECASE)
+        cleaned = [' '.join(match.split()) for match in matches]
+        return list(set([match.lower() for match in cleaned]))[:10]
+    
+    def _extract_injury_types(self, content: str) -> List[str]:
+        """Extract injury type mentions"""
+        pattern = r'\b(?:fracture|sprain|cut|burn|bruise|laceration|contusion)\b'
+        matches = re.findall(pattern, content, re.IGNORECASE)
+        return list(set([match.lower() for match in matches]))[:10]
+    
+    def _extract_compliance_standards(self, content: str) -> List[str]:
+        """Extract compliance standards"""
+        pattern = r'\b(?:ISO|ANSI|ASTM|OSHA|EPA|NFPA)\s*[-\s]*\d+(?:[-\.]\d+)*\b'
+        matches = re.findall(pattern, content, re.IGNORECASE)
+        cleaned = [' '.join(match.split()).upper() for match in matches]
+        return list(set(cleaned))[:10]
+    
+    def _extract_regulatory_agencies(self, content: str) -> List[str]:
+        """Extract regulatory agency mentions"""
+        pattern = r'\b(?:OSHA|EPA|FDA|CPSC|NHTSA|FAA|FCC|SEC)\b'
+        matches = re.findall(pattern, content, re.IGNORECASE)
+        return list(set([match.upper() for match in matches]))[:10]
+    
+    def _extract_penalty_amounts(self, content: str) -> List[str]:
+        """Extract penalty/fine amounts"""
+        pattern = r'(?:fine|penalty|citation)\s*[:\-]?\s*\$[\d,]+(?:\.\d{2})?'
+        matches = re.findall(pattern, content, re.IGNORECASE)
+        cleaned = [' '.join(match.split()) for match in matches]
+        return list(set(cleaned))[:10]
+    
+    def _extract_construction_equipment(self, content: str) -> List[str]:
+        """Extract construction equipment mentions"""
+        pattern = r'\b(?:crane|excavator|bulldozer|loader|scaffold|ladder|forklift)\b'
+        matches = re.findall(pattern, content, re.IGNORECASE)
+        return list(set([match.lower() for match in matches]))[:10]
+    
+    def _extract_building_materials(self, content: str) -> List[str]:
+        """Extract building materials"""
+        pattern = r'\b(?:concrete|steel|lumber|drywall|insulation|rebar|plywood)\b'
+        matches = re.findall(pattern, content, re.IGNORECASE)
+        return list(set([match.lower() for match in matches]))[:10]
+    
+    def _extract_construction_phases(self, content: str) -> List[str]:
+        """Extract construction phases"""
+        pattern = r'\b(?:foundation|framing|roofing|plumbing|electrical|finishing)\s*(?:phase|stage|work)?\b'
+        matches = re.findall(pattern, content, re.IGNORECASE)
+        cleaned = [' '.join(match.split()) for match in matches]
+        return list(set([match.lower() for match in cleaned]))[:10]
+    
+    def _extract_medical_conditions(self, content: str) -> List[str]:
+        """Extract medical conditions"""
+        pattern = r'\b(?:diabetes|hypertension|asthma|pneumonia|infection|syndrome)\b'
+        matches = re.findall(pattern, content, re.IGNORECASE)
+        return list(set([match.lower() for match in matches]))[:10]
+    
+    def _extract_medical_procedures(self, content: str) -> List[str]:
+        """Extract medical procedures"""
+        pattern = r'\b(?:surgery|biopsy|examination|treatment|therapy|procedure)\b'
+        matches = re.findall(pattern, content, re.IGNORECASE)
+        return list(set([match.lower() for match in matches]))[:10]
+    
+    def _extract_medications(self, content: str) -> List[str]:
+        """Extract medication mentions"""
+        pattern = r'\b(?:aspirin|ibuprofen|acetaminophen|medication|drug|prescription)\b'
+        matches = re.findall(pattern, content, re.IGNORECASE)
+        return list(set([match.lower() for match in matches]))[:10]

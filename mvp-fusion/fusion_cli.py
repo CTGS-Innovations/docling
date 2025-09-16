@@ -542,8 +542,30 @@ Examples:
                 warnings_count = sum(1 for doc in results if doc.success and doc.error_message)
                 
                 print(f"\n🚀 PROCESSING PERFORMANCE:")
-                print(f"   🚀 PAGES/SEC: {pages_per_sec:.0f}")
+                print(f"   🚀 PAGES/SEC: {pages_per_sec:.0f} (overall pipeline)")
                 print(f"   ⚡ THROUGHPUT: {throughput_mb_sec:.1f} MB/sec raw document processing")
+                
+                # Add per-stage performance breakdown if available
+                if resource_summary and 'stage_timings' in resource_summary:
+                    print(f"\n📊 STAGE-BY-STAGE PERFORMANCE:")
+                    stage_timings = resource_summary['stage_timings']
+                    total_pages_for_stages = resource_summary.get('total_pages', total_pages)
+                    
+                    # Define stage display names
+                    stage_names = {
+                        'load': 'Conversion',
+                        'classify': 'Classification',
+                        'enrich': 'Enrichment',
+                        'extract': 'Extraction',
+                        'write': 'Writing'
+                    }
+                    
+                    for stage_key, display_name in stage_names.items():
+                        if stage_key in stage_timings:
+                            timing = stage_timings[stage_key]
+                            time_s = timing['time_ms'] / 1000
+                            pages_sec = timing['pages_per_sec']
+                            print(f"   • {display_name}: ~{pages_sec:,.0f} pages/sec ({time_s:.1f}s for {total_pages_for_stages:,} pages)")
                 
                 print(f"\n✅ DATA TRANSFORMATION SUMMARY:")
                 print(f"   📊 INPUT: {input_mb:.0f} MB across {len(results)} files ({total_pages:,} pages)")
