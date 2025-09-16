@@ -98,3 +98,101 @@ patterns:
     max_patterns_per_engine: 20  # Limit patterns per engine
     pattern_timeout_ms: 100      # 100ms timeout per pattern
     enable_pattern_profiling: true
+
+# Pipeline Stages Configuration
+pipeline:
+  # Stage control - enable/disable individual stages
+  stages:
+    convert: true      # Stage 1: PDF/Doc -> Markdown conversion
+    classify: true     # Stage 2: Document classification & type detection
+    enrich: true       # Stage 3: Entity extraction & enrichment
+    extract: true      # Stage 4: Semantic extraction & JSON generation
+  
+  # Stage-specific settings
+  convert:
+    # Document conversion settings
+    preserve_formatting: true
+    extract_tables: true
+    extract_images: false  # Skip for speed
+    ocr_fallback: true
+    
+  classify:
+    # Classification settings
+    confidence_threshold: 0.7
+    max_categories: 5
+    enable_entity_extraction: true
+    
+  enrich:
+    # Enrichment settings  
+    target_domains: ["safety", "compliance", "regulatory", "technical"]
+    max_entities_per_type: 100
+    confidence_threshold: 0.8
+    
+  extract:
+    # Semantic extraction settings
+    extract_facts: true
+    extract_rules: true
+    extract_relationships: true
+    max_facts: 50
+    max_rules: 20
+
+# Output Configuration
+output:
+  # Output directory structure
+  base_directory: "../output/fusion"
+  
+  # Output format control
+  formats:
+    enhanced_markdown: true    # Rich markdown with metadata headers
+    semantic_json: true        # Semantic extraction JSON
+    raw_markdown: false       # Plain markdown without metadata
+    performance_metrics: true  # Processing performance data
+  
+  # File organization
+  organization:
+    preserve_directory_structure: true
+    create_subdirectories: true
+    include_source_path: true
+  
+  # Metadata inclusion
+  metadata:
+    include_processing_stats: true
+    include_engine_info: true
+    include_timestamp: true
+    compact_json: true         # Minimize JSON size
+
+# File Processing Configuration
+files:
+  # Supported extensions (will process these)
+  supported_extensions:
+    - ".pdf"
+    - ".docx"
+    - ".doc"
+    - ".txt"
+    - ".md"
+    - ".html"
+  
+  # Processing options
+  recursive: true              # Process subdirectories
+  follow_symlinks: false       # Skip symbolic links
+  max_files_per_batch: 100     # Limit files per processing batch
+  
+  # Size and content limits
+  max_file_size_mb: 50         # Increased from 10MB for full processing
+  min_file_size_bytes: 100     # Skip tiny files
+  timeout_per_file_seconds: 30 # Generous timeout for large files
+
+# Logging and Monitoring
+logging:
+  level: "INFO"                # DEBUG, INFO, WARNING, ERROR
+  file: "fusion_pipeline.log"
+  console: true
+  include_performance: true
+  max_log_size_mb: 100
+
+# Error Handling
+error_handling:
+  continue_on_error: true      # Don't stop pipeline on individual file errors
+  max_errors: 50               # Stop if too many errors
+  retry_failed: true           # Retry failed files once
+  create_error_report: true    # Generate error summary

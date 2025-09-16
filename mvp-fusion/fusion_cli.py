@@ -244,8 +244,10 @@ def main():
 Examples:
   python fusion_cli.py --file document.pdf
   python fusion_cli.py --directory ~/documents/ --extensions .pdf .docx
+  python fusion_cli.py --config config/fusion_config.yaml --stages all
+  python fusion_cli.py --config config/fusion_config.yaml --convert-only
+  python fusion_cli.py --config config/fusion_config.yaml --stages convert classify
   python fusion_cli.py --performance-test --verbose
-  python fusion_cli.py --config my_config.yaml --batch-size 64
         """
     )
     
@@ -272,6 +274,20 @@ Examples:
     parser.add_argument('--workers', '-w', type=int, help='Number of parallel workers')
     parser.add_argument('--memory-limit', type=int, help='Memory limit in GB')
     
+    # Pipeline stage options
+    parser.add_argument('--stages', nargs='+', 
+                       choices=['convert', 'classify', 'enrich', 'extract', 'all'],
+                       default=['all'],
+                       help='Pipeline stages to run (default: all)')
+    parser.add_argument('--convert-only', action='store_true',
+                       help='Run only conversion stage (PDF -> Markdown)')
+    parser.add_argument('--classify-only', action='store_true', 
+                       help='Run only classification stage')
+    parser.add_argument('--enrich-only', action='store_true',
+                       help='Run only enrichment stage')
+    parser.add_argument('--extract-only', action='store_true',
+                       help='Run only semantic extraction stage')
+    
     # Output options
     parser.add_argument('--verbose', '-v', action='store_true', help='Verbose output')
     parser.add_argument('--quiet', '-q', action='store_true', help='Minimal output')
@@ -296,10 +312,14 @@ Examples:
         if args.workers:
             pipeline.batch_processor.max_workers = args.workers
         
+        # Configure pipeline stages
+        stages_to_run = _configure_pipeline_stages(args, pipeline)
+        
         print(f"✅ Pipeline initialized")
         print(f"   Output directory: {pipeline.output_directory}")
         print(f"   Strategy: {pipeline.strategy}")
         print(f"   Max workers: {pipeline.batch_processor.max_workers}")
+        print(f"   Stages to run: {', '.join(stages_to_run)}")
         
         # Execute command
         if args.file:
@@ -351,6 +371,38 @@ Examples:
             import traceback
             traceback.print_exc()
         sys.exit(1)
+
+
+def _configure_pipeline_stages(args, pipeline) -> List[str]:
+    """Configure which pipeline stages to run based on CLI arguments."""
+    # Handle stage-specific flags
+    if args.convert_only:
+        return ['convert']
+    elif args.classify_only:
+        return ['classify']
+    elif args.enrich_only:
+        return ['enrich']
+    elif args.extract_only:
+        return ['extract']
+    
+    # Handle --stages argument
+    if 'all' in args.stages:
+        stages = ['convert', 'classify', 'enrich', 'extract']
+    else:
+        stages = args.stages
+    
+    # Configure pipeline stages
+    if hasattr(pipeline, 'config'):
+        if 'pipeline' not in pipeline.config:
+            pipeline.config['pipeline'] = {}
+        if 'stages' not in pipeline.config['pipeline']:
+            pipeline.config['pipeline']['stages'] = {}
+        
+        # Set stage flags
+        for stage in ['convert', 'classify', 'enrich', 'extract']:
+            pipeline.config['pipeline']['stages'][stage] = stage in stages
+    
+    return stages
 
 
 if __name__ == "__main__":
