@@ -57,12 +57,15 @@ class FusionPipeline:
     Target: 10,000+ pages/sec (50x improvement over MVP-Hyper)
     """
     
-    def __init__(self, config_path: Optional[str] = None):
+    def __init__(self, config_path: Optional[str] = None, config_dict: Optional[Dict[str, Any]] = None):
         """Initialize the fusion pipeline."""
         self.logger = logging.getLogger(__name__)
         
-        # Load configuration
-        self.config = self._load_config(config_path)
+        # Load configuration (dict takes precedence over path)
+        if config_dict:
+            self.config = config_dict
+        else:
+            self.config = self._load_config(config_path)
         
         # Initialize components
         self.fusion_engine = FusionEngine(self.config)
@@ -91,6 +94,10 @@ class FusionPipeline:
             'pages_processed': 0,
             'errors_encountered': 0
         }
+        
+        # High-performance optimizations
+        self.file_cache = {}  # File content cache for repeated processing
+        self.cache_lock = threading.Lock()  # Thread-safe cache access
         
         # Create output directories
         self._setup_output_directories()
@@ -142,16 +149,60 @@ class FusionPipeline:
         file_path = Path(file_path)
         
         try:
-            # Load content if not provided
+            # Get stage configuration
+            stages_config = self.config.get('pipeline', {}).get('stages', {
+                'convert': True, 'classify': True, 'enrich': True, 'extract': True
+            })
+            
+            # Debug: Log stage configuration only once per batch
+            if not hasattr(self, '_logged_stages'):
+                self.logger.info(f"Pipeline stages: {stages_config}")
+                self._logged_stages = True
+            
+            # STAGE 1: CONVERSION (Load/Convert content)
             if content is None:
                 if not file_path.exists():
                     raise FileNotFoundError(f"File not found: {file_path}")
-                content = self._convert_file_to_text(file_path)
+                content = self._convert_file_to_text_cached(file_path)
             
-            # Step 1: Classification and Entity Extraction (FUSION ENGINE)
-            classification_start = time.time()
-            classification_results = self.fusion_engine.process_text(content, str(file_path))
-            classification_time = time.time() - classification_start
+            # ULTRA-FAST convert-only mode (like MVP-Hyper core)
+            if stages_config.get('convert') and not any([
+                stages_config.get('classify', False),
+                stages_config.get('enrich', False), 
+                stages_config.get('extract', False)
+            ]):
+                convert_time = time.time() - start_time
+                
+                # Minimal processing like MVP-Hyper - just save raw content
+                markdown_path = self.output_directory / f"{file_path.stem}.md"
+                
+                # Ultra-minimal write - no fancy formatting
+                try:
+                    markdown_path.write_text(content, encoding='utf-8')
+                    success = True
+                except Exception as e:
+                    self.logger.warning(f"Write failed for {file_path.name}: {e}")
+                    success = False
+                
+                return {
+                    'status': 'success' if success else 'error',
+                    'file_path': str(file_path),
+                    'conversion_only': True,
+                    'processing_metadata': {
+                        'total_time_ms': convert_time * 1000,
+                        'chars_processed': len(content),
+                        'pages_per_sec': 1 / convert_time if convert_time > 0 else 0
+                    },
+                    'output_files': {'markdown': str(markdown_path)} if success else {}
+                }
+            
+            # STAGE 2: CLASSIFICATION (if enabled)
+            classification_results = {}
+            classification_time = 0
+            if stages_config.get('classify', True):
+                classification_start = time.time()
+                classification_results = self.fusion_engine.process_text(content, str(file_path))
+                classification_time = time.time() - classification_start
             
             # Step 2: Enhanced Markdown Generation (MVP-HYPER COMPATIBLE)
             markdown_start = time.time()
@@ -810,6 +861,82 @@ class FusionPipeline:
         self.processing_stats['total_processing_time'] += time_taken
         self.processing_stats['pages_processed'] += pages
         self.processing_stats['errors_encountered'] += errors
+    
+    def process_batch_files(self, file_paths: List[str]) -> List[Dict[str, Any]]:
+        """Process multiple files in parallel batches (MVP-Hyper style)."""
+        from pathlib import Path
+        from concurrent.futures import ThreadPoolExecutor
+        
+        start_time = time.time()
+        results = []
+        
+        # Use same parallel processing as MVP-Hyper
+        max_workers = min(16, len(file_paths))  # Limit workers like MVP-Hyper
+        
+        print(f"Using {max_workers} parallel workers for batch processing...")
+        
+        # Use MVP-Hyper's proven approach: submit all futures first, then collect
+        try:
+            executor = ThreadPoolExecutor(max_workers=max_workers)
+            
+            # Submit all files for processing (like MVP-Hyper)
+            futures = []
+            for file_path in file_paths:
+                try:
+                    future = executor.submit(self.process_document, Path(file_path))
+                    futures.append((future, file_path))
+                except Exception as e:
+                    self.logger.warning(f"Failed to submit {file_path}: {e}")
+                    results.append({
+                        'status': 'error',
+                        'error': str(e),
+                        'file_path': file_path,
+                        'processing_metadata': {'total_time_ms': 0}
+                    })
+            
+            # Collect results in order (like MVP-Hyper)
+            completed = 0
+            for future, file_path in futures:
+                try:
+                    result = future.result(timeout=30)  # Shorter timeout for speed
+                    results.append(result)
+                    completed += 1
+                    
+                    # Less frequent progress updates for speed
+                    if completed % 100 == 0:
+                        elapsed = time.time() - start_time
+                        rate = completed / elapsed if elapsed > 0 else 0
+                        print(f"Progress: {completed}/{len(file_paths)} files ({rate:.1f} files/sec)")
+                        
+                except Exception as e:
+                    # Handle timeout or processing errors
+                    self.logger.warning(f"Processing failed for {file_path}: {e}")
+                    results.append({
+                        'status': 'error',
+                        'error': str(e),
+                        'file_path': file_path,
+                        'processing_metadata': {'total_time_ms': 0}
+                    })
+                    completed += 1
+                    
+        finally:
+            # Ensure proper executor shutdown
+            try:
+                executor.shutdown(wait=False)  # Don't wait for lingering threads
+            except:
+                pass  # Ignore shutdown errors
+        
+        processing_time = time.time() - start_time
+        successful = sum(1 for r in results if r.get('status') == 'success')
+        
+        print(f"\nBatch processing complete:")
+        print(f"  Files processed: {len(file_paths)}")
+        print(f"  Successful: {successful}")
+        print(f"  Failed: {len(file_paths) - successful}")
+        print(f"  Total time: {processing_time:.2f}s")
+        print(f"  Rate: {len(file_paths) / processing_time:.1f} files/sec")
+        
+        return results
     
     def get_performance_metrics(self) -> Dict[str, Any]:
         """Get pipeline performance metrics."""

@@ -52,9 +52,21 @@ def process_single_file(pipeline: FusionPipeline, file_path: Path) -> Dict[str, 
         metadata = result['processing_metadata']
         print(f"  ✅ Success - {processing_time:.3f}s")
         print(f"     Pages/sec: {metadata['pages_per_sec']:.1f}")
-        print(f"     Entities: {metadata['entities_found']}")
-        print(f"     Engine: {metadata['engine_used']}")
-        print(f"     Outputs: {list(result['output_paths'].keys())}")
+        # Only show entities if they exist (not in convert-only mode)
+        if 'entities_found' in metadata:
+            print(f"     Entities: {metadata['entities_found']}")
+        # Only show engine if it exists (not in convert-only mode) 
+        if 'engine_used' in metadata:
+            print(f"     Engine: {metadata['engine_used']}")
+        # Handle different output formats
+        if 'output_paths' in result:
+            print(f"     Outputs: {list(result['output_paths'].keys())}")
+        elif 'output_files' in result:
+            print(f"     Outputs: {list(result['output_files'].keys())}")
+            
+        # Show convert-only mode info
+        if result.get('conversion_only'):
+            print(f"     Mode: Convert-only ({metadata.get('chars_processed', 0)} chars)")
     else:
         print(f"  ❌ Error: {result.get('error', 'Unknown error')}")
     
@@ -63,7 +75,7 @@ def process_single_file(pipeline: FusionPipeline, file_path: Path) -> Dict[str, 
 
 def process_directory(pipeline: FusionPipeline, directory: Path, 
                      file_extensions: List[str] = None) -> List[Dict[str, Any]]:
-    """Process all files in a directory."""
+    """Process all files in a directory using high-speed batch processing."""
     if file_extensions is None:
         file_extensions = ['.txt', '.md', '.pdf', '.docx', '.doc']
     
@@ -78,19 +90,19 @@ def process_directory(pipeline: FusionPipeline, directory: Path,
     
     print(f"Found {len(files)} files to process in {directory}")
     
-    results = []
+    # Use batch processing like MVP-Hyper for maximum speed
+    print(f"Processing {len(files)} files with parallel batch processing...")
+    
     start_time = time.time()
     
-    for i, file_path in enumerate(files, 1):
-        print(f"\n[{i}/{len(files)}] ", end="")
-        result = process_single_file(pipeline, file_path)
-        results.append(result)
-        
-        # Show progress
-        if i % 10 == 0:
-            elapsed = time.time() - start_time
-            rate = i / elapsed if elapsed > 0 else 0
-            print(f"\nProgress: {i}/{len(files)} files ({rate:.1f} files/sec)")
+    # Process files in parallel batches (like MVP-Hyper)
+    file_paths = [str(f) for f in files]
+    results = pipeline.process_batch_files(file_paths)
+    
+    # Show progress during processing
+    elapsed = time.time() - start_time
+    rate = len(files) / elapsed if elapsed > 0 else 0
+    print(f"\nBatch processing complete: {len(files)} files in {elapsed:.2f}s ({rate:.1f} files/sec)")
     
     # Final statistics
     total_time = time.time() - start_time
@@ -244,15 +256,15 @@ def main():
 Examples:
   python fusion_cli.py --file document.pdf
   python fusion_cli.py --directory ~/documents/ --extensions .pdf .docx
-  python fusion_cli.py --config-directories --config config/fusion_config.yaml --stages all
-  python fusion_cli.py --config-directories --config config/fusion_config.yaml --convert-only
-  python fusion_cli.py --config-directories --config config/fusion_config.yaml --stages convert classify
+  python fusion_cli.py --config config/fusion_config.yaml --stages all
+  python fusion_cli.py --config config/fusion_config.yaml --convert-only
+  python fusion_cli.py --config config/fusion_config.yaml --stages convert classify
   python fusion_cli.py --performance-test --verbose
         """
     )
     
-    # Input options
-    input_group = parser.add_mutually_exclusive_group(required=True)
+    # Input options (optional if config file has directories)
+    input_group = parser.add_mutually_exclusive_group(required=False)
     input_group.add_argument('--file', '-f', type=str, help='Process single file')
     input_group.add_argument('--directory', '-d', type=str, help='Process directory')
     input_group.add_argument('--config-directories', action='store_true',
@@ -302,11 +314,14 @@ Examples:
         setup_logging(args.verbose)
     
     try:
-        # Initialize pipeline
-        print("🔧 Initializing MVP-Fusion Pipeline...")
-        pipeline = FusionPipeline(args.config)
+        # Load base configuration first
+        config = _load_and_override_config(args)
         
-        # Override config with command line args
+        # Initialize pipeline with final config
+        print("🔧 Initializing MVP-Fusion Pipeline...")
+        pipeline = FusionPipeline(config_dict=config)
+        
+        # Apply remaining CLI overrides that aren't in config
         if args.output:
             pipeline.output_directory = Path(args.output)
             pipeline._setup_output_directories()
@@ -314,8 +329,8 @@ Examples:
         if args.workers:
             pipeline.batch_processor.max_workers = args.workers
         
-        # Configure pipeline stages
-        stages_to_run = _configure_pipeline_stages(args, pipeline)
+        # Get final stage configuration
+        stages_to_run = config.get('pipeline', {}).get('stages_to_run', ['all'])
         
         print(f"✅ Pipeline initialized")
         print(f"   Output directory: {pipeline.output_directory}")
@@ -367,6 +382,31 @@ Examples:
             
             print(f"\n✅ Processed {len(all_results)} total files across all directories")
             
+        elif args.config and not args.file and not args.directory and not args.performance_test:
+            # Auto-process directories from config file when only --config is provided
+            config_dirs = pipeline.config.get('inputs', {}).get('directories', [])
+            if config_dirs:
+                print(f"🗂️  Auto-processing {len(config_dirs)} directories from config:")
+                for config_dir in config_dirs:
+                    print(f"   - {config_dir}")
+                
+                all_results = []
+                for config_dir in config_dirs:
+                    directory = Path(config_dir).expanduser()
+                    if not directory.exists():
+                        print(f"⚠️  Directory not found: {directory} (skipping)")
+                        continue
+                        
+                    print(f"\n📂 Processing directory: {directory}")
+                    extensions = pipeline.config.get('files', {}).get('supported_extensions', args.extensions)
+                    results = process_directory(pipeline, directory, extensions)
+                    all_results.extend(results if isinstance(results, list) else [results])
+                
+                print(f"\n✅ Processed {len(all_results)} total files across all directories")
+            else:
+                print("❌ No input specified and no directories in config file")
+                sys.exit(1)
+            
         elif args.performance_test:
             # Run performance test
             test_results = run_performance_test(pipeline)
@@ -400,36 +440,67 @@ Examples:
         sys.exit(1)
 
 
-def _configure_pipeline_stages(args, pipeline) -> List[str]:
-    """Configure which pipeline stages to run based on CLI arguments."""
-    # Handle stage-specific flags
+def _load_and_override_config(args) -> dict:
+    """Load config file and apply CLI overrides (industry best practice)."""
+    import yaml
+    from pathlib import Path
+    
+    # Step 1: Load base configuration
+    config = {}
+    if args.config:
+        config_path = Path(args.config)
+        if config_path.exists():
+            with open(config_path, 'r') as f:
+                config = yaml.safe_load(f) or {}
+        else:
+            print(f"⚠️  Config file not found: {config_path}")
+    
+    # Step 2: Apply CLI overrides to config
+    
+    # Override pipeline stages based on CLI arguments
+    if not config.get('pipeline'):
+        config['pipeline'] = {}
+    if not config['pipeline'].get('stages'):
+        config['pipeline']['stages'] = {}
+    
+    # Determine which stages to run from CLI args
     if args.convert_only:
-        return ['convert']
+        stages_to_run = ['convert']
     elif args.classify_only:
-        return ['classify']
+        stages_to_run = ['classify']
     elif args.enrich_only:
-        return ['enrich']
+        stages_to_run = ['enrich']
     elif args.extract_only:
-        return ['extract']
-    
-    # Handle --stages argument
-    if 'all' in args.stages:
-        stages = ['convert', 'classify', 'enrich', 'extract']
+        stages_to_run = ['extract']
+    elif 'all' in args.stages:
+        stages_to_run = ['convert', 'classify', 'enrich', 'extract']
     else:
-        stages = args.stages
+        stages_to_run = args.stages
     
-    # Configure pipeline stages
-    if hasattr(pipeline, 'config'):
-        if 'pipeline' not in pipeline.config:
-            pipeline.config['pipeline'] = {}
-        if 'stages' not in pipeline.config['pipeline']:
-            pipeline.config['pipeline']['stages'] = {}
-        
-        # Set stage flags
-        for stage in ['convert', 'classify', 'enrich', 'extract']:
-            pipeline.config['pipeline']['stages'][stage] = stage in stages
+    # Set stage flags in config
+    for stage in ['convert', 'classify', 'enrich', 'extract']:
+        config['pipeline']['stages'][stage] = stage in stages_to_run
     
-    return stages
+    # Store stages list for reference
+    config['pipeline']['stages_to_run'] = stages_to_run
+    
+    # Override other settings
+    if args.batch_size:
+        if not config.get('performance'):
+            config['performance'] = {}
+        config['performance']['batch_size'] = args.batch_size
+    
+    if args.workers:
+        if not config.get('performance'):
+            config['performance'] = {}
+        config['performance']['max_workers'] = args.workers
+    
+    if args.memory_limit:
+        if not config.get('performance'):
+            config['performance'] = {}
+        config['performance']['max_memory_usage_gb'] = args.memory_limit
+    
+    return config
 
 
 if __name__ == "__main__":
