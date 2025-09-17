@@ -12,6 +12,11 @@ import ahocorasick
 from pathlib import Path
 from typing import Dict, List, Any, Tuple, Set
 from collections import defaultdict
+import sys
+
+# Import centralized logging
+sys.path.append(str(Path(__file__).parent.parent))
+from utils.logging_config import get_fusion_logger
 
 
 class AhoCorasickKnowledgeEngine:
@@ -26,6 +31,7 @@ class AhoCorasickKnowledgeEngine:
     """
     
     def __init__(self, config_dir: str = "knowledge"):
+        self.logger = get_fusion_logger(__name__)
         self.config_dir = Path(config_dir)
         self.domain_patterns = {}
         self.domain_weights = {}
@@ -96,10 +102,10 @@ class AhoCorasickKnowledgeEngine:
                     if isinstance(category_data, dict):
                         total_entity_patterns += sum(len(e) if isinstance(e, list) else 1 for e in category_data.values())
         
-        print(f"📚 Loaded modular patterns:")
-        print(f"   🏛️  Domains: {len(self.domain_patterns)} ({total_domain_patterns} keywords)")
-        print(f"   📄 Document Types: {len(self.document_type_patterns)} ({total_doctype_patterns} keywords)")
-        print(f"   🔍 Entity Categories: {len(self.entity_patterns)} ({total_entity_patterns} total patterns)")
+        self.logger.entity(f"📚 Loaded modular patterns:")
+        self.logger.entity(f"   🏛️  Domains: {len(self.domain_patterns)} ({total_domain_patterns} keywords)")
+        self.logger.entity(f"   📄 Document Types: {len(self.document_type_patterns)} ({total_doctype_patterns} keywords)")
+        self.logger.entity(f"   🔍 Entity Categories: {len(self.entity_patterns)} ({total_entity_patterns} total patterns)")
         
     def _build_automatons(self):
         """Build Aho-Corasick automatons for domains, document types, and entities"""
@@ -161,10 +167,10 @@ class AhoCorasickKnowledgeEngine:
         
         self.build_time_ms = (time.perf_counter() - build_start) * 1000
         
-        print(f"⚡ Built modular Aho-Corasick automatons: {self.build_time_ms:.2f}ms")
-        print(f"   🏛️  Domain patterns: {domain_pattern_id}")
-        print(f"   📄 Document type patterns: {doctype_pattern_id}")
-        print(f"   🔍 Entity patterns: {entity_id}")
+        self.logger.logger.debug(f"⚡ Built modular Aho-Corasick automatons: {self.build_time_ms:.2f}ms")
+        self.logger.logger.debug(f"   🏛️  Domain patterns: {domain_pattern_id}")
+        self.logger.logger.debug(f"   📄 Document type patterns: {doctype_pattern_id}")
+        self.logger.logger.debug(f"   🔍 Entity patterns: {entity_id}")
         
     def classify_domains(self, content: str) -> Dict[str, float]:
         """

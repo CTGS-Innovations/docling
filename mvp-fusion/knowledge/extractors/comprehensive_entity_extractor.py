@@ -15,6 +15,12 @@ from typing import Dict, List, Any, Optional, Tuple, Set
 from dataclasses import dataclass, field
 from datetime import datetime
 import json
+import sys
+from pathlib import Path
+
+# Import centralized logging
+sys.path.append(str(Path(__file__).parent.parent.parent))
+from utils.logging_config import get_fusion_logger
 
 @dataclass
 class MoneyEntity:
@@ -102,6 +108,7 @@ class ComprehensiveEntityExtractor:
     """
     
     def __init__(self):
+        self.logger = get_fusion_logger(__name__)
         # All patterns use FLPC Rust regex for performance
         self._initialize_patterns()
     
@@ -525,7 +532,7 @@ class ComprehensiveEntityExtractor:
         Extract ALL entities and relationships from text
         Returns comprehensive knowledge graph
         """
-        print("Extracting entities with FLPC Rust regex...")
+        self.logger.logger.debug("Extracting entities with FLPC Rust regex...")
         
         # Extract all entity types
         all_entities = {

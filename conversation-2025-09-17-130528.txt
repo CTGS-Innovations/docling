@@ -1,0 +1,8 @@
+╭───────────────────────────────────────────────────╮
+│ ✻ Welcome to Claude Code!                         │
+│                                                   │
+│   /help for help, /status for your current setup  │
+│                                                   │
+│   cwd: /home/corey/projects/docling               │
+╰───────────────────────────────────────────────────╯
+

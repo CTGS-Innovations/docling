@@ -19,11 +19,17 @@ Edge Architecture:
 
 import re
 import time
+import logging
 from pathlib import Path
 from typing import List, Dict, Any, Union
 import yaml
 from datetime import datetime
 from .in_memory_document import InMemoryDocument, MemoryOverflowError
+
+# Import centralized logging
+import sys
+sys.path.append(str(Path(__file__).parent.parent))
+from utils.logging_config import get_fusion_logger
 
 # Import Aho-Corasick engine for high-performance pattern matching
 try:
@@ -34,7 +40,7 @@ try:
     AHOCORASICK_AVAILABLE = True
 except ImportError:
     AHOCORASICK_AVAILABLE = False
-    print("⚠️  Aho-Corasick engine not available, falling back to regex patterns")
+    logging.warning("⚠️  Aho-Corasick engine not available, falling back to regex patterns")
 
 
 class FusionPipeline:
@@ -53,17 +59,20 @@ class FusionPipeline:
         self.memory_limit_mb = config.get('pipeline', {}).get('memory_limit_mb', 100)
         self.service_memory_limit_mb = config.get('pipeline', {}).get('service_memory_limit_mb', 1024)
         
+        # Get logger for this module
+        self.logger = get_fusion_logger(__name__)
+        
         # Initialize Aho-Corasick engine for high-performance classification
         self.ac_classifier = None
         if AHOCORASICK_AVAILABLE:
             try:
                 self.ac_classifier = AhoCorasickLayeredClassifier()
                 self.semantic_extractor = SemanticFactExtractor()
+                self.logger.entity("✅ Aho-Corasick engine initialized for government/regulatory + AI domains")
             except ImportError:
                 self.semantic_extractor = None
-                print("✅ Aho-Corasick engine initialized for government/regulatory + AI domains")
             except Exception as e:
-                print(f"⚠️  Aho-Corasick initialization failed: {e}, using regex fallback")
+                self.logger.logger.warning(f"⚠️  Aho-Corasick initialization failed: {e}, using regex fallback")
                 self.ac_classifier = None
         
     def process_files(self, extractor, file_paths: List[Path], output_dir: Path, 
@@ -87,8 +96,8 @@ class FusionPipeline:
         """
         start_time = time.perf_counter()
         
-        print(f"🚀 In-Memory Pipeline: {' → '.join(self.stages_to_run)}")
-        print(f"💾 Memory limit: {self.memory_limit_mb}MB per file, {self.service_memory_limit_mb}MB service total")
+        self.logger.stage(f"🚀 In-Memory Pipeline: {' → '.join(self.stages_to_run)}")
+        self.logger.entity(f"💾 Memory limit: {self.memory_limit_mb}MB per file, {self.service_memory_limit_mb}MB service total")
         
         # Initialize in-memory documents
         in_memory_docs = []
@@ -96,7 +105,7 @@ class FusionPipeline:
         
         # Stage 1: CONVERT (if requested)
         if 'convert' in self.stages_to_run:
-            print(f"📄 Stage 1: Converting {len(file_paths)} files to in-memory documents...")
+            self.logger.stage(f"📄 Stage 1: Converting {len(file_paths)} files to in-memory documents...")
             stage_start = time.perf_counter()
             
             # Use extractor for conversion but process results into InMemoryDocument objects
@@ -157,14 +166,14 @@ class FusionPipeline:
                 
             stage_time = (time.perf_counter() - stage_start) * 1000
             successful_docs = [doc for doc in in_memory_docs if doc.success]
-            print(f"   ✅ Conversion complete: {stage_time:.0f}ms ({len(successful_docs)}/{len(in_memory_docs)} successful)")
-            print(f"   💾 Total service memory: {total_service_memory:.1f}MB")
+            self.logger.success(f"Conversion complete: {stage_time:.0f}ms ({len(successful_docs)}/{len(in_memory_docs)} successful)")
+            self.logger.entity(f"💾 Total service memory: {total_service_memory:.1f}MB")
         else:
             resource_summary = None
         
         # Stage 2: CLASSIFY (if requested)
         if 'classify' in self.stages_to_run:
-            print(f"📋 Stage 2: Classifying documents in memory...")
+            self.logger.stage(f"📋 Stage 2: Classifying documents in memory...")
             stage_start = time.perf_counter()
             
             successful_classifications = 0
@@ -181,11 +190,11 @@ class FusionPipeline:
                         doc.mark_failed(f"Classification failed: {e}")
             
             stage_time = (time.perf_counter() - stage_start) * 1000
-            print(f"   ✅ Classification complete: {stage_time:.0f}ms ({successful_classifications}/{len(in_memory_docs)} successful)")
+            self.logger.success(f"Classification complete: {stage_time:.0f}ms ({successful_classifications}/{len(in_memory_docs)} successful)")
         
         # Stage 3: ENRICH (if requested)
         if 'enrich' in self.stages_to_run:
-            print(f"🔍 Stage 3: Enriching documents in memory...")
+            self.logger.stage(f"🔍 Stage 3: Enriching documents in memory...")
             stage_start = time.perf_counter()
             
             successful_enrichments = 0
@@ -210,24 +219,50 @@ class FusionPipeline:
                         doc.mark_failed(f"Enrichment failed: {e}")
             
             stage_time = (time.perf_counter() - stage_start) * 1000
-            print(f"   ✅ Enrichment complete: {stage_time:.0f}ms ({successful_enrichments}/{len(in_memory_docs)} successful)")
+            self.logger.success(f"Enrichment complete: {stage_time:.0f}ms ({successful_enrichments}/{len(in_memory_docs)} successful)")
         
         # Stage 4: EXTRACT (if requested)  
         if 'extract' in self.stages_to_run:
-            print(f"📄 Stage 4: Extracting semantic rules in memory...")
+            self.logger.stage(f"📄 Stage 4: Extracting semantic rules in memory...")
             stage_start = time.perf_counter()
             
             successful_extractions = 0
             for doc in in_memory_docs:
                 if doc.success:
                     try:
-                        # TODO: Implement semantic rule extraction
-                        semantic_data = {
-                            'extraction_date': time.strftime('%Y-%m-%dT%H:%M:%S'),
-                            'extraction_method': 'mvp-fusion-basic',
-                            'rules_extracted': 0,
-                            'knowledge_points': []
-                        }
+                        # Extract rich semantic data from classification results
+                        classification = doc.yaml_frontmatter.get('classification', {})
+                        semantic_facts = classification.get('semantic_facts', {})
+                        semantic_summary = classification.get('semantic_summary', {})
+                        
+                        if semantic_facts:
+                            # Use the rich semantic data 
+                            semantic_data = {
+                                'extraction_date': time.strftime('%Y-%m-%dT%H:%M:%S'),
+                                'extraction_method': 'mvp-fusion-rich-semantic',
+                                'semantic_facts': semantic_facts,
+                                'semantic_summary': semantic_summary,
+                                'rules_extracted': semantic_summary.get('total_facts', 0),
+                                'knowledge_points': [
+                                    {
+                                        'type': fact_type,
+                                        'count': len(facts) if isinstance(facts, list) else 1,
+                                        'facts': facts
+                                    }
+                                    for fact_type, facts in semantic_facts.items() 
+                                    if facts
+                                ]
+                            }
+                        else:
+                            # Fallback for documents without semantic data
+                            semantic_data = {
+                                'extraction_date': time.strftime('%Y-%m-%dT%H:%M:%S'),
+                                'extraction_method': 'mvp-fusion-no-semantic-data',
+                                'rules_extracted': 0,
+                                'knowledge_points': [],
+                                'note': 'No semantic facts found in classification data'
+                            }
+                        
                         doc.set_semantic_data(semantic_data)
                         doc.record_stage_timing('extract', (time.perf_counter() - stage_start) * 1000)
                         successful_extractions += 1
@@ -237,10 +272,10 @@ class FusionPipeline:
                         doc.mark_failed(f"Extraction failed: {e}")
             
             stage_time = (time.perf_counter() - stage_start) * 1000
-            print(f"   ✅ Extraction complete: {stage_time:.0f}ms ({successful_extractions}/{len(in_memory_docs)} successful)")
+            self.logger.success(f"Extraction complete: {stage_time:.0f}ms ({successful_extractions}/{len(in_memory_docs)} successful)")
         
         # Final Stage: WRITE (always performed)
-        print(f"💾 Final Stage: Writing processed documents to disk...")
+        self.logger.stage(f"💾 Final Stage: Writing processed documents to disk...")
         write_start = time.perf_counter()
         
         successful_writes = 0
@@ -255,16 +290,16 @@ class FusionPipeline:
                         f.write(final_markdown)
                     
                     # Write semantic facts JSON knowledge file if available
-                    print(f"🔍 Debug: Checking JSON generation for {doc.source_stem}")
-                    print(f"   - Has semantic_json attr: {hasattr(doc, 'semantic_json')}")
-                    print(f"   - semantic_json exists: {bool(doc.semantic_json)}")
-                    print(f"   - semantic_json type: {type(doc.semantic_json)}")
+                    self.logger.logger.debug(f"🔍 Debug: Checking JSON generation for {doc.source_stem}")
+                    self.logger.logger.debug(f"   - Has semantic_json attr: {hasattr(doc, 'semantic_json')}")
+                    self.logger.logger.debug(f"   - semantic_json exists: {bool(doc.semantic_json)}")
+                    self.logger.logger.debug(f"   - semantic_json type: {type(doc.semantic_json)}")
                     
                     if doc.semantic_json:
                         json_file = output_dir / f"{doc.source_stem}.json"
                         import json
                         
-                        print(f"📝 Generating JSON knowledge file: {json_file}")
+                        self.logger.entity(f"📝 Generating JSON knowledge file: {json_file}")
                         
                         # Use the standardized knowledge JSON format (matches temp file)
                         knowledge_data = doc.generate_knowledge_json()
@@ -274,9 +309,9 @@ class FusionPipeline:
                                 json.dump(knowledge_data, f, indent=2, ensure_ascii=False)
                             
                             total_facts = knowledge_data.get('semantic_summary', {}).get('total_facts', 0)
-                            print(f"📄 Generated knowledge file: {json_file.name} ({total_facts} facts)")
+                            self.logger.entity(f"📄 Generated knowledge file: {json_file.name} ({total_facts} facts)")
                         else:
-                            print(f"⚠️  No semantic facts to write for {doc.source_filename}")
+                            self.logger.logger.warning(f"⚠️  No semantic facts to write for {doc.source_filename}")
                     
                     # Fallback: Legacy semantic JSON support  
                     elif hasattr(doc, 'semantic_json') and doc.semantic_json:
@@ -291,7 +326,7 @@ class FusionPipeline:
                     doc.mark_failed(f"Write failed: {e}")
         
         write_time = (time.perf_counter() - write_start) * 1000
-        print(f"   ✅ Write complete: {write_time:.0f}ms ({successful_writes}/{len(in_memory_docs)} successful)")
+        self.logger.success(f"Write complete: {write_time:.0f}ms ({successful_writes}/{len(in_memory_docs)} successful)")
         
         total_time = time.perf_counter() - start_time
         
@@ -422,10 +457,10 @@ class FusionPipeline:
                 layers_processed.append('layer6_semantic_facts')
                 layer_timings['layer6_semantic_facts'] = (time.perf_counter() - layer6_start) * 1000
                 
-                print(f"🧠 Layer 6: Semantic facts extracted - {semantic_facts.get('semantic_summary', {}).get('total_facts', 0)} facts found")
+                self.logger.entity(f"🧠 Layer 6: Semantic facts extracted - {semantic_facts.get('semantic_summary', {}).get('total_facts', 0)} facts found")
                 
             except Exception as e:
-                print(f"⚠️  Layer 6 semantic extraction failed: {e}")
+                self.logger.logger.warning(f"⚠️  Layer 6 semantic extraction failed: {e}")
                 layer_timings['layer6_semantic_facts'] = (time.perf_counter() - layer6_start) * 1000
         
         # Final performance summary (clean structure)

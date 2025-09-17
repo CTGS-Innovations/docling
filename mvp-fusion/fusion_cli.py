@@ -15,10 +15,12 @@ Usage:
 import argparse
 import sys
 import time
-import logging
 from pathlib import Path
 from typing import List, Dict, Any
 import json
+
+# Import our centralized logging configuration
+from utils.logging_config import setup_logging, get_fusion_logger
 
 # Import extraction architecture
 from extraction import (
@@ -56,30 +58,18 @@ def create_extractor(extractor_name: str, config: dict = None):
     else:
         return extractor_class()
 
-def setup_logging(verbose: bool = False):
-    """Setup logging configuration."""
-    level = logging.DEBUG if verbose else logging.INFO
-    format_string = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    
-    logging.basicConfig(
-        level=level,
-        format=format_string,
-        handlers=[
-            logging.StreamHandler(sys.stdout),
-            logging.FileHandler('fusion_pipeline.log', mode='a')
-        ]
-    )
 
 
 def process_single_file(extractor: BaseExtractor, file_path: Path, output_dir: Path = None, quiet: bool = False) -> Dict[str, Any]:
     """Process a single file and return results."""
+    logger = get_fusion_logger(__name__)
     if not quiet:
-        print(f"Processing: {file_path.name}")
+        logger.stage(f"Processing: {file_path.name}")
     
     result = extractor.extract_single(file_path, output_dir or Path.cwd())
     
     if not quiet and not result.success:
-        print(f"  ❌ Error: {result.error}")
+        logger.logger.error(f"❌ Error: {result.error}")
     
     return result
 
@@ -87,6 +77,7 @@ def process_single_file(extractor: BaseExtractor, file_path: Path, output_dir: P
 def process_directory(extractor: BaseExtractor, directory: Path, 
                      file_extensions: List[str] = None, output_dir: Path = None):
     """Process all files in a directory using high-speed batch processing."""
+    logger = get_fusion_logger(__name__)
     if file_extensions is None:
         file_extensions = ['.txt', '.md', '.pdf', '.docx', '.doc']
     
@@ -96,16 +87,16 @@ def process_directory(extractor: BaseExtractor, directory: Path,
         files.extend(directory.glob(f"**/*{ext}"))
     
     if not files:
-        print(f"No files found in {directory} with extensions {file_extensions}")
+        logger.logger.warning(f"No files found in {directory} with extensions {file_extensions}")
         return []
     
-    print(f"📁 Found {len(files)} files in {directory.name}")
+    logger.stage(f"📁 Found {len(files)} files in {directory.name}")
     
     # Show progress indicator for large batches
     if len(files) > 100:
-        print(f"🚀 Processing {len(files)} files (progress shown every 100 files)...")
+        logger.stage(f"🚀 Processing {len(files)} files (progress shown every 100 files)...")
     else:
-        print(f"🚀 Processing {len(files)} files...")
+        logger.stage(f"🚀 Processing {len(files)} files...")
     
     start_time = time.time()
     
@@ -124,26 +115,27 @@ def process_directory(extractor: BaseExtractor, directory: Path,
     failed = len(results) - successful
     rate = len(files) / total_time if total_time > 0 else 0
     
-    print(f"✅ Completed: {successful} successful, {failed} failed ({rate:.0f} files/sec)")
+    logger.success(f"Completed: {successful} successful, {failed} failed ({rate:.0f} files/sec)")
     
     # Final statistics
     total_time = time.time() - start_time
     successful = sum(1 for r in results if r.success)
     failed = len(results) - successful
     
-    print(f"\n📊 Processing Complete:")
-    print(f"   Total files: {len(results)}")
-    print(f"   Successful: {successful}")
-    print(f"   Failed: {failed}")
-    print(f"   Total time: {total_time:.2f}s")
-    print(f"   Average rate: {len(results)/total_time:.1f} files/sec")
+    logger.stage(f"\n📊 Processing Complete:")
+    logger.stage(f"   Total files: {len(results)}")
+    logger.stage(f"   Successful: {successful}")
+    logger.stage(f"   Failed: {failed}")
+    logger.stage(f"   Total time: {total_time:.2f}s")
+    logger.stage(f"   Average rate: {len(results)/total_time:.1f} files/sec")
     
     return results
 
 
 def run_performance_test(extractor: BaseExtractor, max_workers: int) -> Dict[str, Any]:
     """Run performance benchmark test using the configured extractor."""
-    print("🚀 Running MVP-Fusion Performance Test...")
+    logger = get_fusion_logger(__name__)
+    logger.stage("🚀 Running MVP-Fusion Performance Test...")
     
     # Create test content
     test_content = """
@@ -183,7 +175,7 @@ def run_performance_test(extractor: BaseExtractor, max_workers: int) -> Dict[str
     results = {}
     
     for scenario_name, content, iterations in test_scenarios:
-        print(f"\n📋 Testing {scenario_name} ({len(content)} chars, {iterations} iterations)...")
+        logger.stage(f"\n📋 Testing {scenario_name} ({len(content)} chars, {iterations} iterations)...")
         
         start_time = time.time()
         scenario_results = []
@@ -204,7 +196,7 @@ def run_performance_test(extractor: BaseExtractor, max_workers: int) -> Dict[str
             if (i + 1) % 10 == 0:
                 elapsed = time.time() - start_time
                 rate = (i + 1) / elapsed
-                print(f"  Progress: {i+1}/{iterations} ({rate:.1f} docs/sec)")
+                logger.entity(f"  Progress: {i+1}/{iterations} ({rate:.1f} docs/sec)")
         
         # Calculate statistics
         total_time = time.time() - start_time
@@ -235,10 +227,10 @@ def run_performance_test(extractor: BaseExtractor, max_workers: int) -> Dict[str
                 'chars_per_doc': len(content)
             }
             
-            print(f"  ✅ {successful}/{iterations} successful")
-            print(f"  📊 Rate: {docs_per_sec:.1f} docs/sec")
-            print(f"  ⚡ Speed: {chars_per_sec:,.0f} chars/sec")
-            print(f"  📚 Pages: {total_pages} total")
+            logger.success(f"{successful}/{iterations} successful")
+            logger.entity(f"📊 Rate: {docs_per_sec:.1f} docs/sec")
+            logger.entity(f"⚡ Speed: {chars_per_sec:,.0f} chars/sec")
+            logger.entity(f"📚 Pages: {total_pages} total")
         else:
             results[scenario_name] = {'error': 'All tests failed'}
     
@@ -247,44 +239,45 @@ def run_performance_test(extractor: BaseExtractor, max_workers: int) -> Dict[str
 
 def print_performance_summary(extractor: BaseExtractor, max_workers: int):
     """Print comprehensive performance summary."""
+    logger = get_fusion_logger(__name__)
     perf = extractor.get_performance_summary()
     
-    print("\n" + "="*60)
-    print("🎯 MVP-FUSION PERFORMANCE SUMMARY")
-    print("="*60)
-    print(f"🔧 Engine: {extractor.__class__.__name__}")
-    print(f"⚡ Peak Performance: {perf.get('pages_per_second', 0):.0f} pages/sec")
-    print(f"📊 Efficiency: {perf.get('success_rate', 0)*100:.1f}% success rate")
-    print(f"🔧 Configuration: {max_workers} workers, {perf.get('total_files', 0)} files processed")
+    logger.stage("\n" + "="*60)
+    logger.stage("🎯 MVP-FUSION PERFORMANCE SUMMARY")
+    logger.stage("="*60)
+    logger.stage(f"🔧 Engine: {extractor.__class__.__name__}")
+    logger.stage(f"⚡ Peak Performance: {perf.get('pages_per_second', 0):.0f} pages/sec")
+    logger.stage(f"📊 Efficiency: {perf.get('success_rate', 0)*100:.1f}% success rate")
+    logger.stage(f"🔧 Configuration: {max_workers} workers, {perf.get('total_files', 0)} files processed")
     return
     
-    print("\n" + "="*60)
-    print("🎯 MVP-FUSION PERFORMANCE SUMMARY")
-    print("="*60)
+    logger.stage(f"\n" + "="*60)
+    logger.stage(f"🎯 MVP-FUSION PERFORMANCE SUMMARY")
+    logger.stage(f"="*60)
     
     # Pipeline performance
-    print(f"📄 Documents processed: {metrics['documents_processed']}")
-    print(f"⏱️  Average time per doc: {metrics.get('avg_processing_time_per_doc', 0):.3f}s")
-    print(f"🚀 Pages per second: {metrics.get('pages_per_second', 0):.1f}")
-    print(f"❌ Error rate: {metrics.get('error_rate', 0):.1%}")
+    logger.stage(f"📄 Documents processed: {metrics['documents_processed']}")
+    logger.stage(f"⏱️  Average time per doc: {metrics.get('avg_processing_time_per_doc', 0):.3f}s")
+    logger.stage(f"🚀 Pages per second: {metrics.get('pages_per_second', 0):.1f}")
+    logger.logger.error(f"❌ Error rate: {metrics.get('error_rate', 0):.1%}")
     
     # Engine performance
     fusion_metrics = metrics.get('fusion_engine_metrics', {})
     if fusion_metrics:
-        print(f"\n🔧 Engine Performance:")
-        print(f"   Pages/sec: {fusion_metrics.get('pages_per_second', 0):.1f}")
-        print(f"   Entities/doc: {fusion_metrics.get('entities_per_document', 0):.1f}")
-        print(f"   Engine usage: {fusion_metrics.get('engine_usage', {})}")
+        logger.stage(f"\n🔧 Engine Performance:")
+        logger.stage(f"   Pages/sec: {fusion_metrics.get('pages_per_second', 0):.1f}")
+        logger.stage(f"   Entities/doc: {fusion_metrics.get('entities_per_document', 0):.1f}")
+        logger.stage(f"   Engine usage: {fusion_metrics.get('engine_usage', {})}")
     
     # Batch processor performance
     batch_metrics = metrics.get('batch_processor_metrics', {})
     if batch_metrics:
-        print(f"\n📦 Batch Processing:")
-        print(f"   Docs/sec: {batch_metrics.get('documents_per_second', 0):.1f}")
-        print(f"   Parallel efficiency: {batch_metrics.get('parallel_efficiency', 0):.1%}")
-        print(f"   Avg docs/batch: {batch_metrics.get('avg_docs_per_batch', 0):.1f}")
+        logger.stage(f"\n📦 Batch Processing:")
+        logger.stage(f"   Docs/sec: {batch_metrics.get('documents_per_second', 0):.1f}")
+        logger.stage(f"   Parallel efficiency: {batch_metrics.get('parallel_efficiency', 0):.1%}")
+        logger.stage(f"   Avg docs/batch: {batch_metrics.get('avg_docs_per_batch', 0):.1f}")
     
-    print("\n" + "="*60)
+    logger.stage(f"\n" + "="*60)
 
 
 def main():
@@ -293,13 +286,37 @@ def main():
         description="MVP-Fusion: High-Performance Document Processing",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
+Verbosity Levels:
+  -q, --quiet     : Minimal output (errors and final results only)
+  (default)       : Normal output (stage progress and key metrics)  
+  -v, --verbose   : Detailed output (includes entity counts, memory usage)
+  -vv             : Debug output (full diagnostic info with timestamps)
+
 Examples:
-  python fusion_cli.py --file document.pdf
+  # Basic file processing
+  python fusion_cli.py --file document.pdf                    # Normal output
+  python fusion_cli.py --file document.pdf -q                 # Quiet mode
+  python fusion_cli.py --file document.pdf -v                 # Verbose mode
+  python fusion_cli.py --file document.pdf -vv                # Debug mode
+  
+  # Directory processing with options
   python fusion_cli.py --directory ~/documents/ --extensions .pdf .docx
+  python fusion_cli.py --directory ~/documents/ -q            # Process quietly
+  python fusion_cli.py --directory ~/documents/ -v --log-file process.log
+  
+  # Pipeline control
   python fusion_cli.py --config config/fusion_config.yaml --stages all
-  python fusion_cli.py --config config/fusion_config.yaml --convert-only
+  python fusion_cli.py --config config/fusion_config.yaml --convert-only -v
   python fusion_cli.py --config config/fusion_config.yaml --stages convert classify
-  python fusion_cli.py --performance-test --verbose
+  
+  # Performance testing
+  python fusion_cli.py --performance-test                     # Normal output
+  python fusion_cli.py --performance-test -vv                 # Full debug info
+  
+  # Additional output options
+  python fusion_cli.py --file doc.pdf --no-color              # Disable colors
+  python fusion_cli.py --file doc.pdf --json-logs             # JSON format
+  python fusion_cli.py --file doc.pdf -v --log-file out.log   # Log to file
         """
     )
     
@@ -349,19 +366,57 @@ Examples:
                        help='Run only semantic extraction stage')
     
     # Output options
-    parser.add_argument('--verbose', '-v', action='store_true', help='Verbose output')
-    parser.add_argument('--quiet', '-q', action='store_true', help='Minimal output')
+    verbosity_group = parser.add_mutually_exclusive_group()
+    verbosity_group.add_argument('--quiet', '-q', action='store_true',
+                                help='Quiet mode: minimal output showing only errors and final results (PAGES/SEC, SUCCESS RATE)')
+    verbosity_group.add_argument('--verbose', '-v', action='count', default=0,
+                                help='Increase verbosity (use -v for detailed progress with entity counts, -vv for full debug with timestamps)')
+    parser.add_argument('--log-file', type=str, 
+                       help='Save all output to specified file (useful with -v or -vv for debugging)')
+    parser.add_argument('--no-color', action='store_true', 
+                       help='Disable colored terminal output (useful for log files or CI/CD pipelines)')
+    parser.add_argument('--json-logs', action='store_true', 
+                       help='Output logs in JSON format for structured logging systems')
     parser.add_argument('--export-metrics', type=str, help='Export metrics to JSON file')
     
     args = parser.parse_args()
     
-    # Setup logging
-    if not args.quiet:
-        setup_logging(args.verbose)
+    # Load base configuration first to get logging defaults
+    config = _load_and_override_config(args)
+    
+    # Setup logging with proper verbosity levels
+    # Priority: CLI flags > config file > defaults
+    if args.quiet:
+        verbosity = 0  # QUIET mode
+    elif args.verbose:
+        verbosity = min(args.verbose + 1, 3)  # -v=2 (VERBOSE), -vv=3 (DEBUG)
+    else:
+        # Use config file setting or default to NORMAL (1)
+        verbosity = config.get('logging', {}).get('verbosity', 1)
+    
+    # Get logging options from config or CLI
+    log_file_config = config.get('logging', {}).get('file')
+    log_file = Path(args.log_file) if args.log_file else (Path(log_file_config) if log_file_config else None)
+    
+    use_colors_config = config.get('logging', {}).get('use_colors', True)
+    use_colors = not args.no_color and use_colors_config
+    
+    json_format_config = config.get('logging', {}).get('json_format', False)
+    json_format = args.json_logs or json_format_config
+    
+    setup_logging(
+        verbosity=verbosity,
+        log_file=log_file,
+        use_colors=use_colors,
+        json_format=json_format
+    )
+    
+    # Get logger for CLI module
+    logger = get_fusion_logger(__name__)
     
     try:
-        # Load base configuration first
-        config = _load_and_override_config(args)
+        # Config was already loaded above for logging setup
+        # No need to reload here
         
         # Initialize configured extractor
         extractor_name = args.extractor or config.get('extractor', {}).get('name', 'highspeed_markdown_general')
@@ -371,9 +426,9 @@ Examples:
         extractor = create_extractor(extractor_name, extractor_config)
         max_workers = args.workers or config.get('performance', {}).get('max_workers', 2)
         
-        print(f"🔧 MVP-Fusion Engine: {extractor.name}")
-        print(f"⚡ Performance: {extractor.description}")
-        print(f"🔧 Workers: {max_workers} | Formats: {len(extractor.get_supported_formats())}")
+        logger.stage(f"🔧 MVP-Fusion Engine: {extractor.name}")
+        logger.stage(f"⚡ Performance: {extractor.description}")
+        logger.stage(f"🔧 Workers: {max_workers} | Formats: {len(extractor.get_supported_formats())}")
         
         # Determine output directory
         output_dir = None
@@ -383,14 +438,14 @@ Examples:
             output_dir = Path(config['output']['base_directory']).expanduser()
         
         if output_dir:
-            print(f"📁 Output directory: {output_dir}")
+            logger.stage(f"📁 Output directory: {output_dir}")
         
         # Execute command
         if args.file:
             # Process single file
             file_path = Path(args.file)
             if not file_path.exists():
-                print(f"❌ File not found: {file_path}")
+                logger.logger.error(f"❌ File not found: {file_path}")
                 sys.exit(1)
             
             result = process_single_file(extractor, file_path, output_dir)
@@ -399,7 +454,7 @@ Examples:
             # Process directory
             directory = Path(args.directory).expanduser()
             if not directory.exists():
-                print(f"❌ Directory not found: {directory}")
+                logger.logger.error(f"❌ Directory not found: {directory}")
                 sys.exit(1)
             
             results = process_directory(extractor, directory, args.extensions, output_dir)
@@ -408,35 +463,35 @@ Examples:
             # Process all directories from config
             config_dirs = config.get('inputs', {}).get('directories', [])
             if not config_dirs:
-                print("❌ No directories specified in config file")
+                logger.logger.error(f"❌ No directories specified in config file")
                 sys.exit(1)
             
-            print(f"🗂️  Processing {len(config_dirs)} directories from config:")
+            logger.stage(f"🗂️  Processing {len(config_dirs)} directories from config:")
             for config_dir in config_dirs:
-                print(f"   - {config_dir}")
+                logger.stage(f"   - {config_dir}")
             
             all_results = []
             for config_dir in config_dirs:
                 directory = Path(config_dir).expanduser()
                 if not directory.exists():
-                    print(f"⚠️  Directory not found: {directory} (skipping)")
+                    logger.logger.warning(f"⚠️  Directory not found: {directory} (skipping)")
                     continue
                     
-                print(f"\n📂 Processing directory: {directory}")
+                logger.stage(f"\n📂 Processing directory: {directory}")
                 extensions = config.get('files', {}).get('supported_extensions', args.extensions)
                 results = process_directory(fusion, directory, extensions, output_dir)
                 all_results.extend(results if isinstance(results, list) else [results])
             
-            print(f"\n✅ Processed {len(all_results)} total files across all directories")
+            logger.success(f"\n✅ Processed {len(all_results)} total files across all directories")
             
         elif args.config and not args.file and not args.directory and not args.performance_test:
             # Auto-process directories from config file when only --config is provided
             config_dirs = config.get('inputs', {}).get('directories', [])
             if config_dirs:
                 # Collect all files from all directories first
-                print(f"🗂️  Scanning {len(config_dirs)} directories:")
+                logger.stage(f"🗂️  Scanning {len(config_dirs)} directories:")
                 for config_dir in config_dirs:
-                    print(f"   - {config_dir}")
+                    logger.stage(f"   - {config_dir}")
                 
                 all_files = []
                 extensions = config.get('files', {}).get('supported_extensions', args.extensions)
@@ -444,7 +499,7 @@ Examples:
                 for config_dir in config_dirs:
                     directory = Path(config_dir).expanduser()
                     if not directory.exists():
-                        print(f"⚠️  Directory not found: {directory} (skipping)")
+                        logger.logger.warning(f"⚠️  Directory not found: {directory} (skipping)")
                         continue
                     
                     # Collect files from this directory
@@ -454,7 +509,7 @@ Examples:
                     all_files.extend(files)
                 
                 if not all_files:
-                    print("❌ No files found in any directories")
+                    logger.logger.error(f"❌ No files found in any directories")
                     sys.exit(1)
                 
                 # Show summary before processing
@@ -463,24 +518,24 @@ Examples:
                     ext = file_path.suffix.lower()
                     file_types[ext] = file_types.get(ext, 0) + 1
                 
-                print(f"\n📊 PROCESSING SUMMARY:")
-                print(f"   Total files: {len(all_files)}")
-                print(f"   File types: {dict(file_types)}")
-                print(f"   Workers: {max_workers}")
+                logger.stage(f"\n📊 PROCESSING SUMMARY:")
+                logger.stage(f"   Total files: {len(all_files)}")
+                logger.stage(f"   File types: {dict(file_types)}")
+                logger.stage(f"   Workers: {max_workers}")
                 
                 # Process everything in one batch
-                print(f"\n🚀 Starting batch processing...")
+                logger.stage(f"\n🚀 Starting batch processing...")
                 start_time = time.time()
                 
                 # Choose pipeline architecture based on configuration
                 use_shared_memory = config.get('pipeline', {}).get('use_shared_memory', False)
                 
                 if use_shared_memory:
-                    print("🏊 Using Shared Memory Pipeline (Edge Optimized)")
+                    logger.stage(f"🏊 Using Shared Memory Pipeline (Edge Optimized)")
                     from pipeline.shared_memory_pipeline import SharedMemoryFusionPipeline
                     pipeline = SharedMemoryFusionPipeline(config)
                 else:
-                    print("🔄 Using Traditional In-Memory Pipeline")
+                    logger.stage(f"🔄 Using Traditional In-Memory Pipeline")
                     from pipeline.fusion_pipeline import FusionPipeline
                     pipeline = FusionPipeline(config)
                 
@@ -528,7 +583,7 @@ Examples:
                         total_memory_mb += doc_memory / 1024 / 1024
                         output_file_count += 1
                 
-                print(f"   💾 In-memory processing: {total_memory_mb:.1f}MB total document memory")
+                logger.entity(f"   💾 In-memory processing: {total_memory_mb:.1f}MB total document memory")
                 
                 # Calculate metrics
                 input_mb = total_input_bytes / 1024 / 1024
@@ -541,13 +596,13 @@ Examples:
                 true_failures = failed - skipped_large
                 warnings_count = sum(1 for doc in results if doc.success and doc.error_message)
                 
-                print(f"\n🚀 PROCESSING PERFORMANCE:")
-                print(f"   🚀 PAGES/SEC: {pages_per_sec:.0f} (overall pipeline)")
-                print(f"   ⚡ THROUGHPUT: {throughput_mb_sec:.1f} MB/sec raw document processing")
+                logger.stage(f"\n🚀 PROCESSING PERFORMANCE:")
+                logger.stage(f"   🚀 PAGES/SEC: {pages_per_sec:.0f} (overall pipeline)")
+                logger.stage(f"   ⚡ THROUGHPUT: {throughput_mb_sec:.1f} MB/sec raw document processing")
                 
                 # Add per-stage performance breakdown if available
                 if resource_summary and 'stage_timings' in resource_summary:
-                    print(f"\n📊 STAGE-BY-STAGE PERFORMANCE:")
+                    logger.stage(f"\n📊 STAGE-BY-STAGE PERFORMANCE:")
                     stage_timings = resource_summary['stage_timings']
                     total_pages_for_stages = resource_summary.get('total_pages', total_pages)
                     
@@ -565,57 +620,57 @@ Examples:
                             timing = stage_timings[stage_key]
                             time_s = timing['time_ms'] / 1000
                             pages_sec = timing['pages_per_sec']
-                            print(f"   • {display_name}: ~{pages_sec:,.0f} pages/sec ({time_s:.1f}s for {total_pages_for_stages:,} pages)")
+                            logger.stage(f"   • {display_name}: ~{pages_sec:,.0f} pages/sec ({time_s:.1f}s for {total_pages_for_stages:,} pages)")
                 
-                print(f"\n✅ DATA TRANSFORMATION SUMMARY:")
-                print(f"   📊 INPUT: {input_mb:.0f} MB across {len(results)} files ({total_pages:,} pages)")
-                print(f"   📊 OUTPUT: {output_mb:.1f} MB in {output_file_count} markdown files")
+                logger.success(f"\n✅ DATA TRANSFORMATION SUMMARY:")
+                logger.stage(f"   📊 INPUT: {input_mb:.0f} MB across {len(results)} files ({total_pages:,} pages)")
+                logger.stage(f"   📊 OUTPUT: {output_mb:.1f} MB in {output_file_count} markdown files")
                 if output_mb > 0:
                     compression_percent = ((input_mb - output_mb) / input_mb) * 100
-                    print(f"   🗜️  COMPRESSION: {compression_percent:.1f}% smaller (eliminated formatting, images, bloat)")
+                    logger.stage(f"   🗜️  COMPRESSION: {compression_percent:.1f}% smaller (eliminated formatting, images, bloat)")
                 else:
-                    print(f"   🗜️  COMPRESSION: Unable to calculate (output scanning issue)")
-                print(f"   📁 RESULTS: {successful} successful")
+                    logger.stage(f"   🗜️  COMPRESSION: Unable to calculate (output scanning issue)")
+                logger.stage(f"   📁 RESULTS: {successful} successful")
                 if skipped_large > 0:
-                    print(f"   ⏭️  SKIPPED: {skipped_large} files (>100 pages, too large for this mode)")
+                    logger.stage(f"   ⏭️  SKIPPED: {skipped_large} files (>100 pages, too large for this mode)")
                 if true_failures > 0:
-                    print(f"   ❌ FAILED: {true_failures} files (corrupted or unsupported)")
+                    logger.logger.error(f"   ❌ FAILED: {true_failures} files (corrupted or unsupported)")
                 if warnings_count > 0:
-                    print(f"   ⚠️  WARNINGS: {warnings_count} files (minor PDF issues, but text extracted successfully)")
-                print(f"   ⏱️  TOTAL TIME: {total_time:.2f}s")
+                    logger.logger.warning(f"   ⚠️  WARNINGS: {warnings_count} files (minor PDF issues, but text extracted successfully)")
+                logger.stage(f"   ⏱️  TOTAL TIME: {total_time:.2f}s")
                 
                 # Add system resource information if available
                 if resource_summary:
-                    print(f"\n💻 PROCESSING FOOTPRINT:")
+                    logger.stage(f"\n💻 PROCESSING FOOTPRINT:")
                     if 'shared_memory_architecture' in resource_summary:
                         # Shared memory architecture stats
-                        print(f"   🏊 SHARED MEMORY: {resource_summary['current_memory_mb']:.1f}MB")
-                        print(f"   ⚡ MEMORY SAVINGS: {resource_summary['memory_efficiency_gain_percent']:.1f}%")
-                        print(f"   📊 DOCUMENTS IN POOL: {resource_summary['documents_in_shared_pool']}")
-                        print(f"   🌐 EDGE READY: {'✅ CloudFlare compatible' if resource_summary['edge_deployment_ready']['cloudflare_workers_compatible'] else '❌ Too large'}")
+                        logger.stage(f"   🏊 SHARED MEMORY: {resource_summary['current_memory_mb']:.1f}MB")
+                        logger.stage(f"   ⚡ MEMORY SAVINGS: {resource_summary['memory_efficiency_gain_percent']:.1f}%")
+                        logger.stage(f"   📊 DOCUMENTS IN POOL: {resource_summary['documents_in_shared_pool']}")
+                        logger.stage(f"   🌐 EDGE READY: {'✅ CloudFlare compatible' if resource_summary['edge_deployment_ready']['cloudflare_workers_compatible'] else '❌ Too large'}")
                     elif 'cpu_workers_used' in resource_summary:
                         # Traditional architecture stats
-                        print(f"   🖥️  WORKERS: {resource_summary['cpu_workers_used']}/{resource_summary['cpu_cores_total']} cores (1 worker = 1 core)")
-                        print(f"   🧠 MEMORY: {resource_summary['memory_peak_mb']:.1f} MB peak usage")
+                        logger.stage(f"   🖥️  WORKERS: {resource_summary['cpu_workers_used']}/{resource_summary['cpu_cores_total']} cores (1 worker = 1 core)")
+                        logger.entity(f"   🧠 MEMORY: {resource_summary['memory_peak_mb']:.1f} MB peak usage")
                         if resource_summary.get('memory_used_mb', 0) > 0:
-                            print(f"   📈 PROCESSING MEMORY: {resource_summary['memory_used_mb']:.1f} MB during extraction")
-                        print(f"   ⚡ EFFICIENCY: {resource_summary['efficiency_pages_per_worker']:.0f} pages/worker, {resource_summary['efficiency_mb_per_worker']:.1f} MB/worker")
+                            logger.entity(f"   📈 PROCESSING MEMORY: {resource_summary['memory_used_mb']:.1f} MB during extraction")
+                        logger.stage(f"   ⚡ EFFICIENCY: {resource_summary['efficiency_pages_per_worker']:.0f} pages/worker, {resource_summary['efficiency_mb_per_worker']:.1f} MB/worker")
                 
-                print(f"   ✅ SUCCESS RATE: {(successful/len(results)*100):.1f}% ({successful}/{len(results)})")
+                logger.success(f"   ✅ SUCCESS RATE: {(successful/len(results)*100):.1f}% ({successful}/{len(results)})")
             else:
-                print("❌ No input specified and no directories in config file")
+                logger.logger.error(f"❌ No input specified and no directories in config file")
                 sys.exit(1)
             
         elif args.performance_test:
             # Run performance test
             test_results = run_performance_test(extractor, max_workers)
             
-            print(f"\n🏆 Performance Test Results:")
+            logger.stage(f"\n🏆 Performance Test Results:")
             for scenario, result in test_results.items():
                 if 'error' not in result:
-                    print(f"   {scenario}:")
-                    print(f"     Rate: {result['docs_per_sec']:.1f} docs/sec")
-                    print(f"     Speed: {result['chars_per_sec']:,.0f} chars/sec")
+                    logger.stage(f"   {scenario}:")
+                    logger.stage(f"     Rate: {result['docs_per_sec']:.1f} docs/sec")
+                    logger.stage(f"     Speed: {result['chars_per_sec']:,.0f} chars/sec")
         
         # Processing complete - no additional summary needed
         
@@ -627,14 +682,14 @@ Examples:
             }
             with open(args.export_metrics, 'w') as f:
                 json.dump(metrics_data, f, indent=2)
-            print(f"📊 Basic metrics exported to {args.export_metrics}")
+            logger.stage(f"📊 Basic metrics exported to {args.export_metrics}")
         
         
     except KeyboardInterrupt:
-        print("\n⚠️ Processing interrupted by user")
+        logger.logger.warning(f"\n⚠️ Processing interrupted by user")
         sys.exit(1)
     except Exception as e:
-        print(f"❌ Error: {e}")
+        logger.logger.error(f"❌ Error: {e}")
         if args.verbose:
             import traceback
             traceback.print_exc()
@@ -653,7 +708,7 @@ def _load_and_override_config(args) -> dict:
     if config_path.exists():
         with open(config_path, 'r') as f:
             config = yaml.safe_load(f) or {}
-        print(f"📋 Config: {config_path}")
+        print(f"📋 Config: {config_path}")  # Keep this as print since logger isn't available yet
     else:
         if args.config == 'config/config.yaml':  # Default config missing
             print(f"❌ Default configuration file not found: {args.config}")

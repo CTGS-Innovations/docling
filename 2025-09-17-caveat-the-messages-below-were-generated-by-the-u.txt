@@ -1,0 +1,646 @@
+╭───────────────────────────────────────────────────╮
+│ ✻ Welcome to Claude Code!                         │
+│                                                   │
+│   /help for help, /status for your current setup  │
+│                                                   │
+│   cwd: /home/corey/projects/docling               │
+╰───────────────────────────────────────────────────╯
+
+> /clear 
+  ⎿  (no content)
+
+> '/home/corey/projects/docling/mvp-fusion/out.txt'    clear;python fusion_cli.py > out.txt   Can we have a conversation? 
+  This command that I run. It creates a lot of blogs, which I think are great, but are two verbos for normal output. This is 
+  probably best for more verbos logic. Why don't you take a look at this out.text file and see if you can tag what I've done.
+   What I think should be verbos versus normal output. If I were to put a quiet for the most minimal output, maybe we can 
+  come up with a nice hierarchy of elements here. The idea is that you would tag this document to tell me how you would take 
+  the plan and then we would operate how we would effectively create a verbose, a quiet and a debug. Long output.
+
+● I'll help you analyze the output file and create a hierarchy for different verbosity levels. Let me first examine the
+  out.txt file to understand the current output structure.
+
+● Read(mvp-fusion/out.txt)
+  ⎿  Read 230 lines (ctrl+r to expand)
+
+● Based on analyzing your output file, I can see a rich logging structure with multiple verbosity levels that could be
+  organized into a clear hierarchy. Let me create a plan for categorizing the different types of output:
+
+● Verbosity Level Analysis
+
+  After analyzing your out.txt, I can identify 4 distinct verbosity levels:
+
+  QUIET (Essential Results Only)
+
+  - Final performance metrics
+  - Success/failure counts
+  - Critical errors only
+
+  NORMAL (Standard Operations)
+
+  - Stage progress indicators
+  - File processing summaries
+  - Key statistics and timings
+
+  VERBOSE (Detailed Process Info)
+
+  - Pattern loading details
+  - Entity extraction counts
+  - Memory usage tracking
+  - Individual file processing
+
+  DEBUG (Everything + Diagnostics)
+
+  - All current output
+  - Internal state validation
+  - Step-by-step entity processing
+  - Debug attribute checks
+
+● Let me create a tagged version of your output file to show how I would categorize each line:
+
+● Write(mvp-fusion/out_tagged.txt)
+  ⎿  Wrote 115 lines to mvp-fusion/out_tagged.txt                                                  
+     📋 Config: config/config.yaml                                              # NORMAL
+     🔧 MVP-Fusion Engine: HighSpeed_Markdown_General                        # NORMAL
+     ⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output # NORMAL
+     🔧 Workers: 2 | Formats: 10                                            # VERBOSE
+     📁 Output directory: ../output/fusion                                   # NORMAL
+     🗂️  Scanning 1 directories:                                            # VERBOSE
+        - ~/projects/docling/cli/data_complex                                # VERBOSE
+     📊 PROCESSING SUMMARY:                                                  # NORMAL
+        Total files: 3                                                      # NORMAL
+     … +105 lines (ctrl+r to expand)
+
+● Implementation Plan
+
+  Here's what each verbosity level would show:
+
+  QUIET Mode (--quiet or -q)
+
+  🚀 PAGES/SEC: 108 (overall pipeline)
+  ⚡ THROUGHPUT: 33.7 MB/sec raw document processing
+  ✅ DATA TRANSFORMATION SUMMARY:
+     📊 INPUT: 17 MB across 3 files (53 pages)
+     📊 OUTPUT: 0.4 MB in 3 markdown files
+     🗜️  COMPRESSION: 97.7% smaller
+     📁 RESULTS: 3 successful
+     ⏱️  TOTAL TIME: 0.49s
+     ✅ SUCCESS RATE: 100.0% (3/3)
+
+  NORMAL Mode (default)
+
+  📋 Config: config/config.yaml
+  🔧 MVP-Fusion Engine: HighSpeed_Markdown_General
+  📊 PROCESSING SUMMARY:
+     Total files: 3
+  🚀 Starting batch processing...
+  📄 Stage 1: Converting 3 files to in-memory documents...
+     ✅ Conversion complete: 85ms (3/3 successful)
+  📋 Stage 2: Classifying documents in memory...
+     ✅ Classification complete: 118ms (3/3 successful)
+  🔍 Stage 3: Enriching documents in memory...
+  [... + QUIET output]
+
+  VERBOSE Mode (-v)
+
+  [NORMAL content] +
+  🔧 Workers: 2 | Formats: 10
+  📚 Loaded modular patterns:
+     🏛️  Domains: 209 (2106 keywords)
+  🚀 In-Memory Pipeline: convert → classify → enrich → extract
+  ✅ Total global facts promoted: 53
+  ✅ Total semantic facts extracted: 167
+  📝 Generating JSON knowledge file: ../output/fusion/file.json
+  💻 PROCESSING FOOTPRINT:
+     🖥️  WORKERS: 2/16 cores
+     🧠 MEMORY: 0.1 MB peak usage
+
+  DEBUG Mode (-vv or --debug)
+
+  [Everything currently shown - all the detailed entity processing, internal states, attribute checks, etc.]
+
+  🔴 IMPLEMENTATION DECISION NEEDED 🔴
+
+  How would you like me to implement this verbosity control?
+
+  Option A: Add CLI flags and logging levels to fusion_cli.py (15 min)
+  Option B: Create a logging configuration system with multiple output handlers (30 min)
+  Option C: Just show you the proposed structure and let you implement it yourself
+
+  Which approach would you prefer?
+
+● The tagged file out_tagged.txt shows exactly how I would categorize each line of output. The verbosity hierarchy creates
+  a clean progression from essential results only (QUIET) to full diagnostic information (DEBUG).
+
+> I'm not sure the options you've given me are all my options. Ideally, we need to change the flags as well as the logging 
+  structure we currently have, because I don't think we have a well-defined logging structure. So I think it's a and b at a 
+  combination. Do you agree? Is there something more professional way to do this?
+
+✻ Thinking…
+
+  The user is right - they need both the CLI flags (option A) and a proper logging configuration system (option B). They're 
+  asking for a more professional approach to logging, which would involve:
+
+  1. Using Python's built-in logging module properly
+  2. Creating a centralized logging configuration
+  3. Using different log levels (DEBUG, INFO, WARNING, ERROR)
+  4. Having consistent logger instances across all modules
+  5. CLI flags that control the logging level
+
+  This is indeed a combination of A and B, but done in a professional, scalable way.
+
+● You're absolutely right - it's both A and B combined, and there's definitely a more professional approach. Looking at
+  your current code, you're using print statements directly, which should be replaced with Python's logging framework.
+
+✻ Thinking…
+
+  Let me first check the current structure to understand how logging is being done.
+
+● Search(pattern: "print\(|logger|logging", path: "mvp-fusion")
+  ⎿  Found 29 files (ctrl+r to expand)
+
+✻ Thinking…
+
+  Let me look at the main fusion_cli.py to see how logging is currently being done.
+
+● Search(pattern: "print\(", path: "mvp-fusion/fusion_cli.py", output_mode: "content", head_limit: 20)
+  ⎿  Found 20 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Now let me look at fusion_pipeline.py where a lot of the verbose logging happens:
+
+● Search(pattern: "print\(|logging", path: "mvp-fusion/pipeline/fusion_pipeline.py", output_mode: "content", head_limit: 30)
+  ⎿  Found 26 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Let me check if there's any existing logging infrastructure or configuration:
+
+● Bash(find /home/corey/projects/docling/mvp-fusion -type f -name "*.py" | xargs grep -l "import logging\|from logging")
+  ⎿  /home/corey/projects/docling/mvp-fusion/.venv-clean/lib/python3.12/site-packages/pymupdf/__init__.py       
+     /home/corey/projects/docling/mvp-fusion/.venv-clean/lib/python3.12/site-packages/pypdfium2/_cli/_parsers.py
+     /home/corey/projects/docling/mvp-fusion/.venv-clean/lib/python3.12/site-packages/pypdfium2/_cli/render.py
+     … +270 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  So looking at actual project files (not venv), I see that most files are using print statements directly. Some files in the 
+  fusion directory have logging imports. Let me check the actual project files for logging usage:
+
+● Bash(find /home/corey/projects/docling/mvp-fusion -type f -name "*.py" -path "*/fusion/*" -o -name "*.py" -path
+      "*/performance/*" | grep -v ".venv" | head -10 | xarg…)
+  ⎿  /home/corey/projects/docling/mvp-fusion/performance/fusion_metrics.py:import logging
+     /home/corey/projects/docling/mvp-fusion/fusion/pattern_router.py:import logging
+     /home/corey/projects/docling/mvp-fusion/fusion/batch_processor.py:import logging
+     … +3 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Good, so some modules already have logging imports. Let me check how they're using it:
+
+● Search(pattern: "logger\.|logging\.", path: "mvp-fusion/fusion/fusion_engine.py", output_mode: "content", head_limit: 10)
+  ⎿  Found 10 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  OK, so they have a basic logging setup already. Let me update the todo list and create a comprehensive plan:
+
+✻ Thinking…
+
+  Alright, now let me design and implement a professional logging architecture for the MVP-Fusion system. I'll create a 
+  centralized logging configuration module that can be imported across all files, and update the CLI to use proper verbosity 
+  flags.
+
+● Professional Logging Architecture
+
+  You're absolutely right - we need a proper logging infrastructure. Here's the professional approach combining both A and
+  B:
+
+  The Architecture
+
+  1. Centralized logging configuration module
+  2. Structured log levels matching Python's logging framework
+  3. CLI integration with standard verbosity flags
+  4. Consistent formatting with optional colors for terminal output
+
+  Let me implement this:
+
+✻ Thinking…
+
+  Now I'll create a professional logging configuration module:
+
+● Write(mvp-fusion/utils/logging_config.py)
+  ⎿  Wrote 257 lines to mvp-fusion/utils/logging_config.py      
+     """
+     Centralized logging configuration for MVP-Fusion.
+     Provides structured logging with multiple verbosity levels.
+     """
+     import logging
+     import sys
+     from typing import Optional, Dict, Any
+     from pathlib import Path
+     from datetime import datetime
+     … +247 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Now I need to create the updated fusion_cli.py with proper argument parsing for verbosity levels:
+
+✻ Thinking…
+
+  Now I'll update fusion_cli.py to use the new logging system with proper CLI flags:
+
+● Read(mvp-fusion/fusion_cli.py)
+  ⎿  Read 50 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Let me see the rest of the file to understand its structure better before making updates:
+
+● Read(mvp-fusion/fusion_cli.py)
+  ⎿  Read 100 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Let me see how argparse is set up in the main function:
+
+● Read(mvp-fusion/fusion_cli.py)
+  ⎿  Read 200 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Now I can see the structure. The file already has:
+  - --verbose flag
+  - --quiet flag  
+  - A setup_logging() function call on line 360
+
+  I need to:
+  1. Import our new logging configuration
+  2. Update the CLI arguments to support multiple verbosity levels
+  3. Replace print statements with proper logging calls
+
+  Let me update the CLI first to import our new logging module and use proper verbosity levels:
+
+● Update(mvp-fusion/fusion_cli.py)
+  ⎿  Updated mvp-fusion/fusion_cli.py with 35 additions and 10 removals                                             
+       20    from typing import List, Dict, Any
+       21    import json
+       22    
+       23 +  # Import our centralized logging configuration
+       24 +  from utils.logging_config import setup_logging, get_fusion_logger
+       25 +  
+       26    # Import extraction architecture
+       27    from extraction import (
+       28        BaseExtractor,
+     ...
+       349                           help='Run only semantic extraction stage')
+       350        
+       351        # Output options
+       352 -      parser.add_argument('--verbose', '-v', action='store_true', help='Verbose output')
+       353 -      parser.add_argument('--quiet', '-q', action='store_true', help='Minimal output')
+       352 +      verbosity_group = parser.add_mutually_exclusive_group()
+       353 +      verbosity_group.add_argument('--quiet', '-q', action='store_true',
+       354 +                                  help='Quiet mode (errors and final results only)')
+       355 +      verbosity_group.add_argument('--verbose', '-v', action='count', default=0,
+       356 +                                  help='Increase verbosity (-v: verbose, -vv: debug)')
+       357 +      parser.add_argument('--log-file', type=str, help='Log output to file')
+       358 +      parser.add_argument('--no-color', action='store_true', help='Disable colored output')
+       359 +      parser.add_argument('--json-logs', action='store_true', help='Use JSON structured logging')
+       360        parser.add_argument('--export-metrics', type=str, help='Export metrics to JSON file')
+       361        
+       362        args = parser.parse_args()
+       363        
+       364 -      # Setup logging
+       365 -      if not args.quiet:
+       366 -          setup_logging(args.verbose)
+       364 +      # Setup logging with proper verbosity levels
+       365 +      verbosity = 0  # Default: NORMAL
+       366 +      if args.quiet:
+       367 +          verbosity = 0  # QUIET mode
+       368 +      elif args.verbose:
+       369 +          verbosity = min(args.verbose + 1, 3)  # -v=2 (VERBOSE), -vv=3 (DEBUG)
+       370 +      else:
+       371 +          verbosity = 1  # NORMAL mode
+       372        
+       373 +      log_file = Path(args.log_file) if args.log_file else None
+       374 +      setup_logging(
+       375 +          verbosity=verbosity,
+       376 +          log_file=log_file,
+       377 +          use_colors=not args.no_color,
+       378 +          json_format=args.json_logs
+       379 +      )
+       380 +      
+       381 +      # Get logger for CLI module
+       382 +      logger = get_fusion_logger(__name__)
+       383 +      
+       384        try:
+       385            # Load base configuration first
+       386            config = _load_and_override_config(args)
+     ...
+       371            extractor = create_extractor(extractor_name, extractor_config)
+       372            max_workers = args.workers or config.get('performance', {}).get('max_workers', 2)
+       373            
+       374 -          print(f"🔧 MVP-Fusion Engine: {extractor.name}")
+       375 -          print(f"⚡ Performance: {extractor.description}")
+       376 -          print(f"🔧 Workers: {max_workers} | Formats: {len(extractor.get_supported_formats())}")
+       374 +          logger.stage(f"🔧 MVP-Fusion Engine: {extractor.name}")
+       375 +          logger.stage(f"⚡ Performance: {extractor.description}")
+       376 +          logger.stage(f"🔧 Workers: {max_workers} | Formats: {len(extractor.get_supported_formats())}")
+       377            
+       378            # Determine output directory
+       379            output_dir = None
+     ...
+       383                output_dir = Path(config['output']['base_directory']).expanduser()
+       384            
+       385            if output_dir:
+       386 -              print(f"📁 Output directory: {output_dir}")
+       386 +              logger.stage(f"📁 Output directory: {output_dir}")
+       387            
+       388            # Execute command
+       389            if args.file:
+       390                # Process single file
+       391                file_path = Path(args.file)
+       392                if not file_path.exists():
+       393 -                  print(f"❌ File not found: {file_path}")
+       393 +                  logger.logger.error(f"❌ File not found: {file_path}")
+       394                    sys.exit(1)
+       395                
+       396                result = process_single_file(extractor, file_path, output_dir)
+
+✻ Thinking…
+
+  Now I need to continue updating the rest of the print statements in fusion_cli.py. Let me continue with more replacements:
+
+● Update(mvp-fusion/fusion_cli.py)
+  ⎿  Error editing file
+
+✻ Thinking…
+
+  Let me find the exact string to replace by searching for the process_single_file function:
+
+● Search(pattern: "def process_single_file", path: "mvp-fusion/fusion_cli.py", output_mode: "content")
+  ⎿  Found 6 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  I see, there's a quiet parameter now. Let me also find the other functions that need updating:
+
+✻ Thinking…
+
+  Now let me update the fusion_pipeline.py file to use proper logging instead of print statements. This is where most of the 
+  verbose output is generated:
+
+● Now let me create an updated version of fusion_pipeline.py that uses the new logging system:
+
+● Read(mvp-fusion/pipeline/fusion_pipeline.py)
+  ⎿  Read 100 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Now I'll create an updated version that replaces print statements with proper logging calls. Let me create a modified 
+  version:
+
+● Update(mvp-fusion/pipeline/fusion_pipeline.py)
+  ⎿  Updated mvp-fusion/pipeline/fusion_pipeline.py with 21 additions and 12 removals                                   
+       19    
+       20    import re
+       21    import time
+       22 +  import logging
+       23    from pathlib import Path
+       24    from typing import List, Dict, Any, Union
+       25    import yaml
+       26    from datetime import datetime
+       27    from .in_memory_document import InMemoryDocument, MemoryOverflowError
+       28    
+       29 +  # Import centralized logging
+       30 +  import sys
+       31 +  sys.path.append(str(Path(__file__).parent.parent))
+       32 +  from utils.logging_config import get_fusion_logger
+       33 +  
+       34    # Import Aho-Corasick engine for high-performance pattern matching
+       35    try:
+       36        import sys
+     ...
+       34        AHOCORASICK_AVAILABLE = True
+       35    except ImportError:
+       36        AHOCORASICK_AVAILABLE = False
+       37 -      print("⚠️  Aho-Corasick engine not available, falling back to regex patterns")
+       37 +      logging.warning("⚠️  Aho-Corasick engine not available, falling back to regex patterns")
+       38    
+       39    
+       40    class FusionPipeline:
+     ...
+       53            self.memory_limit_mb = config.get('pipeline', {}).get('memory_limit_mb', 100)
+       54            self.service_memory_limit_mb = config.get('pipeline', {}).get('service_memory_limit_mb', 1024)
+       55            
+       56 +          # Get logger for this module
+       57 +          self.logger = get_fusion_logger(__name__)
+       58 +          
+       59            # Initialize Aho-Corasick engine for high-performance classification
+       60            self.ac_classifier = None
+       61            if AHOCORASICK_AVAILABLE:
+       62                try:
+       63                    self.ac_classifier = AhoCorasickLayeredClassifier()
+       64                    self.semantic_extractor = SemanticFactExtractor()
+       65 +                  self.logger.entity("✅ Aho-Corasick engine initialized for government/regulatory + AI 
+          + domains")
+       66                except ImportError:
+       67                    self.semantic_extractor = None
+       68 -                  print("✅ Aho-Corasick engine initialized for government/regulatory + AI domains")
+       68                except Exception as e:
+       69 -                  print(f"⚠️  Aho-Corasick initialization failed: {e}, using regex fallback")
+       69 +                  self.logger.logger.warning
+          +  (f"⚠️  Aho-Corasick initialization failed: {e}, using regex fallback")
+       70                    self.ac_classifier = None
+       71            
+       72        def process_files(self, extractor, file_paths: List[Path], output_dir: Path, 
+     ...
+       87            """
+       88            start_time = time.perf_counter()
+       89            
+       90 -          print(f"🚀 In-Memory Pipeline: {' → '.join(self.stages_to_run)}")
+       91 -          print
+          -  (f"💾 Memory limit: {self.memory_limit_mb}MB per file, {self.service_memory_limit_mb}MB service total")
+       90 +          self.logger.stage(f"🚀 In-Memory Pipeline: {' → '.join(self.stages_to_run)}")
+       91 +          self.logger.entity
+          +  (f"💾 Memory limit: {self.memory_limit_mb}MB per file, {self.service_memory_limit_mb}MB service total")
+       92            
+       93            # Initialize in-memory documents
+       94            in_memory_docs = []
+     ...
+        96            
+        97            # Stage 1: CONVERT (if requested)
+        98            if 'convert' in self.stages_to_run:
+        99 -              print(f"📄 Stage 1: Converting {len(file_paths)} files to in-memory documents...")
+        99 +              self.logger.stage(f"📄 Stage 1: Converting {len(file_paths)} files to in-memory documents...")
+       100                stage_start = time.perf_counter()
+       101                
+       102                # Use extractor for conversion but process results into InMemoryDocument objects
+     ...
+       157                    
+       158                stage_time = (time.perf_counter() - stage_start) * 1000
+       159                successful_docs = [doc for doc in in_memory_docs if doc.success]
+       160 -              print(f"   ✅ 
+           -  Conversion complete: {stage_time:.0f}ms ({len(successful_docs)}/{len(in_memory_docs)} successful)")
+       161 -              print(f"   💾 Total service memory: {total_service_memory:.1f}MB")
+       160 +              self.logger.success(f"
+           +  Conversion complete: {stage_time:.0f}ms ({len(successful_docs)}/{len(in_memory_docs)} successful)")
+       161 +              self.logger.entity(f"💾 Total service memory: {total_service_memory:.1f}MB")
+       162            else:
+       163                resource_summary = None
+       164            
+       165            # Stage 2: CLASSIFY (if requested)
+       166            if 'classify' in self.stages_to_run:
+       167 -              print(f"📋 Stage 2: Classifying documents in memory...")
+       167 +              self.logger.stage(f"📋 Stage 2: Classifying documents in memory...")
+       168                stage_start = time.perf_counter()
+       169                
+       170                successful_classifications = 0
+     ...
+       181                            doc.mark_failed(f"Classification failed: {e}")
+       182                
+       183                stage_time = (time.perf_counter() - stage_start) * 1000
+       184 -              print(f"   ✅ 
+           -  Classification complete: {stage_time:.0f}ms ({successful_classifications}/{len(in_memory_docs)} 
+           -  successful)")
+       184 +              self.logger.success(f"
+           +  Classification complete: {stage_time:.0f}ms ({successful_classifications}/{len(in_memory_docs)} 
+           +  successful)")
+       185            
+       186            # Stage 3: ENRICH (if requested)
+       187            if 'enrich' in self.stages_to_run:
+       188 -              print(f"🔍 Stage 3: Enriching documents in memory...")
+       188 +              self.logger.stage(f"🔍 Stage 3: Enriching documents in memory...")
+       189                stage_start = time.perf_counter()
+       190                
+       191                successful_enrichments = 0
+     ...
+       210                            doc.mark_failed(f"Enrichment failed: {e}")
+       211                
+       212                stage_time = (time.perf_counter() - stage_start) * 1000
+       213 -              print(f"   ✅ 
+           -  Enrichment complete: {stage_time:.0f}ms ({successful_enrichments}/{len(in_memory_docs)} successful)")
+       213 +              self.logger.success(f"
+           +  Enrichment complete: {stage_time:.0f}ms ({successful_enrichments}/{len(in_memory_docs)} successful)")
+       214            
+       215            # Stage 4: EXTRACT (if requested)  
+       216            if 'extract' in self.stages_to_run:
+
+✻ Thinking…
+
+  Now let me continue updating more print statements in the fusion_pipeline.py file:
+
+● Search(pattern: "print\(", path: "mvp-fusion/pipeline/fusion_pipeline.py", output_mode: "content")
+  ⎿  Found 14 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  Let me update these remaining print statements:
+
+● Update(mvp-fusion/pipeline/fusion_pipeline.py)
+  ⎿  Updated mvp-fusion/pipeline/fusion_pipeline.py with 13 additions and 13 removals                                   
+       223            
+       224            # Stage 4: EXTRACT (if requested)  
+       225            if 'extract' in self.stages_to_run:
+       226 -              print(f"📄 Stage 4: Extracting semantic rules in memory...")
+       226 +              self.logger.stage(f"📄 Stage 4: Extracting semantic rules in memory...")
+       227                stage_start = time.perf_counter()
+       228                
+       229                successful_extractions = 0
+     ...
+       246                            doc.mark_failed(f"Extraction failed: {e}")
+       247                
+       248                stage_time = (time.perf_counter() - stage_start) * 1000
+       249 -              print(f"   ✅ 
+           -  Extraction complete: {stage_time:.0f}ms ({successful_extractions}/{len(in_memory_docs)} successful)")
+       249 +              self.logger.success(f"
+           +  Extraction complete: {stage_time:.0f}ms ({successful_extractions}/{len(in_memory_docs)} successful)")
+       250            
+       251            # Final Stage: WRITE (always performed)
+       252 -          print(f"💾 Final Stage: Writing processed documents to disk...")
+       252 +          self.logger.stage(f"💾 Final Stage: Writing processed documents to disk...")
+       253            write_start = time.perf_counter()
+       254            
+       255            successful_writes = 0
+     ...
+       264                            f.write(final_markdown)
+       265                        
+       266                        # Write semantic facts JSON knowledge file if available
+       267 -                      print(f"🔍 Debug: Checking JSON generation for {doc.source_stem}")
+       268 -                      print(f"   - Has semantic_json attr: {hasattr(doc, 'semantic_json')}")
+       269 -                      print(f"   - semantic_json exists: {bool(doc.semantic_json)}")
+       270 -                      print(f"   - semantic_json type: {type(doc.semantic_json)}")
+       267 +                      self.logger.logger.debug(f"🔍 Debug: Checking JSON generation for {doc.source_stem}")
+       268 +                      self.logger.logger.debug
+           +  (f"   - Has semantic_json attr: {hasattr(doc, 'semantic_json')}")
+       269 +                      self.logger.logger.debug(f"   - semantic_json exists: {bool(doc.semantic_json)}")
+       270 +                      self.logger.logger.debug(f"   - semantic_json type: {type(doc.semantic_json)}")
+       271                        
+       272                        if doc.semantic_json:
+       273                            json_file = output_dir / f"{doc.source_stem}.json"
+       274                            import json
+       275                            
+       276 -                          print(f"📝 Generating JSON knowledge file: {json_file}")
+       276 +                          self.logger.entity(f"📝 Generating JSON knowledge file: {json_file}")
+       277                            
+       278                            # Use the standardized knowledge JSON format (matches temp file)
+       279                            knowledge_data = doc.generate_knowledge_json()
+     ...
+       283                                    json.dump(knowledge_data, f, indent=2, ensure_ascii=False)
+       284                                
+       285                                total_facts = knowledge_data.get('semantic_summary', {}).get('total_facts', 0)
+       286 -                              print(f"📄 Generated knowledge file: {json_file.name} ({total_facts} facts)")
+       286 +                              self.logger.entity
+           +  (f"📄 Generated knowledge file: {json_file.name} ({total_facts} facts)")
+       287                            else:
+       288 -                              print(f"⚠️  No semantic facts to write for {doc.source_filename}")
+       288 +                              self.logger.logger.warning
+           +  (f"⚠️  No semantic facts to write for {doc.source_filename}")
+       289                        
+       290                        # Fallback: Legacy semantic JSON support  
+       291                        elif hasattr(doc, 'semantic_json') and doc.semantic_json:
+     ...
+       300                        doc.mark_failed(f"Write failed: {e}")
+       301            
+       302            write_time = (time.perf_counter() - write_start) * 1000
+       303 -          print(f"   ✅ 
+           -  Write complete: {write_time:.0f}ms ({successful_writes}/{len(in_memory_docs)} successful)")
+       303 +          self.logger.success(f"
+           +  Write complete: {write_time:.0f}ms ({successful_writes}/{len(in_memory_docs)} successful)")
+       304            
+       305            total_time = time.perf_counter() - start_time
+       306            
+     ...
+       431                    layers_processed.append('layer6_semantic_facts')
+       432                    layer_timings['layer6_semantic_facts'] = (time.perf_counter() - layer6_start) * 1000
+       433                    
+       434 -                  print
+           -  (f"🧠 Layer 6: Semantic facts extracted - {semantic_facts.get('semantic_summary', {}).get('total_facts', 
+           -  0)} facts found")
+       434 +                  self.logger.entity
+           +  (f"🧠 Layer 6: Semantic facts extracted - {semantic_facts.get('semantic_summary', {}).get('total_facts', 
+           +  0)} facts found")
+       435                    
+       436                except Exception as e:
+       437 -                  print(f"⚠️  Layer 6 semantic extraction failed: {e}")
+       437 +                  self.logger.logger.warning(f"⚠️  Layer 6 semantic extraction failed: {e}")
+       438                    layer_timings['layer6_semantic_facts'] = (time.perf_counter() - layer6_start) * 1000
+       439            
+       440            # Final performance summary (clean structure)
+  ⎿ API Error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"The request body is not valid JSON: no 
+    low surrogate in string: line 1 column 158618 (char 158617)"},"request_id":"req_011CTE1wbEpTY1gWab5fPbDG"}
+
+> continue
+  ⎿ API Error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"The request body is not valid JSON: no 
+    low surrogate in string: line 1 column 158618 (char 158617)"},"request_id":"req_011CTE233p7jKqg1adHS4Qij"}
+
+> API Error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"The request body is not valid JSON: no 
+  low surrogate in string: line 1 column 158618 (char 
+       158617)"},"request_id":"req_011CTE233p7jKqg1adHS4Qij"}  what is this error ?
+  ⎿ API Error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"The request body is not valid JSON: no 
+    low surrogate in string: line 1 column 158618 (char 158617)"},"request_id":"req_011CTE23y1B97NEqDBcdh1gB"}
+
+> continue
+  ⎿ API Error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"The request body is not valid JSON: no 
+    low surrogate in string: line 1 column 151212 (char 151211)"},"request_id":"req_011CTE25JsHqnML2GK4sFbMt"}
+

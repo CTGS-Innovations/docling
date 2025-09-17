@@ -29,6 +29,12 @@ from dataclasses import dataclass, field
 from datetime import datetime
 import json
 import yaml
+import sys
+from pathlib import Path
+
+# Import centralized logging
+sys.path.append(str(Path(__file__).parent.parent.parent))
+from utils.logging_config import get_fusion_logger
 
 @dataclass
 class SemanticFact:
@@ -113,6 +119,7 @@ class SemanticFactExtractor:
     """
     
     def __init__(self):
+        self.logger = get_fusion_logger(__name__)
         self.canonical_map = self._build_canonical_map()
         self.fact_patterns = self._build_fact_patterns()
         self.aho_corasick = self._build_normalizer()
@@ -421,27 +428,27 @@ class SemanticFactExtractor:
     
     def _parse_yaml_markdown(self, text: str) -> Tuple[Dict, str]:
         """Parse YAML front matter and markdown content from the text"""
-        print(f"🔧 Parsing text: {len(text)} characters, starts with: '{text[:50]}...'")
+        self.logger.logger.debug(f"🔧 Parsing text: {len(text)} characters, starts with: '{text[:50]}...'")
         
         # Split on YAML delimiters
         if text.strip().startswith('---'):
             parts = text.split('---', 2)
-            print(f"📄 Found {len(parts)} parts after splitting on '---'")
+            self.logger.logger.debug(f"📄 Found {len(parts)} parts after splitting on '---'")
             if len(parts) >= 3:
                 try:
                     yaml_content = parts[1].strip()
                     markdown_content = parts[2].strip()
-                    print(f"📄 YAML section: {len(yaml_content)} chars")
-                    print(f"📝 Markdown section: {len(markdown_content)} chars")
+                    self.logger.logger.debug(f"📄 YAML section: {len(yaml_content)} chars")
+                    self.logger.logger.debug(f"📝 Markdown section: {len(markdown_content)} chars")
                     yaml_data = yaml.safe_load(yaml_content)
-                    print(f"✅ YAML parsed successfully: {list(yaml_data.keys()) if yaml_data else 'Empty'}")
+                    self.logger.logger.debug(f"✅ YAML parsed successfully: {list(yaml_data.keys()) if yaml_data else 'Empty'}")
                     return yaml_data or {}, markdown_content
                 except yaml.YAMLError as e:
-                    print(f"❌ YAML parsing error: {e}")
+                    self.logger.logger.error(f"❌ YAML parsing error: {e}")
                     return {}, text
         
         # No YAML front matter found, treat entire text as markdown
-        print("⚠️  No YAML front matter found (doesn't start with '---')")
+        self.logger.logger.debug("⚠️  No YAML front matter found (doesn't start with '---')")
         return {}, text
     
     def _normalize_yaml_entities(self, existing_entities: Dict) -> Dict[str, Dict[str, Any]]:
@@ -481,13 +488,13 @@ class SemanticFactExtractor:
         """Dynamic promotion of any YAML entities to structured semantic facts"""
         promoted_facts = {}
         
-        print(f"🔄 Dynamically promoting entities: {list(existing_entities.keys())}")
+        self.logger.logger.debug(f"🔄 Dynamically promoting entities: {list(existing_entities.keys())}")
         
         for entity_type, entities in existing_entities.items():
             if not isinstance(entities, list):
                 continue
                 
-            print(f"   Processing {entity_type}: {len(entities)} entities")
+            self.logger.logger.debug(f"   Processing {entity_type}: {len(entities)} entities")
             promoted_facts[entity_type] = []
             
             for entity in entities:
@@ -498,7 +505,7 @@ class SemanticFactExtractor:
                         promoted_facts[entity_type].append(semantic_fact)
         
         total_promoted = sum(len(facts) for facts in promoted_facts.values())
-        print(f"✅ Total facts promoted: {total_promoted}")
+        self.logger.entity(f"✅ Total facts promoted: {total_promoted}")
         
         return promoted_facts
     
@@ -880,17 +887,17 @@ class SemanticFactExtractor:
         
         # Step 5: Log filtering results
         total_removed = sum(removed_counts.values())
-        print(f"🧹 Filtered out {total_removed} noisy entities:")
+        self.logger.logger.debug(f"🧹 Filtered out {total_removed} noisy entities:")
         for category, count in removed_counts.items():
-            print(f"   - {category}: {count} entities")
+            self.logger.logger.debug(f"   - {category}: {count} entities")
         
         # Show top entities by type
-        print("🏆 Top entities after filtering:")
+        self.logger.logger.debug("🏆 Top entities after filtering:")
         for fact_type, facts in filtered_facts.items():
             if isinstance(facts, list) and facts:
                 entity_type = facts[0].get('entity_type', 'unknown')
                 top_3 = [(f.get('canonical_name', ''), f.get('frequency_score', 0)) for f in facts[:3]]
-                print(f"   - {entity_type}: {top_3}")
+                self.logger.logger.debug(f"   - {entity_type}: {top_3}")
         
         return filtered_facts
     
@@ -899,12 +906,12 @@ class SemanticFactExtractor:
         Main extraction method: Parse YAML + markdown → promote entities to structured facts
         Returns comprehensive semantic fact graph
         """
-        print("🧠 Starting semantic fact extraction...")
+        self.logger.entity("🧠 Starting semantic fact extraction...")
         
         # Step 1: Parse YAML front matter and markdown content
         yaml_data, markdown_content = self._parse_yaml_markdown(text)
-        print(f"📄 Parsed YAML: {len(yaml_data)} top-level keys found")
-        print(f"📝 Markdown content: {len(markdown_content)} characters")
+        self.logger.logger.debug(f"📄 Parsed YAML: {len(yaml_data)} top-level keys found")
+        self.logger.logger.debug(f"📝 Markdown content: {len(markdown_content)} characters")
         
         # Step 2: Get existing entities from YAML (already extracted)
         existing_entities = yaml_data.get('classification', {}).get('universal_entities', {})
@@ -912,7 +919,7 @@ class SemanticFactExtractor:
             # Fallback to global_entities if structure is different
             existing_entities = yaml_data.get('global_entities', {})
         
-        print(f"🔍 Found entities in YAML: {list(existing_entities.keys()) if existing_entities else 'None'}")
+        self.logger.logger.debug(f"🔍 Found entities in YAML: {list(existing_entities.keys()) if existing_entities else 'None'}")
         if existing_entities:
             for entity_type, entities in existing_entities.items():
                 count = len(entities) if isinstance(entities, list) else 1
@@ -922,26 +929,26 @@ class SemanticFactExtractor:
         
         # Step 3: Normalize entities from YAML
         normalized_entities = self._normalize_yaml_entities(existing_entities)
-        print(f"🔄 Normalized {len(normalized_entities)} entities from YAML")
+        self.logger.logger.debug(f"🔄 Normalized {len(normalized_entities)} entities from YAML")
         
         # Step 4: Promote existing YAML entities to structured facts (primary method)
-        print("⬆️  Promoting YAML entities to structured facts...")
+        self.logger.logger.debug("⬆️  Promoting YAML entities to structured facts...")
         all_facts = self._promote_yaml_entities_to_facts(existing_entities, markdown_content)
         
         # Step 5: Apply normalization + threshold filtering to reduce noise
-        print("🧹 Applying normalization and threshold filtering...")
+        self.logger.logger.debug("🧹 Applying normalization and threshold filtering...")
         all_facts = self._apply_entity_normalization_and_filtering(all_facts)
         
         # Step 6: Extract additional semantic relationships from markdown content
-        print("🔍 Extracting semantic relationships from markdown content...")
+        self.logger.logger.debug("🔍 Extracting semantic relationships from markdown content...")
         relationships = self._extract_semantic_relationships(markdown_content, all_facts)
         if relationships:
             all_facts['relationships'] = relationships
-            print(f"   - relationships: {len(relationships)} semantic relationships found")
+            self.logger.logger.debug(f"   - relationships: {len(relationships)} semantic relationships found")
         
         # Step 7: Build semantic summary
         total_facts = sum(len(facts) for facts in all_facts.values())
-        print(f"✅ Total semantic facts extracted: {total_facts}")
+        self.logger.entity(f"✅ Total semantic facts extracted: {total_facts}")
         
         result = {
             'semantic_facts': {
@@ -1005,30 +1012,30 @@ class SemanticFactExtractor:
         Parallel processing method: Extract semantic facts from classification data + markdown content
         Uses existing entities from classification and markdown context for enrichment
         """
-        print("🧠 Starting semantic fact extraction from classification data...")
+        self.logger.entity("🧠 Starting semantic fact extraction from classification data...")
         
         # Step 1: Get ALL entities from classification structure (both global and domain)
         entities_section = classification_data.get('entities', {})
         global_entities = entities_section.get('global_entities', {})
         domain_entities = entities_section.get('domain_entities', {})
         
-        print(f"🔍 Found entity sections in classification:")
-        print(f"   📊 Global entities: {list(global_entities.keys()) if global_entities else 'None'}")
-        print(f"   🎯 Domain entities: {list(domain_entities.keys()) if domain_entities else 'None'}")
+        self.logger.logger.debug(f"🔍 Found entity sections in classification:")
+        self.logger.logger.debug(f"   📊 Global entities: {list(global_entities.keys()) if global_entities else 'None'}")
+        self.logger.logger.debug(f"   🎯 Domain entities: {list(domain_entities.keys()) if domain_entities else 'None'}")
         
         # Log entity counts for visibility
         if global_entities:
             for entity_type, entities in global_entities.items():
                 count = len(entities) if isinstance(entities, list) else 1
-                print(f"      - global_{entity_type}: {count} entities")
+                self.logger.logger.debug(f"      - global_{entity_type}: {count} entities")
         
         if domain_entities:
             for entity_type, entities in domain_entities.items():
                 count = len(entities) if isinstance(entities, list) else 1
-                print(f"      - domain_{entity_type}: {count} entities")
+                self.logger.logger.debug(f"      - domain_{entity_type}: {count} entities")
         
         if not global_entities and not domain_entities:
-            print("   ⚠️  No entities found in classification structure")
+            self.logger.logger.debug("   ⚠️  No entities found in classification structure")
         
         # Step 2: Normalize entities from both global and domain classifications
         global_normalized = self._normalize_classification_entities(global_entities)
@@ -1043,10 +1050,10 @@ class SemanticFactExtractor:
             v['source'] = 'domain'
             normalized_entities[f"domain_{k}"] = v
             
-        print(f"🔄 Normalized {len(global_normalized)} global + {len(domain_normalized)} domain entities")
+        self.logger.logger.debug(f"🔄 Normalized {len(global_normalized)} global + {len(domain_normalized)} domain entities")
         
         # Step 3: Promote classification entities to structured facts (process both)
-        print("⬆️  Promoting classification entities to structured facts...")
+        self.logger.logger.debug("⬆️  Promoting classification entities to structured facts...")
         
         # Process global entities
         global_facts = self._promote_classification_entities_to_facts(global_entities, markdown_content, source="global")
@@ -1066,15 +1073,15 @@ class SemanticFactExtractor:
             all_facts[f"domain_{fact_type}"] = facts
         
         # Step 4: Extract additional semantic relationships from markdown content
-        print("🔍 Extracting semantic relationships from markdown content...")
+        self.logger.logger.debug("🔍 Extracting semantic relationships from markdown content...")
         relationships = self._extract_semantic_relationships(markdown_content, all_facts)
         if relationships:
             all_facts['relationships'] = relationships
-            print(f"   - relationships: {len(relationships)} semantic relationships found")
+            self.logger.logger.debug(f"   - relationships: {len(relationships)} semantic relationships found")
         
         # Step 5: Build semantic summary
         total_facts = sum(len(facts) for facts in all_facts.values())
-        print(f"✅ Total semantic facts extracted: {total_facts}")
+        self.logger.entity(f"✅ Total semantic facts extracted: {total_facts}")
         
         result = {
             'semantic_facts': all_facts,
@@ -1117,13 +1124,13 @@ class SemanticFactExtractor:
         """Dynamic promotion of classification entities to structured semantic facts"""
         promoted_facts = {}
         
-        print(f"🔄 Dynamically promoting {source} entities: {list(existing_entities.keys())}")
+        self.logger.logger.debug(f"🔄 Dynamically promoting {source} entities: {list(existing_entities.keys())}")
         
         for entity_type, entities in existing_entities.items():
             if not isinstance(entities, list):
                 continue
                 
-            print(f"   Processing {source}_{entity_type}: {len(entities)} entities")
+            self.logger.logger.debug(f"   Processing {source}_{entity_type}: {len(entities)} entities")
             promoted_facts[entity_type] = []
             
             for entity in entities:
@@ -1137,7 +1144,7 @@ class SemanticFactExtractor:
                         promoted_facts[entity_type].append(semantic_fact)
         
         total_promoted = sum(len(facts) for facts in promoted_facts.values())
-        print(f"✅ Total {source} facts promoted: {total_promoted}")
+        self.logger.entity(f"✅ Total {source} facts promoted: {total_promoted}")
         
         return promoted_facts
 
@@ -1156,6 +1163,7 @@ if __name__ == "__main__":
     extractor = SemanticFactExtractor()
     results = extractor.extract_semantic_facts(test_text)
     
+    # Test function - keep as print statements for testing
     print("=== SEMANTIC FACT EXTRACTION ===")
     print(json.dumps(results, indent=2))
     print(f"\n✅ Total semantic facts: {results['semantic_summary']['total_facts']}")

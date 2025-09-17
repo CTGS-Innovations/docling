@@ -190,12 +190,24 @@ files:
   timeout_per_file_seconds: 30 # Generous timeout for large files
 
 # Logging and Monitoring
+# See config/logging_examples.yaml for more logging configuration examples
 logging:
-  level: "INFO"                # DEBUG, INFO, WARNING, ERROR
-  file: "fusion_pipeline.log"
-  console: true
-  include_performance: true
-  max_log_size_mb: 100
+  # Verbosity levels:
+  #   0 = QUIET   (errors and final results only)
+  #   1 = NORMAL  (standard stage progress and key metrics) - DEFAULT
+  #   2 = VERBOSE (detailed progress with entity counts, memory usage)  
+  #   3 = DEBUG   (full diagnostic info with timestamps)
+  verbosity: 1                 # Default: NORMAL mode (standard output)
+  
+  # Output options
+  file: "fusion_pipeline.log"  # Log file name (optional)
+  console: true                # Display output to console
+  use_colors: true             # Enable colored terminal output
+  json_format: false           # Use JSON structured logging format
+  
+  # Performance and monitoring
+  include_performance: true    # Include performance metrics in output
+  max_log_size_mb: 100         # Rotate log files at this size
 
 # Error Handling
 error_handling:

@@ -1,0 +1,115 @@
+📋 Config: config/config.yaml                                              # NORMAL
+🔧 MVP-Fusion Engine: HighSpeed_Markdown_General                        # NORMAL
+⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output # NORMAL
+🔧 Workers: 2 | Formats: 10                                            # VERBOSE
+📁 Output directory: ../output/fusion                                   # NORMAL
+🗂️  Scanning 1 directories:                                            # VERBOSE
+   - ~/projects/docling/cli/data_complex                                # VERBOSE
+
+📊 PROCESSING SUMMARY:                                                  # NORMAL
+   Total files: 3                                                      # NORMAL
+   File types: {'.pdf': 3}                                            # VERBOSE
+   Workers: 2                                                          # VERBOSE
+
+🚀 Starting batch processing...                                         # NORMAL
+🔄 Using Traditional In-Memory Pipeline                                 # VERBOSE
+📚 Loaded modular patterns:                                            # VERBOSE
+   🏛️  Domains: 209 (2106 keywords)                                    # VERBOSE
+   📄 Document Types: 219 (1462 keywords)                              # VERBOSE
+   🔍 Entity Categories: 2 (8 total patterns)                          # VERBOSE
+⚡ Built modular Aho-Corasick automatons: 2.12ms                       # DEBUG
+   🏛️  Domain patterns: 2019                                           # DEBUG
+   📄 Document type patterns: 1400                                     # DEBUG
+   🔍 Entity patterns: 0                                               # DEBUG
+🚀 In-Memory Pipeline: convert → classify → enrich → extract           # VERBOSE
+💾 Memory limit: 100MB per file, 1024MB service total                  # VERBOSE
+📄 Stage 1: Converting 3 files to in-memory documents...               # NORMAL
+   ✅ Conversion complete: 85ms (3/3 successful)                       # NORMAL
+   💾 Total service memory: 0.1MB                                      # VERBOSE
+📋 Stage 2: Classifying documents in memory...                         # NORMAL
+Extracting entities with FLPC Rust regex...                            # DEBUG
+🧠 Starting semantic fact extraction from classification data...        # DEBUG
+🔍 Found entity sections in classification:                            # DEBUG
+   📊 Global entities: ['person', 'org', 'loc', 'gpe', 'date', 'time', 'money', 'percent', 'phone', 'regulation', 'url', 'measurement'] # DEBUG
+   🎯 Domain entities: ['financial', 'percentages', 'organizations', 'people', 'locations', 'regulations', 'statistics'] # DEBUG
+      - global_person: 10 entities                                     # DEBUG
+      - global_org: 4 entities                                         # DEBUG
+      - global_loc: 10 entities                                        # DEBUG
+      - global_gpe: 1 entities                                         # DEBUG
+      - global_date: 3 entities                                        # DEBUG
+      - global_time: 0 entities                                        # DEBUG
+      - global_money: 1 entities                                       # DEBUG
+      - global_percent: 1 entities                                     # DEBUG
+      - global_phone: 10 entities                                      # DEBUG
+      - global_regulation: 2 entities                                  # DEBUG
+      - global_url: 1 entities                                         # DEBUG
+      - global_measurement: 10 entities                                # DEBUG
+      - domain_financial: 1 entities                                   # DEBUG
+      - domain_percentages: 1 entities                                 # DEBUG
+      - domain_organizations: 14 entities                              # DEBUG
+      - domain_people: 77 entities                                     # DEBUG
+      - domain_locations: 16 entities                                  # DEBUG
+      - domain_regulations: 5 entities                                 # DEBUG
+      - domain_statistics: 0 entities                                  # DEBUG
+🔄 Normalized 1 global + 0 domain entities                             # DEBUG
+⬆️  Promoting classification entities to structured facts...            # DEBUG
+🔄 Dynamically promoting global entities: ['person', 'org', 'loc', 'gpe', 'date', 'time', 'money', 'percent', 'phone', 'regulation', 'url', 'measurement'] # DEBUG
+   Processing global_person: 10 entities                               # DEBUG
+   Processing global_org: 4 entities                                   # DEBUG
+   Processing global_loc: 10 entities                                  # DEBUG
+   Processing global_gpe: 1 entities                                   # DEBUG
+   Processing global_date: 3 entities                                  # DEBUG
+   Processing global_time: 0 entities                                  # DEBUG
+   Processing global_money: 1 entities                                 # DEBUG
+   Processing global_percent: 1 entities                               # DEBUG
+   Processing global_phone: 10 entities                                # DEBUG
+   Processing global_regulation: 2 entities                            # DEBUG
+   Processing global_url: 1 entities                                   # DEBUG
+   Processing global_measurement: 10 entities                          # DEBUG
+✅ Total global facts promoted: 53                                     # VERBOSE
+🔄 Dynamically promoting domain entities: ['financial', 'percentages', 'organizations', 'people', 'locations', 'regulations', 'statistics'] # DEBUG
+   Processing domain_financial: 1 entities                             # DEBUG
+   Processing domain_percentages: 1 entities                           # DEBUG
+   Processing domain_organizations: 14 entities                        # DEBUG
+   Processing domain_people: 77 entities                               # DEBUG
+   Processing domain_locations: 16 entities                            # DEBUG
+   Processing domain_regulations: 5 entities                           # DEBUG
+   Processing domain_statistics: 0 entities                            # DEBUG
+✅ Total domain facts promoted: 114                                    # VERBOSE
+🔍 Extracting semantic relationships from markdown content...           # DEBUG
+✅ Total semantic facts extracted: 167                                 # VERBOSE
+🧠 Layer 6: Semantic facts extracted - 167 facts found                 # VERBOSE
+[... similar pattern for files 2 and 3 ...]
+   ✅ Classification complete: 118ms (3/3 successful)                   # NORMAL
+🔍 Stage 3: Enriching documents in memory...                           # NORMAL
+   ✅ Enrichment complete: 2ms (3/3 successful)                        # NORMAL
+📄 Stage 4: Extracting semantic rules in memory...                     # NORMAL
+   ✅ Extraction complete: 1ms (3/3 successful)                        # NORMAL
+💾 Final Stage: Writing processed documents to disk...                  # NORMAL
+🔍 Debug: Checking JSON generation for 3124-stairways-and-ladders      # DEBUG
+   - Has semantic_json attr: True                                      # DEBUG
+   - semantic_json exists: True                                        # DEBUG
+   - semantic_json type: <class 'dict'>                                # DEBUG
+📝 Generating JSON knowledge file: ../output/fusion/3124-stairways-and-ladders.json # VERBOSE
+📄 Generated knowledge file: 3124-stairways-and-ladders.json (167 facts) # VERBOSE
+[... similar debug/verbose for other files ...]
+   ✅ Write complete: 148ms (3/3 successful)                           # NORMAL
+   💾 In-memory processing: 0.4MB total document memory               # VERBOSE
+
+🚀 PROCESSING PERFORMANCE:                                              # QUIET
+   🚀 PAGES/SEC: 108 (overall pipeline)                                # QUIET
+   ⚡ THROUGHPUT: 33.7 MB/sec raw document processing                   # QUIET
+
+✅ DATA TRANSFORMATION SUMMARY:                                         # QUIET
+   📊 INPUT: 17 MB across 3 files (53 pages)                          # QUIET
+   📊 OUTPUT: 0.4 MB in 3 markdown files                              # QUIET
+   🗜️  COMPRESSION: 97.7% smaller (eliminated formatting, images, bloat) # QUIET
+   📁 RESULTS: 3 successful                                            # QUIET
+   ⏱️  TOTAL TIME: 0.49s                                              # QUIET
+
+💻 PROCESSING FOOTPRINT:                                               # NORMAL
+   🖥️  WORKERS: 2/16 cores (1 worker = 1 core)                       # VERBOSE
+   🧠 MEMORY: 0.1 MB peak usage                                       # VERBOSE
+   📈 PROCESSING MEMORY: 0.1 MB during extraction                     # VERBOSE
+   ⚡ EFFICIENCY: 26 pages/worker, 8.3 MB/worker                      # VERBOSE
+   ✅ SUCCESS RATE: 100.0% (3/3)                                      # QUIET

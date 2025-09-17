@@ -1,0 +1,57 @@
+# MVP-Fusion Logging Configuration Examples
+# =========================================
+# Copy these sections to your config/config.yaml file
+
+# Example 1: QUIET mode (minimal output for production)
+logging:
+  verbosity: 0                 # QUIET: errors and final results only
+  file: "fusion_production.log"
+  console: true
+  use_colors: false            # Good for production logs
+  json_format: true            # Structured logging for monitoring systems
+  include_performance: true
+  max_log_size_mb: 500
+
+# Example 2: NORMAL mode (recommended default)
+logging:
+  verbosity: 1                 # NORMAL: standard stage progress
+  file: "fusion_pipeline.log" 
+  console: true
+  use_colors: true             # Nice colored output for development
+  json_format: false
+  include_performance: true
+  max_log_size_mb: 100
+
+# Example 3: VERBOSE mode (detailed monitoring)
+logging:
+  verbosity: 2                 # VERBOSE: detailed progress with entity counts
+  file: "fusion_detailed.log"
+  console: true
+  use_colors: true
+  json_format: false
+  include_performance: true
+  max_log_size_mb: 200
+
+# Example 4: DEBUG mode (troubleshooting)
+logging:
+  verbosity: 3                 # DEBUG: full diagnostic output with timestamps
+  file: "fusion_debug.log"
+  console: true
+  use_colors: false            # Better for log analysis
+  json_format: true            # Structured for debugging tools
+  include_performance: true
+  max_log_size_mb: 1000        # Large files for debug data
+
+# =====================================================
+# Verbosity Level Summary:
+# 0 = QUIET   - Errors and final results (PAGES/SEC, SUCCESS RATE) only
+# 1 = NORMAL  - Standard stage progress and key metrics (DEFAULT)  
+# 2 = VERBOSE - Detailed progress with entity counts and memory usage
+# 3 = DEBUG   - Full diagnostic info with timestamps and module names
+# =====================================================
+
+# Note: CLI flags always override config file settings:
+# python fusion_cli.py --file doc.pdf -q    # Forces QUIET (ignores config)
+# python fusion_cli.py --file doc.pdf -v    # Forces VERBOSE (ignores config)  
+# python fusion_cli.py --file doc.pdf -vv   # Forces DEBUG (ignores config)
+# python fusion_cli.py --file doc.pdf       # Uses config verbosity setting
