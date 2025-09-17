@@ -124,6 +124,58 @@ class InMemoryDocument:
             
         return f"---\n{yaml_content}---{markdown_body}"
     
+    def generate_knowledge_json(self) -> Dict[str, Any]:
+        """Generate knowledge JSON file with semantic facts (matches temp file format)"""
+        # Get semantic facts from YAML frontmatter (where they actually live)
+        classification = self.yaml_frontmatter.get('classification', {})
+        semantic_facts = classification.get('semantic_facts', {})
+        semantic_summary = classification.get('semantic_summary', {})
+        
+        # If no semantic facts in YAML, try the semantic_json fallback
+        if not semantic_facts and self.semantic_json:
+            semantic_facts = self.semantic_json.get('semantic_facts', {})
+            semantic_summary = self.semantic_json.get('semantic_summary', {})
+        
+        # If still no semantic facts, return empty
+        if not semantic_facts:
+            return {}
+        
+        # Calculate entity counts from classification data
+        entities_section = classification.get('entities', {})
+        global_entities = entities_section.get('global_entities', {})
+        domain_entities = entities_section.get('domain_entities', {})
+        
+        # Count entities
+        global_count = 0
+        for entity_type, entities in global_entities.items():
+            if isinstance(entities, list):
+                global_count += len(entities)
+        
+        domain_count = 0  
+        for entity_type, entities in domain_entities.items():
+            if isinstance(entities, list):
+                domain_count += len(entities)
+        
+        # Build knowledge data structure (matches temp file format)
+        knowledge_data = {
+            'source_info': {
+                'source_file': self.source_file_path,
+                'extraction_timestamp': semantic_summary.get('timestamp', ''),
+                'extraction_engine': semantic_summary.get('extraction_engine', ''),
+                'processing_method': 'mvp-fusion-pipeline'
+            },
+            'entity_summary': {
+                'global_entities_count': global_count,
+                'domain_entities_count': domain_count,
+                'total_entities': global_count + domain_count
+            },
+            'semantic_facts': semantic_facts,
+            'normalized_entities': classification.get('normalized_entities', {}),
+            'semantic_summary': semantic_summary
+        }
+        
+        return knowledge_data
+    
     def get_processing_summary(self) -> Dict[str, Any]:
         """Get comprehensive processing summary"""
         total_time_ms = (time.perf_counter() - self.processing_start_time) * 1000

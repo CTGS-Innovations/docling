@@ -266,30 +266,19 @@ class FusionPipeline:
                         
                         print(f"📝 Generating JSON knowledge file: {json_file}")
                         
-                        # Create comprehensive knowledge file
-                        knowledge_data = {
-                            'document_info': {
-                                'filename': doc.source_filename,
-                                'file_stem': doc.source_stem,
-                                'processing_date': datetime.now().isoformat(),
-                                'semantic_extraction_engine': 'MVP-Fusion Layer 6'
-                            },
-                            'semantic_facts': doc.semantic_json.get('semantic_facts', {}),
-                            'normalized_entities': doc.semantic_json.get('normalized_entities', {}),
-                            'semantic_summary': doc.semantic_json.get('semantic_summary', {}),
-                            'knowledge_graph': {
-                                'total_facts': doc.semantic_json.get('semantic_summary', {}).get('total_facts', 0),
-                                'fact_types': doc.semantic_json.get('semantic_summary', {}).get('fact_types', {}),
-                                'extraction_timestamp': doc.semantic_json.get('semantic_summary', {}).get('timestamp', '')
-                            }
-                        }
+                        # Use the standardized knowledge JSON format (matches temp file)
+                        knowledge_data = doc.generate_knowledge_json()
                         
-                        with open(json_file, 'w', encoding='utf-8') as f:
-                            json.dump(knowledge_data, f, indent=2, ensure_ascii=False)
-                        
-                        print(f"📄 Generated knowledge file: {json_file.name} ({doc.semantic_json.get('semantic_summary', {}).get('total_facts', 0)} facts)")
+                        if knowledge_data:  # Only write if we have semantic data
+                            with open(json_file, 'w', encoding='utf-8') as f:
+                                json.dump(knowledge_data, f, indent=2, ensure_ascii=False)
+                            
+                            total_facts = knowledge_data.get('semantic_summary', {}).get('total_facts', 0)
+                            print(f"📄 Generated knowledge file: {json_file.name} ({total_facts} facts)")
+                        else:
+                            print(f"⚠️  No semantic facts to write for {doc.source_filename}")
                     
-                    # Legacy semantic JSON support
+                    # Fallback: Legacy semantic JSON support  
                     elif hasattr(doc, 'semantic_json') and doc.semantic_json:
                         json_file = output_dir / f"{doc.source_stem}.semantic.json"
                         import json
