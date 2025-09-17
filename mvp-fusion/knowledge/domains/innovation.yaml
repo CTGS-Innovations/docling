@@ -5,16 +5,16 @@
 emerging_tech:
   weight: 3.5
   keywords:
-    "emerging": 3.5
-    "breakthrough": 4.0
-    "cutting edge": 3.5
-    "next generation": 3.5
-    "revolutionary": 3.5
-    "disruptive": 4.0
-    "game changer": 3.5
-    "innovative": 3.0
-    "novel": 3.0
-    "pioneering": 3.0
+    "emerging technology": 4.0
+    "tech breakthrough": 4.0
+    "cutting edge tech": 4.0
+    "next generation technology": 4.0
+    "revolutionary technology": 4.0
+    "disruptive technology": 4.0
+    "game changing technology": 4.0
+    "innovative technology": 3.5
+    "novel technology": 3.5
+    "pioneering technology": 3.5
 
 # AI and Machine Learning Innovation
 ai_innovation:
@@ -39,13 +39,13 @@ tech_advancement:
     "new technology": 3.5
     "latest tech": 3.0
     "technological advancement": 3.5
-    "innovation": 3.5
-    "prototype": 3.0
-    "proof of concept": 3.5
-    "beta": 2.5
-    "alpha": 2.5
-    "experimental": 3.0
-    "research": 2.5
+    "tech innovation": 3.5
+    "software prototype": 3.0
+    "tech proof of concept": 3.5
+    "beta software": 2.5
+    "alpha version": 2.5
+    "experimental technology": 3.0
+    "tech research": 2.5
 
 # Market Trends and Patterns
 market_trends:
