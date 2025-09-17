@@ -1766,3 +1766,331 @@
 2025-09-17 16:08:35 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
 2025-09-17 16:08:35 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
 2025-09-17 16:08:35 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:39 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 16:09:39 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 16:09:39 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 16:09:39 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 16:09:39 - __main__ - [32mSTAGE[0m - [32m🔗 Found 36 URLs in MVP-FOUNDERS-JOURNEY-50-URLS.md[0m
+2025-09-17 16:09:39 - __main__ - [32mSTAGE[0m - [32m🚀 Processing 36 URLs...[0m
+2025-09-17 16:09:39 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.forbes.com/sites/alejandrocremades/2018/09/23/how-to-effectively-determine-your-market-size/[0m
+2025-09-17 16:09:40 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:40 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:40 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:40 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:40 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:40 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:40 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.forbes.com/sites/georgedeeb/2019/12/03/calculate-your-addressable-market-size-to-help-you-attract-investors/[0m
+2025-09-17 16:09:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:41 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.forbes.com/sites/abdoriani/2024/03/22/5-famous-startup-examples-of-finding-product-market-fit/[0m
+2025-09-17 16:09:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:41 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://techcrunch.com/2025/04/16/startup-funding-hit-records-in-q1-but-the-outlook-for-2025-is-still-awful/[0m
+2025-09-17 16:09:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:41 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://techcrunch.com/2024/01/15/startup-valuations-predictions-2024/[0m
+2025-09-17 16:09:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:42 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://techcrunch.com/2025/09/12/we-are-entering-a-golden-age-of-robotics-startups-and-not-just-because-of-ai/[0m
+2025-09-17 16:09:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:42 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://a16z.com/big-ideas-in-tech-2025/[0m
+2025-09-17 16:09:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:43 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:43 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:43 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:43 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://a16z.com/unbundling-the-bpo-how-ai-will-disrupt-outsourced-work/[0m
+2025-09-17 16:09:43 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:43 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:43 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:43 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:43 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:43 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:43 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://a16z.com/deconstructing-deel/[0m
+2025-09-17 16:09:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:44 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.cbinsights.com/research/report/venture-trends-q1-2025/[0m
+2025-09-17 16:09:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:44 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.cbinsights.com/research/report/fintech-trends-2024/[0m
+2025-09-17 16:09:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:44 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.cbinsights.com/research/report/insurtech-trends-q1-2025/[0m
+2025-09-17 16:09:45 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:45 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:45 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:45 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:45 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:45 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:45 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://hbr.org/2023/09/how-to-find-product-market-fit[0m
+2025-09-17 16:09:45 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://hbr.org/2023/09/how-to-find-product-market-fit[0m
+2025-09-17 16:09:45 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:09:45 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:09:45 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:45 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:45 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:45 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:45 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:45 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:45 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://hbr.org/2024/02/what-startups-get-wrong-about-scaling[0m
+2025-09-17 16:09:45 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://hbr.org/2024/02/what-startups-get-wrong-about-scaling[0m
+2025-09-17 16:09:45 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:09:45 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:09:45 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:45 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:45 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:45 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:45 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:45 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:45 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://hbr.org/2022/06/why-startups-fail[0m
+2025-09-17 16:09:46 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://hbr.org/2022/06/why-startups-fail[0m
+2025-09-17 16:09:46 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:09:46 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:09:46 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:46 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:46 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:46 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:46 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:46 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:46 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.mckinsey.com/industries/technology-media-and-telecommunications/our-insights/global-tech-trends-2023[0m
+2025-09-17 16:09:46 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.mckinsey.com/industries/technology-media-and-telecommunications/our-insights/global-tech-trends-2023[0m
+2025-09-17 16:09:46 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:09:46 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:09:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:47 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.mckinsey.com/capabilities/growth-marketing-and-sales/our-insights/startups-in-2024-and-beyond[0m
+2025-09-17 16:09:47 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.mckinsey.com/capabilities/growth-marketing-and-sales/our-insights/startups-in-2024-and-beyond[0m
+2025-09-17 16:09:47 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:09:47 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:09:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:47 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.mckinsey.com/featured-insights/innovation-and-growth/the-future-of-ai-innovation[0m
+2025-09-17 16:09:47 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.mckinsey.com/featured-insights/innovation-and-growth/the-future-of-ai-innovation[0m
+2025-09-17 16:09:47 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:09:47 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:09:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:47 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www2.deloitte.com/us/en/insights/industry/financial-services/fintech-lending-trends.html[0m
+2025-09-17 16:09:49 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www2.deloitte.com/us/en/insights/industry/financial-services/fintech-lending-trends.html[0m
+2025-09-17 16:09:49 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:09:49 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:09:49 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:49 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:49 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:49 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:49 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:49 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:49 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www2.deloitte.com/us/en/insights/industry/technology/future-of-cloud-computing.html[0m
+2025-09-17 16:09:50 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www2.deloitte.com/us/en/insights/industry/technology/future-of-cloud-computing.html[0m
+2025-09-17 16:09:50 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:09:50 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:09:50 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:50 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:50 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:50 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:50 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:50 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:50 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www2.deloitte.com/us/en/insights/focus/technology-trends.html[0m
+2025-09-17 16:09:50 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www2.deloitte.com/us/en/insights/focus/technology-trends.html[0m
+2025-09-17 16:09:50 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:09:50 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:09:51 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:51 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:51 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:51 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:51 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:51 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:51 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 16:09:51 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 16:09:51 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:09:51 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:09:51 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:51 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:51 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:51 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:51 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:51 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:51 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.bcg.com/publications/2022/ai-market-trends[0m
+2025-09-17 16:09:52 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.bcg.com/publications/2022/ai-market-trends[0m
+2025-09-17 16:09:52 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:09:52 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:09:52 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:52 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:52 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:52 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:52 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:52 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:52 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.bcg.com/publications/2024/future-of-venture-investing[0m
+2025-09-17 16:09:53 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.bcg.com/publications/2024/future-of-venture-investing[0m
+2025-09-17 16:09:53 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:09:53 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:09:53 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:53 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:53 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:53 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:53 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:53 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:53 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.pwc.com/us/en/industries/technology/publications/ai-predictions.html[0m
+2025-09-17 16:09:54 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.pwc.com/us/en/industries/technology/publications/ai-predictions.html[0m
+2025-09-17 16:09:54 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:09:54 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:09:54 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:54 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:54 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:54 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:54 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:54 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:54 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.pwc.com/us/en/industries/financial-services/library/venture-funding-trends.html[0m
+2025-09-17 16:09:54 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.pwc.com/us/en/industries/financial-services/library/venture-funding-trends.html[0m
+2025-09-17 16:09:54 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:09:54 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:09:54 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:54 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:55 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:55 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:55 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:55 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:55 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.pwc.com/us/en/library/global-top-100-companies-2024.html[0m
+2025-09-17 16:09:55 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.pwc.com/us/en/library/global-top-100-companies-2024.html[0m
+2025-09-17 16:09:55 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:09:55 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:09:55 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:55 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:55 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:55 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:55 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:55 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:55 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.ey.com/en_us/strategy/entrepreneurship-trends-2023[0m
+2025-09-17 16:09:56 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.ey.com/en_us/strategy/entrepreneurship-trends-2023[0m
+2025-09-17 16:09:56 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:09:56 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:09:56 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:56 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:56 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:56 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:56 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:56 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:56 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.ey.com/en_us/strategy/startup-ecosystem-trends[0m
+2025-09-17 16:09:56 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.ey.com/en_us/strategy/startup-ecosystem-trends[0m
+2025-09-17 16:09:56 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:09:56 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:09:57 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:57 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:57 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:57 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:57 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:57 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:57 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.ey.com/en_us/technology/global-tech-trends-2025[0m
+2025-09-17 16:09:57 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.ey.com/en_us/technology/global-tech-trends-2025[0m
+2025-09-17 16:09:57 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:09:57 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:09:57 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:09:57 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:09:57 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:09:57 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:09:57 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:09:57 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:09:57 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.statista.com/topics/840/venture-capital/[0m
+2025-09-17 16:10:00 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:10:00 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:10:00 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:10:00 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:10:00 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:10:00 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:10:00 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.statista.com/topics/871/startups-in-the-us/[0m
+2025-09-17 16:10:02 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:10:02 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:10:02 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:10:02 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:10:02 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:10:02 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:10:02 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.statista.com/topics/3122/artificial-intelligence-ai-in-business/[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:10:08 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.crunchbase.com/hub/unicorn-startups[0m
+2025-09-17 16:10:08 - __main__ - [31mERROR[0m - [31m❌ HTTP 403 response from https://www.crunchbase.com/hub/unicorn-startups[0m
+2025-09-17 16:10:08 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 403 - not processable[0m
+2025-09-17 16:10:08 - __main__ - [31mERROR[0m - [31m📊 Status: 403, Size: 0 bytes, Type: [0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:10:08 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.crunchbase.com/hub/recently-funded-startups[0m
+2025-09-17 16:10:08 - __main__ - [31mERROR[0m - [31m❌ HTTP 403 response from https://www.crunchbase.com/hub/recently-funded-startups[0m
+2025-09-17 16:10:08 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 403 - not processable[0m
+2025-09-17 16:10:08 - __main__ - [31mERROR[0m - [31m📊 Status: 403, Size: 0 bytes, Type: [0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:10:08 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.crunchbase.com/hub/most-innovative-companies[0m
+2025-09-17 16:10:08 - __main__ - [31mERROR[0m - [31m❌ HTTP 403 response from https://www.crunchbase.com/hub/most-innovative-companies[0m
+2025-09-17 16:10:08 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 403 - not processable[0m
+2025-09-17 16:10:08 - __main__ - [31mERROR[0m - [31m📊 Status: 403, Size: 0 bytes, Type: [0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:10:08 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:10:08 - __main__ - [32mSTAGE[0m - [32m
+📊 URL Processing Complete:[0m
+2025-09-17 16:10:08 - __main__ - [32mSTAGE[0m - [32m   Total URLs: 36[0m
+2025-09-17 16:10:08 - __main__ - [32mSTAGE[0m - [32m   Successful: 33[0m
+2025-09-17 16:10:08 - __main__ - [32mSTAGE[0m - [32m   Failed: 3[0m
+2025-09-17 16:10:08 - __main__ - [32mSTAGE[0m - [32m   Total time: 29.45s[0m
+2025-09-17 16:10:08 - __main__ - [32mSTAGE[0m - [32m   Average rate: 1.2 URLs/sec[0m
