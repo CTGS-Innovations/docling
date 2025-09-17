@@ -61,6 +61,13 @@ class InMemoryDocument:
     def add_classification_data(self, classification_data: Dict[str, Any]):
         """Add classification section to YAML frontmatter"""
         self.yaml_frontmatter['classification'] = classification_data
+        
+        # Check for semantic facts and store them for JSON generation
+        if '_semantic_facts_for_json' in classification_data:
+            self.semantic_json = classification_data['_semantic_facts_for_json']
+            # Remove the temporary key to keep classification data clean
+            del classification_data['_semantic_facts_for_json']
+        
         self._check_memory_limit("after classification")
         
     def add_enrichment_data(self, enrichment_data: Dict[str, Any]):

@@ -478,48 +478,115 @@ class SemanticFactExtractor:
         return normalized
     
     def _promote_yaml_entities_to_facts(self, existing_entities: Dict, markdown_content: str) -> Dict[str, List]:
-        """Promote existing YAML entities to structured semantic facts"""
-        promoted_facts = {
-            'regulation_citations': [],
-            'requirements': [],
-            'financial_impacts': [],
-            'action_facts': []
-        }
+        """Dynamic promotion of any YAML entities to structured semantic facts"""
+        promoted_facts = {}
         
-        # Promote regulation entities to RegulationCitation facts
-        regulations = existing_entities.get('regulation', [])
-        for reg in regulations:
-            if isinstance(reg, dict):
-                fact = RegulationCitation(
-                    fact_type='RegulationCitation',
-                    confidence=0.9,
-                    span=reg.get('span', {}),
-                    raw_text=reg.get('value', reg.get('text', '')),
-                    regulation_id=reg.get('value', reg.get('text', '')),
-                    issuing_authority=self._determine_authority(reg.get('value', '')),
-                    subject_area='safety_compliance'
-                )
-                promoted_facts['regulation_citations'].append(fact)
+        print(f"🔄 Dynamically promoting entities: {list(existing_entities.keys())}")
         
-        # Promote money entities to FinancialImpact facts
-        money_entities = existing_entities.get('money', [])
-        for money in money_entities:
-            if isinstance(money, dict):
-                amount_text = money.get('value', money.get('text', ''))
-                amount = self._parse_money_amount(amount_text)
-                fact = FinancialImpact(
-                    fact_type='FinancialImpact',
-                    confidence=0.8,
-                    span=money.get('span', {}),
-                    raw_text=amount_text,
-                    amount=amount,
-                    currency='USD',
-                    impact_type='cost',  # Default, could be refined
-                    subject='compliance'
-                )
-                promoted_facts['financial_impacts'].append(fact)
+        for entity_type, entities in existing_entities.items():
+            if not isinstance(entities, list):
+                continue
+                
+            print(f"   Processing {entity_type}: {len(entities)} entities")
+            promoted_facts[entity_type] = []
+            
+            for entity in entities:
+                if isinstance(entity, dict):
+                    # Create semantic fact based on entity type
+                    semantic_fact = self._create_dynamic_semantic_fact(entity_type, entity, markdown_content)
+                    if semantic_fact:
+                        promoted_facts[entity_type].append(semantic_fact)
+        
+        total_promoted = sum(len(facts) for facts in promoted_facts.values())
+        print(f"✅ Total facts promoted: {total_promoted}")
         
         return promoted_facts
+    
+    def _universal_text_clean(self, text: str) -> str:
+        """Universal text cleaning: replace newlines with spaces, normalize whitespace"""
+        if not text:
+            return ""
+        
+        # Replace single and multiple newlines with single space
+        import re
+        # Replace any sequence of newlines and whitespace with single space
+        cleaned = re.sub(r'\s*\n\s*', ' ', str(text))
+        # Normalize multiple spaces to single space
+        cleaned = re.sub(r'\s+', ' ', cleaned)
+        # Strip leading/trailing whitespace
+        return cleaned.strip()
+    
+    def _create_dynamic_semantic_fact(self, entity_type: str, entity: Dict, context: str) -> Optional[Dict]:
+        """Create semantic fact dynamically based on entity type"""
+        # Apply universal text cleaning to all text fields
+        raw_text = self._universal_text_clean(entity.get('value', entity.get('text', '')))
+        canonical_name = self._universal_text_clean(self._get_canonical_name(entity.get('value', ''), entity_type))
+        
+        base_data = {
+            'fact_type': f"{entity_type.title()}Fact",
+            'confidence': 0.85,
+            'span': entity.get('span', {}),
+            'raw_text': raw_text,
+            'entity_type': entity_type,
+            'canonical_name': canonical_name,
+            'extraction_layer': 'semantic_promotion'
+        }
+        
+        # Add entity-specific semantic enrichment
+        if entity_type == 'money':
+            financial_context = self._universal_text_clean(self._extract_financial_context(entity, context))
+            base_data.update({
+                'amount': self._parse_money_amount(entity.get('value', '')),
+                'currency': self._detect_currency(entity.get('value', '')),
+                'financial_context': financial_context
+            })
+        elif entity_type == 'regulation':
+            base_data.update({
+                'regulation_id': entity.get('value', ''),
+                'issuing_authority': self._determine_authority(entity.get('value', '')),
+                'regulatory_domain': self._classify_regulation_domain(entity.get('value', '')),
+                'compliance_level': self._assess_compliance_level(entity.get('value', ''))
+            })
+        elif entity_type == 'person':
+            base_data.update({
+                'person_name': entity.get('value', ''),
+                'role_context': self._extract_role_context(entity, context),
+                'organization_affiliation': self._find_organization_context(entity, context)
+            })
+        elif entity_type == 'organization':
+            base_data.update({
+                'organization_name': entity.get('value', ''),
+                'organization_type': self._classify_organization_type(entity.get('value', '')),
+                'industry_context': self._extract_industry_context(entity, context)
+            })
+        elif entity_type == 'phone':
+            base_data.update({
+                'phone_number': entity.get('value', ''),
+                'contact_type': 'phone',
+                'formatted_number': self._format_phone_number(entity.get('value', ''))
+            })
+        elif entity_type == 'url':
+            base_data.update({
+                'url': entity.get('value', ''),
+                'domain': self._extract_domain(entity.get('value', '')),
+                'link_type': self._classify_url_type(entity.get('value', ''))
+            })
+        elif entity_type == 'measurement':
+            measurement_context = self._universal_text_clean(self._extract_measurement_context(entity, context))
+            base_data.update({
+                'measurement_value': self._extract_measurement_value(entity.get('value', '')),
+                'unit': self._extract_measurement_unit(entity.get('value', '')),
+                'measurement_context': measurement_context
+            })
+        elif entity_type == 'date':
+            temporal_context = self._universal_text_clean(self._extract_temporal_context(entity, context))
+            base_data.update({
+                'date_value': entity.get('value', ''),
+                'date_format': self._detect_date_format(entity.get('value', '')),
+                'temporal_context': temporal_context
+            })
+        
+        return base_data
     
     def _determine_authority(self, regulation_text: str) -> str:
         """Determine issuing authority from regulation text"""
@@ -542,6 +609,290 @@ class SemanticFactExtractor:
             return float(cleaned)
         except:
             return 0.0
+    
+    # Dynamic semantic enrichment helper methods
+    def _get_canonical_name(self, value: str, entity_type: str) -> str:
+        """Get canonical name from mapping or return original"""
+        if value in self.canonical_map:
+            return self.canonical_map[value]['canonical_name']
+        return value
+    
+    def _detect_currency(self, amount_text: str) -> str:
+        """Detect currency from amount text"""
+        if '$' in amount_text:
+            return 'USD'
+        elif '€' in amount_text:
+            return 'EUR'
+        elif '£' in amount_text:
+            return 'GBP'
+        return 'USD'  # Default
+    
+    def _extract_financial_context(self, entity: Dict, context: str) -> str:
+        """Extract financial context around money entity"""
+        span = entity.get('span', {})
+        if span and context:
+            start = max(0, span.get('start', 0) - 100)
+            end = min(len(context), span.get('end', 0) + 100)
+            return context[start:end].strip()
+        return ""
+    
+    def _classify_regulation_domain(self, regulation_text: str) -> str:
+        """Classify the domain of a regulation"""
+        if any(word in regulation_text.upper() for word in ['OSHA', 'SAFETY', 'HEALTH']):
+            return 'occupational_safety'
+        elif 'CFR' in regulation_text:
+            return 'federal_regulation'
+        elif 'ISO' in regulation_text:
+            return 'international_standard'
+        return 'general'
+    
+    def _assess_compliance_level(self, regulation_text: str) -> str:
+        """Assess compliance level requirement"""
+        if any(word in regulation_text.lower() for word in ['must', 'shall', 'required']):
+            return 'mandatory'
+        elif any(word in regulation_text.lower() for word in ['should', 'recommended']):
+            return 'recommended'
+        return 'informational'
+    
+    def _extract_role_context(self, entity: Dict, context: str) -> str:
+        """Extract role context for person entities"""
+        # Simple role extraction - could be enhanced
+        roles = ['director', 'manager', 'supervisor', 'worker', 'inspector', 'ceo', 'president']
+        for role in roles:
+            if role in context.lower():
+                return role
+        return ""
+    
+    def _find_organization_context(self, entity: Dict, context: str) -> str:
+        """Find organization affiliation for person"""
+        # Look for organization patterns near person mention
+        org_patterns = ['Inc', 'LLC', 'Corp', 'Company', 'Agency', 'Department']
+        for pattern in org_patterns:
+            if pattern in context:
+                return pattern
+        return ""
+    
+    def _classify_organization_type(self, org_name: str) -> str:
+        """Classify organization type"""
+        if any(word in org_name for word in ['Inc', 'LLC', 'Corp', 'Company']):
+            return 'private_company'
+        elif any(word in org_name for word in ['Department', 'Agency', 'Administration']):
+            return 'government_agency'
+        elif any(word in org_name for word in ['University', 'Institute', 'College']):
+            return 'educational'
+        return 'organization'
+    
+    def _extract_industry_context(self, entity: Dict, context: str) -> str:
+        """Extract industry context for organization"""
+        industries = ['construction', 'manufacturing', 'healthcare', 'technology', 'finance']
+        for industry in industries:
+            if industry in context.lower():
+                return industry
+        return ""
+    
+    def _format_phone_number(self, phone: str) -> str:
+        """Format phone number consistently"""
+        # Simple formatting - could be enhanced
+        digits = ''.join(filter(str.isdigit, phone))
+        if len(digits) == 10:
+            return f"({digits[:3]}) {digits[3:6]}-{digits[6:]}"
+        return phone
+    
+    def _extract_domain(self, url: str) -> str:
+        """Extract domain from URL"""
+        try:
+            from urllib.parse import urlparse
+            return urlparse(url).netloc
+        except:
+            return url
+    
+    def _classify_url_type(self, url: str) -> str:
+        """Classify URL type"""
+        if 'gov' in url:
+            return 'government'
+        elif 'edu' in url:
+            return 'educational'
+        elif 'org' in url:
+            return 'organization'
+        return 'general'
+    
+    def _extract_measurement_value(self, measurement: str) -> str:
+        """Extract numeric value from measurement"""
+        import re
+        match = re.search(r'(\d+(?:\.\d+)?)', measurement)
+        return match.group(1) if match else ""
+    
+    def _extract_measurement_unit(self, measurement: str) -> str:
+        """Extract unit from measurement"""
+        units = ['inches', 'feet', 'meters', 'cm', 'mm', 'pounds', 'kg', 'degrees']
+        for unit in units:
+            if unit in measurement.lower():
+                return unit
+        return ""
+    
+    def _extract_measurement_context(self, entity: Dict, context: str) -> str:
+        """Extract context around measurement"""
+        return self._extract_financial_context(entity, context)  # Reuse logic
+    
+    def _detect_date_format(self, date_text: str) -> str:
+        """Detect date format"""
+        if '/' in date_text:
+            return 'MM/DD/YYYY'
+        elif '-' in date_text:
+            return 'YYYY-MM-DD'
+        return 'unknown'
+    
+    def _extract_temporal_context(self, entity: Dict, context: str) -> str:
+        """Extract temporal context around date"""
+        return self._extract_financial_context(entity, context)  # Reuse logic
+    
+    def _extract_semantic_relationships(self, markdown_content: str, facts: Dict) -> List[Dict]:
+        """Extract semantic relationships between entities"""
+        relationships = []
+        # Simple relationship extraction - could be enhanced
+        # This is where we'd find connections between entities
+        return relationships
+    
+    def _apply_entity_normalization_and_filtering(self, all_facts: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Apply normalization and minimum occurrence threshold filtering to reduce noise
+        """
+        print("🔄 Normalizing entity variants...")
+        
+        # Step 1: Define normalization mappings for common variants
+        normalization_map = {
+            # OSHA variants
+            "OSHA": ["The OSHA Training Institute", "OSHA Training Institute", "Training Institute"],
+            "Occupational Safety and Health Administration": ["Occupational Safety", "Health Administration"],
+            
+            # Date formatting variants  
+            "March 15, 1991": ["March 15,1991", "March 15 1991"],
+            "January 26, 1989": ["January 26,1989", "January 26 1989"],
+            
+            # Location variants
+            "New York, NY": ["New York"],
+            "Washington, DC": ["Washington D.C.", "Washington"],
+            
+            # Remove obvious fragments
+            "_FRAGMENTS_": ["Rules This", "Labor Occupational", "Health Act", "Introduction Working", "General Requirements", "Contents Introduction", "All Ladders"]
+        }
+        
+        # Step 2: Define minimum occurrence thresholds by entity type
+        min_thresholds = {
+            "people": 2,        # Must appear 2+ times (filters out name fragments)
+            "person": 2,        # Must appear 2+ times
+            "organizations": 2, # Must appear 2+ times (filters out partial org names)
+            "org": 2,          # Must appear 2+ times
+            "locations": 2,     # Must appear 2+ times (filters out random place mentions)
+            "loc": 2,          # Must appear 2+ times
+            "phone": 1,         # Keep all (usually accurate when found)
+            "measurement": 1,   # Keep all (usually accurate)
+            "regulations": 1,   # Keep all (usually important)
+            "regulation": 1,    # Keep all (usually important)
+            "date": 1,         # Keep all (usually relevant)
+            "money": 1,        # Keep all (usually important)
+            "percent": 1,      # Keep all (usually relevant)
+            "percentages": 1,  # Keep all (usually relevant)
+            "url": 1,          # Keep all (usually important)
+            "gpe": 1,          # Keep all (geopolitical entities usually relevant)
+            "financial": 1     # Keep all (usually important)
+        }
+        
+        # Step 3: Build frequency map with normalization
+        entity_frequencies = {}
+        entity_to_canonical = {}
+        
+        for fact_type, facts in all_facts.items():
+            if not isinstance(facts, list):
+                continue
+                
+            for fact in facts:
+                canonical_name = fact.get('canonical_name', '').strip()
+                entity_type = fact.get('entity_type', '').lower()
+                
+                # Skip empty names
+                if not canonical_name:
+                    continue
+                
+                # Remove obvious fragments
+                if canonical_name in normalization_map.get('_FRAGMENTS_', []):
+                    continue
+                
+                # Apply normalization
+                normalized_name = canonical_name
+                for canonical, variants in normalization_map.items():
+                    if canonical == '_FRAGMENTS_':
+                        continue
+                    if canonical_name in variants:
+                        normalized_name = canonical
+                        break
+                
+                # Track frequency
+                key = (normalized_name, entity_type)
+                entity_frequencies[key] = entity_frequencies.get(key, 0) + 1
+                entity_to_canonical[canonical_name] = normalized_name
+        
+        # Step 4: Filter facts based on frequency thresholds
+        filtered_facts = {}
+        removed_counts = {}
+        
+        for fact_type, facts in all_facts.items():
+            if not isinstance(facts, list):
+                # Keep non-list items as-is (like metadata)
+                filtered_facts[fact_type] = facts
+                continue
+            
+            filtered_list = []
+            
+            for fact in facts:
+                canonical_name = fact.get('canonical_name', '').strip()
+                entity_type = fact.get('entity_type', '').lower()
+                
+                # Skip empty names
+                if not canonical_name:
+                    continue
+                
+                # Skip fragments
+                if canonical_name in normalization_map.get('_FRAGMENTS_', []):
+                    removed_counts[f"{entity_type}_fragments"] = removed_counts.get(f"{entity_type}_fragments", 0) + 1
+                    continue
+                
+                # Get normalized name and frequency
+                normalized_name = entity_to_canonical.get(canonical_name, canonical_name)
+                key = (normalized_name, entity_type)
+                frequency = entity_frequencies.get(key, 0)
+                
+                # Check minimum threshold
+                min_threshold = min_thresholds.get(entity_type, 1)
+                
+                if frequency >= min_threshold:
+                    # Update fact with normalized name
+                    fact['canonical_name'] = normalized_name
+                    fact['frequency_score'] = frequency
+                    filtered_list.append(fact)
+                else:
+                    removed_counts[f"{entity_type}_low_frequency"] = removed_counts.get(f"{entity_type}_low_frequency", 0) + 1
+            
+            if filtered_list:
+                # Sort by frequency (highest first)
+                filtered_list.sort(key=lambda x: x.get('frequency_score', 0), reverse=True)
+                filtered_facts[fact_type] = filtered_list
+        
+        # Step 5: Log filtering results
+        total_removed = sum(removed_counts.values())
+        print(f"🧹 Filtered out {total_removed} noisy entities:")
+        for category, count in removed_counts.items():
+            print(f"   - {category}: {count} entities")
+        
+        # Show top entities by type
+        print("🏆 Top entities after filtering:")
+        for fact_type, facts in filtered_facts.items():
+            if isinstance(facts, list) and facts:
+                entity_type = facts[0].get('entity_type', 'unknown')
+                top_3 = [(f.get('canonical_name', ''), f.get('frequency_score', 0)) for f in facts[:3]]
+                print(f"   - {entity_type}: {top_3}")
+        
+        return filtered_facts
     
     def extract_semantic_facts(self, text: str) -> Dict[str, Any]:
         """
@@ -573,31 +924,20 @@ class SemanticFactExtractor:
         normalized_entities = self._normalize_yaml_entities(existing_entities)
         print(f"🔄 Normalized {len(normalized_entities)} entities from YAML")
         
-        # Step 4: Extract additional semantic facts from markdown content
-        print("🔍 Extracting facts from markdown content...")
-        all_facts = {
-            'regulation_citations': self._extract_regulation_citations(markdown_content, normalized_entities),
-            'requirements': self._extract_requirements(markdown_content, normalized_entities),
-            'financial_impacts': self._extract_financial_impacts(markdown_content, normalized_entities),
-            'action_facts': self._extract_action_facts(markdown_content, normalized_entities)
-        }
-        
-        for fact_type, facts in all_facts.items():
-            print(f"   - {fact_type}: {len(facts)} facts from markdown")
-        
-        # Step 5: Promote existing YAML entities to structured facts
+        # Step 4: Promote existing YAML entities to structured facts (primary method)
         print("⬆️  Promoting YAML entities to structured facts...")
-        promoted_facts = self._promote_yaml_entities_to_facts(existing_entities, markdown_content)
+        all_facts = self._promote_yaml_entities_to_facts(existing_entities, markdown_content)
         
-        for fact_type, facts in promoted_facts.items():
-            print(f"   - {fact_type}: {len(facts)} facts promoted from YAML")
+        # Step 5: Apply normalization + threshold filtering to reduce noise
+        print("🧹 Applying normalization and threshold filtering...")
+        all_facts = self._apply_entity_normalization_and_filtering(all_facts)
         
-        # Step 6: Merge promoted facts with extracted facts
-        for fact_type, facts in promoted_facts.items():
-            if fact_type in all_facts:
-                all_facts[fact_type].extend(facts)
-            else:
-                all_facts[fact_type] = facts
+        # Step 6: Extract additional semantic relationships from markdown content
+        print("🔍 Extracting semantic relationships from markdown content...")
+        relationships = self._extract_semantic_relationships(markdown_content, all_facts)
+        if relationships:
+            all_facts['relationships'] = relationships
+            print(f"   - relationships: {len(relationships)} semantic relationships found")
         
         # Step 7: Build semantic summary
         total_facts = sum(len(facts) for facts in all_facts.values())
@@ -659,6 +999,147 @@ class SemanticFactExtractor:
         }
         
         return result
+    
+    def extract_semantic_facts_from_classification(self, classification_data: Dict, markdown_content: str) -> Dict[str, Any]:
+        """
+        Parallel processing method: Extract semantic facts from classification data + markdown content
+        Uses existing entities from classification and markdown context for enrichment
+        """
+        print("🧠 Starting semantic fact extraction from classification data...")
+        
+        # Step 1: Get ALL entities from classification structure (both global and domain)
+        entities_section = classification_data.get('entities', {})
+        global_entities = entities_section.get('global_entities', {})
+        domain_entities = entities_section.get('domain_entities', {})
+        
+        print(f"🔍 Found entity sections in classification:")
+        print(f"   📊 Global entities: {list(global_entities.keys()) if global_entities else 'None'}")
+        print(f"   🎯 Domain entities: {list(domain_entities.keys()) if domain_entities else 'None'}")
+        
+        # Log entity counts for visibility
+        if global_entities:
+            for entity_type, entities in global_entities.items():
+                count = len(entities) if isinstance(entities, list) else 1
+                print(f"      - global_{entity_type}: {count} entities")
+        
+        if domain_entities:
+            for entity_type, entities in domain_entities.items():
+                count = len(entities) if isinstance(entities, list) else 1
+                print(f"      - domain_{entity_type}: {count} entities")
+        
+        if not global_entities and not domain_entities:
+            print("   ⚠️  No entities found in classification structure")
+        
+        # Step 2: Normalize entities from both global and domain classifications
+        global_normalized = self._normalize_classification_entities(global_entities)
+        domain_normalized = self._normalize_classification_entities(domain_entities)
+        
+        # Combine normalized entities (maintaining source distinction)
+        normalized_entities = {}
+        for k, v in global_normalized.items():
+            v['source'] = 'global'
+            normalized_entities[f"global_{k}"] = v
+        for k, v in domain_normalized.items():
+            v['source'] = 'domain'
+            normalized_entities[f"domain_{k}"] = v
+            
+        print(f"🔄 Normalized {len(global_normalized)} global + {len(domain_normalized)} domain entities")
+        
+        # Step 3: Promote classification entities to structured facts (process both)
+        print("⬆️  Promoting classification entities to structured facts...")
+        
+        # Process global entities
+        global_facts = self._promote_classification_entities_to_facts(global_entities, markdown_content, source="global")
+        
+        # Process domain entities  
+        domain_facts = self._promote_classification_entities_to_facts(domain_entities, markdown_content, source="domain")
+        
+        # Combine all facts maintaining source distinction
+        all_facts = {}
+        
+        # Add global facts
+        for fact_type, facts in global_facts.items():
+            all_facts[f"global_{fact_type}"] = facts
+            
+        # Add domain facts
+        for fact_type, facts in domain_facts.items():
+            all_facts[f"domain_{fact_type}"] = facts
+        
+        # Step 4: Extract additional semantic relationships from markdown content
+        print("🔍 Extracting semantic relationships from markdown content...")
+        relationships = self._extract_semantic_relationships(markdown_content, all_facts)
+        if relationships:
+            all_facts['relationships'] = relationships
+            print(f"   - relationships: {len(relationships)} semantic relationships found")
+        
+        # Step 5: Build semantic summary
+        total_facts = sum(len(facts) for facts in all_facts.values())
+        print(f"✅ Total semantic facts extracted: {total_facts}")
+        
+        result = {
+            'semantic_facts': all_facts,
+            'normalized_entities': normalized_entities,
+            'semantic_summary': {
+                'total_facts': total_facts,
+                'fact_types': {k: len(v) for k, v in all_facts.items()},
+                'extraction_engine': 'FLPC + Classification Parallel Processing',
+                'performance_model': 'O(n) Linear Semantic Extraction',
+                'timestamp': datetime.now().isoformat()
+            }
+        }
+        
+        return result
+    
+    def _normalize_classification_entities(self, existing_entities: Dict) -> Dict[str, Dict[str, Any]]:
+        """Normalize entities from classification data structure"""
+        normalized = {}
+        
+        # Process each entity type from classification
+        for entity_type, entities in existing_entities.items():
+            if isinstance(entities, list):
+                for entity in entities:
+                    if isinstance(entity, dict):
+                        # Entity with span information (standard format)
+                        entity_value = entity.get('value', entity.get('text', ''))
+                        if entity_value and entity_value in self.canonical_map:
+                            canonical_info = self.canonical_map[entity_value]
+                            normalized[entity_value] = {
+                                'canonical_name': canonical_info['canonical_name'],
+                                'entity_id': canonical_info['entity_id'],
+                                'domain': canonical_info['domain'],
+                                'span': entity.get('span', {}),
+                                'type': entity.get('type', entity_type)
+                            }
+        
+        return normalized
+    
+    def _promote_classification_entities_to_facts(self, existing_entities: Dict, markdown_content: str, source: str = "unknown") -> Dict[str, List]:
+        """Dynamic promotion of classification entities to structured semantic facts"""
+        promoted_facts = {}
+        
+        print(f"🔄 Dynamically promoting {source} entities: {list(existing_entities.keys())}")
+        
+        for entity_type, entities in existing_entities.items():
+            if not isinstance(entities, list):
+                continue
+                
+            print(f"   Processing {source}_{entity_type}: {len(entities)} entities")
+            promoted_facts[entity_type] = []
+            
+            for entity in entities:
+                if isinstance(entity, dict):
+                    # Create semantic fact based on entity type
+                    semantic_fact = self._create_dynamic_semantic_fact(entity_type, entity, markdown_content)
+                    if semantic_fact:
+                        # Add source information to semantic fact
+                        semantic_fact['extraction_source'] = source
+                        semantic_fact['fact_type'] = f"{source.title()}{entity_type.title()}Fact"
+                        promoted_facts[entity_type].append(semantic_fact)
+        
+        total_promoted = sum(len(facts) for facts in promoted_facts.values())
+        print(f"✅ Total {source} facts promoted: {total_promoted}")
+        
+        return promoted_facts
 
 
 if __name__ == "__main__":

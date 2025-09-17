@@ -22,6 +22,7 @@ import time
 from pathlib import Path
 from typing import List, Dict, Any, Union
 import yaml
+from datetime import datetime
 from .in_memory_document import InMemoryDocument, MemoryOverflowError
 
 # Import Aho-Corasick engine for high-performance pattern matching
@@ -253,8 +254,43 @@ class FusionPipeline:
                     with open(output_file, 'w', encoding='utf-8') as f:
                         f.write(final_markdown)
                     
-                    # Write semantic JSON if available
+                    # Write semantic facts JSON knowledge file if available
+                    print(f"🔍 Debug: Checking JSON generation for {doc.source_stem}")
+                    print(f"   - Has semantic_json attr: {hasattr(doc, 'semantic_json')}")
+                    print(f"   - semantic_json exists: {bool(doc.semantic_json)}")
+                    print(f"   - semantic_json type: {type(doc.semantic_json)}")
+                    
                     if doc.semantic_json:
+                        json_file = output_dir / f"{doc.source_stem}.json"
+                        import json
+                        
+                        print(f"📝 Generating JSON knowledge file: {json_file}")
+                        
+                        # Create comprehensive knowledge file
+                        knowledge_data = {
+                            'document_info': {
+                                'filename': doc.source_filename,
+                                'file_stem': doc.source_stem,
+                                'processing_date': datetime.now().isoformat(),
+                                'semantic_extraction_engine': 'MVP-Fusion Layer 6'
+                            },
+                            'semantic_facts': doc.semantic_json.get('semantic_facts', {}),
+                            'normalized_entities': doc.semantic_json.get('normalized_entities', {}),
+                            'semantic_summary': doc.semantic_json.get('semantic_summary', {}),
+                            'knowledge_graph': {
+                                'total_facts': doc.semantic_json.get('semantic_summary', {}).get('total_facts', 0),
+                                'fact_types': doc.semantic_json.get('semantic_summary', {}).get('fact_types', {}),
+                                'extraction_timestamp': doc.semantic_json.get('semantic_summary', {}).get('timestamp', '')
+                            }
+                        }
+                        
+                        with open(json_file, 'w', encoding='utf-8') as f:
+                            json.dump(knowledge_data, f, indent=2, ensure_ascii=False)
+                        
+                        print(f"📄 Generated knowledge file: {json_file.name} ({doc.semantic_json.get('semantic_summary', {}).get('total_facts', 0)} facts)")
+                    
+                    # Legacy semantic JSON support
+                    elif hasattr(doc, 'semantic_json') and doc.semantic_json:
                         json_file = output_dir / f"{doc.source_stem}.semantic.json"
                         import json
                         with open(json_file, 'w', encoding='utf-8') as f:
@@ -380,12 +416,19 @@ class FusionPipeline:
             layer6_start = time.perf_counter()
             
             try:
-                semantic_facts = self.semantic_extractor.extract_semantic_facts(content)
+                # Pass both classification data (for entities) and content (for context) - parallel processing
+                semantic_facts = self.semantic_extractor.extract_semantic_facts_from_classification(
+                    classification_data=classification_data,
+                    markdown_content=content
+                )
                 
                 # Add semantic facts to classification data
                 classification_data['semantic_facts'] = semantic_facts.get('semantic_facts', {})
                 classification_data['normalized_entities'] = semantic_facts.get('normalized_entities', {})
                 classification_data['semantic_summary'] = semantic_facts.get('semantic_summary', {})
+                
+                # Store semantic facts for JSON knowledge file generation (fix: return for doc storage)
+                classification_data['_semantic_facts_for_json'] = semantic_facts
                 
                 layers_processed.append('layer6_semantic_facts')
                 layer_timings['layer6_semantic_facts'] = (time.perf_counter() - layer6_start) * 1000

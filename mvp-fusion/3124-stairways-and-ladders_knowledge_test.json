@@ -1,0 +1,2032 @@
+{
+  "test_info": {
+    "source_file": "/home/corey/projects/docling/output/fusion/3124-stairways-and-ladders.md",
+    "test_timestamp": "2025-09-17T04:06:52.491407",
+    "extraction_engine": "FLPC + Classification Parallel Processing"
+  },
+  "entity_summary": {
+    "global_entities_count": 53,
+    "domain_entities_count": 114,
+    "total_entities": 167
+  },
+  "semantic_facts": {
+    "global_person": [
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 162,
+          "end": 181
+        },
+        "raw_text": "Labor Occupational",
+        "entity_type": "person",
+        "canonical_name": "Labor Occupational",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Labor Occupational",
+        "role_context": "worker",
+        "organization_affiliation": "Department",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 193,
+          "end": 214
+        },
+        "raw_text": "Health Administration",
+        "entity_type": "person",
+        "canonical_name": "Health Administration",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Health Administration",
+        "role_context": "worker",
+        "organization_affiliation": "Department",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 275,
+          "end": 286
+        },
+        "raw_text": "Rules This",
+        "entity_type": "person",
+        "canonical_name": "Rules This",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Rules This",
+        "role_context": "worker",
+        "organization_affiliation": "Department",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 472,
+          "end": 491
+        },
+        "raw_text": "Occupational Safety",
+        "entity_type": "person",
+        "canonical_name": "Occupational Safety",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Occupational Safety",
+        "role_context": "worker",
+        "organization_affiliation": "Department",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 496,
+          "end": 506
+        },
+        "raw_text": "Health Act",
+        "entity_type": "person",
+        "canonical_name": "Health Act",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Health Act",
+        "role_context": "worker",
+        "organization_affiliation": "Department",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 695,
+          "end": 708
+        },
+        "raw_text": "Health Review",
+        "entity_type": "person",
+        "canonical_name": "Health Review",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Health Review",
+        "role_context": "worker",
+        "organization_affiliation": "Department",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1114,
+          "end": 1135
+        },
+        "raw_text": "Introduction Working",
+        "entity_type": "person",
+        "canonical_name": "Introduction Working",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Introduction Working",
+        "role_context": "worker",
+        "organization_affiliation": "Department",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1567,
+          "end": 1587
+        },
+        "raw_text": "General Requirements",
+        "entity_type": "person",
+        "canonical_name": "General Requirements",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "General Requirements",
+        "role_context": "worker",
+        "organization_affiliation": "Department",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 2901,
+          "end": 2923
+        },
+        "raw_text": "Contents Introduction",
+        "entity_type": "person",
+        "canonical_name": "Contents Introduction",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Contents Introduction",
+        "role_context": "worker",
+        "organization_affiliation": "Department",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 2976,
+          "end": 2987
+        },
+        "raw_text": "All Ladders",
+        "entity_type": "person",
+        "canonical_name": "All Ladders",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "All Ladders",
+        "role_context": "worker",
+        "organization_affiliation": "Department",
+        "extraction_source": "global"
+      }
+    ],
+    "global_org": [
+      {
+        "fact_type": "GlobalOrgFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 30573,
+          "end": 30591
+        },
+        "raw_text": "Training Institute",
+        "entity_type": "org",
+        "canonical_name": "Training Institute",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalOrgFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 30835,
+          "end": 30862
+        },
+        "raw_text": "The OSHA Training Institute",
+        "entity_type": "org",
+        "canonical_name": "The OSHA Training Institute",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalOrgFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 30886,
+          "end": 30909
+        },
+        "raw_text": "OSHA Training Institute",
+        "entity_type": "org",
+        "canonical_name": "OSHA Training Institute",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalOrgFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 61,
+          "end": 65
+        },
+        "raw_text": "OSHA",
+        "entity_type": "org",
+        "canonical_name": "Occupational Safety and Health Administration",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      }
+    ],
+    "global_loc": [
+      {
+        "fact_type": "GlobalLocFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 33065,
+          "end": 33088
+        },
+        "raw_text": "Constitution Avenue, NW",
+        "entity_type": "loc",
+        "canonical_name": "Constitution Avenue, NW",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalLocFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 33099,
+          "end": 33113
+        },
+        "raw_text": "Washington, DC",
+        "entity_type": "loc",
+        "canonical_name": "Washington, DC",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalLocFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 33708,
+          "end": 33718
+        },
+        "raw_text": "Boston, MA",
+        "entity_type": "loc",
+        "canonical_name": "Boston, MA",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalLocFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 33801,
+          "end": 33813
+        },
+        "raw_text": "New York, NY",
+        "entity_type": "loc",
+        "canonical_name": "New York, NY",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalLocFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 33934,
+          "end": 33955
+        },
+        "raw_text": "West Philadelphia, PA",
+        "entity_type": "loc",
+        "canonical_name": "West Philadelphia, PA",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalLocFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 34442,
+          "end": 34463
+        },
+        "raw_text": "Arlington Heights, IL",
+        "entity_type": "loc",
+        "canonical_name": "Arlington Heights, IL",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalLocFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 35390,
+          "end": 35404
+        },
+        "raw_text": "Pittsburgh, PA",
+        "entity_type": "loc",
+        "canonical_name": "Pittsburgh, PA",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalLocFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 35679,
+          "end": 35697
+        },
+        "raw_text": "Forsyth Street, SW",
+        "entity_type": "loc",
+        "canonical_name": "Forsyth Street, SW",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalLocFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 35709,
+          "end": 35720
+        },
+        "raw_text": "Atlanta, GA",
+        "entity_type": "loc",
+        "canonical_name": "Atlanta, GA",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalLocFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 35818,
+          "end": 35829
+        },
+        "raw_text": "Chicago, IL",
+        "entity_type": "loc",
+        "canonical_name": "Chicago, IL",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      }
+    ],
+    "global_gpe": [
+      {
+        "fact_type": "GlobalGpeFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 29315,
+          "end": 29323
+        },
+        "raw_text": "New York",
+        "entity_type": "gpe",
+        "canonical_name": "New York",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      }
+    ],
+    "global_date": [
+      {
+        "fact_type": "GlobalDateFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 12722,
+          "end": 12736
+        },
+        "raw_text": "March 15, 1991",
+        "entity_type": "date",
+        "canonical_name": "March 15, 1991",
+        "extraction_layer": "semantic_promotion",
+        "date_value": "March 15, 1991",
+        "date_format": "unknown",
+        "temporal_context": "slipping off the end of the rungs. I Rungs and steps of fixed metal ladders manufactured after March 15, 1991, must be corrugated, knurled, dimpled, coated with skid-resistant material or treated to minimize sl",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalDateFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 21818,
+          "end": 21831
+        },
+        "raw_text": "March 15,1991",
+        "entity_type": "date",
+        "canonical_name": "March 15,1991",
+        "extraction_layer": "semantic_promotion",
+        "date_value": "March 15,1991",
+        "date_format": "unknown",
+        "temporal_context": "m the upper surface of the stair rail to the surface of the tread. I Stair rails installed after March 15,1991, must be not less than 36 inches (91.5 cm) in height. I Top edges of stair rail systems used as hand",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalDateFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 28394,
+          "end": 28410
+        },
+        "raw_text": "January 26, 1989",
+        "entity_type": "date",
+        "canonical_name": "January 26, 1989",
+        "extraction_layer": "semantic_promotion",
+        "date_value": "January 26, 1989",
+        "date_format": "unknown",
+        "temporal_context": "recommended Safety and Health Program Management Guidelines (Federal Register 54 (16): 3904-3916, January 26, 1989). These voluntary guidelines can be applied to all places of employment covered by OSHA. The guidelin",
+        "extraction_source": "global"
+      }
+    ],
+    "global_time": [],
+    "global_money": [
+      {
+        "fact_type": "GlobalMoneyFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 28062,
+          "end": 28064
+        },
+        "raw_text": "$4",
+        "entity_type": "money",
+        "canonical_name": "$4",
+        "extraction_layer": "semantic_promotion",
+        "amount": 4.0,
+        "currency": "USD",
+        "financial_context": "ty and health program forms the basis of good worker protection and can save time and money—about $4 for every dollar spent—and increase productivity and reduce worker injuries, illnesses and related wo",
+        "extraction_source": "global"
+      }
+    ],
+    "global_percent": [
+      {
+        "fact_type": "GlobalPercentFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 34243,
+          "end": 34253
+        },
+        "raw_text": "20 percent",
+        "entity_type": "percent",
+        "canonical_name": "20 percent",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      }
+    ],
+    "global_phone": [
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1035,
+          "end": 1049
+        },
+        "raw_text": "(202) 693-1999",
+        "entity_type": "phone",
+        "canonical_name": "(202) 693-1999",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(202) 693-1999",
+        "contact_type": "phone",
+        "formatted_number": "(202) 693-1999",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1081,
+          "end": 1095
+        },
+        "raw_text": "(877) 889-5627",
+        "entity_type": "phone",
+        "canonical_name": "(877) 889-5627",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(877) 889-5627",
+        "contact_type": "phone",
+        "formatted_number": "(877) 889-5627",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 33131,
+          "end": 33145
+        },
+        "raw_text": "(202) 693-1888",
+        "entity_type": "phone",
+        "canonical_name": "(202) 693-1888",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(202) 693-1888",
+        "contact_type": "phone",
+        "formatted_number": "(202) 693-1888",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 33157,
+          "end": 33171
+        },
+        "raw_text": "(202) 693-2498",
+        "entity_type": "phone",
+        "canonical_name": "(202) 693-2498",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(202) 693-2498",
+        "contact_type": "phone",
+        "formatted_number": "(202) 693-2498",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 33726,
+          "end": 33740
+        },
+        "raw_text": "(617) 565-9860",
+        "entity_type": "phone",
+        "canonical_name": "(617) 565-9860",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(617) 565-9860",
+        "contact_type": "phone",
+        "formatted_number": "(617) 565-9860",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 33821,
+          "end": 33835
+        },
+        "raw_text": "(212) 337-2378",
+        "entity_type": "phone",
+        "canonical_name": "(212) 337-2378",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(212) 337-2378",
+        "contact_type": "phone",
+        "formatted_number": "(212) 337-2378",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 33968,
+          "end": 33982
+        },
+        "raw_text": "(215) 861-4900",
+        "entity_type": "phone",
+        "canonical_name": "(215) 861-4900",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(215) 861-4900",
+        "contact_type": "phone",
+        "formatted_number": "(215) 861-4900",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 34471,
+          "end": 34485
+        },
+        "raw_text": "(847) 297-4810",
+        "entity_type": "phone",
+        "canonical_name": "(847) 297-4810",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(847) 297-4810",
+        "contact_type": "phone",
+        "formatted_number": "(847) 297-4810",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 35426,
+          "end": 35440
+        },
+        "raw_text": "(202) 512-1800",
+        "entity_type": "phone",
+        "canonical_name": "(202) 512-1800",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(202) 512-1800",
+        "contact_type": "phone",
+        "formatted_number": "(202) 512-1800",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 35728,
+          "end": 35742
+        },
+        "raw_text": "(404) 562-2300",
+        "entity_type": "phone",
+        "canonical_name": "(404) 562-2300",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(404) 562-2300",
+        "contact_type": "phone",
+        "formatted_number": "(404) 562-2300",
+        "extraction_source": "global"
+      }
+    ],
+    "global_regulation": [
+      {
+        "fact_type": "GlobalRegulationFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 2552,
+          "end": 2568
+        },
+        "raw_text": "29 CFR 1926.1050",
+        "entity_type": "regulation",
+        "canonical_name": "29 CFR 1926.1050",
+        "extraction_layer": "semantic_promotion",
+        "regulation_id": "29 CFR 1926.1050",
+        "issuing_authority": "Federal Government",
+        "regulatory_domain": "federal_regulation",
+        "compliance_level": "informational",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalRegulationFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 2868,
+          "end": 2883
+        },
+        "raw_text": "29 CFR 1926.451",
+        "entity_type": "regulation",
+        "canonical_name": "29 CFR 1926.451",
+        "extraction_layer": "semantic_promotion",
+        "regulation_id": "29 CFR 1926.451",
+        "issuing_authority": "Federal Government",
+        "regulatory_domain": "federal_regulation",
+        "compliance_level": "informational",
+        "extraction_source": "global"
+      }
+    ],
+    "global_url": [
+      {
+        "fact_type": "GlobalUrlFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 35462,
+          "end": 35487
+        },
+        "raw_text": "http://bookstore.gpo.gov.",
+        "entity_type": "url",
+        "canonical_name": "http://bookstore.gpo.gov.",
+        "extraction_layer": "semantic_promotion",
+        "url": "http://bookstore.gpo.gov.",
+        "domain": "bookstore.gpo.gov.",
+        "link_type": "government",
+        "extraction_source": "global"
+      }
+    ],
+    "global_measurement": [
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1751,
+          "end": 1760
+        },
+        "raw_text": "19 inches",
+        "entity_type": "measurement",
+        "canonical_name": "19 inches",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "19",
+        "unit": "inches",
+        "measurement_context": "adders. In general, the standards require the following: I When there is a break in elevation of 19 inches (48 cm) or more and no ramp, runway, embankment or personnel hoist is available, employers must provi",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1762,
+          "end": 1767
+        },
+        "raw_text": "48 cm",
+        "entity_type": "measurement",
+        "canonical_name": "48 cm",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "48",
+        "unit": "cm",
+        "measurement_context": "general, the standards require the following: I When there is a break in elevation of 19 inches (48 cm) or more and no ramp, runway, embankment or personnel hoist is available, employers must provide a st",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 4321,
+          "end": 4330
+        },
+        "raw_text": "10 inches",
+        "entity_type": "measurement",
+        "canonical_name": "10 inches",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "10",
+        "unit": "inches",
+        "measurement_context": "s and steps of portable and fixed ladders (except as provided below) must not be spaced less than 10 inches (25 cm) apart, nor more than 14 inches (36 cm) apart, along the ladder’s side rails. I Rungs, cleats",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 4332,
+          "end": 4337
+        },
+        "raw_text": "25 cm",
+        "entity_type": "measurement",
+        "canonical_name": "25 cm",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "25",
+        "unit": "cm",
+        "measurement_context": "of portable and fixed ladders (except as provided below) must not be spaced less than 10 inches (25 cm) apart, nor more than 14 inches (36 cm) apart, along the ladder’s side rails. I Rungs, cleats and st",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 4360,
+          "end": 4369
+        },
+        "raw_text": "14 inches",
+        "entity_type": "measurement",
+        "canonical_name": "14 inches",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "14",
+        "unit": "inches",
+        "measurement_context": "rs (except as provided below) must not be spaced less than 10 inches (25 cm) apart, nor more than 14 inches (36 cm) apart, along the ladder’s side rails. I Rungs, cleats and steps of step stools must not be l",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 4371,
+          "end": 4376
+        },
+        "raw_text": "36 cm",
+        "entity_type": "measurement",
+        "canonical_name": "36 cm",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "36",
+        "unit": "cm",
+        "measurement_context": "as provided below) must not be spaced less than 10 inches (25 cm) apart, nor more than 14 inches (36 cm) apart, along the ladder’s side rails. I Rungs, cleats and steps of step stools must not be less tha",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 4480,
+          "end": 4488
+        },
+        "raw_text": "8 inches",
+        "entity_type": "measurement",
+        "canonical_name": "8 inches",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "8",
+        "unit": "inches",
+        "measurement_context": "t, along the ladder’s side rails. I Rungs, cleats and steps of step stools must not be less than 8 inches (20 cm) apart, nor more than 12 inches (31 cm) apart, between center lines of the rungs, cleats and s",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 4490,
+          "end": 4495
+        },
+        "raw_text": "20 cm",
+        "entity_type": "measurement",
+        "canonical_name": "20 cm",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "20",
+        "unit": "cm",
+        "measurement_context": "he ladder’s side rails. I Rungs, cleats and steps of step stools must not be less than 8 inches (20 cm) apart, nor more than 12 inches (31 cm) apart, between center lines of the rungs, cleats and steps.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 4518,
+          "end": 4527
+        },
+        "raw_text": "12 inches",
+        "entity_type": "measurement",
+        "canonical_name": "12 inches",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "12",
+        "unit": "inches",
+        "measurement_context": "ungs, cleats and steps of step stools must not be less than 8 inches (20 cm) apart, nor more than 12 inches (31 cm) apart, between center lines of the rungs, cleats and steps. I Rungs, cleats and steps at the",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 4529,
+          "end": 4534
+        },
+        "raw_text": "31 cm",
+        "entity_type": "measurement",
+        "canonical_name": "31 cm",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "31",
+        "unit": "cm",
+        "measurement_context": "s and steps of step stools must not be less than 8 inches (20 cm) apart, nor more than 12 inches (31 cm) apart, between center lines of the rungs, cleats and steps. I Rungs, cleats and steps at the base s",
+        "extraction_source": "global"
+      }
+    ],
+    "domain_financial": [
+      {
+        "fact_type": "DomainFinancialFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "financial",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      }
+    ],
+    "domain_percentages": [
+      {
+        "fact_type": "DomainPercentagesFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "20.0",
+        "entity_type": "percentages",
+        "canonical_name": "20.0",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      }
+    ],
+    "domain_organizations": [
+      {
+        "fact_type": "DomainOrganizationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "organizations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainOrganizationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "organizations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainOrganizationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "organizations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainOrganizationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "organizations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainOrganizationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "organizations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainOrganizationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "organizations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainOrganizationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "organizations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainOrganizationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "organizations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainOrganizationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "organizations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainOrganizationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "organizations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainOrganizationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "organizations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainOrganizationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "organizations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainOrganizationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "organizations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainOrganizationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "organizations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      }
+    ],
+    "domain_people": [
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainPeopleFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "people",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      }
+    ],
+    "domain_locations": [
+      {
+        "fact_type": "DomainLocationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "locations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainLocationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "locations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainLocationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "locations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainLocationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "locations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainLocationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "locations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainLocationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "locations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainLocationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "locations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainLocationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "locations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainLocationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "locations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainLocationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "locations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainLocationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "locations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainLocationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "locations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainLocationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "locations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainLocationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "locations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainLocationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "locations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainLocationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "locations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      }
+    ],
+    "domain_regulations": [
+      {
+        "fact_type": "DomainRegulationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "regulations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainRegulationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "regulations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainRegulationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "regulations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainRegulationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "regulations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      },
+      {
+        "fact_type": "DomainRegulationsFact",
+        "confidence": 0.85,
+        "span": {},
+        "raw_text": "",
+        "entity_type": "regulations",
+        "canonical_name": "",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "domain"
+      }
+    ],
+    "domain_statistics": []
+  },
+  "normalized_entities": {
+    "global_OSHA": {
+      "canonical_name": "Occupational Safety and Health Administration",
+      "entity_id": "Q192334",
+      "domain": "safety_regulatory",
+      "span": {
+        "start": 61,
+        "end": 65
+      },
+      "type": "ORG",
+      "source": "global"
+    }
+  },
+  "semantic_summary": {
+    "total_facts": 167,
+    "fact_types": {
+      "global_person": 10,
+      "global_org": 4,
+      "global_loc": 10,
+      "global_gpe": 1,
+      "global_date": 3,
+      "global_time": 0,
+      "global_money": 1,
+      "global_percent": 1,
+      "global_phone": 10,
+      "global_regulation": 2,
+      "global_url": 1,
+      "global_measurement": 10,
+      "domain_financial": 1,
+      "domain_percentages": 1,
+      "domain_organizations": 14,
+      "domain_people": 77,
+      "domain_locations": 16,
+      "domain_regulations": 5,
+      "domain_statistics": 0
+    },
+    "extraction_engine": "FLPC + Classification Parallel Processing",
+    "performance_model": "O(n) Linear Semantic Extraction",
+    "timestamp": "2025-09-17T04:06:52.491407"
+  }
+}
