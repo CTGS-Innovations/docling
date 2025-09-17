@@ -105,6 +105,35 @@ class ComprehensiveEntityExtractor:
         # All patterns use FLPC Rust regex for performance
         self._initialize_patterns()
     
+    def _clean_context(self, context: str) -> str:
+        """Clean context text by normalizing whitespace and removing line breaks"""
+        if not context:
+            return ""
+        # Replace multiple whitespace chars (including newlines) with single space
+        cleaned = ' '.join(context.split()).strip()
+        # Limit context length to prevent excessive output
+        return cleaned[:200] if len(cleaned) > 200 else cleaned
+    
+    def _is_valid_entity(self, entity_text: str) -> bool:
+        """Validate entity to filter out malformed entries with formatting issues"""
+        if not entity_text or len(entity_text.strip()) < 2:
+            return False
+        
+        # Filter out entities that are mostly whitespace or formatting
+        if len(entity_text.strip()) / len(entity_text) < 0.5:
+            return False
+            
+        # Filter out entities with excessive special characters
+        special_char_count = sum(1 for c in entity_text if not c.isalnum() and c not in ' .-')
+        if special_char_count > len(entity_text) * 0.3:
+            return False
+            
+        # Filter out single characters or very short nonsense
+        if len(entity_text.strip()) < 3 and not entity_text.strip().isupper():
+            return False
+            
+        return True
+    
     def _initialize_patterns(self):
         """Initialize all extraction patterns"""
         
@@ -219,7 +248,7 @@ class ComprehensiveEntityExtractor:
                 # Get context
                 start = max(0, match.start(0) - 50)
                 end = min(len(text), match.end(0) + 50)
-                context = text[start:end].strip()
+                context = self._clean_context(text[start:end])
                 
                 # Parse amount and currency
                 amount_text = match.group(0)
@@ -248,7 +277,7 @@ class ComprehensiveEntityExtractor:
                 # Get context
                 start = max(0, match.start(0) - 50)
                 end = min(len(text), match.end(0) + 50)
-                context = text[start:end].strip()
+                context = self._clean_context(text[start:end])
                 
                 # Extract value
                 try:
@@ -329,8 +358,13 @@ class ComprehensiveEntityExtractor:
             for match in matches:
                 org_name = match.group(0)
                 
-                if org_name not in seen and len(org_name) > 2:  # Filter out very short matches
-                    seen.add(org_name)
+                # Clean the organization name to remove line breaks
+                clean_org_name = self._clean_context(org_name)
+                
+                if (clean_org_name not in seen and len(clean_org_name) > 2 and 
+                    self._is_valid_entity(clean_org_name)):  # Filter out malformed entities
+                    seen.add(clean_org_name)
+                    org_name = clean_org_name
                     
                     # Determine type
                     org_type = self._categorize_organization(org_name)
@@ -357,14 +391,18 @@ class ComprehensiveEntityExtractor:
             for match in matches:
                 name = match.group(0)
                 
+                # Clean the name to remove line breaks
+                clean_name = self._clean_context(name)
+                
                 # Filter out common false positives
-                if name not in seen and not self._is_false_positive_name(name):
-                    seen.add(name)
+                if clean_name not in seen and not self._is_false_positive_name(clean_name):
+                    seen.add(clean_name)
+                    name = clean_name
                     
                     # Try to extract role from context
                     start = max(0, match.start(0) - 50)
                     end = min(len(text), match.end(0) + 50)
-                    context = text[start:end]
+                    context = self._clean_context(text[start:end])
                     role = self._extract_role(context)
                     
                     entity = PersonEntity(
@@ -386,13 +424,17 @@ class ComprehensiveEntityExtractor:
             for match in matches:
                 location = match.group(0)
                 
-                if location not in seen:
-                    seen.add(location)
+                # Clean the location name to remove line breaks
+                clean_location = self._clean_context(location)
+                
+                if clean_location not in seen:
+                    seen.add(clean_location)
+                    location = clean_location
                     
                     # Get context
                     start = max(0, match.start(0) - 30)
                     end = min(len(text), match.end(0) + 30)
-                    context = text[start:end].strip()
+                    context = self._clean_context(text[start:end])
                     
                     # Categorize location
                     loc_type = self._categorize_location(location)
@@ -413,7 +455,7 @@ class ComprehensiveEntityExtractor:
         for pattern in self.regulatory_patterns:
             matches = re.finditer(pattern, text, re.IGNORECASE)
             for match in matches:
-                identifier = match.group(0)
+                identifier = self._clean_context(match.group(0))
                 
                 # Determine type
                 reg_type = identifier.split()[0] if ' ' in identifier else identifier[:4]
@@ -438,7 +480,7 @@ class ComprehensiveEntityExtractor:
                 # Get full context
                 start = max(0, match.start(0) - 50)
                 end = min(len(text), match.end(0) + 50)
-                context = text[start:end].strip()
+                context = self._clean_context(text[start:end])
                 
                 entity = StatisticEntity(
                     value=match.group(0),
@@ -508,7 +550,7 @@ class ComprehensiveEntityExtractor:
                         'amount': m.amount,
                         'currency': m.currency,
                         'normalized': m.normalized_value,
-                        'context': m.context[:100]
+                        'context': self._clean_context(m.context)[:100]
                     }
                     for m in all_entities['money']
                 ],
@@ -517,7 +559,7 @@ class ComprehensiveEntityExtractor:
                         'value': p.value,
                         'subject': p.subject,
                         'trend': p.trend,
-                        'context': p.context[:100]
+                        'context': self._clean_context(p.context)[:100]
                     }
                     for p in all_entities['percentages']
                 ],

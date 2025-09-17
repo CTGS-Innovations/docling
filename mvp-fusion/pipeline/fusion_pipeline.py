@@ -329,7 +329,7 @@ class FusionPipeline:
         primary_domain_confidence = max(domain_data['domains'].values()) if domain_data['domains'] else 0
         layers_processed = ['layer1_file_metadata', 'layer2_document_structure', 'layer3_domain_classification']
         
-        if primary_domain_confidence < 20.0:  # Low confidence threshold
+        if primary_domain_confidence < 5.0:  # Low confidence threshold (matching entity extraction threshold)
             classification_data['early_termination'] = True
             classification_data['termination_reason'] = f'Low domain confidence: {primary_domain_confidence}%'
         else:
@@ -693,9 +693,9 @@ class FusionPipeline:
             import sys
             import os
             sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'knowledge', 'extractors'))
-            from fast_regex import FastRegex
+            from fast_regex import FastRegexEngine
             
-            flpc = FastRegex()
+            flpc = FastRegexEngine()
             
             # Core 8 entities using FLPC
             global_entities = {
@@ -922,10 +922,18 @@ class FusionPipeline:
         for pattern in patterns:
             try:
                 for match in flpc.finditer(pattern, content):
+                    raw_text = match.group(0)
+                    # Clean text: normalize whitespace, remove line breaks, strip
+                    cleaned_text = ' '.join(raw_text.split()).strip()
+                    
+                    # Skip if cleaning resulted in empty/invalid text
+                    if not cleaned_text or len(cleaned_text) < 2:
+                        continue
+                        
                     entity = {
-                        "value": match.group(0),
+                        "value": cleaned_text,
                         "span": {"start": match.start(0), "end": match.end(0)},
-                        "text": match.group(0),
+                        "text": cleaned_text,
                         "type": entity_type
                     }
                     entities.append(entity)
