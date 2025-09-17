@@ -89,5 +89,25 @@ Option A: Quick fix (5 min)
 Option B: Full refactor (30 min)
 ```
 
+### **Rule #8: CRITICAL - Stop and Discuss Before Pivoting**
+When errors or failures occur:
+
+🛑 **MANDATORY DISCUSSION BEFORE ACTION** 🛑
+- **NEVER** immediately implement fixes or workarounds
+- **STOP** and analyze the root problem first
+- **DISCUSS** the issue and potential approaches with user
+- **AVOID** hard pivots without consultation
+- **ASK** before changing architecture or adding fallbacks
+
+**Process:**
+1. **Identify**: What exactly failed and why?
+2. **Analyze**: What are the real options to fix it?
+3. **Discuss**: Present options and get user direction
+4. **Then** implement the chosen approach
+
+**Critical Flaw to Avoid:**
+❌ Error occurs → immediately implement fallback/fix
+✅ Error occurs → stop → discuss → get direction → implement
+
 ---
 **These rules prevent codebase clutter and maintain focus on performance and clarity.**

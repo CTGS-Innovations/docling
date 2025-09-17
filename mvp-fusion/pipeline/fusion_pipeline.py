@@ -28,6 +28,7 @@ from .in_memory_document import InMemoryDocument, MemoryOverflowError
 try:
     import sys
     sys.path.append(str(Path(__file__).parent.parent))
+    from knowledge.extractors.semantic_fact_extractor import SemanticFactExtractor
     from knowledge.aho_corasick_engine import AhoCorasickLayeredClassifier
     AHOCORASICK_AVAILABLE = True
 except ImportError:
@@ -56,6 +57,9 @@ class FusionPipeline:
         if AHOCORASICK_AVAILABLE:
             try:
                 self.ac_classifier = AhoCorasickLayeredClassifier()
+                self.semantic_extractor = SemanticFactExtractor()
+            except ImportError:
+                self.semantic_extractor = None
                 print("✅ Aho-Corasick engine initialized for government/regulatory + AI domains")
             except Exception as e:
                 print(f"⚠️  Aho-Corasick initialization failed: {e}, using regex fallback")
@@ -370,6 +374,27 @@ class FusionPipeline:
                 
                 layers_processed.append('layer5_deep_domain_entities')
                 layer_timings['layer5_deep_domain_entities'] = (time.perf_counter() - layer5_start) * 1000
+        
+        # LAYER 6: SEMANTIC FACT EXTRACTION (Conditional - only if semantic extractor available)
+        if hasattr(self, 'semantic_extractor') and self.semantic_extractor and not classification_data.get('early_termination', False):
+            layer6_start = time.perf_counter()
+            
+            try:
+                semantic_facts = self.semantic_extractor.extract_semantic_facts(content)
+                
+                # Add semantic facts to classification data
+                classification_data['semantic_facts'] = semantic_facts.get('semantic_facts', {})
+                classification_data['normalized_entities'] = semantic_facts.get('normalized_entities', {})
+                classification_data['semantic_summary'] = semantic_facts.get('semantic_summary', {})
+                
+                layers_processed.append('layer6_semantic_facts')
+                layer_timings['layer6_semantic_facts'] = (time.perf_counter() - layer6_start) * 1000
+                
+                print(f"🧠 Layer 6: Semantic facts extracted - {semantic_facts.get('semantic_summary', {}).get('total_facts', 0)} facts found")
+                
+            except Exception as e:
+                print(f"⚠️  Layer 6 semantic extraction failed: {e}")
+                layer_timings['layer6_semantic_facts'] = (time.perf_counter() - layer6_start) * 1000
         
         # Final performance summary (clean structure)
         total_time_ms = (time.perf_counter() - start_time) * 1000
