@@ -55,6 +55,19 @@ mvp-fusion/
 - Clear performance improvements documented
 - Single, obvious entry point for each capability
 
+### **Rule #7: Temporary File Naming Convention**
+For testing, trials, and temporary code that will be removed:
+- **Always append `_TMP` to filename**: `test_extraction_TMP.py`
+- **Use for**: validation scripts, experimental code, testing utilities
+- **Purpose**: Clear identification of files to be removed after testing
+- **Cleanup**: Remove all `_TMP` files before production deployment
+
+**Examples:**
+```
+✅ Good: validation_script_TMP.py, test_performance_TMP.py
+❌ Bad: test.py, temp_file.py, experimental_code.py
+```
+
 ---
 
 ## COMMUNICATION STYLE

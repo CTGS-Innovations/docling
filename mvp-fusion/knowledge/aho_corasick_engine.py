@@ -360,7 +360,7 @@ class AhoCorasickLayeredClassifier:
         
         # Domain-based routing decisions
         routing_decisions = {
-            'skip_entity_extraction': primary_domain_confidence < 20.0,
+            'skip_entity_extraction': primary_domain_confidence < 5.0,  # Lower threshold for early testing
             'enable_deep_domain_extraction': primary_domain_confidence >= 60.0,
             'domain_specialization_route': primary_domain if primary_domain_confidence >= 40.0 else 'general'
         }
