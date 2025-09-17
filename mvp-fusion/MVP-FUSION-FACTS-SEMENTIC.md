@@ -1,125 +1,363 @@
-Got it — you don’t just want “facts from this OSHA file,” you want **general guidance** on how to do fact extraction consistently across \~20 different domains (legal, safety, finance, healthcare, etc.) so you can compare results later.
+# Founder's Journey Semantic Knowledge Extraction Framework
 
-Here’s the high-level playbook you can apply:
+A comprehensive system for extracting structured, actionable intelligence from hundreds of thousands of websites to power the complete **Founder's Journey** - giving entrepreneurs everything they need to make informed market entry decisions.
 
----
+## Core Philosophy: Full-Stack Founder Intelligence
 
-## 🟢 1. Always Distinguish **Entities** vs. **Facts**
+Scout extracts semantic facts across **12 critical decision areas** that determine startup success or failure. While others use generic AI summarization, we extract structured, comparable facts that provide founders with intelligence advantages over incumbents.
 
-* **Entities** = nouns, spans, labels (e.g., *“OSHA” → ORG*).
-* **Facts** = structured, reusable statements linking entities (e.g., *OSHA issued regulation 29 CFR 1926.1050 on 1991-03-15*).
-* Rule: **never stop at entities**; always promote to facts.
+## The Founder's Journey: From Idea to Exit Strategy
 
----
-
-## 🟢 2. Universal Fact Types (Cross-Domain Schema)
-
-Regardless of whether the document is safety, legal, financial, or healthcare, you can unify facts into a reusable schema. Here’s a **core set of fact classes** that generalize across \~20 domains:
-
-| Fact Type                  | Description                          | Cross-Domain Example                          |
-| -------------------------- | ------------------------------------ | --------------------------------------------- |
-| **RegulationCitation**     | Links a regulation/code to a context | *“29 CFR 1926.1050 applies to stairways”*     |
-| **Requirement**            | Rule, constraint, or obligation      | *“Ladder spacing must be 10 inches”*          |
-| **PublicationDate**        | When doc was issued/revised          | *“OSHA 3124 issued 1991-03-15”*               |
-| **FinancialImpact**        | ROI, savings, costs                  | *“Worker protection saves \$4 per \$1 spent”* |
-| **GrantRequirement**       | Contribution or funding rule         | *“20% contribution required”*                 |
-| **ContactInfo**            | Person/organization coordinates      | *“OSHA Washington office, (202) 693-1999”*    |
-| **MeasurementRequirement** | Dimensions, quantities               | *“Rungs must be ≤ 12 inches apart”*           |
-| **EventFact**              | Event + participants + date          | *“Inspection occurred Jan 2023 in Boston”*    |
-| **ActionFact**             | Subject–verb–object                  | *“OSHA enforces stairway compliance”*         |
-| **CausalFact**             | Cause → effect                       | *“Training reduces accidents”*                |
-| **LocationFact**           | Geopolitical / facility / address    | *“Constitution Ave NW, Washington, DC”*       |
+Every market entry decision requires intelligence across these interconnected areas:
+- **Market & Capital Flows** → Is there opportunity and funding?
+- **Competition & Users** → Who are we displacing and why will they switch?
+- **Talent & Regulation** → Can we build and operate legally?
+- **Growth & Exit** → How do we scale and where does this lead?
 
 ---
 
-## 🟢 3. Domain-Specific Extensions
+## 🟢 1. The 12 Founder's Journey Fact Categories
 
-Each domain then layers its own fact subclasses on top:
+### **🔵 Market Intelligence Cluster**
 
-* **Safety/Compliance:** *RegulationCitation*, *MeasurementRequirement*, *InspectionEvent*.
-* **Finance:** *FinancialImpact*, *TransactionFact*, *ValuationFact*.
-* **Healthcare:** *ClinicalTrialFact*, *TreatmentGuideline*, *RegulatoryApproval*.
-* **Legal:** *CaseCitation*, *Obligation*, *ContractTerm*.
-* **Education:** *CurriculumRequirement*, *AssessmentFact*.
-* **Tech/Software:** *APIRequirement*, *VersionReleaseFact*, *VulnerabilityFact*.
+**1. Market Opportunity**
+- Market size, CAGR, geographic breakdown
+- Adjacent and emerging markets (white spaces, blue oceans)
+- Macroeconomic indicators affecting the space
 
-Think of it as a **core “fact backbone”** plus **domain plug-ins**.
+**2. Capital Flows & Investment**
+- VC/PE funding patterns and thesis evolution
+- Corporate venture activity and strategic investments
+- Government grants, contracts, and incentive programs
+
+**3. Financial Signals & Economics**
+- Exit multiples (M&A, IPO valuations)
+- Gross margin benchmarks and unit economics
+- Typical burn rates and runway requirements
+
+### **🟠 Competitive & User Cluster**
+
+**4. Competitive Landscape**
+- Market leaders, challengers, and positioning
+- Feature differentiation matrices
+- M&A activity and partnership strategies
+
+**5. User Pain Points & Behavior**
+- Explicit pain points (forums, support tickets)
+- Latent needs (workarounds, job postings, patent gaps)
+- Cultural and behavioral shifts driving demand
+
+**6. Customer Acquisition & Growth**
+- Dominant acquisition channels and CAC benchmarks
+- Viral mechanics and network effects evidence
+- Partnership and reseller ecosystem dynamics
+
+### **🟢 Operational & Scaling Cluster**
+
+**7. Technical Innovation & Infrastructure**
+- Popular frameworks, stacks, and development patterns
+- Patent clusters and emerging IP areas
+- Infrastructure dependencies and supply chain factors
+
+**8. Talent & Human Capital**
+- Availability and cost of skilled workers
+- Communities of practice and talent hubs
+- Regulatory/licensing requirements
+
+**9. Regulatory & Policy Intelligence**
+- Current and emerging regulations
+- Enforcement patterns and compliance costs
+- Government incentives and trade restrictions
+
+### **🟡 Growth & Exit Cluster**
+
+**10. Ecosystem Analysis**
+- Key players, suppliers, and integrators
+- Industry standards and certification requirements
+- Distribution channels and market access
+
+**11. Scaling Pathways**
+- Proven growth models in the vertical
+- Platform and partnership opportunities
+- Geographic expansion patterns
+
+**12. Exit Landscape**
+- Active acquirers and their acquisition criteria
+- IPO readiness benchmarks and public comparables
+- Strategic buyer maps and consolidation trends
 
 ---
 
-## 🟢 4. Best Practices Across Domains
+## 🟢 2. Universal Founder's Journey JSON Schema
 
-1. **Always keep span anchors** (start/end + raw text).
-   → This guarantees auditability.
-2. **Normalize entities** (map OSHA → \[Wikidata\:Q192334], CFR code → URI).
-   → Enables cross-document linking.
-3. **Type the fact explicitly** (`type: RegulationCitation`, `type: FinancialImpact`).
-   → Avoids ambiguity when comparing across domains.
-4. **Bind entities with roles** (subject, object, condition, qualifier).
-   → E.g., *OSHA (subject)* → *requires (predicate)* → *ladder spacing 10 in (object)*.
-5. **Keep fact granularity atomic.**
-   → Break long sentences into multiple facts (don’t stuff too much into one).
-6. **Layer your pipeline:**
+Every website extraction, regardless of vertical, produces this standardized structure:
 
-   * Layer 1: Entities (raw spans).
-   * Layer 2: Normalized entities.
-   * Layer 3: Fact extraction (typed facts).
-   * Layer 4: Domain enrichment (compliance, finance, etc.).
-
----
-
-## 🟢 5. Example: OSHA (Safety) vs. Finance vs. Healthcare
-
-Here’s how the **same framework** applies differently:
-
-```yaml
-# Safety domain
-- type: RegulationCitation
-  regulation: "29 CFR 1926.1050"
-  subject: "OSHA"
-  context: "stairways and ladders"
-
-# Finance domain
-- type: FinancialImpact
-  subject: "Worker protection"
-  relation: "saves"
-  saving: 4.0
-  cost: 1.0
-  unit: "USD"
-
-# Healthcare domain
-- type: ClinicalTrialFact
-  drug: "DrugX"
-  phase: "III"
-  outcome: "reduced symptoms by 20%"
-  date: "2024-11-01"
+```json
+{
+  "document_id": "web_healthcare_crm_001",
+  "domain_detected": "healthcare_technology",
+  "url": "https://example-healthtech.com",
+  "extraction_date": "2024-01-15",
+  
+  "founder_intelligence": {
+    
+    "market_opportunity": [
+      {
+        "fact_id": "market_001",
+        "type": "MarketSize",
+        "market": "Healthcare CRM",
+        "size": "$4.2B",
+        "growth_rate": "12.5% CAGR",
+        "timeframe": "2024-2029",
+        "source": "About page market stats",
+        "confidence": 0.7
+      }
+    ],
+    
+    "capital_flows": [
+      {
+        "fact_id": "funding_001", 
+        "type": "InvestmentActivity",
+        "investor": "Andreessen Horowitz",
+        "amount": "$50M Series B",
+        "focus_area": "Healthcare workflow automation",
+        "date": "2024-01-10",
+        "source": "Press release",
+        "confidence": 0.95
+      }
+    ],
+    
+    "user_pain_points": [
+      {
+        "fact_id": "pain_001",
+        "type": "ExplicitPainPoint", 
+        "pain_point": "Manual patient data entry takes 40% of staff time",
+        "affected_users": "Healthcare administrators",
+        "frequency": "Daily workflow issue",
+        "source": "Customer testimonial",
+        "confidence": 0.85
+      }
+    ],
+    
+    "competitive_landscape": [
+      {
+        "fact_id": "comp_001",
+        "type": "CompetitivePosition",
+        "company": "Salesforce Health Cloud",
+        "market_position": "Market leader",
+        "key_differentiator": "Integration with existing Salesforce ecosystem", 
+        "market_share": "23%",
+        "source": "Competitive comparison page",
+        "confidence": 0.8
+      }
+    ],
+    
+    "talent_signals": [
+      {
+        "fact_id": "talent_001",
+        "type": "TalentDemand",
+        "role": "Healthcare Software Engineers",
+        "salary_range": "$120K-180K",
+        "availability": "High demand, limited supply",
+        "location": "San Francisco Bay Area",
+        "source": "Careers page",
+        "confidence": 0.75
+      }
+    ]
+    
+    // ... Additional categories
+  },
+  
+  "entity_map": {
+    "organizations": [...],
+    "persons": [...],
+    "products": [...],
+    "technologies": [...]
+  },
+  
+  "relationships": [
+    {
+      "subject": "Andreessen Horowitz",
+      "predicate": "invested_in", 
+      "object": "Healthcare CRM Company",
+      "context": "Series B funding"
+    }
+  ]
+}
 ```
 
 ---
 
-## 🟢 6. What You’re Missing Right Now
+## 🟢 3. Web-Scale Extraction Patterns for Founder's Journey
 
-Looking at your sample YAML, you already have:
+### **High-Value Fact Patterns Across Hundreds of Thousands of Websites**
 
-* Entities with spans ✔
-* Domains ✔
-* Entity density ✔
+| Founder Category | Fact Pattern | Website Sources | Extraction Signal |
+|------------------|--------------|-----------------|-------------------|
+| **Market Opportunity** | Market size claims | Company about pages, investor decks | `"$X billion market"`, `"Growing at X% CAGR"` |
+| **Capital Flows** | Funding announcements | Press releases, TechCrunch, company blogs | `"raises $X Series Y"`, `"led by [Investor]"` |
+| **Pain Points** | User frustration signals | Support forums, Reddit, job postings | `"biggest challenge"`, `"spending too much time on"` |
+| **Competitive Position** | Market positioning claims | Landing pages, comparison pages | `"leading provider"`, `"unlike [Competitor]"` |
+| **Technical Innovation** | Technology stack mentions | Engineering blogs, job postings, GitHub | Framework names, language preferences |
+| **Talent Signals** | Hiring patterns | Careers pages, LinkedIn jobs | Role requirements, salary ranges, team size |
+| **Customer Acquisition** | Growth claims | Case studies, testimonials | `"increased by X%"`, `"saved $X"`, CAC metrics |
+| **Exit Activity** | M&A announcements | Business news, SEC filings | `"acquires"`, `"merger"`, valuation multiples |
 
-But you’re missing:
+### **Source Quality Weighting**
 
-* **Fact typing** (turning entities into structured facts)
-* **Linking** (entity IDs across docs)
-* **Predicates** (who does what to whom, when, why)
-* **Cross-domain consistency**
+**Tier 1 (Confidence 0.9+)**: SEC filings, official press releases, company investor pages
+**Tier 2 (Confidence 0.7-0.9)**: Reputable business news, company blogs, customer case studies  
+**Tier 3 (Confidence 0.5-0.7)**: Social media, forums, third-party articles
+**Tier 4 (Confidence <0.5)**: Marketing copy, unverified claims, user-generated content
 
 ---
 
-✅ **Overall Guidance:**
-Think of your system not as “entity extraction” but as a **fact assembly line**: entities → normalized entities → facts → domain facts. Across 20 domains, the schema doesn’t change — only the **fact subtypes** do.
+## 🟢 4. Scout's Competitive Intelligence Advantage
+
+### **The Knowledge Extraction Edge**
+
+While competitors use generic AI for web summarization, Scout extracts **structured, queryable intelligence** that enables:
+
+**Cross-Market Analysis**:
+- "Show me all SaaS companies in healthcare claiming >40% efficiency gains"
+- "Which fintech startups got Series A funding in Q4 2024?"
+- "What are the top 3 pain points mentioned across 1000+ customer testimonials?"
+
+**Trend Detection at Scale**:
+- Emerging technology adoption patterns across industries
+- Capital flow shifts and investment thesis evolution  
+- Regulatory changes impacting market opportunities
+
+**Competitive Positioning Intelligence**:
+- Feature gap analysis across market leaders
+- Pricing model evolution and market positioning shifts
+- Partnership and acquisition pattern recognition
+
+### **Web-Scale Implementation Requirements**
+
+**🟢 Core Pattern Recognition (Linear Performance)**:
+- Aho-Corasick multi-pattern matching for entity normalization
+- FLPC Rust regex for structured fact extraction
+- Single-pass architecture across all 12 Founder categories
+
+**🟡 Source Authority Classification**:
+- Domain authority scoring and source type detection
+- Cross-source fact validation and confidence weighting
+- Temporal fact tracking for trend analysis
+
+**🔴 Critical Gap: Relationship Extraction**:
+- Predicate vocabulary for business relationships
+- Semantic pattern matching for "Company A acquires Company B"
+- Context understanding for conditional facts
 
 ---
 
-Would you like me to draft a **universal YAML schema for facts** (core + domain extensions) that you can drop into your pipeline, so every doc, whether OSHA, SEC, or FDA, outputs facts in the same comparable shape?
+## 🟢 5. Universal Output Template
+
+Every document, regardless of domain, produces this standardized JSON structure:
+
+```json
+{
+  "document_id": "doc_123",
+  "domain_detected": "regulatory_compliance",
+  "entities": {
+    "persons": [
+      {
+        "id": "person_001",
+        "canonical_name": "John Smith",
+        "aliases": ["J. Smith", "Smith, John"],
+        "role": "Safety Director",
+        "source": "Page 2"
+      }
+    ],
+    "organizations": [
+      {
+        "id": "org_osha", 
+        "canonical_name": "Occupational Safety and Health Administration",
+        "aliases": ["OSHA", "the Agency"],
+        "type": "regulatory_agency",
+        "source": "Page 1"
+      }
+    ],
+    
+    // Domain-specific entities (conditional)
+    "standards": [...],      // Only if regulatory domain
+    "equipment": [...],      // Only if equipment-focused
+    "products": [...],       // Only if commercial domain
+    "treatments": [...]      // Only if healthcare domain
+  },
+  
+  "relationships": [
+    {
+      "subject": "org_osha",
+      "predicate": "issues", 
+      "object": "std_1926_1050",
+      "source": "Page 3"
+    }
+  ],
+  
+  "facts": [
+    {
+      "id": "fact_001",
+      "type": "Requirement",
+      "subject": "Employers", 
+      "predicate": "must_provide",
+      "object": "Stairway or ladder at worker access points",
+      "condition": "Break in elevation ≥ 19 inches",
+      "source": "Page 3",
+      "confidence": 0.95
+    }
+  ]
+}
+```
+
+---
+
+## 🟢 6. Comparative Analysis Across Domains
+
+The power of this approach: **same extraction framework, comparable outputs across completely different domains**.
+
+### **Web Content vs. Regulatory Document**
+
+**Website Analysis:**
+```json
+{
+  "domain_detected": "commercial_web",
+  "facts": [
+    {
+      "type": "Impact", 
+      "subject": "Our software",
+      "predicate": "increases",
+      "object": "productivity by 40%",
+      "source": "Homepage hero section",
+      "confidence": 0.7  // Lower confidence for marketing claims
+    }
+  ]
+}
+```
+
+**OSHA Document:**
+```json
+{
+  "domain_detected": "regulatory_compliance", 
+  "facts": [
+    {
+      "type": "Impact",
+      "subject": "Safety training", 
+      "predicate": "reduces", 
+      "object": "workplace accidents by 40%",
+      "source": "Page 15, Study Citation",
+      "confidence": 0.95  // Higher confidence for regulatory data
+    }
+  ]
+}
+```
+
+### **Cross-Domain Comparison Benefits**
+- **Fact Verification**: Compare claims across authoritative vs. marketing sources
+- **Knowledge Synthesis**: Link regulatory requirements to business claims  
+- **Source Quality**: Weight facts by domain authority and provenance
+- **Pattern Recognition**: Identify universal vs. domain-specific insights
 
 
 Here’s a reusable Markdown section you can drop into your docs — focused on **Normalization 2**, the step that makes entities comparable across files and domains:
