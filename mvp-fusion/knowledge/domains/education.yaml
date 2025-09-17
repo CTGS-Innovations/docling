@@ -1,0 +1,177 @@
+# Education - Academic, training, learning platforms intelligence
+# Routes to EdTech SaaS specialists for educational MVP opportunities
+
+# Educational Institutions
+institutions:
+  weight: 3.0
+  keywords:
+    "education": 4.0
+    "school": 3.5
+    "university": 3.5
+    "college": 3.5
+    "academy": 3.0
+    "institute": 3.0
+    "classroom": 3.5
+    "campus": 3.0
+    "student": 3.5
+    "teacher": 3.5
+
+# Learning and Instruction
+learning_instruction:
+  weight: 3.5
+  keywords:
+    "learning": 4.0
+    "teaching": 3.5
+    "instruction": 3.5
+    "curriculum": 3.5
+    "lesson": 3.5
+    "course": 3.5
+    "class": 3.0
+    "training": 3.5
+    "workshop": 3.0
+    "seminar": 3.0
+
+# Educational Technology
+edtech:
+  weight: 4.0
+  keywords:
+    "edtech": 4.0
+    "educational technology": 4.0
+    "e-learning": 4.0
+    "online learning": 4.0
+    "digital learning": 4.0
+    "lms": 4.0
+    "learning management system": 4.0
+    "virtual classroom": 4.0
+    "remote learning": 4.0
+    "distance education": 3.5
+
+# Assessment and Evaluation
+assessment:
+  weight: 3.5
+  keywords:
+    "assessment": 4.0
+    "evaluation": 3.5
+    "testing": 3.5
+    "exam": 3.5
+    "quiz": 3.5
+    "grade": 3.5
+    "grading": 3.5
+    "scoring": 3.5
+    "rubric": 3.5
+    "feedback": 3.5
+
+# Student Management
+student_management:
+  weight: 3.0
+  keywords:
+    "student information": 3.5
+    "sis": 4.0
+    "enrollment": 3.5
+    "registration": 3.5
+    "attendance": 3.5
+    "transcript": 3.5
+    "records": 3.5
+    "progress": 3.5
+    "performance": 3.5
+    "academic": 3.5
+
+# Professional Development
+professional_development:
+  weight: 3.0
+  keywords:
+    "professional development": 4.0
+    "teacher training": 3.5
+    "faculty": 3.0
+    "instructor": 3.0
+    "educator": 3.0
+    "certification": 3.5
+    "continuing education": 3.5
+    "skill development": 3.5
+    "competency": 3.0
+
+# Special Education
+special_education:
+  weight: 3.0
+  keywords:
+    "special education": 4.0
+    "special needs": 3.5
+    "iep": 4.0
+    "individualized education": 4.0
+    "accommodation": 3.5
+    "modification": 3.5
+    "disability": 3.5
+    "accessibility": 3.5
+    "inclusive": 3.0
+
+# Higher Education
+higher_education:
+  weight: 2.5
+  keywords:
+    "higher education": 3.5
+    "university": 3.0
+    "college": 3.0
+    "graduate": 3.0
+    "undergraduate": 3.0
+    "degree": 3.0
+    "bachelor": 3.0
+    "master": 3.0
+    "doctorate": 3.0
+    "phd": 3.0
+
+# K-12 Education
+k12_education:
+  weight: 3.0
+  keywords:
+    "k-12": 4.0
+    "k12": 4.0
+    "elementary": 3.5
+    "middle school": 3.5
+    "high school": 3.5
+    "kindergarten": 3.0
+    "primary": 3.0
+    "secondary": 3.0
+    "grade": 3.0
+
+# Online Learning Platforms
+online_platforms:
+  weight: 3.5
+  keywords:
+    "online course": 4.0
+    "mooc": 4.0
+    "webinar": 3.5
+    "virtual": 3.5
+    "remote": 3.5
+    "digital": 3.0
+    "platform": 3.5
+    "portal": 3.0
+    "app": 3.0
+
+# Learning Analytics
+learning_analytics:
+  weight: 3.5
+  keywords:
+    "learning analytics": 4.0
+    "educational data": 3.5
+    "student data": 3.5
+    "analytics": 3.5
+    "metrics": 3.5
+    "insights": 3.0
+    "reporting": 3.0
+    "dashboard": 3.0
+    "intelligence": 3.0
+
+# Corporate Training
+corporate_training:
+  weight: 3.0
+  keywords:
+    "corporate training": 4.0
+    "employee training": 3.5
+    "workplace learning": 3.5
+    "professional training": 3.5
+    "skills training": 3.5
+    "compliance training": 3.5
+    "onboarding": 3.5
+    "development": 3.0
+    "upskilling": 3.5
+    "reskilling": 3.5

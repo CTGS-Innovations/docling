@@ -1,0 +1,182 @@
+# Competitive Intelligence - Market positioning and competitor analysis
+# Strategic intelligence for Scout's competitive landscape understanding
+
+# Competitor Identification
+competitors:
+  weight: 3.5
+  keywords:
+    "competitor": 4.0
+    "competition": 3.5
+    "rival": 3.0
+    "competing": 3.0
+    "alternative": 3.0
+    "versus": 3.0
+    "vs": 2.5
+    "compared to": 3.0
+    "similar to": 3.0
+    "like": 2.0
+
+# Market Positioning
+market_positioning:
+  weight: 3.0
+  keywords:
+    "market leader": 3.5
+    "market share": 4.0
+    "dominant": 3.5
+    "leading": 3.0
+    "top player": 3.5
+    "incumbent": 3.5
+    "established": 3.0
+    "challenger": 3.5
+    "disruptor": 3.5
+    "niche": 3.0
+
+# Competitive Advantages
+competitive_advantages:
+  weight: 3.5
+  keywords:
+    "competitive advantage": 4.0
+    "moat": 4.0
+    "differentiation": 3.5
+    "unique selling": 3.5
+    "usp": 3.0
+    "value proposition": 3.5
+    "edge": 3.0
+    "superior": 3.0
+    "better than": 3.0
+    "outperform": 3.5
+
+# Pricing Analysis
+pricing_analysis:
+  weight: 3.0
+  keywords:
+    "pricing": 3.5
+    "price point": 3.5
+    "cost": 3.0
+    "expensive": 3.0
+    "cheap": 3.0
+    "affordable": 3.0
+    "premium": 3.5
+    "budget": 3.0
+    "free tier": 3.5
+    "subscription": 3.0
+
+# Feature Comparison
+feature_comparison:
+  weight: 3.5
+  keywords:
+    "features": 3.5
+    "functionality": 3.0
+    "capabilities": 3.0
+    "missing": 3.5
+    "lacks": 3.5
+    "has": 2.5
+    "includes": 2.5
+    "supports": 2.5
+    "limitation": 3.5
+    "weakness": 3.5
+
+# Product Quality
+product_quality:
+  weight: 3.0
+  keywords:
+    "quality": 3.0
+    "reliability": 3.5
+    "performance": 3.5
+    "speed": 3.0
+    "accuracy": 3.0
+    "bugs": 3.5
+    "issues": 3.0
+    "problems": 3.0
+    "stable": 3.0
+    "robust": 3.0
+
+# User Experience Comparison
+ux_comparison:
+  weight: 3.0
+  keywords:
+    "user experience": 3.5
+    "ux": 3.0
+    "ease of use": 3.5
+    "intuitive": 3.0
+    "user friendly": 3.5
+    "interface": 3.0
+    "design": 3.0
+    "usability": 3.5
+    "navigation": 3.0
+    "workflow": 3.0
+
+# Market Analysis
+market_analysis:
+  weight: 2.5
+  keywords:
+    "market analysis": 3.5
+    "industry": 3.0
+    "sector": 3.0
+    "vertical": 3.0
+    "landscape": 3.5
+    "ecosystem": 3.0
+    "players": 3.0
+    "vendors": 3.0
+    "solutions": 3.0
+    "offerings": 3.0
+
+# Customer Feedback
+customer_feedback:
+  weight: 3.0
+  keywords:
+    "customer satisfaction": 3.5
+    "user reviews": 3.5
+    "rating": 3.0
+    "testimonial": 3.0
+    "case study": 3.0
+    "feedback": 3.0
+    "complaints": 3.5
+    "praise": 3.0
+    "recommendation": 3.0
+    "referral": 3.0
+
+# Sales and Marketing
+sales_marketing:
+  weight: 2.5
+  keywords:
+    "sales strategy": 3.0
+    "marketing": 3.0
+    "go to market": 3.5
+    "gtm": 3.0
+    "channels": 3.0
+    "distribution": 3.0
+    "partnerships": 3.0
+    "reseller": 3.0
+    "direct sales": 3.0
+    "lead generation": 3.0
+
+# Technology Stack
+technology_stack:
+  weight: 2.5
+  keywords:
+    "technology": 2.5
+    "platform": 3.0
+    "architecture": 3.0
+    "infrastructure": 3.0
+    "cloud": 2.5
+    "on premise": 3.0
+    "saas": 3.0
+    "api": 3.0
+    "integration": 3.5
+    "scalability": 3.5
+
+# Business Model
+business_model:
+  weight: 3.0
+  keywords:
+    "business model": 3.5
+    "revenue model": 3.5
+    "monetization": 3.5
+    "subscription": 3.0
+    "freemium": 3.5
+    "enterprise": 3.0
+    "b2b": 3.0
+    "b2c": 3.0
+    "marketplace": 3.5
+    "platform": 3.0

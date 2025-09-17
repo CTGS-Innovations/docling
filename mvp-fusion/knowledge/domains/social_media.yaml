@@ -1,0 +1,176 @@
+# Social Media - Platforms, content, engagement intelligence
+# Routes to social media SaaS specialists for social platform MVP opportunities
+
+# Social Media Platforms
+platforms:
+  weight: 3.5
+  keywords:
+    "social media": 4.0
+    "social network": 3.5
+    "facebook": 3.5
+    "instagram": 3.5
+    "twitter": 3.5
+    "linkedin": 3.5
+    "tiktok": 3.5
+    "youtube": 3.5
+    "snapchat": 3.0
+    "pinterest": 3.0
+
+# Content Creation and Management
+content_creation:
+  weight: 3.5
+  keywords:
+    "content": 3.5
+    "content creation": 4.0
+    "content marketing": 4.0
+    "post": 3.5
+    "posting": 3.5
+    "share": 3.0
+    "sharing": 3.0
+    "upload": 3.0
+    "publish": 3.0
+    "content calendar": 3.5
+
+# Engagement and Interaction
+engagement:
+  weight: 3.5
+  keywords:
+    "engagement": 4.0
+    "like": 3.0
+    "comment": 3.5
+    "share": 3.0
+    "retweet": 3.0
+    "mention": 3.0
+    "tag": 3.0
+    "hashtag": 3.5
+    "interaction": 3.5
+    "community": 3.5
+
+# Influencer Marketing
+influencer_marketing:
+  weight: 3.5
+  keywords:
+    "influencer": 4.0
+    "influencer marketing": 4.0
+    "creator": 3.5
+    "content creator": 3.5
+    "sponsored": 3.5
+    "partnership": 3.0
+    "collaboration": 3.0
+    "brand ambassador": 3.5
+    "micro influencer": 3.5
+    "macro influencer": 3.0
+
+# Analytics and Metrics
+social_analytics:
+  weight: 3.5
+  keywords:
+    "social analytics": 4.0
+    "social media analytics": 4.0
+    "metrics": 3.5
+    "insights": 3.5
+    "reach": 3.5
+    "impressions": 3.5
+    "clicks": 3.5
+    "followers": 3.5
+    "engagement rate": 4.0
+    "roi": 3.5
+
+# Social Media Management
+management:
+  weight: 4.0
+  keywords:
+    "social media management": 4.0
+    "social media manager": 3.5
+    "scheduling": 4.0
+    "automation": 3.5
+    "workflow": 3.5
+    "approval": 3.0
+    "publishing": 3.5
+    "calendar": 3.5
+    "planning": 3.5
+
+# Community Management
+community_management:
+  weight: 3.0
+  keywords:
+    "community": 3.5
+    "community management": 4.0
+    "moderation": 3.5
+    "customer service": 3.5
+    "support": 3.0
+    "response": 3.5
+    "monitoring": 3.5
+    "listening": 3.5
+    "sentiment": 3.5
+
+# Advertising and Promotion
+social_advertising:
+  weight: 3.5
+  keywords:
+    "social ads": 4.0
+    "facebook ads": 4.0
+    "instagram ads": 4.0
+    "linkedin ads": 3.5
+    "twitter ads": 3.5
+    "promoted": 3.5
+    "sponsored": 3.5
+    "campaign": 3.5
+    "targeting": 3.5
+    "audience": 3.5
+
+# User Generated Content
+user_generated_content:
+  weight: 3.0
+  keywords:
+    "user generated content": 4.0
+    "ugc": 3.5
+    "user content": 3.5
+    "customer content": 3.5
+    "review": 3.5
+    "testimonial": 3.5
+    "submission": 3.0
+    "contest": 3.0
+    "challenge": 3.0
+
+# Social Commerce
+social_commerce:
+  weight: 3.5
+  keywords:
+    "social commerce": 4.0
+    "social selling": 4.0
+    "shoppable": 3.5
+    "shop": 3.5
+    "product tag": 3.5
+    "buy now": 3.5
+    "social shopping": 4.0
+    "in-app purchase": 3.5
+    "checkout": 3.0
+
+# Crisis Management
+crisis_management:
+  weight: 3.0
+  keywords:
+    "crisis": 3.5
+    "crisis management": 4.0
+    "reputation": 3.5
+    "reputation management": 4.0
+    "negative": 3.5
+    "complaint": 3.5
+    "issue": 3.0
+    "damage control": 3.5
+    "response": 3.0
+
+# Trends and Viral Content
+trends_viral:
+  weight: 3.0
+  keywords:
+    "viral": 4.0
+    "trending": 4.0
+    "trend": 3.5
+    "meme": 3.0
+    "popular": 3.0
+    "buzz": 3.0
+    "hot": 3.0
+    "moment": 3.0
+    "topic": 3.0

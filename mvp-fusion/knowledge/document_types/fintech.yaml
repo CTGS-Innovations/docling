@@ -1,0 +1,248 @@
+# Fintech and Financial Services Document Types
+# For Scout's financial services SaaS and fintech intelligence platform
+
+# Banking and Lending
+loan_application:
+  weight: 2.5
+  keywords:
+    "loan application": 4.0
+    "credit application": 3.5
+    "mortgage": 3.0
+    "borrower": 2.5
+    "income": 2.5
+    "debt": 2.5
+    "collateral": 2.5
+    "credit score": 3.0
+
+credit_report:
+  weight: 2.5
+  keywords:
+    "credit report": 4.0
+    "credit score": 3.5
+    "fico": 3.0
+    "credit history": 3.0
+    "payment history": 2.5
+    "credit utilization": 2.5
+    "delinquent": 2.5
+
+bank_statement:
+  weight: 2.0
+  keywords:
+    "bank statement": 4.0
+    "account balance": 3.0
+    "transaction": 2.5
+    "deposit": 2.5
+    "withdrawal": 2.5
+    "routing number": 2.5
+    "account number": 2.5
+
+# Investment and Wealth Management
+investment_prospectus:
+  weight: 2.0
+  keywords:
+    "prospectus": 3.5
+    "investment": 2.5
+    "fund": 2.5
+    "portfolio": 2.5
+    "risk factors": 2.5
+    "returns": 2.5
+    "management fees": 2.5
+
+portfolio_statement:
+  weight: 2.0
+  keywords:
+    "portfolio": 3.0
+    "holdings": 2.5
+    "asset allocation": 2.5
+    "performance": 2.5
+    "gains": 2.5
+    "losses": 2.5
+
+trade_confirmation:
+  weight: 2.0
+  keywords:
+    "trade confirmation": 4.0
+    "buy": 2.5
+    "sell": 2.5
+    "shares": 2.5
+    "price": 2.0
+    "execution": 2.5
+
+# Insurance
+insurance_policy:
+  weight: 2.0
+  keywords:
+    "insurance policy": 4.0
+    "coverage": 2.5
+    "premium": 2.5
+    "deductible": 2.5
+    "beneficiary": 2.5
+    "claim": 2.5
+
+actuarial_report:
+  weight: 2.0
+  keywords:
+    "actuarial": 3.5
+    "risk assessment": 3.0
+    "probability": 2.5
+    "statistical": 2.5
+    "mortality": 2.5
+    "morbidity": 2.5
+
+# Regulatory and Compliance
+sec_filing:
+  weight: 2.5
+  keywords:
+    "sec filing": 4.0
+    "10-k": 3.5
+    "10-q": 3.5
+    "8-k": 3.0
+    "form": 2.5
+    "securities": 2.5
+    "disclosure": 2.5
+
+aml_report:
+  weight: 2.5
+  keywords:
+    "aml": 3.5
+    "anti-money laundering": 4.0
+    "suspicious activity": 3.5
+    "sar": 3.0
+    "compliance": 2.5
+    "kyc": 3.0
+    "know your customer": 3.0
+
+kyc_document:
+  weight: 2.5
+  keywords:
+    "kyc": 3.5
+    "know your customer": 4.0
+    "customer identification": 3.0
+    "due diligence": 2.5
+    "verification": 2.5
+    "identity": 2.5
+
+# Payments and Transactions
+payment_processing:
+  weight: 2.0
+  keywords:
+    "payment processing": 3.5
+    "transaction": 2.5
+    "merchant": 2.5
+    "gateway": 2.5
+    "settlement": 2.5
+    "chargeback": 2.5
+
+wire_transfer:
+  weight: 2.0
+  keywords:
+    "wire transfer": 4.0
+    "swift": 3.0
+    "remittance": 2.5
+    "beneficiary": 2.5
+    "sender": 2.5
+    "correspondent bank": 2.5
+
+# Financial Analysis and Reporting
+financial_statement:
+  weight: 2.5
+  keywords:
+    "financial statement": 4.0
+    "balance sheet": 3.5
+    "income statement": 3.5
+    "cash flow": 3.0
+    "assets": 2.5
+    "liabilities": 2.5
+    "equity": 2.5
+    "revenue": 2.5
+
+audit_report:
+  weight: 2.0
+  keywords:
+    "audit report": 4.0
+    "auditor": 2.5
+    "opinion": 2.5
+    "material weakness": 3.0
+    "internal controls": 2.5
+    "gaap": 2.5
+
+tax_return:
+  weight: 2.0
+  keywords:
+    "tax return": 4.0
+    "1040": 3.0
+    "deduction": 2.5
+    "income tax": 2.5
+    "refund": 2.5
+    "irs": 2.5
+
+# Risk Management
+risk_assessment:
+  weight: 2.0
+  keywords:
+    "risk assessment": 3.5
+    "credit risk": 3.0
+    "market risk": 3.0
+    "operational risk": 3.0
+    "var": 2.5
+    "value at risk": 3.0
+
+stress_test:
+  weight: 2.0
+  keywords:
+    "stress test": 3.5
+    "scenario": 2.5
+    "adverse": 2.5
+    "capital": 2.5
+    "resilience": 2.5
+
+# Cryptocurrency and DeFi
+crypto_transaction:
+  weight: 2.0
+  keywords:
+    "cryptocurrency": 3.0
+    "bitcoin": 2.5
+    "ethereum": 2.5
+    "blockchain": 2.5
+    "wallet": 2.5
+    "transaction hash": 3.0
+
+defi_protocol:
+  weight: 2.0
+  keywords:
+    "defi": 3.5
+    "decentralized finance": 4.0
+    "smart contract": 3.0
+    "liquidity": 2.5
+    "yield": 2.5
+    "staking": 2.5
+
+# Accounting and Bookkeeping
+general_ledger:
+  weight: 2.0
+  keywords:
+    "general ledger": 4.0
+    "journal entry": 3.0
+    "account": 2.5
+    "debit": 2.5
+    "credit": 2.5
+    "reconciliation": 2.5
+
+accounts_receivable:
+  weight: 1.5
+  keywords:
+    "accounts receivable": 3.5
+    "ar aging": 3.5
+    "invoice payment": 3.0
+    "customer payment": 3.0
+    "payment collection": 3.0
+    "receivables": 3.0
+
+accounts_payable:
+  weight: 1.5
+  keywords:
+    "accounts payable": 3.5
+    "ap aging": 3.5
+    "vendor payment": 3.0
+    "supplier payment": 3.0
+    "payables": 3.0

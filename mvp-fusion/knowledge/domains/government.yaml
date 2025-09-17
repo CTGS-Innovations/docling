@@ -1,92 +1,144 @@
-# Government/Regulatory Domain Patterns
-# High priority for OSHA validation
+# Government - Public sector and municipal services intelligence
+# Routes to GovTech SaaS specialists for government MVP opportunities
 
-government:
-  weight: 2.0
+# Government Agencies
+agencies:
+  weight: 3.0
   keywords:
-    osha: 3.0
-    epa: 2.5
-    sec: 2.5
-    fda: 2.5
-    nhtsa: 2.0
-    government: 2.0
-    federal: 1.5
-    agency: 1.5
-    department: 1.5
-    bureau: 1.0
-    administration: 1.0
-  entities:
-    agencies: ["osha", "epa", "sec", "fda", "nhtsa", "dot", "faa", "fcc"]
-    departments: ["labor", "energy", "health", "transportation", "commerce"]
-    levels: ["federal", "state", "local", "municipal", "county"]
+    "government": 4.0
+    "agency": 3.5
+    "department": 3.5
+    "bureau": 3.0
+    "administration": 3.0
+    "federal": 3.5
+    "state": 3.0
+    "local": 3.0
+    "municipal": 3.5
+    "county": 3.0
 
-regulatory:
+# Federal Agencies
+federal_agencies:
+  weight: 3.5
+  keywords:
+    "osha": 3.5
+    "epa": 3.5
+    "sec": 3.5
+    "fda": 3.5
+    "nhtsa": 3.0
+    "dot": 3.0
+    "faa": 3.0
+    "fcc": 3.0
+    "irs": 3.5
+    "dhs": 3.0
+
+# Public Services
+public_services:
+  weight: 3.0
+  keywords:
+    "public service": 3.5
+    "citizen services": 4.0
+    "municipal services": 3.5
+    "city services": 3.5
+    "public safety": 3.5
+    "emergency services": 3.5
+    "utilities": 3.0
+    "infrastructure": 3.0
+    "transportation": 3.0
+
+# Policy and Legislation
+policy_legislation:
   weight: 2.5
   keywords:
-    regulation: 3.0
-    compliance: 3.0
-    "29 cfr": 3.0
-    "40 cfr": 3.0
-    cfr: 2.5
-    standard: 2.0
-    requirement: 2.0
-    mandate: 1.5
-    directive: 1.5
-    code: 1.0
-  entities:
-    standards: ["iso", "ansi", "astm", "nfpa", "osha", "epa"]
-    cfr_sections: ["29 cfr 1926", "29 cfr 1910", "40 cfr 260", "17 cfr 240"]
-    compliance_types: ["safety", "environmental", "financial", "quality"]
+    "policy": 3.5
+    "legislation": 3.5
+    "bill": 3.0
+    "law": 3.0
+    "act": 3.0
+    "statute": 3.0
+    "ordinance": 3.0
+    "regulation": 3.0
+    "mandate": 3.0
+    "directive": 3.0
 
-legal:
-  weight: 1.5
+# Elections and Democracy
+elections:
+  weight: 2.5
   keywords:
-    legal: 2.0
-    law: 2.0
-    contract: 2.0
-    liability: 1.5
-    lawsuit: 1.5
-    court: 1.5
-    attorney: 1.0
-    litigation: 1.0
-  entities:
-    document_types: ["contract", "agreement", "policy", "procedure", "lawsuit"]
-    legal_areas: ["employment", "environmental", "safety", "corporate", "regulatory"]
+    "election": 3.5
+    "voting": 3.5
+    "ballot": 3.5
+    "democracy": 3.0
+    "civic": 3.0
+    "political": 3.0
+    "campaign": 3.0
+    "candidate": 3.0
+    "registration": 3.0
 
-safety:
-  weight: 2.0
+# Government Technology
+govtech:
+  weight: 4.0
   keywords:
-    safety: 3.0
-    hazard: 2.5
-    "hard hat": 2.5
-    "safety goggles": 2.5
-    harness: 2.0
-    ppe: 2.5
-    "protective equipment": 2.0
-    "fall protection": 2.5
-    scaffold: 2.0
-    ladder: 2.0
-    injury: 1.5
-    accident: 1.5
-    "safety training": 2.0
-  entities:
-    safety_equipment: ["hard hat", "safety goggles", "harness", "gloves", "respirator", "steel toes"]
-    hazard_types: ["fall hazard", "electrical hazard", "chemical exposure", "noise exposure", "heat stress"]
-    injury_types: ["fracture", "laceration", "burn", "sprain", "contusion", "concussion"]
-    safety_procedures: ["lockout tagout", "confined space", "hot work", "fall protection"]
+    "govtech": 4.0
+    "government technology": 4.0
+    "digital government": 4.0
+    "e-government": 4.0
+    "digital services": 3.5
+    "citizen portal": 3.5
+    "online services": 3.5
+    "government app": 3.5
+    "digital transformation": 3.5
 
-construction:
-  weight: 1.5
+# Transparency and Open Data
+transparency:
+  weight: 3.0
   keywords:
-    construction: 2.5
-    building: 2.0
-    contractor: 2.0
-    scaffold: 2.0
-    excavation: 1.5
-    concrete: 1.5
-    steel: 1.5
-    "construction site": 2.0
-  entities:
-    equipment: ["crane", "excavator", "bulldozer", "forklift", "cement mixer"]
-    materials: ["concrete", "steel", "lumber", "rebar", "drywall", "insulation"]
-    phases: ["foundation", "framing", "roofing", "electrical", "plumbing", "finishing"]
+    "transparency": 3.5
+    "open data": 4.0
+    "freedom of information": 3.5
+    "foia": 3.5
+    "public records": 3.5
+    "accountability": 3.0
+    "disclosure": 3.0
+    "public information": 3.5
+
+# Procurement and Contracting
+procurement:
+  weight: 3.0
+  keywords:
+    "procurement": 3.5
+    "government contract": 3.5
+    "rfp": 3.5
+    "request for proposal": 3.5
+    "bid": 3.0
+    "tender": 3.0
+    "vendor": 3.0
+    "supplier": 3.0
+    "contracting": 3.5
+
+# Public Finance
+public_finance:
+  weight: 2.5
+  keywords:
+    "budget": 3.5
+    "public finance": 3.5
+    "government spending": 3.5
+    "tax": 3.5
+    "revenue": 3.0
+    "appropriation": 3.0
+    "fiscal": 3.0
+    "treasury": 3.0
+    "audit": 3.0
+
+# Citizen Engagement
+citizen_engagement:
+  weight: 3.5
+  keywords:
+    "citizen engagement": 4.0
+    "public participation": 3.5
+    "community": 3.0
+    "stakeholder": 3.0
+    "feedback": 3.0
+    "survey": 3.0
+    "consultation": 3.0
+    "input": 3.0
+    "involvement": 3.0

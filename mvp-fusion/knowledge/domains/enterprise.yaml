@@ -1,0 +1,193 @@
+# Enterprise - B2B SaaS and corporate solutions intelligence
+# Routes to enterprise SaaS specialists for B2B MVP opportunities
+
+# Enterprise Software and SaaS
+enterprise_software:
+  weight: 4.0
+  keywords:
+    "enterprise": 4.0
+    "enterprise software": 4.0
+    "b2b": 4.0
+    "business to business": 4.0
+    "saas": 4.0
+    "software as a service": 4.0
+    "cloud": 3.5
+    "platform": 3.5
+    "solution": 3.5
+    "system": 3.0
+
+# Sales and CRM
+sales_crm:
+  weight: 3.5
+  keywords:
+    "crm": 4.0
+    "customer relationship management": 4.0
+    "sales": 3.5
+    "lead": 3.5
+    "prospect": 3.5
+    "pipeline": 3.5
+    "opportunity": 3.5
+    "deal": 3.5
+    "quote": 3.5
+    "proposal": 3.5
+
+# Customer Success and Support
+customer_success:
+  weight: 3.5
+  keywords:
+    "customer success": 4.0
+    "customer support": 3.5
+    "help desk": 3.5
+    "service desk": 3.5
+    "ticket": 3.5
+    "support": 3.0
+    "customer service": 3.5
+    "onboarding": 3.5
+    "training": 3.0
+    "adoption": 3.5
+
+# Marketing Automation
+marketing_automation:
+  weight: 3.5
+  keywords:
+    "marketing automation": 4.0
+    "email marketing": 3.5
+    "campaign": 3.5
+    "lead generation": 3.5
+    "nurturing": 3.5
+    "segmentation": 3.5
+    "personalization": 3.5
+    "attribution": 3.5
+    "funnel": 3.5
+
+# Human Resources Technology
+hr_tech:
+  weight: 3.0
+  keywords:
+    "hr": 3.5
+    "human resources": 3.5
+    "hris": 4.0
+    "payroll": 3.5
+    "benefits": 3.0
+    "talent": 3.5
+    "recruiting": 3.5
+    "performance": 3.0
+    "employee": 3.0
+    "workforce": 3.0
+
+# Financial Management
+financial_management:
+  weight: 3.0
+  keywords:
+    "erp": 4.0
+    "enterprise resource planning": 4.0
+    "accounting": 3.5
+    "financial": 3.5
+    "finance": 3.5
+    "billing": 3.5
+    "invoicing": 3.5
+    "expense": 3.5
+    "budgeting": 3.5
+    "reporting": 3.5
+
+# Project Management
+project_management:
+  weight: 3.5
+  keywords:
+    "project management": 4.0
+    "project": 3.5
+    "task": 3.0
+    "workflow": 3.5
+    "collaboration": 3.5
+    "productivity": 3.5
+    "planning": 3.0
+    "scheduling": 3.5
+    "resource": 3.0
+    "timeline": 3.0
+
+# Business Intelligence
+business_intelligence:
+  weight: 3.5
+  keywords:
+    "business intelligence": 4.0
+    "bi": 3.5
+    "analytics": 3.5
+    "dashboard": 3.5
+    "reporting": 3.5
+    "data": 3.0
+    "insights": 3.5
+    "metrics": 3.5
+    "kpi": 3.5
+    "visualization": 3.5
+
+# Security and Compliance
+security_compliance:
+  weight: 3.5
+  keywords:
+    "security": 3.5
+    "cybersecurity": 3.5
+    "compliance": 3.5
+    "governance": 3.5
+    "risk": 3.5
+    "audit": 3.5
+    "access control": 3.5
+    "identity": 3.5
+    "authentication": 3.5
+    "encryption": 3.0
+
+# Communication and Collaboration
+communication:
+  weight: 3.0
+  keywords:
+    "communication": 3.5
+    "collaboration": 3.5
+    "messaging": 3.5
+    "chat": 3.0
+    "video": 3.0
+    "meeting": 3.5
+    "conference": 3.0
+    "sharing": 3.0
+    "teamwork": 3.0
+
+# Supply Chain Management
+supply_chain:
+  weight: 2.5
+  keywords:
+    "supply chain": 3.5
+    "procurement": 3.5
+    "vendor": 3.0
+    "supplier": 3.0
+    "inventory": 3.0
+    "logistics": 3.0
+    "distribution": 3.0
+    "fulfillment": 3.0
+    "warehouse": 3.0
+
+# API and Integration
+api_integration:
+  weight: 3.5
+  keywords:
+    "api": 4.0
+    "integration": 4.0
+    "connector": 3.5
+    "webhook": 3.5
+    "sync": 3.5
+    "data sync": 3.5
+    "automation": 3.5
+    "workflow": 3.5
+    "interoperability": 3.5
+    "ecosystem": 3.5
+
+# Enterprise Architecture
+architecture:
+  weight: 2.5
+  keywords:
+    "architecture": 3.0
+    "infrastructure": 3.0
+    "scalability": 3.5
+    "performance": 3.0
+    "reliability": 3.0
+    "availability": 3.0
+    "deployment": 3.0
+    "cloud": 3.0
+    "on premise": 3.0

@@ -1,60 +1,152 @@
-# Science & Health Domain Patterns
+# Science - Research and scientific intelligence
+# Routes to SciTech SaaS specialists for research MVP opportunities
 
-health_medical:
-  weight: 1.0
+# Scientific Research
+research:
+  weight: 3.5
   keywords:
-    health: 2.0
-    medical: 2.0
-    doctor: 1.5
-    medicine: 1.5
-    treatment: 1.5
-    diagnosis: 1.5
-    patient: 1.0
-    hospital: 1.0
-    healthcare: 1.0
-  entities:
-    conditions: ["diabetes", "hypertension", "cancer", "covid", "flu"]
-    specialties: ["cardiology", "neurology", "oncology", "pediatrics"]
-    treatments: ["surgery", "medication", "therapy", "vaccination"]
+    "research": 4.0
+    "scientific": 3.5
+    "science": 3.5
+    "study": 3.5
+    "experiment": 3.5
+    "laboratory": 3.5
+    "lab": 3.0
+    "investigation": 3.0
+    "analysis": 3.0
+    "discovery": 3.5
 
-science_research:
-  weight: 1.0
+# Research Methods
+methods:
+  weight: 3.0
   keywords:
-    science: 2.0
-    research: 2.0
-    study: 1.5
-    experiment: 1.5
-    laboratory: 1.0
-    scientific: 1.0
-    discovery: 1.0
-  entities:
-    fields: ["physics", "chemistry", "biology", "astronomy", "geology"]
-    methods: ["peer review", "hypothesis", "methodology", "analysis"]
+    "methodology": 3.5
+    "hypothesis": 3.5
+    "peer review": 3.5
+    "publication": 3.5
+    "journal": 3.5
+    "paper": 3.0
+    "article": 3.0
+    "citation": 3.0
+    "reference": 3.0
+    "bibliography": 3.0
 
+# Scientific Fields
+fields:
+  weight: 2.5
+  keywords:
+    "physics": 3.0
+    "chemistry": 3.0
+    "biology": 3.0
+    "astronomy": 3.0
+    "geology": 3.0
+    "mathematics": 3.0
+    "statistics": 3.0
+    "psychology": 3.0
+    "neuroscience": 3.0
+    "genetics": 3.0
+
+# Data and Analytics
+data_analytics:
+  weight: 3.5
+  keywords:
+    "data": 3.5
+    "dataset": 3.5
+    "statistical": 3.5
+    "analytics": 3.5
+    "modeling": 3.5
+    "simulation": 3.5
+    "computational": 3.5
+    "algorithm": 3.5
+    "machine learning": 3.0
+    "ai": 3.0
+
+# Laboratory Technology
+lab_tech:
+  weight: 3.0
+  keywords:
+    "laboratory": 3.5
+    "instrumentation": 3.5
+    "equipment": 3.0
+    "measurement": 3.0
+    "calibration": 3.0
+    "testing": 3.5
+    "assay": 3.0
+    "protocol": 3.5
+    "procedure": 3.0
+    "sample": 3.0
+
+# Academic and Institutional
+academic:
+  weight: 2.5
+  keywords:
+    "academic": 3.0
+    "university": 3.0
+    "college": 3.0
+    "institute": 3.0
+    "faculty": 3.0
+    "professor": 3.0
+    "researcher": 3.5
+    "scientist": 3.5
+    "graduate": 3.0
+    "phd": 3.0
+
+# Scientific Publishing
+publishing:
+  weight: 3.0
+  keywords:
+    "publication": 3.5
+    "journal": 3.5
+    "article": 3.0
+    "paper": 3.0
+    "manuscript": 3.5
+    "submission": 3.0
+    "review": 3.0
+    "revision": 3.0
+    "acceptance": 3.0
+    "rejection": 3.0
+
+# Grants and Funding
+grants_funding:
+  weight: 3.0
+  keywords:
+    "grant": 3.5
+    "funding": 3.5
+    "research grant": 4.0
+    "nsf": 3.5
+    "nih": 3.5
+    "proposal": 3.5
+    "application": 3.0
+    "award": 3.0
+    "budget": 3.0
+    "sponsor": 3.0
+
+# Clinical and Medical Research
+clinical_research:
+  weight: 3.0
+  keywords:
+    "clinical": 3.5
+    "clinical trial": 4.0
+    "medical research": 3.5
+    "patient": 3.0
+    "treatment": 3.0
+    "therapy": 3.0
+    "drug": 3.0
+    "pharmaceutical": 3.0
+    "biomedical": 3.5
+    "health": 3.0
+
+# Environmental Science
 environmental:
-  weight: 1.0
+  weight: 2.5
   keywords:
-    environment: 2.0
-    "climate change": 2.5
-    sustainability: 2.0
-    "renewable energy": 2.0
-    carbon: 1.5
-    pollution: 1.5
-    ecosystem: 1.0
-    conservation: 1.0
-  entities:
-    issues: ["global warming", "deforestation", "plastic pollution", "biodiversity loss"]
-    solutions: ["solar power", "wind energy", "recycling", "electric vehicles"]
-
-psychology:
-  weight: 1.0
-  keywords:
-    psychology: 2.0
-    "mental health": 2.5
-    therapy: 2.0
-    behavior: 1.5
-    cognitive: 1.0
-    emotional: 1.0
-  entities:
-    conditions: ["anxiety", "depression", "adhd", "ptsd", "bipolar"]
-    treatments: ["cbt", "therapy", "medication", "mindfulness", "counseling"]
+    "environmental": 3.5
+    "climate": 3.5
+    "ecology": 3.0
+    "conservation": 3.0
+    "sustainability": 3.0
+    "ecosystem": 3.0
+    "biodiversity": 3.0
+    "pollution": 3.0
+    "carbon": 3.0
+    "renewable": 3.0

@@ -1,0 +1,190 @@
+# Regulatory Compliance - Domain-specific regulations affecting MVP viability
+# Compliance intelligence for Scout's regulatory landscape understanding
+
+# General Compliance Framework
+compliance:
+  weight: 3.0
+  keywords:
+    "compliance": 4.0
+    "regulation": 3.5
+    "regulatory": 3.5
+    "requirement": 3.0
+    "mandate": 3.5
+    "directive": 3.0
+    "standard": 3.0
+    "policy": 3.0
+    "guideline": 2.5
+    "framework": 2.5
+
+# Data Protection and Privacy
+data_privacy:
+  weight: 3.5
+  keywords:
+    "gdpr": 4.0
+    "ccpa": 4.0
+    "hipaa": 4.0
+    "data protection": 4.0
+    "privacy": 3.5
+    "personal data": 3.5
+    "pii": 3.5
+    "consent": 3.5
+    "data breach": 3.5
+    "right to delete": 3.5
+
+# Financial Regulations
+financial_regulations:
+  weight: 3.5
+  keywords:
+    "sox": 4.0
+    "sarbanes oxley": 4.0
+    "sec": 3.5
+    "finra": 3.5
+    "pci dss": 4.0
+    "aml": 4.0
+    "kyc": 4.0
+    "anti money laundering": 4.0
+    "know your customer": 4.0
+    "dodd frank": 3.5
+
+# Healthcare Regulations
+healthcare_regulations:
+  weight: 3.5
+  keywords:
+    "hipaa": 4.0
+    "hitech": 3.5
+    "fda": 3.5
+    "510k": 3.5
+    "clinical trial": 3.5
+    "medical device": 3.5
+    "pharmaceutical": 3.0
+    "health information": 3.5
+    "protected health": 4.0
+    "phi": 3.5
+
+# Safety and Occupational Standards
+safety_standards:
+  weight: 3.0
+  keywords:
+    "osha": 4.0
+    "workplace safety": 3.5
+    "occupational safety": 3.5
+    "safety standard": 3.5
+    "iso 45001": 3.5
+    "29 cfr": 4.0
+    "safety regulation": 3.5
+    "hazard": 3.0
+    "ppe": 3.0
+    "safety training": 3.0
+
+# Environmental Regulations
+environmental:
+  weight: 2.5
+  keywords:
+    "epa": 3.5
+    "environmental": 3.0
+    "pollution": 3.0
+    "emissions": 3.0
+    "waste": 3.0
+    "clean air act": 3.5
+    "clean water act": 3.5
+    "40 cfr": 3.5
+    "environmental impact": 3.0
+    "sustainability": 2.5
+
+# International Standards
+international_standards:
+  weight: 2.5
+  keywords:
+    "iso": 3.5
+    "iso 9001": 3.5
+    "iso 27001": 3.5
+    "international standard": 3.0
+    "global compliance": 3.0
+    "certification": 3.0
+    "accreditation": 3.0
+    "audit": 3.0
+    "quality management": 3.0
+
+# Industry-Specific Regulations
+industry_specific:
+  weight: 3.0
+  keywords:
+    "industry regulation": 3.5
+    "sector specific": 3.0
+    "vertical compliance": 3.0
+    "domain regulation": 3.0
+    "specialized": 2.5
+    "niche": 2.5
+    "custom": 2.5
+    "tailored": 2.5
+
+# Technology and Security Standards
+tech_security:
+  weight: 3.0
+  keywords:
+    "cybersecurity": 3.5
+    "information security": 3.5
+    "nist": 3.5
+    "iso 27001": 3.5
+    "security framework": 3.5
+    "encryption": 3.0
+    "access control": 3.0
+    "vulnerability": 3.0
+    "penetration testing": 3.0
+    "security audit": 3.5
+
+# Legal and Contractual
+legal_contractual:
+  weight: 2.5
+  keywords:
+    "legal requirement": 3.5
+    "statutory": 3.0
+    "legislation": 3.0
+    "law": 3.0
+    "act": 3.0
+    "bill": 3.0
+    "statute": 3.0
+    "code": 3.0
+    "ordinance": 3.0
+
+# Import/Export and Trade
+trade_regulations:
+  weight: 2.0
+  keywords:
+    "import": 2.5
+    "export": 2.5
+    "customs": 3.0
+    "trade": 2.5
+    "tariff": 3.0
+    "embargo": 3.0
+    "sanctions": 3.5
+    "international trade": 3.0
+    "duty": 2.5
+
+# Licensing and Permits
+licensing:
+  weight: 2.5
+  keywords:
+    "license": 3.0
+    "permit": 3.0
+    "authorization": 3.0
+    "certification": 3.0
+    "registration": 3.0
+    "approval": 3.0
+    "clearance": 3.0
+    "validation": 2.5
+
+# Penalties and Enforcement
+enforcement:
+  weight: 3.0
+  keywords:
+    "penalty": 3.5
+    "fine": 3.5
+    "violation": 4.0
+    "non compliance": 4.0
+    "breach": 3.5
+    "enforcement": 3.5
+    "sanction": 3.5
+    "punishment": 3.0
+    "prosecution": 3.5
+    "lawsuit": 3.0

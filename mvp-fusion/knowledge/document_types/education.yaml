@@ -1,0 +1,297 @@
+# Education and Training Document Types
+# For Scout's EdTech SaaS and educational intelligence platform
+
+# Academic Content
+lesson_plan:
+  weight: 2.5
+  keywords:
+    "lesson plan": 4.0
+    "objective": 2.5
+    "learning": 2.5
+    "activity": 2.0
+    "assessment": 2.5
+    "curriculum": 2.5
+    "grade": 2.0
+
+syllabus:
+  weight: 2.5
+  keywords:
+    "syllabus": 4.0
+    "course": 2.5
+    "semester": 2.0
+    "schedule": 2.0
+    "assignments": 2.5
+    "grading": 2.5
+    "textbook": 2.0
+
+assignment:
+  weight: 2.0
+  keywords:
+    "assignment": 3.5
+    "homework": 3.0
+    "due date": 2.5
+    "instructions": 2.0
+    "rubric": 2.5
+    "points": 2.0
+    "submit": 2.0
+
+exam:
+  weight: 2.0
+  keywords:
+    "exam": 3.5
+    "test": 3.0
+    "quiz": 2.5
+    "midterm": 2.5
+    "final": 2.5
+    "questions": 2.0
+    "answer": 2.0
+
+# Student Records and Assessment
+transcript:
+  weight: 2.5
+  keywords:
+    "transcript": 4.0
+    "grades": 3.0
+    "gpa": 3.0
+    "credits": 2.5
+    "semester": 2.0
+    "degree": 2.5
+    "graduation": 2.5
+
+report_card:
+  weight: 2.0
+  keywords:
+    "report card": 4.0
+    "progress report": 3.5
+    "grades": 2.5
+    "subject": 2.0
+    "teacher": 2.0
+    "parent": 2.0
+
+iep:
+  weight: 2.5
+  keywords:
+    "iep": 4.0
+    "individualized education program": 4.0
+    "special education": 3.5
+    "accommodation": 3.0
+    "modification": 2.5
+    "goals": 2.5
+
+# Administrative Documents
+enrollment_form:
+  weight: 2.0
+  keywords:
+    "enrollment": 3.5
+    "registration": 3.0
+    "student": 2.5
+    "guardian": 2.0
+    "emergency contact": 2.5
+    "medical": 2.0
+
+attendance_record:
+  weight: 2.0
+  keywords:
+    "attendance": 3.5
+    "absent": 2.5
+    "present": 2.0
+    "tardy": 2.5
+    "excused": 2.0
+    "unexcused": 2.5
+
+discipline_report:
+  weight: 2.0
+  keywords:
+    "discipline": 3.0
+    "behavior": 2.5
+    "incident": 2.5
+    "suspension": 2.5
+    "detention": 2.5
+    "referral": 2.5
+
+# Curriculum and Standards
+curriculum_guide:
+  weight: 2.0
+  keywords:
+    "curriculum guide": 4.0
+    "standards": 2.5
+    "benchmarks": 2.0
+    "scope": 2.0
+    "sequence": 2.0
+    "alignment": 2.0
+
+assessment_rubric:
+  weight: 2.0
+  keywords:
+    "rubric": 3.5
+    "criteria": 2.5
+    "performance": 2.0
+    "levels": 2.0
+    "scoring": 2.5
+    "evaluation": 2.0
+
+learning_objectives:
+  weight: 2.0
+  keywords:
+    "learning objectives": 4.0
+    "outcomes": 2.5
+    "goals": 2.0
+    "measurable": 2.0
+    "bloom": 2.0
+
+# Training and Professional Development
+training_manual:
+  weight: 2.0
+  keywords:
+    "training manual": 4.0
+    "training": 2.5
+    "professional development": 3.0
+    "workshop": 2.0
+    "certification": 2.5
+
+course_catalog:
+  weight: 1.5
+  keywords:
+    "course catalog": 4.0
+    "catalog": 2.5
+    "offerings": 2.0
+    "prerequisites": 2.5
+    "description": 2.0
+
+employee_handbook:
+  weight: 1.5
+  keywords:
+    "employee handbook": 4.0
+    "staff": 2.0
+    "policies": 2.5
+    "procedures": 2.0
+    "guidelines": 2.0
+
+# Research and Publications
+research_paper:
+  weight: 2.0
+  keywords:
+    "research paper": 4.0
+    "abstract": 2.5
+    "methodology": 2.5
+    "findings": 2.5
+    "conclusion": 2.0
+    "bibliography": 2.5
+
+thesis:
+  weight: 2.0
+  keywords:
+    "thesis": 4.0
+    "dissertation": 3.5
+    "research": 2.5
+    "hypothesis": 2.5
+    "defense": 2.5
+    "committee": 2.0
+
+# Digital Learning
+online_course:
+  weight: 2.0
+  keywords:
+    "online course": 3.5
+    "e-learning": 3.0
+    "virtual": 2.5
+    "module": 2.5
+    "video": 2.0
+    "interactive": 2.0
+
+lms_content:
+  weight: 2.0
+  keywords:
+    "lms": 3.5
+    "learning management system": 4.0
+    "blackboard": 2.5
+    "canvas": 2.5
+    "moodle": 2.5
+
+webinar:
+  weight: 1.5
+  keywords:
+    "webinar": 3.5
+    "online training": 3.0
+    "virtual meeting": 2.5
+    "presentation": 2.0
+    "recording": 2.0
+
+# Special Programs
+gifted_program:
+  weight: 1.5
+  keywords:
+    "gifted": 3.0
+    "talented": 2.5
+    "enrichment": 2.5
+    "advanced": 2.0
+    "acceleration": 2.5
+
+remedial_program:
+  weight: 1.5
+  keywords:
+    "remedial": 3.0
+    "intervention": 2.5
+    "support": 2.0
+    "struggling": 2.0
+    "additional help": 2.5
+
+# Testing and Evaluation
+standardized_test:
+  weight: 2.0
+  keywords:
+    "standardized test": 4.0
+    "state test": 3.0
+    "assessment": 2.5
+    "score": 2.5
+    "percentile": 2.5
+    "benchmark": 2.0
+
+placement_test:
+  weight: 2.0
+  keywords:
+    "placement test": 4.0
+    "placement": 3.0
+    "level": 2.0
+    "readiness": 2.0
+    "prerequisite": 2.5
+
+# Parent Communication
+parent_communication:
+  weight: 1.5
+  keywords:
+    "parent": 2.5
+    "guardian": 2.0
+    "conference": 2.0
+    "meeting": 2.0
+    "communication": 2.0
+    "newsletter": 2.0
+
+progress_report:
+  weight: 2.0
+  keywords:
+    "progress report": 4.0
+    "progress": 2.5
+    "improvement": 2.0
+    "concerns": 2.0
+    "recommendations": 2.0
+
+# Financial Aid and Scholarships
+financial_aid:
+  weight: 2.0
+  keywords:
+    "financial aid": 4.0
+    "fafsa": 3.5
+    "scholarship": 3.0
+    "grant": 2.5
+    "loan": 2.5
+    "tuition": 2.5
+
+scholarship_application:
+  weight: 2.0
+  keywords:
+    "scholarship application": 4.0
+    "merit": 2.5
+    "need-based": 2.5
+    "essay": 2.0
+    "recommendation": 2.5

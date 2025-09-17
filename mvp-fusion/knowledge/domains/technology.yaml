@@ -1,69 +1,182 @@
-# Technology Domain Patterns
-# AI, Software, and Cybersecurity
+# Technology - Software development and computing intelligence
+# Routes to TechTech SaaS specialists for technology MVP opportunities
 
-technology:
-  weight: 1.0
+# Software Development
+software_development:
+  weight: 3.5
   keywords:
-    software: 2.0
-    programming: 2.0  
-    algorithm: 2.0
-    database: 1.5
-    cloud: 1.5
-    api: 1.5
-    framework: 1.0
-    development: 1.0
-    code: 1.0
-    tech: 1.0
-  entities:
-    programming_languages: ["python", "javascript", "java", "c++", "go", "rust"]
-    frameworks: ["react", "angular", "vue", "django", "flask", "spring"]
-    cloud_services: ["aws", "azure", "gcp", "kubernetes", "docker"]
+    "software": 4.0
+    "development": 3.5
+    "programming": 4.0
+    "coding": 3.5
+    "developer": 3.5
+    "engineer": 3.5
+    "code": 3.5
+    "application": 3.5
+    "app": 3.0
+    "system": 3.0
 
-artificial_intelligence:
-  weight: 1.0
+# Programming Languages
+programming_languages:
+  weight: 3.0
   keywords:
-    "artificial intelligence": 3.0
-    "machine learning": 3.0
-    "deep learning": 2.5
-    "neural network": 2.5
-    ai: 2.0
-    ml: 2.0
-    nlp: 2.0
-    "computer vision": 2.0
-    llm: 1.5
-    gpt: 1.5
-  entities:
-    ai_models: ["gpt", "bert", "transformer", "cnn", "rnn", "lstm"]
-    ml_frameworks: ["tensorflow", "pytorch", "scikit-learn", "keras"]
-    ai_companies: ["openai", "anthropic", "google", "microsoft", "meta"]
+    "python": 3.5
+    "javascript": 3.5
+    "java": 3.5
+    "c++": 3.0
+    "go": 3.0
+    "rust": 3.0
+    "typescript": 3.5
+    "php": 3.0
+    "ruby": 3.0
+    "swift": 3.0
 
+# Frameworks and Libraries
+frameworks:
+  weight: 3.0
+  keywords:
+    "framework": 3.5
+    "library": 3.0
+    "react": 3.5
+    "angular": 3.5
+    "vue": 3.0
+    "django": 3.0
+    "flask": 3.0
+    "spring": 3.0
+    "express": 3.0
+    "bootstrap": 3.0
+
+# Cloud and Infrastructure
+cloud_infrastructure:
+  weight: 3.5
+  keywords:
+    "cloud": 4.0
+    "aws": 3.5
+    "azure": 3.5
+    "gcp": 3.5
+    "google cloud": 3.5
+    "kubernetes": 3.5
+    "docker": 3.5
+    "container": 3.5
+    "microservices": 3.5
+    "serverless": 3.5
+
+# Database and Storage
+database:
+  weight: 3.0
+  keywords:
+    "database": 3.5
+    "sql": 3.5
+    "nosql": 3.5
+    "mysql": 3.0
+    "postgresql": 3.0
+    "mongodb": 3.0
+    "redis": 3.0
+    "elasticsearch": 3.0
+    "data": 3.0
+    "storage": 3.0
+
+# API and Integration
+api_integration:
+  weight: 3.5
+  keywords:
+    "api": 4.0
+    "rest": 3.5
+    "graphql": 3.5
+    "webhook": 3.5
+    "integration": 3.5
+    "microservices": 3.5
+    "service": 3.0
+    "endpoint": 3.5
+    "request": 3.0
+    "response": 3.0
+
+# DevOps and Deployment
+devops:
+  weight: 3.5
+  keywords:
+    "devops": 4.0
+    "deployment": 3.5
+    "ci/cd": 4.0
+    "continuous integration": 3.5
+    "automation": 3.5
+    "pipeline": 3.5
+    "monitoring": 3.5
+    "logging": 3.0
+    "testing": 3.5
+    "deployment": 3.5
+
+# Cybersecurity
 cybersecurity:
-  weight: 1.0
+  weight: 3.5
   keywords:
-    cybersecurity: 2.5
-    security: 2.0
-    encryption: 2.0
-    firewall: 1.5
-    malware: 1.5
-    phishing: 1.5
-    vulnerability: 1.5
-    breach: 1.5
-    hacking: 1.0
-    "penetration testing": 1.0
-  entities:
-    threats: ["malware", "ransomware", "phishing", "ddos", "sql injection"]
-    tools: ["antivirus", "firewall", "vpn", "ssl", "two-factor"]
+    "cybersecurity": 4.0
+    "security": 3.5
+    "encryption": 3.5
+    "authentication": 3.5
+    "authorization": 3.5
+    "vulnerability": 3.5
+    "threat": 3.5
+    "firewall": 3.0
+    "malware": 3.5
+    "phishing": 3.0
 
-gaming:
-  weight: 1.0
+# Mobile Development
+mobile_development:
+  weight: 3.0
   keywords:
-    gaming: 2.0
-    "video games": 2.0
-    esports: 1.5
-    console: 1.5
-    "pc gaming": 1.5
-    "mobile games": 1.0
-    streaming: 1.0
-  entities:
-    platforms: ["playstation", "xbox", "nintendo", "steam", "epic games"]
-    genres: ["fps", "rpg", "mmo", "strategy", "puzzle", "simulation"]
+    "mobile": 3.5
+    "mobile development": 4.0
+    "ios": 3.5
+    "android": 3.5
+    "react native": 3.5
+    "flutter": 3.5
+    "swift": 3.0
+    "kotlin": 3.0
+    "app store": 3.0
+    "mobile app": 3.5
+
+# Web Development
+web_development:
+  weight: 3.0
+  keywords:
+    "web": 3.5
+    "web development": 4.0
+    "frontend": 3.5
+    "backend": 3.5
+    "full stack": 3.5
+    "html": 3.0
+    "css": 3.0
+    "responsive": 3.0
+    "website": 3.0
+    "browser": 3.0
+
+# Data Science and AI
+data_science_ai:
+  weight: 3.5
+  keywords:
+    "data science": 4.0
+    "machine learning": 4.0
+    "artificial intelligence": 4.0
+    "ai": 3.5
+    "ml": 3.5
+    "deep learning": 3.5
+    "neural network": 3.5
+    "nlp": 3.5
+    "computer vision": 3.5
+    "algorithm": 3.5
+
+# Emerging Technologies
+emerging_tech:
+  weight: 3.0
+  keywords:
+    "blockchain": 3.5
+    "cryptocurrency": 3.0
+    "iot": 3.5
+    "internet of things": 3.5
+    "ar": 3.0
+    "vr": 3.0
+    "augmented reality": 3.0
+    "virtual reality": 3.0
+    "quantum": 3.0
+    "edge computing": 3.5

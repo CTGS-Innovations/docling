@@ -1,0 +1,181 @@
+# Manufacturing - Industrial, operations, safety intelligence
+# Routes to manufacturing SaaS specialists for industrial MVP opportunities
+
+# Production and Manufacturing
+production:
+  weight: 3.5
+  keywords:
+    "manufacturing": 4.0
+    "production": 4.0
+    "factory": 3.5
+    "plant": 3.5
+    "assembly": 3.5
+    "fabrication": 3.5
+    "machining": 3.5
+    "processing": 3.5
+    "industrial": 3.5
+    "operation": 3.0
+
+# Quality Control and Assurance
+quality_control:
+  weight: 3.5
+  keywords:
+    "quality control": 4.0
+    "qc": 3.5
+    "quality assurance": 4.0
+    "qa": 3.5
+    "inspection": 3.5
+    "testing": 3.5
+    "defect": 3.5
+    "reject": 3.5
+    "tolerance": 3.5
+    "specification": 3.5
+
+# Safety and Compliance
+safety_compliance:
+  weight: 4.0
+  keywords:
+    "safety": 4.0
+    "workplace safety": 4.0
+    "osha": 4.0
+    "occupational safety": 4.0
+    "hazard": 3.5
+    "ppe": 4.0
+    "personal protective equipment": 4.0
+    "safety training": 3.5
+    "accident": 3.5
+    "injury": 3.5
+
+# Equipment and Maintenance
+equipment_maintenance:
+  weight: 3.5
+  keywords:
+    "equipment": 3.5
+    "machinery": 3.5
+    "machine": 3.5
+    "maintenance": 4.0
+    "repair": 3.5
+    "downtime": 4.0
+    "preventive maintenance": 4.0
+    "predictive maintenance": 4.0
+    "reliability": 3.5
+    "calibration": 3.5
+
+# Supply Chain and Inventory
+supply_chain:
+  weight: 3.5
+  keywords:
+    "supply chain": 4.0
+    "inventory": 3.5
+    "procurement": 3.5
+    "purchasing": 3.5
+    "vendor": 3.5
+    "supplier": 3.5
+    "raw materials": 3.5
+    "components": 3.5
+    "parts": 3.5
+    "warehouse": 3.5
+
+# Lean Manufacturing
+lean_manufacturing:
+  weight: 3.0
+  keywords:
+    "lean": 3.5
+    "lean manufacturing": 4.0
+    "continuous improvement": 3.5
+    "kaizen": 3.5
+    "waste": 3.5
+    "efficiency": 3.5
+    "optimization": 3.5
+    "value stream": 3.5
+    "six sigma": 3.5
+    "5s": 3.0
+
+# Automation and Technology
+automation:
+  weight: 3.5
+  keywords:
+    "automation": 4.0
+    "robotics": 4.0
+    "iot": 3.5
+    "industry 4.0": 4.0
+    "smart factory": 4.0
+    "digital transformation": 3.5
+    "sensors": 3.5
+    "plc": 3.5
+    "scada": 3.5
+    "mes": 4.0
+
+# Environmental and Sustainability
+environmental:
+  weight: 2.5
+  keywords:
+    "environmental": 3.0
+    "sustainability": 3.5
+    "green": 2.5
+    "eco friendly": 3.0
+    "carbon footprint": 3.0
+    "waste management": 3.5
+    "recycling": 3.0
+    "emissions": 3.5
+    "pollution": 3.0
+    "renewable": 2.5
+
+# Process Management
+process_management:
+  weight: 3.0
+  keywords:
+    "process": 3.5
+    "workflow": 3.5
+    "procedure": 3.5
+    "sop": 4.0
+    "standard operating procedure": 4.0
+    "process improvement": 3.5
+    "optimization": 3.5
+    "standardization": 3.5
+    "best practices": 3.0
+
+# Planning and Scheduling
+planning_scheduling:
+  weight: 3.5
+  keywords:
+    "planning": 3.5
+    "scheduling": 4.0
+    "capacity": 3.5
+    "resource": 3.0
+    "allocation": 3.0
+    "timeline": 3.0
+    "deadline": 3.0
+    "milestone": 3.0
+    "project": 3.0
+    "erp": 4.0
+
+# Cost and Financial Management
+cost_management:
+  weight: 3.0
+  keywords:
+    "cost": 3.5
+    "budget": 3.5
+    "expense": 3.0
+    "margin": 3.5
+    "profit": 3.0
+    "roi": 3.5
+    "financial": 3.0
+    "accounting": 3.0
+    "pricing": 3.5
+    "costing": 3.5
+
+# Regulatory Standards
+regulatory_standards:
+  weight: 3.0
+  keywords:
+    "iso": 3.5
+    "iso 9001": 4.0
+    "iso 14001": 3.5
+    "regulatory": 3.5
+    "compliance": 3.5
+    "standard": 3.5
+    "certification": 3.5
+    "audit": 3.5
+    "inspection": 3.5
+    "approval": 3.0

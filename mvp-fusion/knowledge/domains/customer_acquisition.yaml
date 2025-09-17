@@ -1,0 +1,195 @@
+# Customer Acquisition - Marketing channels and growth strategies
+# Strategic intelligence for Scout's customer acquisition analysis across SaaS domains
+
+# Digital Marketing Channels
+digital_marketing:
+  weight: 3.0
+  keywords:
+    "digital marketing": 3.5
+    "online marketing": 3.5
+    "internet marketing": 3.0
+    "web marketing": 3.0
+    "marketing campaign": 3.5
+    "ad campaign": 3.5
+    "advertising": 3.0
+    "promotion": 3.0
+    "campaign": 3.0
+
+# Search Engine Marketing
+search_marketing:
+  weight: 3.5
+  keywords:
+    "seo": 4.0
+    "search engine optimization": 4.0
+    "sem": 3.5
+    "search engine marketing": 3.5
+    "google ads": 4.0
+    "ppc": 3.5
+    "pay per click": 3.5
+    "adwords": 3.5
+    "keyword": 3.0
+    "ranking": 3.0
+
+# Social Media Marketing
+social_marketing:
+  weight: 3.0
+  keywords:
+    "social media marketing": 4.0
+    "facebook ads": 3.5
+    "instagram ads": 3.5
+    "linkedin ads": 3.5
+    "twitter ads": 3.0
+    "social advertising": 3.5
+    "influencer": 3.5
+    "viral": 3.0
+    "engagement": 3.0
+    "followers": 3.0
+
+# Content Marketing
+content_marketing:
+  weight: 3.0
+  keywords:
+    "content marketing": 4.0
+    "blog": 3.0
+    "content strategy": 3.5
+    "thought leadership": 3.5
+    "educational content": 3.0
+    "webinar": 3.5
+    "whitepaper": 3.5
+    "case study": 3.5
+    "storytelling": 3.0
+    "brand awareness": 3.5
+
+# Email Marketing
+email_marketing:
+  weight: 3.0
+  keywords:
+    "email marketing": 4.0
+    "newsletter": 3.5
+    "email campaign": 3.5
+    "drip campaign": 3.5
+    "automation": 3.5
+    "list building": 3.5
+    "lead nurturing": 4.0
+    "segmentation": 3.5
+    "personalization": 3.5
+    "open rate": 3.0
+
+# Sales and Lead Generation
+sales_processes:
+  weight: 3.5
+  keywords:
+    "lead generation": 4.0
+    "sales funnel": 4.0
+    "conversion": 4.0
+    "pipeline": 3.5
+    "prospect": 3.5
+    "qualified lead": 4.0
+    "sales process": 3.5
+    "closing": 3.5
+    "deal": 3.0
+    "opportunity": 3.0
+
+# Customer Acquisition Cost
+acquisition_metrics:
+  weight: 4.0
+  keywords:
+    "customer acquisition cost": 4.0
+    "cac": 4.0
+    "cost per acquisition": 4.0
+    "cpa": 3.5
+    "ltv": 4.0
+    "lifetime value": 4.0
+    "acquisition": 3.5
+    "retention": 3.5
+    "churn": 3.5
+    "growth rate": 3.5
+
+# Referral and Word of Mouth
+referral_marketing:
+  weight: 3.5
+  keywords:
+    "referral": 4.0
+    "word of mouth": 4.0
+    "recommendation": 3.5
+    "advocate": 3.5
+    "ambassador": 3.5
+    "viral coefficient": 3.5
+    "network effect": 4.0
+    "organic growth": 4.0
+    "testimonial": 3.5
+    "review": 3.0
+
+# Partnership and Channel
+partnership_channels:
+  weight: 3.0
+  keywords:
+    "partnership": 3.5
+    "channel partner": 3.5
+    "reseller": 3.5
+    "affiliate": 3.5
+    "integration": 3.5
+    "ecosystem": 3.5
+    "marketplace": 3.5
+    "distribution": 3.5
+    "channel": 3.0
+    "alliance": 3.0
+
+# Event and Trade Show Marketing
+event_marketing:
+  weight: 2.5
+  keywords:
+    "event marketing": 3.5
+    "trade show": 3.5
+    "conference": 3.0
+    "networking": 3.5
+    "booth": 3.0
+    "exhibition": 3.0
+    "speaking": 3.0
+    "sponsorship": 3.5
+    "demo": 3.5
+    "meetup": 3.0
+
+# Product-Led Growth
+product_led_growth:
+  weight: 3.5
+  keywords:
+    "product led growth": 4.0
+    "plg": 3.5
+    "freemium": 4.0
+    "free trial": 4.0
+    "self serve": 3.5
+    "viral loops": 3.5
+    "in app": 3.0
+    "user onboarding": 3.5
+    "activation": 3.5
+    "feature adoption": 3.5
+
+# Growth Hacking
+growth_hacking:
+  weight: 3.0
+  keywords:
+    "growth hacking": 4.0
+    "growth hack": 3.5
+    "viral marketing": 3.5
+    "guerrilla marketing": 3.0
+    "unconventional": 3.0
+    "creative": 2.5
+    "experimental": 3.0
+    "rapid growth": 3.5
+    "scalable": 3.0
+
+# Conversion Optimization
+conversion_optimization:
+  weight: 3.5
+  keywords:
+    "conversion optimization": 4.0
+    "cro": 3.5
+    "a/b testing": 4.0
+    "landing page": 3.5
+    "funnel optimization": 3.5
+    "user experience": 3.5
+    "ux": 3.0
+    "testing": 3.0
+    "optimization": 3.0
+    "improvement": 2.5

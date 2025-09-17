@@ -1,0 +1,151 @@
+# Fintech - Banking, payments, financial services intelligence
+# Routes to fintech SaaS specialists for financial MVP opportunities
+
+# Banking and Financial Services
+banking:
+  weight: 3.5
+  keywords:
+    "banking": 4.0
+    "financial services": 4.0
+    "bank": 3.5
+    "credit union": 3.0
+    "loan": 3.5
+    "mortgage": 3.5
+    "credit": 3.5
+    "debt": 3.0
+    "savings": 3.0
+    "checking": 3.0
+
+# Payments and Transactions
+payments:
+  weight: 3.5
+  keywords:
+    "payment": 4.0
+    "transaction": 3.5
+    "payment processing": 4.0
+    "payment gateway": 4.0
+    "merchant": 3.5
+    "pos": 3.5
+    "point of sale": 3.5
+    "mobile payment": 3.5
+    "digital wallet": 4.0
+    "contactless": 3.0
+
+# Investment and Trading
+investment:
+  weight: 3.0
+  keywords:
+    "investment": 3.5
+    "trading": 3.5
+    "stock": 3.5
+    "securities": 3.5
+    "portfolio": 3.5
+    "asset management": 3.5
+    "wealth management": 3.5
+    "robo advisor": 4.0
+    "broker": 3.0
+    "brokerage": 3.0
+
+# Cryptocurrency and Blockchain
+crypto:
+  weight: 3.5
+  keywords:
+    "cryptocurrency": 4.0
+    "bitcoin": 3.5
+    "ethereum": 3.5
+    "blockchain": 4.0
+    "crypto": 3.5
+    "digital currency": 3.5
+    "defi": 4.0
+    "decentralized finance": 4.0
+    "smart contract": 4.0
+    "wallet": 3.0
+
+# Insurance Technology
+insurtech:
+  weight: 3.0
+  keywords:
+    "insurance": 3.5
+    "insurtech": 4.0
+    "policy": 3.0
+    "premium": 3.0
+    "claim": 3.5
+    "underwriting": 3.5
+    "actuarial": 3.0
+    "risk assessment": 3.5
+    "coverage": 3.0
+    "liability": 3.0
+
+# Lending and Credit
+lending:
+  weight: 3.5
+  keywords:
+    "lending": 4.0
+    "loan": 3.5
+    "credit score": 4.0
+    "credit report": 4.0
+    "underwriting": 3.5
+    "borrower": 3.5
+    "lender": 3.5
+    "peer to peer": 3.5
+    "p2p lending": 4.0
+    "alternative lending": 4.0
+
+# Regulatory and Compliance
+financial_compliance:
+  weight: 3.0
+  keywords:
+    "aml": 4.0
+    "kyc": 4.0
+    "anti money laundering": 4.0
+    "know your customer": 4.0
+    "pci dss": 4.0
+    "sox": 3.5
+    "sec": 3.5
+    "finra": 3.5
+    "compliance": 3.5
+    "regulatory": 3.0
+
+# Personal Finance
+personal_finance:
+  weight: 2.5
+  keywords:
+    "personal finance": 3.5
+    "budgeting": 3.5
+    "expense tracking": 3.5
+    "financial planning": 3.5
+    "retirement": 3.0
+    "savings": 3.0
+    "financial advisor": 3.0
+    "financial wellness": 3.0
+    "money management": 3.5
+
+# Business Finance
+business_finance:
+  weight: 3.0
+  keywords:
+    "accounting": 3.5
+    "bookkeeping": 3.5
+    "invoicing": 3.5
+    "payroll": 3.5
+    "expense management": 3.5
+    "cash flow": 3.5
+    "financial reporting": 3.5
+    "accounts receivable": 3.5
+    "accounts payable": 3.5
+    "tax": 3.0
+
+# Fraud and Security
+financial_security:
+  weight: 3.0
+  keywords:
+    "fraud": 4.0
+    "fraud detection": 4.0
+    "fraud prevention": 4.0
+    "security": 3.5
+    "identity theft": 3.5
+    "chargeback": 3.5
+    "risk management": 3.5
+    "authentication": 3.5
+    "biometric": 3.0
+    "two factor": 3.0

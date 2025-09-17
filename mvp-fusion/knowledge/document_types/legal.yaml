@@ -1,0 +1,276 @@
+# Legal and Compliance Document Types
+# For Scout's legal tech SaaS and compliance intelligence platform
+
+# Contracts and Agreements
+contract:
+  weight: 2.5
+  keywords:
+    "contract": 3.5
+    "agreement": 3.0
+    "party": 2.5
+    "whereas": 3.0
+    "therefore": 2.5
+    "consideration": 2.5
+    "breach": 2.5
+    "termination": 2.5
+
+nda:
+  weight: 2.5
+  keywords:
+    "nda": 4.0
+    "non-disclosure agreement": 4.0
+    "confidentiality": 3.5
+    "confidential information": 3.5
+    "proprietary": 2.5
+    "trade secret": 3.0
+
+employment_agreement:
+  weight: 2.0
+  keywords:
+    "employment agreement": 4.0
+    "employee": 2.5
+    "employer": 2.5
+    "compensation": 2.5
+    "benefits": 2.0
+    "at-will": 2.5
+    "non-compete": 3.0
+
+licensing_agreement:
+  weight: 2.0
+  keywords:
+    "licensing agreement": 4.0
+    "license": 3.0
+    "licensor": 2.5
+    "licensee": 2.5
+    "royalty": 2.5
+    "intellectual property": 3.0
+
+# Litigation and Court Documents
+complaint:
+  weight: 2.5
+  keywords:
+    "complaint": 3.5
+    "plaintiff": 3.0
+    "defendant": 3.0
+    "cause of action": 3.0
+    "damages": 2.5
+    "relief": 2.5
+    "jurisdiction": 2.5
+
+motion:
+  weight: 2.0
+  keywords:
+    "motion": 3.0
+    "move": 2.5
+    "respectfully": 2.5
+    "court": 2.5
+    "relief": 2.5
+    "pursuant": 2.5
+
+deposition:
+  weight: 2.0
+  keywords:
+    "deposition": 4.0
+    "testimony": 3.0
+    "sworn": 2.5
+    "examination": 2.5
+    "transcript": 2.5
+    "oath": 2.5
+
+judgment:
+  weight: 2.0
+  keywords:
+    "judgment": 3.5
+    "court orders": 3.0
+    "decree": 2.5
+    "ruling": 2.5
+    "final": 2.5
+
+# Intellectual Property
+patent_application:
+  weight: 2.5
+  keywords:
+    "patent application": 4.0
+    "invention": 3.0
+    "claims": 3.0
+    "prior art": 3.0
+    "embodiment": 2.5
+    "uspto": 3.0
+
+trademark_application:
+  weight: 2.0
+  keywords:
+    "trademark": 3.5
+    "mark": 2.5
+    "service mark": 3.0
+    "registration": 2.5
+    "goods and services": 2.5
+
+copyright_notice:
+  weight: 1.5
+  keywords:
+    "copyright": 3.5
+    "©": 3.0
+    "all rights reserved": 3.0
+    "reproduction": 2.5
+    "distribution": 2.5
+
+# Corporate and Business Law
+articles_of_incorporation:
+  weight: 2.0
+  keywords:
+    "articles of incorporation": 4.0
+    "corporation": 3.0
+    "incorporation": 3.0
+    "shares": 2.5
+    "directors": 2.5
+
+bylaws:
+  weight: 2.0
+  keywords:
+    "bylaws": 4.0
+    "governance": 2.5
+    "board": 2.5
+    "shareholders": 2.5
+    "meetings": 2.0
+    "voting": 2.5
+
+board_resolution:
+  weight: 1.5
+  keywords:
+    "board resolution": 4.0
+    "resolved": 3.0
+    "directors": 2.5
+    "board": 2.5
+    "authorization": 2.5
+
+# Regulatory and Compliance
+compliance_report:
+  weight: 2.0
+  keywords:
+    "compliance": 3.0
+    "regulatory": 2.5
+    "violation": 2.5
+    "audit": 2.5
+    "findings": 2.5
+    "corrective action": 2.5
+
+policy_document:
+  weight: 1.5
+  keywords:
+    "policy": 3.0
+    "procedure": 2.5
+    "guideline": 2.0
+    "standard": 2.0
+    "requirement": 2.0
+
+# Real Estate Law
+lease_agreement:
+  weight: 2.0
+  keywords:
+    "lease agreement": 4.0
+    "landlord": 3.0
+    "tenant": 3.0
+    "rent": 2.5
+    "premises": 2.5
+    "term": 2.0
+
+purchase_agreement:
+  weight: 2.0
+  keywords:
+    "purchase agreement": 4.0
+    "buyer": 2.5
+    "seller": 2.5
+    "property": 2.5
+    "closing": 2.5
+    "deed": 2.5
+
+# Family Law
+divorce_decree:
+  weight: 2.0
+  keywords:
+    "divorce": 3.5
+    "dissolution": 3.0
+    "custody": 2.5
+    "alimony": 2.5
+    "child support": 3.0
+    "marital property": 2.5
+
+will:
+  weight: 2.0
+  keywords:
+    "last will": 4.0
+    "testament": 3.5
+    "executor": 3.0
+    "beneficiary": 2.5
+    "bequest": 2.5
+    "probate": 2.5
+
+# Criminal Law
+indictment:
+  weight: 2.0
+  keywords:
+    "indictment": 4.0
+    "grand jury": 3.0
+    "charges": 2.5
+    "felony": 2.5
+    "misdemeanor": 2.5
+
+plea_agreement:
+  weight: 2.0
+  keywords:
+    "plea agreement": 4.0
+    "guilty": 2.5
+    "prosecution": 2.5
+    "sentencing": 2.5
+
+# Legal Research and Analysis
+legal_memo:
+  weight: 2.0
+  keywords:
+    "legal memorandum": 4.0
+    "memo": 3.0
+    "analysis": 2.5
+    "issue": 2.5
+    "conclusion": 2.0
+    "recommendation": 2.5
+
+case_law:
+  weight: 2.0
+  keywords:
+    "case law": 3.5
+    "precedent": 3.0
+    "holding": 2.5
+    "opinion": 2.5
+    "dissent": 2.5
+    "concur": 2.0
+
+legal_brief:
+  weight: 2.0
+  keywords:
+    "brief": 3.0
+    "argument": 2.5
+    "facts": 2.5
+    "law": 2.0
+    "conclusion": 2.0
+
+# Immigration Law
+visa_application:
+  weight: 2.0
+  keywords:
+    "visa": 3.0
+    "immigration": 2.5
+    "petition": 2.5
+    "green card": 3.0
+    "uscis": 3.0
+    "sponsor": 2.5
+
+# Tax Law
+tax_opinion:
+  weight: 1.5
+  keywords:
+    "tax opinion": 3.5
+    "tax": 2.5
+    "irs": 2.5
+    "regulation": 2.5
+    "code": 2.0

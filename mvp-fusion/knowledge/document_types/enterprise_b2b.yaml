@@ -1,0 +1,222 @@
+# Enterprise and B2B SaaS Document Types
+# For Scout's enterprise intelligence and B2B market analysis
+
+# Sales and Marketing Documents
+sales_proposal:
+  weight: 2.5
+  keywords:
+    "proposal": 3.0
+    "quote": 2.5
+    "estimate": 2.0
+    "pricing": 2.5
+    "cost": 2.0
+    "investment": 2.0
+    "roi": 2.5
+    "return on investment": 2.5
+    "implementation": 2.0
+
+rfp_response:
+  weight: 2.5
+  keywords:
+    "rfp": 4.0
+    "request for proposal": 4.0
+    "bid": 2.5
+    "tender": 2.0
+    "procurement": 2.5
+    "vendor": 2.0
+    "supplier": 2.0
+
+case_study:
+  weight: 2.0
+  keywords:
+    "case study": 4.0
+    "success story": 3.0
+    "customer story": 3.0
+    "results": 2.5
+    "achieved": 2.0
+    "improved": 2.0
+    "increased": 2.0
+    "reduced": 2.0
+
+whitepaper:
+  weight: 2.0
+  keywords:
+    "whitepaper": 4.0
+    "white paper": 4.0
+    "research": 2.0
+    "study": 2.0
+    "analysis": 2.0
+    "insights": 2.0
+    "findings": 2.5
+
+# Contract and Legal Documents
+service_agreement:
+  weight: 2.0
+  keywords:
+    "service agreement": 3.5
+    "sla": 3.0
+    "service level": 3.0
+    "uptime": 2.5
+    "availability": 2.0
+    "performance": 2.0
+    "penalties": 2.0
+
+master_service_agreement:
+  weight: 2.0
+  keywords:
+    "msa": 3.5
+    "master service agreement": 4.0
+    "framework": 2.0
+    "terms": 2.0
+    "conditions": 2.0
+
+contract:
+  weight: 1.5
+  keywords:
+    "contract": 3.0
+    "agreement": 2.5
+    "party": 2.0
+    "whereas": 2.5
+    "therefore": 2.0
+    "execution": 2.0
+    "signatures": 2.0
+
+# Technical Documentation
+api_documentation:
+  weight: 2.0
+  keywords:
+    "api": 3.0
+    "endpoint": 2.5
+    "rest": 2.0
+    "graphql": 2.5
+    "webhook": 2.5
+    "integration": 2.5
+    "swagger": 2.5
+    "openapi": 2.5
+
+technical_specification:
+  weight: 2.0
+  keywords:
+    "technical specification": 3.5
+    "tech spec": 3.0
+    "requirements": 2.5
+    "architecture": 2.5
+    "design": 2.0
+    "implementation": 2.0
+
+system_documentation:
+  weight: 1.5
+  keywords:
+    "system": 2.0
+    "architecture": 2.5
+    "infrastructure": 2.0
+    "deployment": 2.0
+    "configuration": 2.0
+
+# Operations and Management
+project_plan:
+  weight: 1.5
+  keywords:
+    "project plan": 3.5
+    "timeline": 2.5
+    "milestones": 2.5
+    "deliverables": 2.5
+    "gantt": 2.0
+    "schedule": 2.0
+    "phases": 2.0
+
+status_report:
+  weight: 1.5
+  keywords:
+    "status report": 3.5
+    "progress": 2.5
+    "update": 2.0
+    "completed": 2.0
+    "in progress": 2.5
+    "blocked": 2.0
+    "issues": 2.0
+
+meeting_minutes:
+  weight: 1.0
+  keywords:
+    "meeting minutes": 4.0
+    "agenda": 2.5
+    "action items": 3.0
+    "decisions": 2.5
+    "attendees": 2.0
+    "next steps": 2.5
+
+# Procurement and Vendor Management
+vendor_evaluation:
+  weight: 2.0
+  keywords:
+    "vendor evaluation": 3.5
+    "supplier": 2.5
+    "assessment": 2.5
+    "criteria": 2.0
+    "scoring": 2.0
+    "comparison": 2.0
+
+purchase_order:
+  weight: 1.5
+  keywords:
+    "purchase order": 4.0
+    "po": 3.0
+    "order": 2.0
+    "quantity": 2.0
+    "unit price": 2.5
+    "total": 2.0
+
+invoice:
+  weight: 1.5
+  keywords:
+    "invoice": 3.5
+    "bill": 2.0
+    "amount due": 2.5
+    "payment terms": 2.5
+    "due date": 2.0
+    "remittance": 2.0
+
+# Training and Knowledge Management
+training_material:
+  weight: 1.5
+  keywords:
+    "training": 2.5
+    "course": 2.0
+    "curriculum": 2.0
+    "learning": 2.0
+    "objectives": 2.0
+    "modules": 2.0
+
+knowledge_base:
+  weight: 1.5
+  keywords:
+    "knowledge base": 3.5
+    "faq": 3.0
+    "frequently asked": 3.0
+    "help": 2.0
+    "support": 2.0
+    "troubleshooting": 2.5
+
+# Security and Compliance
+security_assessment:
+  weight: 2.0
+  keywords:
+    "security assessment": 3.5
+    "penetration test": 3.0
+    "vulnerability": 2.5
+    "audit": 2.5
+    "compliance": 2.5
+    "sox": 2.5
+    "gdpr": 2.5
+    "hipaa": 2.5
+
+data_sheet:
+  weight: 1.5
+  keywords:
+    "data sheet": 3.5
+    "datasheet": 3.0
+    "specifications": 2.5
+    "features": 2.0
+    "capabilities": 2.0
+    "performance": 2.0

@@ -1,0 +1,284 @@
+# E-commerce and Retail Document Types
+# For Scout's retail SaaS and e-commerce intelligence platform
+
+# Product Management
+product_listing:
+  weight: 2.5
+  keywords:
+    "product listing": 3.5
+    "sku": 3.0
+    "price": 2.5
+    "inventory": 2.5
+    "description": 2.0
+    "features": 2.0
+    "specifications": 2.0
+
+product_catalog:
+  weight: 2.0
+  keywords:
+    "product catalog": 4.0
+    "catalog": 3.0
+    "category": 2.5
+    "brand": 2.5
+    "collection": 2.0
+    "seasonal": 2.0
+
+inventory_report:
+  weight: 2.0
+  keywords:
+    "inventory": 3.0
+    "stock": 2.5
+    "quantity": 2.5
+    "reorder": 2.5
+    "out of stock": 3.0
+    "backorder": 2.5
+    "warehouse": 2.0
+
+# Sales and Orders
+purchase_order:
+  weight: 2.0
+  keywords:
+    "purchase order": 4.0
+    "order": 2.5
+    "quantity": 2.5
+    "unit price": 2.5
+    "total": 2.0
+    "delivery": 2.0
+
+sales_receipt:
+  weight: 2.0
+  keywords:
+    "receipt": 3.5
+    "transaction": 2.5
+    "payment": 2.5
+    "total": 2.0
+    "tax": 2.0
+    "change": 2.0
+
+invoice:
+  weight: 2.0
+  keywords:
+    "invoice": 3.5
+    "bill": 2.5
+    "amount due": 2.5
+    "payment terms": 2.5
+    "due date": 2.0
+
+return_authorization:
+  weight: 2.0
+  keywords:
+    "return": 3.0
+    "rma": 3.5
+    "return merchandise authorization": 4.0
+    "refund": 2.5
+    "exchange": 2.5
+    "defective": 2.5
+
+# Customer Experience
+customer_review:
+  weight: 2.5
+  keywords:
+    "review": 3.5
+    "rating": 3.0
+    "stars": 2.5
+    "feedback": 2.5
+    "recommend": 2.5
+    "customer": 2.0
+    "experience": 2.0
+
+product_review:
+  weight: 2.5
+  keywords:
+    "product review": 4.0
+    "quality": 2.5
+    "value": 2.0
+    "pros": 2.5
+    "cons": 2.5
+    "would buy again": 2.5
+
+customer_service:
+  weight: 2.0
+  keywords:
+    "customer service": 3.5
+    "support": 2.5
+    "complaint": 2.5
+    "inquiry": 2.0
+    "resolution": 2.5
+    "ticket": 2.0
+
+# Marketing and Promotions
+promotional_material:
+  weight: 1.5
+  keywords:
+    "promotion": 2.5
+    "sale": 2.5
+    "discount": 2.5
+    "coupon": 2.5
+    "deal": 2.0
+    "offer": 2.0
+
+email_campaign:
+  weight: 1.5
+  keywords:
+    "email campaign": 3.5
+    "newsletter": 2.5
+    "marketing": 2.0
+    "subject line": 2.5
+    "click rate": 2.0
+    "conversion": 2.5
+
+product_announcement:
+  weight: 1.5
+  keywords:
+    "product announcement": 3.5
+    "new product": 3.0
+    "launch": 2.5
+    "introducing": 2.5
+    "available": 2.0
+
+# Supply Chain and Logistics
+shipping_manifest:
+  weight: 2.0
+  keywords:
+    "shipping manifest": 4.0
+    "manifest": 3.0
+    "shipment": 2.5
+    "tracking": 2.5
+    "carrier": 2.0
+    "delivery": 2.0
+
+packing_slip:
+  weight: 2.0
+  keywords:
+    "packing slip": 4.0
+    "shipped": 2.5
+    "contents": 2.5
+    "package": 2.0
+    "items": 2.0
+
+bill_of_lading:
+  weight: 2.0
+  keywords:
+    "bill of lading": 4.0
+    "freight": 2.5
+    "cargo": 2.5
+    "shipper": 2.5
+    "consignee": 2.5
+
+vendor_agreement:
+  weight: 2.0
+  keywords:
+    "vendor agreement": 3.5
+    "supplier": 2.5
+    "terms": 2.0
+    "conditions": 2.0
+    "payment terms": 2.5
+
+# Financial and Analytics
+sales_report:
+  weight: 2.0
+  keywords:
+    "sales report": 4.0
+    "revenue": 2.5
+    "performance": 2.0
+    "growth": 2.0
+    "conversion rate": 2.5
+    "metrics": 2.0
+
+financial_report:
+  weight: 2.0
+  keywords:
+    "financial report": 3.5
+    "profit": 2.5
+    "margin": 2.5
+    "cost": 2.0
+    "expenses": 2.0
+    "roi": 2.5
+
+analytics_report:
+  weight: 2.0
+  keywords:
+    "analytics": 2.5
+    "traffic": 2.0
+    "visitors": 2.0
+    "bounce rate": 2.5
+    "sessions": 2.0
+    "pageviews": 2.0
+
+# Marketplace and Platform
+marketplace_listing:
+  weight: 2.0
+  keywords:
+    "marketplace": 2.5
+    "amazon": 2.5
+    "ebay": 2.5
+    "etsy": 2.0
+    "listing": 2.5
+    "seller": 2.0
+
+platform_policy:
+  weight: 1.5
+  keywords:
+    "platform policy": 3.5
+    "terms of service": 3.0
+    "guidelines": 2.5
+    "rules": 2.0
+    "compliance": 2.0
+
+# Subscription and Membership
+subscription_agreement:
+  weight: 2.0
+  keywords:
+    "subscription": 3.0
+    "recurring": 2.5
+    "membership": 2.5
+    "plan": 2.0
+    "billing cycle": 2.5
+    "cancel": 2.0
+
+loyalty_program:
+  weight: 1.5
+  keywords:
+    "loyalty": 2.5
+    "rewards": 2.5
+    "points": 2.5
+    "program": 2.0
+    "benefits": 2.0
+
+# Brand and Content
+brand_guidelines:
+  weight: 1.5
+  keywords:
+    "brand guidelines": 4.0
+    "brand": 2.5
+    "logo": 2.0
+    "colors": 2.0
+    "typography": 2.0
+    "style": 2.0
+
+content_strategy:
+  weight: 1.5
+  keywords:
+    "content strategy": 3.5
+    "content": 2.5
+    "strategy": 2.0
+    "messaging": 2.0
+    "voice": 2.0
+
+# Seasonal and Events
+seasonal_planning:
+  weight: 1.5
+  keywords:
+    "seasonal": 2.5
+    "holiday": 2.0
+    "planning": 2.0
+    "campaign": 2.0
+    "event": 2.0
+
+black_friday:
+  weight: 1.5
+  keywords:
+    "black friday": 4.0
+    "cyber monday": 3.5
+    "holiday sale": 3.0
+    "seasonal sale": 2.5

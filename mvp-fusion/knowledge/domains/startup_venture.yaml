@@ -1,0 +1,178 @@
+# Startup Venture - Company operations and business development intelligence
+# Routes to startup SaaS specialists for entrepreneurial business MVP opportunities
+
+# Startup Operations
+startup_operations:
+  weight: 4.0
+  keywords:
+    "startup": 4.0
+    "entrepreneur": 4.0
+    "founder": 4.0
+    "co-founder": 3.5
+    "early stage": 3.5
+    "seed stage": 3.5
+    "growth stage": 3.5
+    "scale": 3.5
+    "scaling": 3.5
+    "pivot": 3.5
+
+# Business Model and Strategy
+business_model:
+  weight: 3.5
+  keywords:
+    "business model": 4.0
+    "revenue model": 4.0
+    "monetization": 3.5
+    "value proposition": 4.0
+    "go to market": 4.0
+    "gtm": 3.5
+    "strategy": 3.5
+    "competitive advantage": 3.5
+    "moat": 3.5
+    "differentiation": 3.5
+
+# Product Development
+product_development:
+  weight: 3.5
+  keywords:
+    "product development": 4.0
+    "mvp": 4.0
+    "minimum viable product": 4.0
+    "prototype": 3.5
+    "iteration": 3.5
+    "feature": 3.0
+    "roadmap": 3.5
+    "development": 3.0
+    "launch": 3.5
+    "release": 3.0
+
+# Market and Customer
+market_customer:
+  weight: 3.5
+  keywords:
+    "market": 3.5
+    "target market": 4.0
+    "customer": 3.5
+    "user": 3.0
+    "customer acquisition": 4.0
+    "user acquisition": 3.5
+    "market fit": 4.0
+    "product market fit": 4.0
+    "customer development": 3.5
+    "validation": 3.5
+
+# Team and Hiring
+team_hiring:
+  weight: 3.0
+  keywords:
+    "team": 3.5
+    "hiring": 3.5
+    "talent": 3.5
+    "employee": 3.0
+    "culture": 3.0
+    "equity": 3.5
+    "stock options": 3.5
+    "co-founder": 3.5
+    "advisor": 3.0
+    "board": 3.0
+
+# Technology and Development
+technology:
+  weight: 3.0
+  keywords:
+    "technology": 3.0
+    "tech stack": 3.5
+    "platform": 3.0
+    "software": 3.0
+    "development": 3.0
+    "engineering": 3.0
+    "api": 3.0
+    "cloud": 3.0
+    "infrastructure": 3.0
+    "scalability": 3.5
+
+# Growth and Metrics
+growth_metrics:
+  weight: 3.5
+  keywords:
+    "growth": 4.0
+    "metrics": 3.5
+    "kpi": 3.5
+    "analytics": 3.0
+    "data": 3.0
+    "traction": 4.0
+    "user growth": 3.5
+    "revenue growth": 3.5
+    "retention": 3.5
+    "churn": 3.5
+
+# Business Operations
+operations:
+  weight: 2.5
+  keywords:
+    "operations": 3.0
+    "process": 3.0
+    "workflow": 3.0
+    "efficiency": 3.0
+    "automation": 3.0
+    "systems": 3.0
+    "infrastructure": 3.0
+    "scalability": 3.5
+    "optimization": 3.0
+
+# Legal and Compliance
+legal_compliance:
+  weight: 2.5
+  keywords:
+    "legal": 3.0
+    "incorporation": 3.5
+    "llc": 3.0
+    "corporation": 3.0
+    "compliance": 3.0
+    "contract": 3.0
+    "terms": 3.0
+    "privacy": 3.0
+    "security": 3.0
+    "ip": 3.0
+
+# Partnerships and Ecosystem
+partnerships:
+  weight: 3.0
+  keywords:
+    "partnership": 3.5
+    "strategic partnership": 3.5
+    "integration": 3.0
+    "ecosystem": 3.5
+    "channel": 3.0
+    "distribution": 3.0
+    "alliance": 3.0
+    "collaboration": 3.0
+    "joint venture": 3.0
+
+# Innovation and Disruption
+innovation:
+  weight: 3.0
+  keywords:
+    "innovation": 3.5
+    "disruption": 3.5
+    "disruptive": 3.5
+    "revolutionary": 3.0
+    "breakthrough": 3.0
+    "cutting edge": 3.0
+    "novel": 3.0
+    "unique": 3.0
+    "first": 3.0
+
+# Exit Strategy
+exit_strategy:
+  weight: 2.5
+  keywords:
+    "exit": 3.5
+    "acquisition": 3.5
+    "ipo": 3.5
+    "merger": 3.0
+    "buyout": 3.0
+    "strategic buyer": 3.0
+    "financial buyer": 3.0
+    "liquidity": 3.0
+    "return": 3.0

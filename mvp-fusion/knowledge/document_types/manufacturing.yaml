@@ -1,0 +1,284 @@
+# Manufacturing and Operations Document Types
+# For Scout's manufacturing SaaS and industrial intelligence platform
+
+# Production and Manufacturing
+work_order:
+  weight: 2.5
+  keywords:
+    "work order": 4.0
+    "production": 2.5
+    "manufacturing": 2.5
+    "schedule": 2.5
+    "batch": 2.5
+    "quantity": 2.0
+    "deadline": 2.0
+
+bill_of_materials:
+  weight: 2.5
+  keywords:
+    "bill of materials": 4.0
+    "bom": 4.0
+    "components": 2.5
+    "parts": 2.5
+    "assembly": 2.5
+    "raw materials": 3.0
+
+production_schedule:
+  weight: 2.0
+  keywords:
+    "production schedule": 4.0
+    "schedule": 2.5
+    "capacity": 2.5
+    "timeline": 2.0
+    "shift": 2.0
+    "machine": 2.0
+
+quality_control:
+  weight: 2.5
+  keywords:
+    "quality control": 4.0
+    "qc": 3.5
+    "inspection": 3.0
+    "defect": 2.5
+    "reject": 2.5
+    "pass": 2.0
+    "fail": 2.5
+
+# Safety and Compliance
+safety_procedure:
+  weight: 2.5
+  keywords:
+    "safety procedure": 4.0
+    "safety": 3.0
+    "hazard": 2.5
+    "ppe": 3.0
+    "personal protective equipment": 3.5
+    "lockout": 2.5
+    "tagout": 2.5
+
+osha_report:
+  weight: 3.0
+  keywords:
+    "osha": 4.0
+    "occupational safety": 3.5
+    "workplace safety": 3.0
+    "injury": 2.5
+    "incident": 2.5
+    "compliance": 2.5
+
+msds:
+  weight: 2.5
+  keywords:
+    "msds": 4.0
+    "material safety data sheet": 4.0
+    "sds": 3.5
+    "safety data sheet": 4.0
+    "chemical": 2.5
+    "hazardous": 2.5
+
+# Maintenance and Equipment
+maintenance_log:
+  weight: 2.0
+  keywords:
+    "maintenance": 3.0
+    "service": 2.5
+    "repair": 2.5
+    "equipment": 2.5
+    "downtime": 2.5
+    "preventive": 2.5
+
+equipment_manual:
+  weight: 2.0
+  keywords:
+    "equipment manual": 4.0
+    "operator manual": 3.5
+    "machine": 2.5
+    "operation": 2.5
+    "instructions": 2.0
+    "troubleshooting": 2.5
+
+calibration_record:
+  weight: 2.0
+  keywords:
+    "calibration": 4.0
+    "instrument": 2.5
+    "accuracy": 2.5
+    "standard": 2.5
+    "tolerance": 2.5
+    "certification": 2.5
+
+# Inventory and Supply Chain
+inventory_record:
+  weight: 2.0
+  keywords:
+    "inventory": 3.0
+    "stock": 2.5
+    "warehouse": 2.5
+    "storage": 2.0
+    "location": 2.0
+    "bin": 2.0
+
+purchase_requisition:
+  weight: 2.0
+  keywords:
+    "purchase requisition": 4.0
+    "requisition": 3.0
+    "request": 2.0
+    "approval": 2.0
+    "budget": 2.0
+
+receiving_report:
+  weight: 2.0
+  keywords:
+    "receiving report": 4.0
+    "received": 2.5
+    "delivery": 2.5
+    "inspection": 2.5
+    "quantity": 2.0
+    "condition": 2.0
+
+# Process Documentation
+standard_operating_procedure:
+  weight: 2.5
+  keywords:
+    "sop": 4.0
+    "standard operating procedure": 4.0
+    "procedure": 3.0
+    "process": 2.5
+    "step": 2.0
+    "instruction": 2.0
+
+process_flow:
+  weight: 2.0
+  keywords:
+    "process flow": 4.0
+    "workflow": 3.0
+    "flowchart": 2.5
+    "sequence": 2.0
+    "steps": 2.0
+
+method_validation:
+  weight: 2.0
+  keywords:
+    "method validation": 4.0
+    "validation": 3.0
+    "method": 2.5
+    "procedure": 2.0
+    "verification": 2.5
+
+# Quality Management
+iso_document:
+  weight: 2.0
+  keywords:
+    "iso": 3.5
+    "iso 9001": 4.0
+    "quality management": 3.5
+    "standard": 2.5
+    "certification": 2.5
+    "audit": 2.5
+
+corrective_action:
+  weight: 2.0
+  keywords:
+    "corrective action": 4.0
+    "capa": 3.5
+    "preventive action": 3.5
+    "root cause": 3.0
+    "investigation": 2.5
+
+non_conformance:
+  work: 2.0
+  keywords:
+    "non-conformance": 4.0
+    "ncr": 3.5
+    "deviation": 2.5
+    "nonconforming": 3.0
+    "reject": 2.5
+
+# Engineering and Design
+engineering_drawing:
+  weight: 2.0
+  keywords:
+    "engineering drawing": 4.0
+    "blueprint": 3.0
+    "schematic": 3.0
+    "dimensions": 2.5
+    "tolerance": 2.5
+    "revision": 2.5
+
+design_specification:
+  weight: 2.0
+  keywords:
+    "design specification": 4.0
+    "specification": 3.0
+    "requirements": 2.5
+    "design": 2.5
+    "parameters": 2.0
+
+change_order:
+  weight: 2.0
+  keywords:
+    "change order": 4.0
+    "eco": 3.5
+    "engineering change": 3.5
+    "revision": 2.5
+    "modification": 2.5
+
+# Testing and Validation
+test_report:
+  weight: 2.0
+  keywords:
+    "test report": 4.0
+    "testing": 2.5
+    "results": 2.5
+    "pass": 2.0
+    "fail": 2.5
+    "criteria": 2.0
+
+validation_protocol:
+  weight: 2.0
+  keywords:
+    "validation protocol": 4.0
+    "protocol": 3.0
+    "validation": 3.0
+    "acceptance": 2.5
+    "criteria": 2.0
+
+# Environmental and Sustainability
+environmental_report:
+  weight: 1.5
+  keywords:
+    "environmental": 2.5
+    "sustainability": 2.0
+    "waste": 2.0
+    "emission": 2.5
+    "carbon": 2.0
+    "footprint": 2.0
+
+waste_manifest:
+  weight: 2.0
+  keywords:
+    "waste manifest": 4.0
+    "hazardous waste": 3.5
+    "disposal": 2.5
+    "epa": 2.5
+    "generator": 2.0
+
+# Lean Manufacturing
+kaizen_report:
+  weight: 1.5
+  keywords:
+    "kaizen": 3.5
+    "continuous improvement": 3.0
+    "lean": 2.5
+    "improvement": 2.0
+    "efficiency": 2.0
+
+value_stream_map:
+  weight: 1.5
+  keywords:
+    "value stream": 4.0
+    "vsm": 3.5
+    "mapping": 2.5
+    "flow": 2.0
+    "waste": 2.0

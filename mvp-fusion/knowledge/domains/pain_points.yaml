@@ -1,0 +1,148 @@
+# Pain Points - User frustrations and unmet needs
+# Core entrepreneurial intelligence for Scout's MVP opportunity discovery
+
+# User Frustrations and Complaints
+frustration:
+  weight: 3.5
+  keywords:
+    "frustrated": 4.0
+    "hate that": 3.5
+    "drives me crazy": 4.0
+    "can't stand": 3.0
+    "annoying": 3.0
+    "irritating": 3.0
+    "sick of": 3.0
+    "tired of": 2.5
+    "fed up": 3.0
+    "ridiculous": 2.5
+
+# Unmet Needs and Market Gaps
+unmet_needs:
+  weight: 4.0
+  keywords:
+    "wish there was": 4.0
+    "someone should build": 4.0
+    "why doesn't exist": 4.0
+    "need a tool that": 3.5
+    "looking for something": 3.0
+    "if only there was": 3.5
+    "would love to see": 3.0
+    "missing": 3.0
+    "lacking": 2.5
+    "gap in the market": 4.0
+
+# Broken Workflows and Process Problems
+broken_workflows:
+  weight: 3.5
+  keywords:
+    "workflow sucks": 4.0
+    "process is broken": 4.0
+    "takes forever": 3.5
+    "manual process": 3.0
+    "workaround": 3.0
+    "inefficient": 3.0
+    "time consuming": 3.0
+    "too many steps": 3.0
+    "complicated": 2.5
+    "difficult": 2.5
+
+# Product and Service Complaints
+product_issues:
+  weight: 3.0
+  keywords:
+    "doesn't work": 4.0
+    "broken": 3.5
+    "buggy": 3.5
+    "slow": 3.0
+    "expensive": 3.0
+    "overpriced": 3.5
+    "poor quality": 3.5
+    "terrible": 3.0
+    "awful": 3.0
+    "worst": 3.0
+
+# User Experience Pain Points
+ux_problems:
+  weight: 3.0
+  keywords:
+    "confusing": 3.0
+    "hard to use": 3.5
+    "unintuitive": 3.5
+    "cluttered": 2.5
+    "overwhelming": 2.5
+    "not user friendly": 3.5
+    "poor design": 3.0
+    "hard to find": 3.0
+    "navigation sucks": 3.5
+    "interface": 2.0
+
+# Customer Service Issues
+support_problems:
+  weight: 2.5
+  keywords:
+    "terrible support": 3.5
+    "no response": 3.0
+    "unhelpful": 3.0
+    "rude": 2.5
+    "can't reach": 3.0
+    "no one cares": 3.0
+    "poor service": 3.0
+    "waited hours": 3.0
+    "never resolved": 3.5
+
+# Integration and Compatibility Problems
+integration_issues:
+  weight: 3.0
+  keywords:
+    "doesn't integrate": 4.0
+    "no api": 3.5
+    "not compatible": 3.5
+    "can't connect": 3.0
+    "no sync": 3.0
+    "isolation": 2.5
+    "silos": 3.0
+    "data stuck": 3.0
+    "manual export": 3.0
+
+# Pricing and Value Complaints
+pricing_issues:
+  weight: 2.5
+  keywords:
+    "too expensive": 3.5
+    "overpriced": 3.5
+    "not worth it": 3.0
+    "hidden fees": 3.5
+    "price increase": 3.0
+    "can't afford": 3.0
+    "budget": 2.5
+    "cheap alternative": 3.0
+    "free option": 3.0
+
+# Feature Requests and Wishlist Items
+feature_requests:
+  weight: 3.5
+  keywords:
+    "feature request": 4.0
+    "would be nice": 3.0
+    "should have": 3.5
+    "missing feature": 4.0
+    "add support for": 3.5
+    "please add": 3.0
+    "wish it had": 3.5
+    "needs": 3.0
+    "lacks": 3.0
+    "should include": 3.0
+
+# Market Opportunity Signals
+market_opportunities:
+  weight: 3.5
+  keywords:
+    "market gap": 4.0
+    "no good options": 4.0
+    "all solutions suck": 4.0
+    "nothing works": 3.5
+    "tried everything": 3.5
+    "no one has solved": 4.0
+    "untapped market": 4.0
+    "underserved": 3.5
+    "opportunity": 3.0

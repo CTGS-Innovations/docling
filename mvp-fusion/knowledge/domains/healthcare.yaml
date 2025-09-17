@@ -1,0 +1,121 @@
+# Healthcare - Medical, clinical, pharmaceutical intelligence
+# Routes to healthcare SaaS specialists for medical MVP opportunities
+
+# Clinical and Medical
+clinical:
+  weight: 3.5
+  keywords:
+    "medical": 4.0
+    "clinical": 4.0
+    "patient": 3.5
+    "diagnosis": 3.5
+    "treatment": 3.5
+    "doctor": 3.5
+    "physician": 3.5
+    "nurse": 3.0
+    "healthcare": 3.5
+    "hospital": 3.5
+
+# Medical Specialties
+specialties:
+  weight: 3.0
+  keywords:
+    "cardiology": 3.5
+    "neurology": 3.5
+    "oncology": 3.5
+    "pediatrics": 3.5
+    "radiology": 3.5
+    "surgery": 3.5
+    "psychiatry": 3.0
+    "dermatology": 3.0
+    "orthopedics": 3.0
+    "emergency": 3.0
+
+# Medical Conditions
+conditions:
+  weight: 3.0
+  keywords:
+    "diabetes": 3.5
+    "hypertension": 3.5
+    "cancer": 3.5
+    "covid": 3.5
+    "flu": 3.0
+    "infection": 3.0
+    "disease": 3.0
+    "syndrome": 3.0
+    "disorder": 3.0
+    "condition": 3.0
+
+# Pharmaceutical
+pharmaceutical:
+  weight: 3.0
+  keywords:
+    "pharmaceutical": 3.5
+    "drug": 3.5
+    "medication": 3.5
+    "prescription": 3.5
+    "pharmacy": 3.5
+    "dosage": 3.0
+    "side effects": 3.0
+    "contraindications": 3.0
+    "clinical trial": 3.5
+    "fda": 3.5
+
+# Healthcare Technology
+healthtech:
+  weight: 3.5
+  keywords:
+    "ehr": 4.0
+    "electronic health record": 4.0
+    "emr": 3.5
+    "health information": 3.5
+    "telemedicine": 4.0
+    "telehealth": 4.0
+    "digital health": 4.0
+    "mhealth": 3.5
+    "wearables": 3.0
+    "remote monitoring": 3.5
+
+# Medical Devices
+medical_devices:
+  weight: 2.5
+  keywords:
+    "medical device": 3.5
+    "implant": 3.0
+    "pacemaker": 3.0
+    "prosthetic": 3.0
+    "surgical instrument": 3.0
+    "diagnostic": 3.0
+    "imaging": 3.0
+    "ultrasound": 3.0
+    "mri": 3.0
+    "ct scan": 3.0
+
+# Healthcare Administration
+administration:
+  weight: 2.5
+  keywords:
+    "health insurance": 3.0
+    "medical billing": 3.5
+    "claims": 3.0
+    "reimbursement": 3.0
+    "prior authorization": 3.5
+    "copay": 3.0
+    "deductible": 3.0
+    "benefits": 2.5
+    "coverage": 2.5
+
+# Public Health
+public_health:
+  weight: 2.0
+  keywords:
+    "public health": 3.5
+    "epidemiology": 3.5
+    "outbreak": 3.5
+    "pandemic": 3.5
+    "vaccination": 3.5
+    "immunization": 3.0
+    "surveillance": 3.0
+    "prevention": 3.0
+    "wellness": 2.5
+    "health promotion": 2.5

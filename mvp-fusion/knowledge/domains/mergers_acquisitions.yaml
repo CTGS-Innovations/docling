@@ -1,0 +1,176 @@
+# Mergers & Acquisitions - Market consolidation and landscape shifts
+# Strategic intelligence for Scout's M&A activity and market dynamics analysis
+
+# Merger and Acquisition Activity
+ma_activity:
+  weight: 3.5
+  keywords:
+    "merger": 4.0
+    "acquisition": 4.0
+    "buyout": 3.5
+    "takeover": 3.5
+    "consolidation": 4.0
+    "acquired": 3.5
+    "merged": 3.5
+    "purchased": 3.0
+    "deal": 3.5
+    "transaction": 3.0
+
+# Deal Types and Structure
+deal_types:
+  weight: 3.0
+  keywords:
+    "strategic acquisition": 4.0
+    "financial acquisition": 3.5
+    "horizontal merger": 3.5
+    "vertical merger": 3.5
+    "conglomerate": 3.0
+    "asset purchase": 3.5
+    "stock purchase": 3.5
+    "merger of equals": 3.5
+    "friendly takeover": 3.5
+    "hostile takeover": 3.5
+
+# Due Diligence and Process
+due_diligence:
+  weight: 3.0
+  keywords:
+    "due diligence": 4.0
+    "dd": 3.0
+    "investigation": 3.0
+    "valuation": 3.5
+    "assessment": 3.0
+    "evaluation": 3.0
+    "analysis": 2.5
+    "review": 2.5
+    "audit": 3.0
+    "examination": 3.0
+
+# Financial Terms
+financial_terms:
+  weight: 3.5
+  keywords:
+    "purchase price": 3.5
+    "enterprise value": 3.5
+    "multiple": 3.5
+    "premium": 3.5
+    "cash deal": 3.5
+    "stock deal": 3.5
+    "earnout": 3.5
+    "escrow": 3.0
+    "working capital": 3.0
+    "debt": 3.0
+
+# Market Impact
+market_impact:
+  weight: 3.0
+  keywords:
+    "market consolidation": 4.0
+    "industry consolidation": 4.0
+    "competitive landscape": 3.5
+    "market share": 3.5
+    "dominant player": 3.5
+    "monopoly": 3.5
+    "antitrust": 3.5
+    "regulatory approval": 3.5
+    "market power": 3.5
+    "barrier to entry": 3.5
+
+# Strategic Rationale
+strategic_rationale:
+  weight: 3.0
+  keywords:
+    "synergy": 4.0
+    "synergies": 4.0
+    "cost savings": 3.5
+    "revenue synergy": 3.5
+    "scale": 3.5
+    "capabilities": 3.0
+    "technology": 3.0
+    "talent": 3.0
+    "customer base": 3.5
+    "market access": 3.5
+
+# Integration Process
+integration:
+  weight: 2.5
+  keywords:
+    "integration": 3.5
+    "post merger": 3.5
+    "cultural integration": 3.0
+    "system integration": 3.5
+    "operational integration": 3.5
+    "combined entity": 3.0
+    "unified": 3.0
+    "merged operations": 3.5
+    "streamlined": 3.0
+
+# Investment Banking
+investment_banking:
+  weight: 2.5
+  keywords:
+    "investment bank": 3.0
+    "advisor": 3.0
+    "banker": 3.0
+    "underwriter": 3.0
+    "financial advisor": 3.5
+    "boutique": 3.0
+    "bulge bracket": 3.0
+    "middle market": 3.0
+
+# Regulatory and Legal
+regulatory_legal:
+  weight: 3.0
+  keywords:
+    "regulatory approval": 4.0
+    "antitrust": 4.0
+    "ftc": 3.5
+    "doj": 3.5
+    "competition": 3.5
+    "clearance": 3.5
+    "approval": 3.5
+    "compliance": 3.0
+    "legal": 2.5
+
+# Exit Strategy
+exit_strategy:
+  weight: 3.0
+  keywords:
+    "exit strategy": 4.0
+    "exit": 3.5
+    "liquidity event": 3.5
+    "strategic exit": 3.5
+    "financial exit": 3.5
+    "divestiture": 3.5
+    "spin off": 3.5
+    "carve out": 3.5
+    "ipo": 3.0
+
+# Private Equity Activity
+private_equity_ma:
+  weight: 3.0
+  keywords:
+    "private equity": 3.5
+    "pe": 3.0
+    "buyout": 3.5
+    "lbo": 3.5
+    "leveraged buyout": 3.5
+    "portfolio company": 3.5
+    "add on": 3.5
+    "bolt on": 3.5
+    "platform": 3.5
+    "roll up": 3.5
+
+# Technology M&A
+tech_ma:
+  weight: 3.5
+  keywords:
+    "tech acquisition": 4.0
+    "acquihire": 4.0
+    "technology acquisition": 4.0
+    "startup acquisition": 4.0
+    "innovation": 3.0
+    "intellectual property": 3.5
+    "patent": 3.0
+    "talent acquisition": 3.5
+    "team": 3.0

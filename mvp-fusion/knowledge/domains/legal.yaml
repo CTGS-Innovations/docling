@@ -1,0 +1,180 @@
+# Legal - Law, compliance, intellectual property intelligence
+# Routes to legal tech SaaS specialists for legal MVP opportunities
+
+# Legal Practice Areas
+practice_areas:
+  weight: 3.5
+  keywords:
+    "legal": 3.5
+    "law": 3.5
+    "attorney": 3.5
+    "lawyer": 3.5
+    "counsel": 3.5
+    "litigation": 3.5
+    "court": 3.5
+    "lawsuit": 3.5
+    "legal services": 3.5
+    "law firm": 3.5
+
+# Contract and Agreement Management
+contracts:
+  weight: 4.0
+  keywords:
+    "contract": 4.0
+    "agreement": 3.5
+    "terms": 3.0
+    "conditions": 3.0
+    "nda": 4.0
+    "non disclosure": 4.0
+    "confidentiality": 3.5
+    "licensing": 3.5
+    "employment agreement": 3.5
+    "service agreement": 3.5
+
+# Intellectual Property
+intellectual_property:
+  weight: 3.5
+  keywords:
+    "intellectual property": 4.0
+    "ip": 3.5
+    "patent": 4.0
+    "trademark": 4.0
+    "copyright": 4.0
+    "trade secret": 3.5
+    "licensing": 3.5
+    "infringement": 3.5
+    "uspto": 3.5
+    "patent application": 4.0
+
+# Corporate Law
+corporate_law:
+  weight: 3.0
+  keywords:
+    "corporate": 3.5
+    "corporation": 3.5
+    "llc": 3.5
+    "incorporation": 3.5
+    "bylaws": 3.5
+    "board": 3.0
+    "shareholder": 3.5
+    "securities": 3.5
+    "compliance": 3.5
+    "governance": 3.5
+
+# Employment Law
+employment_law:
+  weight: 3.0
+  keywords:
+    "employment": 3.5
+    "labor": 3.5
+    "employee": 3.0
+    "workplace": 3.0
+    "discrimination": 3.5
+    "harassment": 3.5
+    "wrongful termination": 3.5
+    "wage": 3.0
+    "benefits": 2.5
+    "hr": 3.0
+
+# Real Estate Law
+real_estate_law:
+  weight: 2.5
+  keywords:
+    "real estate": 3.0
+    "property": 3.0
+    "lease": 3.5
+    "landlord": 3.0
+    "tenant": 3.0
+    "deed": 3.0
+    "title": 3.0
+    "closing": 3.0
+    "zoning": 3.0
+    "easement": 3.0
+
+# Family Law
+family_law:
+  weight: 2.0
+  keywords:
+    "family law": 3.5
+    "divorce": 3.5
+    "custody": 3.5
+    "child support": 3.5
+    "alimony": 3.0
+    "adoption": 3.0
+    "prenuptial": 3.0
+    "marriage": 2.5
+    "domestic": 2.5
+
+# Criminal Law
+criminal_law:
+  weight: 2.0
+  keywords:
+    "criminal": 3.5
+    "prosecution": 3.5
+    "defense": 3.0
+    "felony": 3.0
+    "misdemeanor": 3.0
+    "arrest": 3.0
+    "indictment": 3.5
+    "plea": 3.0
+    "sentencing": 3.0
+    "bail": 3.0
+
+# Legal Technology
+legal_tech:
+  weight: 4.0
+  keywords:
+    "legal tech": 4.0
+    "legaltech": 4.0
+    "contract management": 4.0
+    "document automation": 4.0
+    "legal research": 4.0
+    "case management": 4.0
+    "e-discovery": 4.0
+    "legal analytics": 4.0
+    "ai lawyer": 3.5
+    "legal ai": 3.5
+
+# Dispute Resolution
+dispute_resolution:
+  weight: 3.0
+  keywords:
+    "arbitration": 3.5
+    "mediation": 3.5
+    "settlement": 3.5
+    "negotiation": 3.0
+    "dispute": 3.5
+    "resolution": 3.0
+    "adr": 3.5
+    "alternative dispute": 3.5
+    "conflict": 3.0
+
+# Legal Research and Documentation
+legal_research:
+  weight: 3.0
+  keywords:
+    "legal research": 4.0
+    "case law": 3.5
+    "precedent": 3.5
+    "statute": 3.5
+    "regulation": 3.5
+    "legal brief": 3.5
+    "memorandum": 3.5
+    "legal writing": 3.5
+    "citation": 3.0
+    "westlaw": 3.0
+
+# Regulatory and Compliance
+legal_compliance:
+  weight: 3.5
+  keywords:
+    "regulatory": 3.5
+    "compliance": 3.5
+    "regulation": 3.5
+    "legal compliance": 4.0
+    "audit": 3.0
+    "investigation": 3.0
+    "enforcement": 3.5
+    "penalty": 3.5
+    "violation": 3.5
+    "fine": 3.0

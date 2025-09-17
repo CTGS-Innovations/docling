@@ -1,0 +1,172 @@
+# Research and Academic Document Types
+# For Scout's research intelligence and academic content processing
+
+# Academic Research Papers
+research_paper:
+  weight: 4.0
+  keywords:
+    "research paper": 4.0
+    "academic paper": 4.0
+    "journal article": 4.0
+    "peer reviewed": 4.0
+    "abstract": 4.0
+    "methodology": 4.0
+    "findings": 4.0
+    "conclusion": 3.5
+    "bibliography": 4.0
+    "references": 3.5
+
+# Scientific Studies
+scientific_study:
+  weight: 3.5
+  keywords:
+    "scientific study": 4.0
+    "research study": 4.0
+    "empirical study": 4.0
+    "experimental": 3.5
+    "hypothesis": 4.0
+    "data analysis": 3.5
+    "statistical": 3.5
+    "sample size": 3.5
+    "control group": 3.5
+    "variables": 3.0
+
+# Market Research
+market_research:
+  weight: 3.5
+  keywords:
+    "market research": 4.0
+    "market analysis": 4.0
+    "industry analysis": 4.0
+    "competitive research": 3.5
+    "consumer research": 3.5
+    "market survey": 3.5
+    "focus group": 3.5
+    "market trends": 3.5
+    "market intelligence": 4.0
+    "industry insights": 3.5
+
+# Technical Research
+technical_research:
+  weight: 3.5
+  keywords:
+    "technical report": 4.0
+    "research report": 4.0
+    "feasibility study": 4.0
+    "technical analysis": 3.5
+    "research findings": 4.0
+    "investigation": 3.5
+    "analysis": 3.0
+    "evaluation": 3.0
+    "assessment": 3.0
+    "study": 3.5
+
+# Thesis and Dissertations
+thesis_dissertation:
+  weight: 3.0
+  keywords:
+    "thesis": 4.0
+    "dissertation": 4.0
+    "doctoral": 3.5
+    "phd": 3.5
+    "masters": 3.0
+    "graduate": 3.0
+    "research proposal": 3.5
+    "literature review": 3.5
+    "defense": 3.0
+
+# Clinical Research
+clinical_research:
+  weight: 3.0
+  keywords:
+    "clinical study": 4.0
+    "clinical trial": 4.0
+    "medical research": 4.0
+    "patient study": 3.5
+    "clinical data": 3.5
+    "trial results": 3.5
+    "efficacy": 3.5
+    "safety": 3.0
+    "treatment": 3.0
+
+# Survey and Poll Research
+survey_research:
+  weight: 3.0
+  keywords:
+    "survey": 3.5
+    "poll": 3.5
+    "questionnaire": 3.5
+    "survey results": 4.0
+    "respondents": 3.5
+    "sample": 3.0
+    "demographics": 3.0
+    "response rate": 3.5
+    "statistical significance": 3.5
+
+# User Research (for Scout's UX intelligence)
+user_research:
+  weight: 4.0
+  keywords:
+    "user research": 4.0
+    "ux research": 4.0
+    "user study": 4.0
+    "usability study": 4.0
+    "user interview": 4.0
+    "user testing": 4.0
+    "user behavior": 3.5
+    "user experience": 3.5
+    "user feedback": 3.5
+    "user insights": 4.0
+
+# White Papers
+whitepaper:
+  weight: 3.5
+  keywords:
+    "white paper": 4.0
+    "whitepaper": 4.0
+    "research white paper": 4.0
+    "industry whitepaper": 3.5
+    "technical whitepaper": 3.5
+    "executive summary": 3.0
+    "industry insights": 3.5
+    "thought leadership": 3.5
+
+# Data Analysis Reports
+data_analysis:
+  weight: 3.5
+  keywords:
+    "data analysis": 4.0
+    "analytics report": 4.0
+    "data insights": 4.0
+    "statistical analysis": 4.0
+    "data findings": 4.0
+    "metrics analysis": 3.5
+    "performance analysis": 3.5
+    "trend analysis": 3.5
+    "predictive analysis": 3.5
+
+# Research Proposals
+research_proposal:
+  weight: 3.0
+  keywords:
+    "research proposal": 4.0
+    "grant proposal": 3.5
+    "funding proposal": 3.5
+    "project proposal": 3.0
+    "research plan": 3.5
+    "study design": 3.5
+    "research objectives": 3.5
+    "research questions": 3.5
+
+# Case Studies (Research Context)
+research_case_study:
+  weight: 3.0
+  keywords:
+    "case study": 3.5
+    "research case": 4.0
+    "field study": 3.5
+    "observational study": 3.5
+    "longitudinal study": 3.5
+    "cross-sectional": 3.0
+    "qualitative": 3.5
+    "quantitative": 3.5

@@ -1,0 +1,176 @@
+# E-commerce - Retail, marketplace, commerce intelligence
+# Routes to e-commerce SaaS specialists for retail MVP opportunities
+
+# E-commerce Platforms and Operations
+ecommerce_platforms:
+  weight: 4.0
+  keywords:
+    "ecommerce": 4.0
+    "e-commerce": 4.0
+    "online store": 4.0
+    "retail": 3.5
+    "marketplace": 4.0
+    "shopping": 3.5
+    "cart": 3.5
+    "checkout": 3.5
+    "product catalog": 3.5
+    "inventory": 3.5
+
+# Product Management
+product_management:
+  weight: 3.5
+  keywords:
+    "product": 3.5
+    "sku": 4.0
+    "inventory management": 4.0
+    "stock": 3.5
+    "warehouse": 3.5
+    "fulfillment": 3.5
+    "product listing": 4.0
+    "catalog": 3.5
+    "merchandise": 3.0
+    "assortment": 3.0
+
+# Customer Experience
+customer_experience:
+  weight: 3.5
+  keywords:
+    "customer experience": 4.0
+    "cx": 3.5
+    "user experience": 3.5
+    "ux": 3.0
+    "personalization": 4.0
+    "recommendation": 3.5
+    "product review": 3.5
+    "rating": 3.0
+    "customer service": 3.5
+    "support": 3.0
+
+# Sales and Conversion
+sales_conversion:
+  weight: 3.5
+  keywords:
+    "conversion": 4.0
+    "sales": 3.5
+    "revenue": 3.5
+    "transaction": 3.5
+    "order": 3.5
+    "purchase": 3.5
+    "buy": 3.0
+    "sell": 3.0
+    "checkout": 3.5
+    "abandoned cart": 4.0
+
+# Payment and Financial
+payment_financial:
+  weight: 3.0
+  keywords:
+    "payment": 3.5
+    "payment gateway": 4.0
+    "payment processing": 4.0
+    "credit card": 3.5
+    "paypal": 3.0
+    "stripe": 3.5
+    "billing": 3.5
+    "invoice": 3.0
+    "refund": 3.5
+    "chargeback": 3.5
+
+# Marketing and Promotion
+marketing_promotion:
+  weight: 3.0
+  keywords:
+    "digital marketing": 3.5
+    "email marketing": 3.5
+    "seo": 3.5
+    "ppc": 3.0
+    "social media": 3.0
+    "influencer": 3.0
+    "affiliate": 3.5
+    "promotion": 3.5
+    "discount": 3.5
+    "coupon": 3.5
+
+# Logistics and Shipping
+logistics_shipping:
+  weight: 3.0
+  keywords:
+    "shipping": 3.5
+    "delivery": 3.5
+    "logistics": 3.5
+    "fulfillment": 3.5
+    "warehouse": 3.0
+    "distribution": 3.0
+    "freight": 3.0
+    "tracking": 3.5
+    "last mile": 3.5
+    "supply chain": 3.5
+
+# Mobile Commerce
+mobile_commerce:
+  weight: 3.5
+  keywords:
+    "mobile commerce": 4.0
+    "mcommerce": 4.0
+    "mobile app": 3.5
+    "mobile shopping": 3.5
+    "app store": 3.0
+    "mobile payment": 3.5
+    "responsive": 3.0
+    "mobile first": 3.5
+
+# Analytics and Data
+analytics_data:
+  weight: 3.0
+  keywords:
+    "analytics": 3.5
+    "data": 3.0
+    "metrics": 3.5
+    "kpi": 3.5
+    "tracking": 3.0
+    "insights": 3.0
+    "reporting": 3.0
+    "dashboard": 3.0
+    "business intelligence": 3.5
+    "conversion rate": 4.0
+
+# Subscription Commerce
+subscription_commerce:
+  weight: 3.5
+  keywords:
+    "subscription": 4.0
+    "recurring": 3.5
+    "subscription box": 4.0
+    "membership": 3.5
+    "saas": 3.0
+    "recurring revenue": 3.5
+    "churn": 3.5
+    "retention": 3.5
+    "billing cycle": 3.5
+
+# B2B E-commerce
+b2b_ecommerce:
+  weight: 3.0
+  keywords:
+    "b2b": 3.5
+    "business to business": 3.5
+    "wholesale": 3.5
+    "bulk": 3.0
+    "enterprise": 3.0
+    "procurement": 3.5
+    "vendor": 3.0
+    "supplier": 3.0
+    "purchase order": 3.5
+
+# Social Commerce
+social_commerce:
+  weight: 3.0
+  keywords:
+    "social commerce": 4.0
+    "social selling": 3.5
+    "facebook shop": 3.5
+    "instagram shopping": 3.5
+    "live shopping": 3.5
+    "shoppable": 3.5
+    "social media": 3.0
+    "influencer marketing": 3.5

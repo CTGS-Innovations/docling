@@ -1,0 +1,169 @@
+# Capital Markets - Complete funding ecosystem intelligence
+# Investment intelligence for Scout's entrepreneurial funding analysis
+
+# Venture Capital
+venture_capital:
+  weight: 3.5
+  keywords:
+    "venture capital": 4.0
+    "vc": 3.5
+    "venture capitalist": 3.5
+    "series a": 4.0
+    "series b": 4.0
+    "series c": 3.5
+    "growth round": 3.5
+    "late stage": 3.0
+    "term sheet": 4.0
+    "cap table": 3.5
+
+# Private Equity
+private_equity:
+  weight: 3.0
+  keywords:
+    "private equity": 4.0
+    "pe": 3.0
+    "buyout": 3.5
+    "leveraged buyout": 3.5
+    "lbo": 3.0
+    "portfolio company": 3.5
+    "exit strategy": 3.5
+    "management buyout": 3.0
+    "recapitalization": 3.0
+
+# Angel Investment
+angel_investment:
+  weight: 3.0
+  keywords:
+    "angel investor": 4.0
+    "angel funding": 4.0
+    "angel round": 3.5
+    "seed funding": 4.0
+    "seed round": 4.0
+    "pre-seed": 3.5
+    "friends and family": 3.0
+    "bootstrap": 3.0
+    "self-funded": 2.5
+
+# Public Markets
+public_markets:
+  weight: 2.5
+  keywords:
+    "ipo": 4.0
+    "initial public offering": 4.0
+    "public offering": 3.5
+    "nasdaq": 3.0
+    "nyse": 3.0
+    "stock exchange": 3.0
+    "public company": 3.0
+    "ticker": 2.5
+    "shares": 2.5
+
+# Alternative Funding
+alternative_funding:
+  weight: 2.5
+  keywords:
+    "crowdfunding": 3.5
+    "kickstarter": 3.0
+    "indiegogo": 3.0
+    "revenue based": 3.0
+    "convertible note": 3.5
+    "safe": 3.5
+    "equity crowdfunding": 3.5
+    "peer to peer": 3.0
+
+# Government Funding
+government_funding:
+  weight: 2.5
+  keywords:
+    "grant": 3.5
+    "sbir": 4.0
+    "sttr": 3.5
+    "government grant": 4.0
+    "federal funding": 3.5
+    "research grant": 3.5
+    "innovation grant": 3.5
+    "tax credit": 3.0
+    "subsidy": 3.0
+
+# Corporate Investment
+corporate_investment:
+  weight: 2.5
+  keywords:
+    "corporate venture": 3.5
+    "strategic investment": 3.5
+    "corporate vc": 3.5
+    "strategic investor": 3.5
+    "partnership": 2.5
+    "joint venture": 3.0
+    "acquisition": 3.5
+    "acquihire": 3.0
+
+# Institutional Investors
+institutional_investors:
+  weight: 2.5
+  keywords:
+    "pension fund": 3.0
+    "endowment": 3.5
+    "sovereign wealth": 3.5
+    "family office": 3.5
+    "institutional": 2.5
+    "limited partner": 3.0
+    "lp": 2.5
+    "general partner": 3.0
+    "gp": 2.5
+
+# Investment Terms and Metrics
+investment_terms:
+  weight: 3.0
+  keywords:
+    "valuation": 4.0
+    "pre-money": 3.5
+    "post-money": 3.5
+    "liquidation preference": 3.5
+    "anti-dilution": 3.5
+    "drag along": 3.0
+    "tag along": 3.0
+    "board seat": 3.5
+    "voting rights": 3.0
+
+# Financial Performance
+financial_performance:
+  weight: 2.5
+  keywords:
+    "revenue": 3.0
+    "arr": 3.5
+    "mrr": 3.5
+    "burn rate": 3.5
+    "runway": 3.5
+    "cash flow": 3.0
+    "profit": 2.5
+    "ebitda": 3.0
+    "gross margin": 3.0
+
+# Market Dynamics
+market_dynamics:
+  weight: 2.5
+  keywords:
+    "market cap": 3.0
+    "market size": 3.0
+    "tam": 3.5
+    "sam": 3.0
+    "som": 3.0
+    "total addressable market": 4.0
+    "market share": 3.0
+    "competition": 2.5
+    "moat": 3.0
+
+# Exit Events
+exit_events:
+  weight: 3.0
+  keywords:
+    "exit": 3.5
+    "acquisition": 3.5
+    "merger": 3.5
+    "buyout": 3.0
+    "strategic exit": 3.5
+    "financial exit": 3.0
+    "return": 3.0
+    "multiple": 3.0
+    "irr": 3.5

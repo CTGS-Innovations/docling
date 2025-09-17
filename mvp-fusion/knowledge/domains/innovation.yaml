@@ -1,0 +1,164 @@
+# Innovation - Emerging trends and technology discovery
+# Strategic intelligence for Scout's trend analysis and market opportunity detection
+
+# Emerging Technologies and Trends
+emerging_tech:
+  weight: 3.5
+  keywords:
+    "emerging": 3.5
+    "breakthrough": 4.0
+    "cutting edge": 3.5
+    "next generation": 3.5
+    "revolutionary": 3.5
+    "disruptive": 4.0
+    "game changer": 3.5
+    "innovative": 3.0
+    "novel": 3.0
+    "pioneering": 3.0
+
+# AI and Machine Learning Innovation
+ai_innovation:
+  weight: 3.5
+  keywords:
+    "artificial intelligence": 3.5
+    "machine learning": 3.5
+    "deep learning": 3.0
+    "neural network": 3.0
+    "ai": 2.5
+    "ml": 2.5
+    "nlp": 3.0
+    "computer vision": 3.0
+    "llm": 3.0
+    "gpt": 3.0
+    "transformer": 3.0
+
+# Technology Advancement Signals
+tech_advancement:
+  weight: 3.0
+  keywords:
+    "new technology": 3.5
+    "latest tech": 3.0
+    "technological advancement": 3.5
+    "innovation": 3.5
+    "prototype": 3.0
+    "proof of concept": 3.5
+    "beta": 2.5
+    "alpha": 2.5
+    "experimental": 3.0
+    "research": 2.5
+
+# Market Trends and Patterns
+market_trends:
+  weight: 3.0
+  keywords:
+    "trending": 3.0
+    "hot market": 3.5
+    "growing demand": 3.5
+    "market opportunity": 4.0
+    "rising interest": 3.0
+    "increasing adoption": 3.5
+    "viral": 2.5
+    "popular": 2.5
+    "momentum": 3.0
+    "traction": 3.5
+
+# Future Technology Predictions
+future_tech:
+  weight: 2.5
+  keywords:
+    "future of": 3.0
+    "next big thing": 4.0
+    "prediction": 2.5
+    "forecast": 2.5
+    "will revolutionize": 3.5
+    "expected to": 2.5
+    "anticipated": 2.0
+    "upcoming": 2.5
+    "roadmap": 3.0
+
+# Investment and Funding Trends
+funding_trends:
+  weight: 3.0
+  keywords:
+    "venture capital": 3.0
+    "investment trend": 3.5
+    "funding round": 3.0
+    "investor interest": 3.5
+    "valuation surge": 3.5
+    "unicorn": 3.5
+    "ipo": 3.0
+    "acquisition": 3.0
+    "merger": 3.0
+
+# Research and Development
+research_development:
+  weight: 2.5
+  keywords:
+    "r&d": 3.0
+    "research and development": 3.5
+    "laboratory": 2.5
+    "experiment": 2.5
+    "study": 2.0
+    "academic": 2.0
+    "university": 2.0
+    "patent": 3.5
+    "intellectual property": 3.0
+    "discovery": 3.0
+
+# Startup and Entrepreneurship Innovation
+startup_innovation:
+  weight: 3.0
+  keywords:
+    "startup": 3.0
+    "entrepreneur": 3.0
+    "founder": 3.0
+    "new company": 3.0
+    "business model": 3.0
+    "mvp": 3.5
+    "minimum viable product": 3.5
+    "pivot": 3.0
+    "scale": 2.5
+    "growth": 2.5
+
+# Technology Adoption Patterns
+adoption_patterns:
+  weight: 2.5
+  keywords:
+    "early adopter": 3.0
+    "mainstream adoption": 3.5
+    "mass market": 3.0
+    "consumer acceptance": 3.0
+    "enterprise adoption": 3.5
+    "widespread use": 3.0
+    "penetration": 2.5
+    "rollout": 2.5
+    "deployment": 2.5
+
+# Industry Disruption Signals
+disruption:
+  weight: 3.5
+  keywords:
+    "disruption": 4.0
+    "disruptive": 4.0
+    "disrupting": 4.0
+    "traditional industry": 3.0
+    "legacy system": 3.0
+    "outdated": 3.0
+    "reimagining": 3.5
+    "transformation": 3.0
+    "modernization": 3.0
+    "digitization": 3.0
+
+# Platform and Ecosystem Innovation
+platform_innovation:
+  weight: 3.0
+  keywords:
+    "platform": 3.0
+    "ecosystem": 3.5
+    "marketplace": 3.0
+    "network effect": 3.5
+    "two-sided market": 3.5
+    "api economy": 3.5
+    "integration": 2.5
+    "connectivity": 2.5
+    "interoperability": 3.0

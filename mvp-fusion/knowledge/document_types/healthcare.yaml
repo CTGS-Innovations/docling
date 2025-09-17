@@ -1,0 +1,241 @@
+# Healthcare Vertical Document Types
+# For Scout's healthcare SaaS and medical intelligence platform
+
+# Clinical Documentation
+medical_record:
+  weight: 3.0
+  keywords:
+    "medical record": 4.0
+    "patient": 3.0
+    "diagnosis": 3.0
+    "treatment": 2.5
+    "symptoms": 2.5
+    "medication": 2.5
+    "prescription": 2.5
+    "chief complaint": 3.0
+    "history of present illness": 3.0
+
+clinical_note:
+  weight: 2.5
+  keywords:
+    "clinical note": 3.5
+    "progress note": 3.0
+    "soap note": 3.5
+    "assessment": 2.5
+    "plan": 2.0
+    "subjective": 2.5
+    "objective": 2.5
+
+discharge_summary:
+  weight: 2.5
+  keywords:
+    "discharge summary": 4.0
+    "hospital course": 3.0
+    "admission": 2.5
+    "discharge": 2.5
+    "follow-up": 2.5
+    "instructions": 2.0
+
+lab_report:
+  weight: 2.5
+  keywords:
+    "lab report": 3.5
+    "laboratory": 3.0
+    "test results": 3.0
+    "normal range": 2.5
+    "abnormal": 2.5
+    "reference": 2.0
+    "specimen": 2.5
+
+radiology_report:
+  weight: 2.5
+  keywords:
+    "radiology": 3.5
+    "x-ray": 3.0
+    "ct scan": 3.0
+    "mri": 3.0
+    "ultrasound": 2.5
+    "impression": 2.5
+    "findings": 2.5
+
+# Administrative and Billing
+insurance_claim:
+  weight: 2.0
+  keywords:
+    "insurance claim": 3.5
+    "claim": 2.5
+    "coverage": 2.5
+    "deductible": 2.5
+    "copay": 2.5
+    "benefits": 2.0
+    "authorization": 2.5
+
+medical_bill:
+  weight: 2.0
+  keywords:
+    "medical bill": 3.5
+    "patient statement": 3.0
+    "charges": 2.5
+    "billing": 2.5
+    "payment": 2.0
+    "balance": 2.0
+
+prior_authorization:
+  weight: 2.0
+  keywords:
+    "prior authorization": 4.0
+    "pre-auth": 3.0
+    "approval": 2.5
+    "medical necessity": 3.0
+    "criteria": 2.0
+
+# Regulatory and Compliance
+hipaa_document:
+  weight: 2.5
+  keywords:
+    "hipaa": 4.0
+    "protected health information": 3.5
+    "phi": 3.0
+    "privacy": 2.5
+    "confidentiality": 2.5
+    "authorization": 2.5
+
+fda_submission:
+  weight: 2.0
+  keywords:
+    "fda": 3.5
+    "510k": 3.0
+    "clinical trial": 3.0
+    "submission": 2.5
+    "approval": 2.5
+    "regulatory": 2.5
+
+clinical_protocol:
+  weight: 2.0
+  keywords:
+    "clinical protocol": 3.5
+    "study protocol": 3.0
+    "trial": 2.5
+    "inclusion criteria": 2.5
+    "exclusion criteria": 2.5
+    "endpoint": 2.5
+
+# Quality and Safety
+incident_report:
+  weight: 2.5
+  keywords:
+    "incident report": 4.0
+    "adverse event": 3.5
+    "patient safety": 3.0
+    "error": 2.5
+    "investigation": 2.5
+    "root cause": 2.5
+
+quality_measure:
+  weight: 2.0
+  keywords:
+    "quality measure": 3.5
+    "performance": 2.5
+    "metric": 2.5
+    "outcome": 2.5
+    "indicator": 2.0
+
+risk_assessment:
+  weight: 2.0
+  keywords:
+    "risk assessment": 3.5
+    "safety": 2.5
+    "hazard": 2.5
+    "mitigation": 2.5
+    "prevention": 2.0
+
+# Research and Development
+clinical_study:
+  weight: 2.0
+  keywords:
+    "clinical study": 3.5
+    "research": 2.5
+    "methodology": 2.5
+    "data collection": 2.5
+    "statistical": 2.0
+    "efficacy": 2.5
+
+medical_device:
+  weight: 2.0
+  keywords:
+    "medical device": 3.5
+    "device": 2.5
+    "equipment": 2.0
+    "specifications": 2.0
+    "validation": 2.5
+    "testing": 2.0
+
+pharmaceutical:
+  weight: 2.0
+  keywords:
+    "pharmaceutical": 3.0
+    "drug": 2.5
+    "medication": 2.5
+    "dosage": 2.5
+    "side effects": 2.5
+    "contraindications": 2.5
+
+# Patient Communication
+patient_education:
+  weight: 1.5
+  keywords:
+    "patient education": 3.5
+    "instructions": 2.5
+    "information": 2.0
+    "brochure": 2.0
+    "pamphlet": 2.0
+
+consent_form:
+  weight: 2.0
+  keywords:
+    "consent form": 4.0
+    "informed consent": 3.5
+    "consent": 2.5
+    "agreement": 2.0
+    "risks": 2.5
+    "benefits": 2.0
+
+# Telemedicine and Digital Health
+telehealth:
+  weight: 2.0
+  keywords:
+    "telehealth": 3.5
+    "telemedicine": 3.5
+    "virtual": 2.5
+    "remote": 2.5
+    "consultation": 2.5
+    "video": 2.0
+
+ehr_data:
+  weight: 2.5
+  keywords:
+    "ehr": 3.5
+    "electronic health record": 4.0
+    "emr": 3.0
+    "electronic medical record": 3.5
+    "health information": 2.5
+
+# Population Health
+epidemiology:
+  weight: 1.5
+  keywords:
+    "epidemiology": 3.0
+    "outbreak": 2.5
+    "surveillance": 2.5
+    "public health": 2.5
+    "population": 2.0
+    "disease": 2.0
+
+health_survey:
+  weight: 1.5
+  keywords:
+    "health survey": 3.5
+    "questionnaire": 2.5
+    "assessment": 2.0
+    "screening": 2.5
+    "wellness": 2.0
