@@ -252,235 +252,300 @@ While competitors use generic AI for web summarization, Scout extracts **structu
 
 ---
 
-## 🟢 5. Universal Output Template
+## 🟢 5. Founder's Journey Universal Output Examples
 
-Every document, regardless of domain, produces this standardized JSON structure:
+### **🔵 Market Intelligence Cluster Example**
+*Source: TechCrunch article about AI SaaS funding*
 
 ```json
 {
-  "document_id": "doc_123",
-  "domain_detected": "regulatory_compliance",
-  "entities": {
-    "persons": [
+  "document_id": "web_techcrunch_ai_saas_001",
+  "url": "https://techcrunch.com/ai-saas-funding-q4-2024",
+  "domain_detected": "business_technology",
+  
+  "founder_intelligence": {
+    "market_opportunity": [
       {
-        "id": "person_001",
-        "canonical_name": "John Smith",
-        "aliases": ["J. Smith", "Smith, John"],
-        "role": "Safety Director",
-        "source": "Page 2"
+        "fact_id": "market_001",
+        "type": "MarketSize", 
+        "subject": "AI-powered SaaS market",
+        "predicate": "valued_at",
+        "object": "$28.1 billion",
+        "timeframe": "2024",
+        "growth_projection": "32% CAGR through 2029",
+        "source": "Paragraph 2, Gartner report citation",
+        "confidence": 0.85
       }
     ],
-    "organizations": [
+    "capital_flows": [
       {
-        "id": "org_osha", 
-        "canonical_name": "Occupational Safety and Health Administration",
-        "aliases": ["OSHA", "the Agency"],
-        "type": "regulatory_agency",
-        "source": "Page 1"
+        "fact_id": "funding_001",
+        "type": "InvestmentRound",
+        "subject": "Anthropic",
+        "predicate": "raised", 
+        "object": "$4 billion Series C",
+        "investor": "Amazon",
+        "date": "2024-11-15",
+        "focus_area": "Enterprise AI safety",
+        "source": "Headline and lead paragraph",
+        "confidence": 0.95
+      }
+    ]
+  }
+}
+```
+
+### **🟠 Competitive & User Cluster Example** 
+*Source: SaaS company comparison page*
+
+```json
+{
+  "document_id": "web_g2_crm_comparison_001", 
+  "url": "https://g2.com/categories/crm-software",
+  "domain_detected": "software_comparison",
+  
+  "founder_intelligence": {
+    "competitive_landscape": [
+      {
+        "fact_id": "comp_001",
+        "type": "MarketPosition",
+        "subject": "Salesforce",
+        "predicate": "holds_market_share",
+        "object": "19.8%",
+        "market": "CRM software",
+        "rank": "#1",
+        "source": "Market share chart",
+        "confidence": 0.80
       }
     ],
-    
-    // Domain-specific entities (conditional)
-    "standards": [...],      // Only if regulatory domain
-    "equipment": [...],      // Only if equipment-focused
-    "products": [...],       // Only if commercial domain
-    "treatments": [...]      // Only if healthcare domain
-  },
-  
-  "relationships": [
-    {
-      "subject": "org_osha",
-      "predicate": "issues", 
-      "object": "std_1926_1050",
-      "source": "Page 3"
-    }
-  ],
-  
-  "facts": [
-    {
-      "id": "fact_001",
-      "type": "Requirement",
-      "subject": "Employers", 
-      "predicate": "must_provide",
-      "object": "Stairway or ladder at worker access points",
-      "condition": "Break in elevation ≥ 19 inches",
-      "source": "Page 3",
-      "confidence": 0.95
-    }
-  ]
+    "user_pain_points": [
+      {
+        "fact_id": "pain_001", 
+        "type": "UserFriction",
+        "subject": "Small business users",
+        "predicate": "complain_about",
+        "object": "Complex setup taking 3+ months",
+        "frequency": "mentioned in 67% of reviews",
+        "source": "Review summary section",
+        "confidence": 0.75
+      }
+    ]
+  }
 }
 ```
 
----
+### **🟢 Operational & Scaling Cluster Example**
+*Source: Engineering blog about tech stack*
 
-## 🟢 6. Comparative Analysis Across Domains
-
-The power of this approach: **same extraction framework, comparable outputs across completely different domains**.
-
-### **Web Content vs. Regulatory Document**
-
-**Website Analysis:**
 ```json
 {
-  "domain_detected": "commercial_web",
-  "facts": [
-    {
-      "type": "Impact", 
-      "subject": "Our software",
-      "predicate": "increases",
-      "object": "productivity by 40%",
-      "source": "Homepage hero section",
-      "confidence": 0.7  // Lower confidence for marketing claims
-    }
-  ]
+  "document_id": "web_stripe_engineering_001",
+  "url": "https://stripe.com/blog/engineering/scaling-apis", 
+  "domain_detected": "engineering_technical",
+  
+  "founder_intelligence": {
+    "technical_innovation": [
+      {
+        "fact_id": "tech_001",
+        "type": "TechStackChoice",
+        "subject": "Stripe API infrastructure", 
+        "predicate": "built_with",
+        "object": "Ruby on Rails + Go microservices",
+        "performance_metric": "handles 10,000+ requests/second",
+        "source": "Architecture diagram caption",
+        "confidence": 0.90
+      }
+    ],
+    "talent_signals": [
+      {
+        "fact_id": "talent_001",
+        "type": "HiringPattern",
+        "subject": "Stripe",
+        "predicate": "hiring_for", 
+        "object": "Senior Go Engineers",
+        "salary_range": "$180K-250K base",
+        "location": "Remote + SF",
+        "urgency": "25 open positions",
+        "source": "Careers page link in footer",
+        "confidence": 0.85
+      }
+    ]
+  }
 }
 ```
 
-**OSHA Document:**
+### **🟡 Growth & Exit Cluster Example**
+*Source: Business news acquisition announcement*
+
 ```json
 {
-  "domain_detected": "regulatory_compliance", 
-  "facts": [
-    {
-      "type": "Impact",
-      "subject": "Safety training", 
-      "predicate": "reduces", 
-      "object": "workplace accidents by 40%",
-      "source": "Page 15, Study Citation",
-      "confidence": 0.95  // Higher confidence for regulatory data
-    }
-  ]
+  "document_id": "web_techcrunch_acquisition_001",
+  "url": "https://techcrunch.com/adobe-figma-acquisition",
+  "domain_detected": "business_news",
+  
+  "founder_intelligence": {
+    "exit_landscape": [
+      {
+        "fact_id": "exit_001",
+        "type": "AcquisitionEvent",
+        "subject": "Adobe", 
+        "predicate": "acquired",
+        "object": "Figma",
+        "valuation": "$20 billion",
+        "multiple": "50x revenue",
+        "strategic_rationale": "Design workflow consolidation",
+        "date": "2024-01-15",
+        "source": "Press release quote",
+        "confidence": 0.95
+      }
+    ],
+    "scaling_pathways": [
+      {
+        "fact_id": "scale_001",
+        "type": "GrowthModel",
+        "subject": "Figma",
+        "predicate": "achieved_growth_via",
+        "object": "Viral collaboration features",
+        "metric": "10x user growth in 18 months", 
+        "source": "CEO interview excerpt",
+        "confidence": 0.80
+      }
+    ]
+  }
 }
 ```
 
-### **Cross-Domain Comparison Benefits**
-- **Fact Verification**: Compare claims across authoritative vs. marketing sources
-- **Knowledge Synthesis**: Link regulatory requirements to business claims  
-- **Source Quality**: Weight facts by domain authority and provenance
-- **Pattern Recognition**: Identify universal vs. domain-specific insights
-
-
-Here’s a reusable Markdown section you can drop into your docs — focused on **Normalization 2**, the step that makes entities comparable across files and domains:
-
 ---
 
-## 🔑 Normalization 2: Entity → Canonical Form
+## 🟢 6. Pattern Matching Implementation (Aho-Corasick + Rust Regex)
 
-Once raw entities and spans are extracted, the **second normalization step** (“Normalization 2”) ensures they become **comparable, reusable, and linkable** across documents and domains. Without this, entities stay siloed and facts cannot be aggregated.
+### **What's Achievable with Your Current Tech Stack**
 
-### 🎯 Goals
+**✅ High-Confidence Patterns (Aho-Corasick Multi-Pattern Matching)**:
+```rust
+// Market size extraction patterns
+"$X billion market" | "$X.Y billion industry" | "market valued at $X"
+"growing at X% CAGR" | "X% annual growth" | "projected to reach $X"
 
-* **Resolve surface forms**: map variants (*OSHA*, *Occupational Safety and Health Administration*, *the Agency*) to one canonical ID.
-* **Anchor to external knowledge**: connect entities to stable identifiers (e.g., Wikidata QID, ISO code, SEC CIK, ICD-10).
-* **Standardize values**: normalize units, dates, numbers, and formats (e.g., *\$4*, *4 dollars*, *USD 4.00* → `4.0 USD`).
+// Funding announcement patterns  
+"raised $X Series [A-D]" | "closes $X funding round" | "$X investment led by"
+"Series [A-D] of $X" | "secured $X from [Investor]"
 
-### 🛠️ Process
-
-1. **Deduplication**
-
-   * Collapse aliases and spelling variants.
-   * Example: *“Dept. of Labor”* → *“Department of Labor”*.
-
-2. **Canonical Mapping**
-
-   * Assign each entity a canonical form (`canonical_name`) and a persistent ID (`entity_id`).
-   * Example:
-
-     ```yaml
-     raw: "OSHA"
-     canonical_name: "Occupational Safety and Health Administration"
-     entity_id: "Q192334"   # Wikidata ID
-     ```
-
-3. **Value Normalization**
-
-   * Dates → ISO 8601 (`1991-03-15`)
-   * Measurements → SI + alt units (`10 in` → `25.4 cm`)
-   * Money → numeric + currency code (`$4` → `4.0 USD`)
-
-4. **Cross-Document Linking**
-
-   * Entities with the same `entity_id` are treated as the same real-world thing, even if phrased differently across files.
-   * Enables comparison (e.g., OSHA citation counts across reports).
-
-### 📊 Example
-
-From OSHA stairways report:
-
-```yaml
-- type: RegulationCitation
-  raw: "29 CFR 1926.1050"
-  canonical_name: "29 CFR Part 1926.1050"
-  entity_id: "CFR:1926.1050"
-  domain: safety_compliance
+// Competitive positioning patterns
+"market leader in" | "leading provider of" | "#1 in [category]"
+"holds X% market share" | "ranks #X in [market]"
 ```
 
-### ⚡ Why It Matters
+**✅ Structured Fact Extraction (Rust Regex)**:
+```rust
+// Investment rounds
+r"(?P<company>\w+)\s+raised\s+\$(?P<amount>[\d.]+\s*[BMK]?)\s+Series\s+(?P<round>[A-D])"
 
-* Without Normalization 2, you have *strings*.
-* With Normalization 2, you have **knowledge objects** you can compare, aggregate, and query globally.
+// Market metrics  
+r"market\s+(?:valued|worth|size)\s+(?:of\s+)?\$(?P<amount>[\d.]+\s*[BMK]?)"
 
----
+// Pain points
+r"(?P<users>[\w\s]+)\s+(?:struggle|complain|frustrated)\s+(?:with|about)\s+(?P<pain>[\w\s]+)"
 
-Do you want me to also sketch the **universal YAML template** for Normalization 2 fields (`raw`, `canonical_name`, `entity_id`, `normalized_value`, `domain`), so you can bake it into your pipeline definition?
-
----
-
-## 🚀 Performance Architecture: Nonlinear Algorithms for Linear Cost
-
-The semantic enhancement layer leverages **nonlinear algorithms** that maintain O(n) performance regardless of pattern complexity - making fact extraction performance-friendly at scale.
-
-### 🔧 Core Performance Engines
-
-**Aho-Corasick Multi-Pattern Matching:**
-- **Complexity**: O(n + m + z) - linear with text size, NOT pattern count
-- **Capability**: Search 1000+ canonical mappings as fast as 10 mappings
-- **Use Case**: Entity normalization, alias resolution, canonical form mapping
-- **Performance**: One pass through text finds all entity variants simultaneously
-
-**FLPC Rust Regex Engine:**
-- **Complexity**: O(n) linear time with text length
-- **Capability**: Multiple complex fact patterns processed in parallel
-- **Use Case**: Structured fact extraction (RegulationCitation, Requirements, FinancialImpact)
-- **Performance**: Adding more extraction patterns doesn't degrade speed
-
-### 🎯 Implementation Strategy
-
-```python
-# Canonical Normalization - Aho-Corasick O(1) lookup
-canonical_map = {
-    "OSHA": "Occupational Safety and Health Administration",
-    "EPA": "Environmental Protection Agency", 
-    "DOL": "Department of Labor",
-    "29 CFR": "Code of Federal Regulations Title 29",
-    # ... 1000+ mappings processed simultaneously
-}
-
-# Fact Pattern Recognition - FLPC Rust Regex
-fact_patterns = {
-    'RegulationCitation': r'(\w+)\s+(\d+\s+CFR\s+[\d\.]+)',
-    'Requirement': r'(must|shall|required)\s+(.+?)(?=\.|,)',
-    'FinancialImpact': r'\$[\d,]+(?:\.\d{2})?.*?(?:save|cost|impact)',
-    'MeasurementRequirement': r'(\d+(?:\.\d+)?)\s*(inches?|feet?|meters?)',
-    # ... All patterns processed in single pass
-}
+// Tech stack mentions
+r"built\s+(?:with|using|on)\s+(?P<tech>[\w\s,+]+)"
 ```
 
-### ⚡ Performance Advantage
+### **Performance Advantage**
+- **Single Pass**: All patterns processed simultaneously across hundreds of thousands of websites
+- **Linear Scaling**: Adding 1000 patterns costs same as adding 10 patterns  
+- **No AI Overhead**: Direct pattern matching without model inference costs
 
-**Single-Pass Architecture:**
-1. **ONE** text traversal with ALL patterns active
-2. **Simultaneous** entity recognition + canonicalization + fact extraction
-3. **Post-processing** match assembly into structured facts
-4. **No multiple passes** - no exponential scaling
+---
 
-**Key Insight:** Semantic intelligence comes "for free" because both Aho-Corasick and FLPC are designed for massive pattern sets with linear performance. Adding 1000 fact patterns costs the same as adding 10.
+## 🟢 7. Organizational Implementation Roadmap
 
-### 📊 Scaling Characteristics
+### **Phase 1: Foundation Patterns (Weeks 1-4)**
+**Goal**: Get basic Founder's Journey facts extracting from 10,000 websites
 
-- **Text Length**: Linear O(n) - 10KB processes as fast as 1KB per character
-- **Pattern Count**: Constant O(1) - 1000 patterns ≈ 10 patterns  
-- **Fact Complexity**: No penalty - complex structured facts cost same as simple entities
-- **Domain Count**: Additive only - 20 domains scale independently
+**🔵 Market Intelligence Patterns**:
+- Investment announcements (funding amounts, investors, dates)
+- Market size claims (dollar amounts, growth rates)
+- Company valuations (acquisition prices, IPO values)
 
-**Result**: Rich semantic extraction with entity-level performance costs.
+**Implementation**:
+1. Build Aho-Corasick dictionary for investor names, funding terminology
+2. Create Rust regex patterns for dollar amounts and percentages
+3. Test on TechCrunch, Business Insider, company press releases
+
+### **Phase 2: Competitive Intelligence (Weeks 5-8)**  
+**Goal**: Extract positioning and user feedback across 50,000 websites
+
+**🟠 Competitive & User Patterns**:
+- Market positioning claims ("leading", "first", "#1 in")
+- User pain points (review sites, forums, support pages)
+- Feature comparisons (vs. competitor language)
+
+**Implementation**:
+1. Expand Aho-Corasick for company names and positioning terms
+2. Add regex patterns for review sentiment and complaint language
+3. Test on G2, Capterra, Reddit, company comparison pages
+
+### **Phase 3: Technical & Talent Intelligence (Weeks 9-12)**
+**Goal**: Track innovation and hiring patterns across 100,000+ websites
+
+**🟢 Operational Patterns**:
+- Technology stack mentions (frameworks, languages, tools)
+- Hiring patterns (job postings, salary ranges, team sizes)
+- Partnership announcements (integrations, acquisitions)
+
+**Implementation**:
+1. Build tech terminology dictionary (React, Python, AWS, etc.)
+2. Create patterns for job titles and salary formats
+3. Test on engineering blogs, careers pages, LinkedIn
+
+### **Phase 4: Growth & Exit Intelligence (Weeks 13-16)**
+**Goal**: Complete Founder's Journey coverage across 200,000+ websites
+
+**🟡 Growth & Exit Patterns**:
+- Acquisition announcements (buyer, target, price, rationale)
+- Growth metrics (user counts, revenue growth, market expansion)
+- Exit multiples (revenue multiples, EBITDA multiples)
+
+**Implementation**:
+1. Add acquisition terminology and buyer company names
+2. Create patterns for growth metrics and financial ratios
+3. Test on business news, SEC filings, company earnings calls
+
+### **Success Metrics by Phase**:
+- **Phase 1**: 1,000 market facts/day from 10K websites
+- **Phase 2**: 5,000 competitive facts/day from 50K websites  
+- **Phase 3**: 10,000 operational facts/day from 100K websites
+- **Phase 4**: 20,000+ complete founder profiles/day from 200K+ websites
+
+## 🟢 8. Scout's Founder Intelligence Advantage
+
+### **The Strategic Edge**
+
+With this semantic extraction framework, Scout provides founders with **structured intelligence advantages**:
+
+**Cross-Market Pattern Detection**:
+- "Show me all AI startups that raised >$10M and claim 40%+ efficiency gains"
+- "Which markets have the highest talent cost vs. funding availability ratios?"
+- "What pain points appear across 5+ different industries?"
+
+**Real-Time Market Intelligence**:
+- Track funding velocity changes across sectors
+- Monitor competitive positioning shifts and new market entrants
+- Identify emerging technology adoption patterns before they become obvious
+
+**Risk Assessment Capabilities**:
+- Regulatory change impact analysis across affected markets
+- Talent availability and cost trends in target geographies  
+- Exit pathway health and buyer appetite by vertical
+
+### **Competitive Moat**
+
+While others use AI for summarization, Scout's **pattern-based semantic extraction** creates:
+- **Queryable Knowledge Graphs**: Structured facts enable complex market analysis
+- **Trend Detection**: Pattern changes signal market shifts before competitors notice
+- **Source Authority Weighting**: Distinguish marketing claims from validated data
+- **Cross-Domain Synthesis**: Connect regulatory, competitive, and financial intelligence
+
+This isn't just better market research - it's **founder intelligence at scale**.
+
