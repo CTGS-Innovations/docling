@@ -56,3 +56,7 @@ mvp-fusion/bin/
 mvp-fusion/lib/
 
 .gitignore
+mvp-fusion/compressed_outputs/fusion.tar.bz2
+mvp-fusion/compressed_outputs/fusion.tar.gz
+mvp-fusion/compressed_outputs/fusion.tar.xz
+mvp-fusion/compressed_outputs/fusion.tar.zst
