@@ -260,19 +260,12 @@ def process_single_url(extractor: BaseExtractor, url: str, output_dir: Path = No
             status_code, len(content), content_type
         )
         
+        # Always log validation results (success or failure)
         if not success:
             logger.logger.error(f"❌ URL validation failed: {message}")
             logger.logger.error(f"📊 Status: {status_code}, Size: {len(content)} bytes, Type: {content_type}")
-            return {
-                'success': False,
-                'error': message,
-                'url': url,
-                'status_code': status_code,
-                'content_type': content_type,
-                'size_bytes': len(content)
-            }
-        
-        logger.success(f"✅ {message} - Status: {status_code}")
+        else:
+            logger.success(f"✅ {message} - Status: {status_code}")
         
         # Create safe filename from URL for final output
         safe_filename = create_filename_from_url(url)
@@ -287,8 +280,32 @@ def process_single_url(extractor: BaseExtractor, url: str, output_dir: Path = No
         temp_path = temp_dir / temp_filename
         
         # Write content to URL-named file
-        with open(temp_path, 'wb') as f:
-            f.write(content)
+        if success:
+            # Successful URLs: Write actual content
+            with open(temp_path, 'wb') as f:
+                f.write(content)
+        else:
+            # Failed URLs: Create minimal HTML with failure metadata for pipeline processing
+            failure_html = f"""<!DOCTYPE html>
+<html>
+<head>
+    <title>URL Processing Failed: {status_code} Error</title>
+    <meta name="http-status" content="{status_code}">
+    <meta name="validation-failure" content="true">
+    <meta name="source-url" content="{url}">
+</head>
+<body>
+    <h1>URL Processing Failed</h1>
+    <p><strong>URL:</strong> {url}</p>
+    <p><strong>HTTP Status:</strong> {status_code}</p>
+    <p><strong>Error:</strong> {message}</p>
+    <p><strong>Content Type:</strong> {content_type or 'unknown'}</p>
+    <p><strong>Response Size:</strong> {len(content)} bytes</p>
+    <p>This document represents a failed URL processing attempt and should not proceed to semantic extraction.</p>
+</body>
+</html>"""
+            with open(temp_path, 'w', encoding='utf-8') as f:
+                f.write(failure_html)
         
         # Store URL metadata in a companion metadata file that the extractor can read
         metadata_file = temp_path.parent / f"{temp_path.stem}_url_metadata.json"
@@ -299,8 +316,9 @@ def process_single_url(extractor: BaseExtractor, url: str, output_dir: Path = No
             'safe_filename': safe_filename,
             'http_status': status_code,
             'response_headers': headers,
-            'conversion_success': True,
+            'validation_success': success,  # Track validation result
             'validation_message': message,
+            'proceed_to_classification': success,  # Only proceed if validation passed
             **validation_metadata  # Include validation metadata (http_status, content_type, etc.)
         }
         with open(metadata_file, 'w') as f:

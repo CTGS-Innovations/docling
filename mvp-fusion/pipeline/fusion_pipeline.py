@@ -211,7 +211,11 @@ class FusionPipeline:
             
             successful_classifications = 0
             for doc in in_memory_docs:
-                if doc.success:
+                # Check if this document should proceed to classification
+                conversion_data = doc.yaml_frontmatter.get('conversion', {})
+                proceed_to_classification = conversion_data.get('proceed_to_classification', True)
+                
+                if doc.success and proceed_to_classification:
                     try:
                         classification_data = self._generate_classification_data(doc.markdown_content, doc.source_filename)
                         doc.add_classification_data(classification_data)
@@ -221,6 +225,22 @@ class FusionPipeline:
                         doc.mark_failed(str(e))
                     except Exception as e:
                         doc.mark_failed(f"Classification failed: {e}")
+                elif not proceed_to_classification:
+                    # Document failed validation - add skip documentation
+                    http_status = conversion_data.get('http_status', 'unknown')
+                    validation_message = conversion_data.get('validation_message', 'Unknown validation failure')
+                    
+                    skip_classification = {
+                        'processing_status': 'skipped',
+                        'skip_reason': f'http_{http_status}_validation_failed',
+                        'error_explanation': f'Cannot classify - {validation_message}',
+                        'http_status': http_status,
+                        'validation_failure': True,
+                        'proceed_to_enrichment': False,
+                        'proceed_to_extraction': False
+                    }
+                    doc.add_classification_data(skip_classification)
+                    doc.record_stage_timing('classify', 0)  # No processing time for skipped docs
             
             stage_time = (time.perf_counter() - stage_start) * 1000
             self.logger.success(f"Classification complete: {stage_time:.0f}ms ({successful_classifications}/{len(in_memory_docs)} successful)")
@@ -232,7 +252,11 @@ class FusionPipeline:
             
             successful_enrichments = 0
             for doc in in_memory_docs:
-                if doc.success:
+                # Check if this document should proceed to enrichment
+                classification_data = doc.yaml_frontmatter.get('classification', {})
+                proceed_to_enrichment = classification_data.get('proceed_to_enrichment', True)
+                
+                if doc.success and proceed_to_enrichment:
                     try:
                         # TODO: Implement domain-specific enrichment
                         enrichment_data = {
@@ -261,7 +285,11 @@ class FusionPipeline:
             
             successful_extractions = 0
             for doc in in_memory_docs:
-                if doc.success:
+                # Check if this document should proceed to extraction
+                classification_data = doc.yaml_frontmatter.get('classification', {})
+                proceed_to_extraction = classification_data.get('proceed_to_extraction', True)
+                
+                if doc.success and proceed_to_extraction:
                     try:
                         # Extract rich semantic data from classification results
                         classification = doc.yaml_frontmatter.get('classification', {})
@@ -313,60 +341,52 @@ class FusionPipeline:
         
         successful_writes = 0
         for doc in in_memory_docs:
-            if doc.success:
-                try:
-                    # Write final markdown file
-                    final_markdown = doc.generate_final_markdown()
-                    output_file = output_dir / f"{doc.source_stem}.md"
+            # Write files for ALL documents (success and failure) for universal audit trail
+            try:
+                # Write final markdown file (both success and failure cases)
+                final_markdown = doc.generate_final_markdown()
+                output_file = output_dir / f"{doc.source_stem}.md"
+                
+                with open(output_file, 'w', encoding='utf-8') as f:
+                    f.write(final_markdown)
+                
+                # Write JSON file ONLY for successful documents that actually have semantic data
+                if doc.success and doc.semantic_json:
+                    # Successful documents: Write full semantic JSON
+                    json_file = output_dir / f"{doc.source_stem}.json"
+                    import json
                     
-                    with open(output_file, 'w', encoding='utf-8') as f:
-                        f.write(final_markdown)
+                    self.logger.entity(f"📝 Generating JSON knowledge file: {json_file}")
                     
-                    # Write semantic facts JSON knowledge file if available
-                    self.logger.logger.debug(f"🔍 Debug: Checking JSON generation for {doc.source_stem}")
-                    self.logger.logger.debug(f"   - Has semantic_json attr: {hasattr(doc, 'semantic_json')}")
-                    self.logger.logger.debug(f"   - semantic_json exists: {bool(doc.semantic_json)}")
-                    self.logger.logger.debug(f"   - semantic_json type: {type(doc.semantic_json)}")
+                    # Use the standardized knowledge JSON format (matches temp file)
+                    knowledge_data = doc.generate_knowledge_json()
                     
-                    if doc.semantic_json:
-                        json_file = output_dir / f"{doc.source_stem}.json"
-                        import json
-                        
-                        self.logger.entity(f"📝 Generating JSON knowledge file: {json_file}")
-                        
-                        # Use the standardized knowledge JSON format (matches temp file)
-                        knowledge_data = doc.generate_knowledge_json()
-                        
-                        if knowledge_data:  # Only write if we have semantic data
-                            with open(json_file, 'w', encoding='utf-8') as f:
-                                json.dump(knowledge_data, f, indent=2, ensure_ascii=False)
-                            
-                            total_facts = knowledge_data.get('semantic_summary', {}).get('total_facts', 0)
-                            self.logger.entity(f"📄 Generated knowledge file: {json_file.name} ({total_facts} facts)")
-                        else:
-                            self.logger.logger.warning(f"⚠️  No semantic facts to write for {doc.source_filename}")
-                    
-                    # Fallback: Legacy semantic JSON support  
-                    elif hasattr(doc, 'semantic_json') and doc.semantic_json:
-                        json_file = output_dir / f"{doc.source_stem}.semantic.json"
-                        import json
+                    if knowledge_data:  # Only write if we have semantic data
                         with open(json_file, 'w', encoding='utf-8') as f:
-                            json.dump(doc.semantic_json, f, indent=2)
-                    
-                    successful_writes += 1
-                    
-                    # Clean up URL metadata file after successful processing
-                    if hasattr(doc, 'url_metadata'):
-                        try:
-                            file_path = Path(doc.source_file_path)
-                            metadata_file = file_path.parent / f"{file_path.stem}_url_metadata.json"
-                            if metadata_file.exists():
-                                metadata_file.unlink()
-                        except Exception:
-                            pass  # Don't fail the whole process if cleanup fails
-                    
-                except Exception as e:
-                    doc.mark_failed(f"Write failed: {e}")
+                            json.dump(knowledge_data, f, indent=2, ensure_ascii=False)
+                        
+                        total_facts = knowledge_data.get('semantic_summary', {}).get('total_facts', 0)
+                        self.logger.entity(f"📄 Generated knowledge file: {json_file.name} ({total_facts} facts)")
+                    else:
+                        self.logger.logger.warning(f"⚠️  No semantic facts to write for {doc.source_filename}")
+                
+                # Note: Failed URLs only get markdown files with failure metadata, no JSON files
+                
+                # Mark successful write for any document that got written (success or failure)
+                successful_writes += 1
+                
+                # Clean up URL metadata file after successful processing
+                if hasattr(doc, 'url_metadata'):
+                    try:
+                        file_path = Path(doc.source_file_path)
+                        metadata_file = file_path.parent / f"{file_path.stem}_url_metadata.json"
+                        if metadata_file.exists():
+                            metadata_file.unlink()
+                    except Exception:
+                        pass  # Don't fail the whole process if cleanup fails
+                        
+            except Exception as e:
+                doc.mark_failed(f"Write failed: {e}")
         
         write_time = (time.perf_counter() - write_start) * 1000
         self.logger.success(f"Write complete: {write_time:.0f}ms ({successful_writes}/{len(in_memory_docs)} successful)")

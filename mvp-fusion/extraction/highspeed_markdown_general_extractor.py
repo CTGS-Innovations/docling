@@ -147,7 +147,7 @@ def _extract_pdf_to_markdown(pdf_path_and_output_dir):
                     original_size=url_meta.get('original_size'),
                     http_status=url_meta.get('http_status'),
                     response_headers=url_meta.get('response_headers'),
-                    validation_success=url_meta.get('conversion_success'),
+                    validation_success=url_meta.get('validation_success'),
                     validation_message=url_meta.get('validation_message')
                 )
                 # Note: Metadata file cleanup handled by pipeline to avoid race conditions

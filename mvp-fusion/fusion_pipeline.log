@@ -1602,3 +1602,167 @@
 2025-09-17 15:42:47 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 403 - not processable[0m
 2025-09-17 15:42:47 - __main__ - [31mERROR[0m - [31m📊 Status: 403, Size: 0 bytes, Type: [0m
 2025-09-17 15:42:47 - __main__ - [31mERROR[0m - [31m❌ Error: 'dict' object has no attribute 'success'[0m
+2025-09-17 15:52:22 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 15:52:22 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 15:52:22 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 15:52:22 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 15:52:22 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 15:52:23 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 15:52:23 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:52:23 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:52:23 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:52:23 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:52:23 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:52:23 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:52:23 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:52:23 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:53:01 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 15:53:01 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 15:53:01 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 15:53:01 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 15:53:01 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 15:53:02 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 15:53:02 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:53:02 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:53:02 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:53:02 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:53:02 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:53:02 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:53:02 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:53:02 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:54:58 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 15:54:58 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 15:54:58 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 15:54:58 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 15:54:58 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 15:54:59 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 15:54:59 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:54:59 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:54:59 - __main__ - [31mERROR[0m - [31m❌ Failed to process URL https://www.bcg.com/publications/2023/state-of-startups: invalid syntax (fusion_pipeline.py, line 410)[0m
+2025-09-17 15:56:23 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 15:56:23 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 15:56:23 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 15:56:23 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 15:56:23 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 15:56:24 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 15:56:24 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:56:24 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:56:24 - __main__ - [31mERROR[0m - [31m❌ Failed to process URL https://www.bcg.com/publications/2023/state-of-startups: invalid syntax (fusion_pipeline.py, line 411)[0m
+2025-09-17 15:56:50 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 15:56:50 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 15:56:50 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 15:56:50 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 15:56:50 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 15:56:51 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 15:56:51 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:56:51 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:56:51 - __main__ - [31mERROR[0m - [31m❌ Failed to process URL https://www.bcg.com/publications/2023/state-of-startups: invalid syntax (fusion_pipeline.py, line 411)[0m
+2025-09-17 15:57:35 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 15:57:35 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 15:57:35 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 15:57:35 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 15:57:35 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 15:57:36 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 15:57:36 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:57:36 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:57:36 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:57:36 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:57:36 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:57:36 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:57:36 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:57:36 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:58:48 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 15:58:48 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 15:58:48 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 15:58:48 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 15:58:48 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.statista.com/topics/840/venture-capital/[0m
+2025-09-17 15:58:50 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:58:50 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:58:50 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:58:50 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:58:50 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:58:50 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:59:59 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 15:59:59 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 15:59:59 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 15:59:59 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 15:59:59 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 15:59:59 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 15:59:59 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:59:59 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:59:59 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:59:59 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:00:00 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:00:00 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:00:00 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:00:00 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:03:24 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 16:03:24 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 16:03:24 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 16:03:24 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 16:03:24 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 16:03:25 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 16:03:25 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:03:25 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:03:25 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:03:25 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:03:25 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:03:25 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:03:25 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:03:25 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:05:28 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 16:05:28 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 16:05:28 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 16:05:28 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 16:05:28 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 16:05:29 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 16:05:29 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:05:29 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:05:29 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:05:29 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:05:29 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:05:29 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:05:29 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:05:29 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:06:47 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 16:06:47 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 16:06:47 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 16:06:47 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 16:06:47 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 16:06:48 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 16:06:48 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:06:48 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:06:48 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:06:48 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:06:48 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:06:48 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:06:48 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:06:48 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:08:08 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 16:08:08 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 16:08:08 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 16:08:08 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 16:08:08 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 16:08:08 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 16:08:08 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:08:08 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:08:09 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:08:09 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:08:09 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:08:09 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:08:09 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:08:09 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 16:08:34 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 16:08:34 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 16:08:34 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 16:08:34 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 16:08:34 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 16:08:35 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 16:08:35 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 16:08:35 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 16:08:35 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 16:08:35 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 16:08:35 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 16:08:35 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 16:08:35 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 16:08:35 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
