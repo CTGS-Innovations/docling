@@ -15,7 +15,7 @@ performance:
   # Processing strategy
   enable_vectorization: true    # SIMD operations
   enable_parallel_processing: true
-  max_workers: 2               # Default 2 cores (1025 p/s, resource efficient)
+  max_workers: 2               # Test higher workers with connection pool optimization
   
   # Batch processing for efficiency
   batch_size: 32               # Process 32 documents simultaneously
@@ -52,6 +52,10 @@ inputs:
   # Performance limits
   max_file_size_mb: 10.0       # Larger than MVP-Hyper for better throughput
   timeout_per_file: 5          # Faster timeout for efficiency
+  
+  # URL-specific timeout settings
+  url_timeout_seconds: 15      # Primary URL download timeout
+  url_retry_timeout: 30        # Optional: retry timeout for failed URLs
 
 # Fusion Engine Configuration
 fusion_engine:

@@ -102,7 +102,7 @@ def process_single_file(extractor: BaseExtractor, file_path: Path, output_dir: P
     return result
 
 
-def download_url_content(url: str, max_size_mb: int = 10) -> tuple[bytes, str, str, int, Dict]:
+def download_url_content(url: str, max_size_mb: int = 10, timeout_seconds: int = 15, session: requests.Session = None) -> tuple[bytes, str, str, int, Dict]:
     """Download URL content to memory with size limit. 
     
     Returns: 
@@ -133,7 +133,11 @@ def download_url_content(url: str, max_size_mb: int = 10) -> tuple[bytes, str, s
         logger.entity(f"🌐 Downloading: {url}")
         
         # Stream download to check size before loading into memory
-        response = requests.get(url, headers=headers, timeout=30, stream=True)
+        # Use provided session or fall back to requests.get
+        if session:
+            response = session.get(url, headers=headers, timeout=timeout_seconds, stream=True)
+        else:
+            response = requests.get(url, headers=headers, timeout=timeout_seconds, stream=True)
         
         # Capture response metadata immediately
         status_code = response.status_code
@@ -243,7 +247,7 @@ def create_filename_from_url(url: str) -> str:
     return filename
 
 
-def process_single_url(extractor: BaseExtractor, url: str, output_dir: Path = None, config: dict = None, quiet: bool = False) -> Dict[str, Any]:
+def process_single_url(extractor: BaseExtractor, url: str, output_dir: Path = None, config: dict = None, quiet: bool = False, session: requests.Session = None) -> Dict[str, Any]:
     """Process a single URL through the complete fusion pipeline (convert → classify → enrich → extract)."""
     logger = get_fusion_logger(__name__)
     temp_file = None
@@ -252,8 +256,10 @@ def process_single_url(extractor: BaseExtractor, url: str, output_dir: Path = No
         if not quiet:
             logger.stage(f"🌐 Processing URL: {url}")
         
-        # Download URL content to memory with size limit
-        content, content_type, file_ext, status_code, headers = download_url_content(url, max_size_mb=10)
+        # Download URL content to memory with configurable timeout
+        url_timeout = config.get('inputs', {}).get('url_timeout_seconds', 15) if config else 15
+        max_size_mb = config.get('inputs', {}).get('max_file_size_mb', 10.0) if config else 10.0
+        content, content_type, file_ext, status_code, headers = download_url_content(url, max_size_mb=max_size_mb, timeout_seconds=url_timeout, session=session)
         
         # Validate URL conversion success before proceeding to classification
         success, message, validation_metadata = ConversionSuccess.validate_url(
@@ -471,25 +477,64 @@ def process_url_file(extractor: BaseExtractor, url_file_path: Path, output_dir: 
     results = []
     start_time = time.time()
     
-    for i, url in enumerate(urls, 1):
-        try:
-            logger.entity(f"📋 Processing {i}/{len(urls)}: {url[:60]}...")
-            result = process_single_url(extractor, url, output_dir, config, quiet=False)
-            results.append(result)
+    # Get parallel processing configuration
+    max_workers = config.get('performance', {}).get('max_workers', 2)
+    
+    # Process URLs in parallel using ThreadPoolExecutor (same pattern as file processing)
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    from requests.adapters import HTTPAdapter
+    
+    logger.stage(f"🔧 Using {max_workers} parallel workers for URL processing")
+    
+    # Create optimized session for parallel downloads
+    session = requests.Session()
+    adapter = HTTPAdapter(
+        pool_connections=max_workers * 2,  # Scale with worker count
+        pool_maxsize=max_workers * 4,      # Allow more connections per pool
+        max_retries=1
+    )
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+    
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # Submit all URL processing tasks with shared session
+        future_to_url = {
+            executor.submit(process_single_url, extractor, url, output_dir, config, True, session): url
+            for url in urls
+        }
+        
+        # Process results as they complete with clean logging
+        completed_count = 0
+        successful_count = 0
+        failed_count = 0
+        
+        for future in as_completed(future_to_url):
+            url = future_to_url[future]
+            completed_count += 1
             
-            # Show progress every 10 URLs
-            if i % 10 == 0:
-                elapsed = time.time() - start_time
-                rate = i / elapsed
-                logger.entity(f"  Progress: {i}/{len(urls)} ({rate:.1f} URLs/sec)")
+            try:
+                result = future.result()
+                results.append(result)
                 
-        except KeyboardInterrupt:
-            logger.logger.warning(f"\n⚠️ Processing interrupted by user at URL {i}/{len(urls)}")
-            break
-        except Exception as e:
-            logger.logger.error(f"❌ Error processing URL {i}: {e}")
-            # Continue with next URL
-            continue
+                # Count successes/failures without verbose logging
+                if hasattr(result, 'success') and result.success:
+                    successful_count += 1
+                else:
+                    failed_count += 1
+                
+                # Show clean progress every 10 URLs
+                if completed_count % 10 == 0:
+                    elapsed = time.time() - start_time
+                    rate = completed_count / elapsed
+                    logger.entity(f"📊 Progress: {completed_count}/{len(urls)} URLs processed ({rate:.1f}/sec) - {successful_count} successful, {failed_count} failed")
+                    
+            except KeyboardInterrupt:
+                logger.logger.warning(f"\n⚠️ Processing interrupted by user at URL {completed_count}/{len(urls)}")
+                break
+            except Exception as e:
+                logger.logger.error(f"❌ Error processing URL {url}: {e}")
+                failed_count += 1
+                continue
     
     # Final summary
     total_time = time.time() - start_time
