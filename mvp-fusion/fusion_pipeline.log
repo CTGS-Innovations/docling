@@ -1119,3 +1119,486 @@
 💻 PROCESSING FOOTPRINT:[0m
 2025-09-17 13:47:58 - __main__ - [32mSTAGE[0m - [32m   🖥️  WORKERS: 2/16 cores (1 worker = 1 core)[0m
 2025-09-17 13:47:58 - __main__ - [32mSTAGE[0m - [32m   ⚡ EFFICIENCY: 26 pages/worker, 8.3 MB/worker[0m
+2025-09-17 14:41:20 - __main__ - [31mERROR[0m - [31m❌ Failed to process URL https://www.forbes.com/sites/alejandrocremades/2018/09/23/how-to-effectively-determine-your-market-size/: ExtractionResult.__init__() missing 1 required positional argument: 'file_path'[0m
+2025-09-17 14:41:20 - __main__ - [31mERROR[0m - [31m❌ Error: ExtractionResult.__init__() missing 1 required positional argument: 'file_path'[0m
+2025-09-17 14:42:10 - __main__ - [31mERROR[0m - [31m❌ Failed to process URL https://www.forbes.com/sites/alejandrocremades/2018/09/23/how-to-effectively-determine-your-market-size/: ExtractionResult.__init__() missing 1 required positional argument: 'file_path'[0m
+2025-09-17 14:43:08 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 14:43:08 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 14:43:08 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 14:43:08 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 14:43:08 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://ctgs.com[0m
+2025-09-17 14:43:08 - __main__ - [35mENTITY[0m - [35m🌐 Downloading: https://ctgs.com[0m
+2025-09-17 14:43:08 - __main__ - [0mINFO[0m - [0m✅ ✅ Downloaded 155847 bytes to tmp2d0g2ysv.html[0m
+2025-09-17 14:43:08 - __main__ - [31mERROR[0m - [31m❌ Failed to process URL https://ctgs.com: ExtractionResult.__init__() missing 1 required positional argument: 'file_path'[0m
+2025-09-17 14:44:00 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 14:44:00 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 14:44:00 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 14:44:00 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 14:44:00 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://ctgs.com[0m
+2025-09-17 14:44:00 - __main__ - [35mENTITY[0m - [35m🌐 Downloading: https://ctgs.com[0m
+2025-09-17 14:44:01 - __main__ - [0mINFO[0m - [0m✅ ✅ Downloaded 155847 bytes to tmpocwzp53_.html[0m
+2025-09-17 14:49:09 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 14:49:09 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 14:49:09 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 14:49:09 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 14:49:09 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://ctgs.com[0m
+2025-09-17 14:49:09 - __main__ - [35mENTITY[0m - [35m🌐 Downloading: https://ctgs.com[0m
+2025-09-17 14:49:09 - __main__ - [0mINFO[0m - [0m✅ ✅ Downloaded 155847 bytes (0.1MB) - Type: text/html; charset=utf-8[0m
+2025-09-17 14:49:09 - __main__ - [35mENTITY[0m - [35m📄 Detected content type: text/html; charset=utf-8 → .html[0m
+2025-09-17 14:49:09 - __main__ - [0mINFO[0m - [0m✅ 📝 Created: ctgs.com.md[0m
+2025-09-17 14:52:14 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 14:52:14 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 14:52:14 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 14:52:14 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 14:52:14 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://ctgs.com[0m
+2025-09-17 14:52:14 - __main__ - [35mENTITY[0m - [35m🌐 Downloading: https://ctgs.com[0m
+2025-09-17 14:52:14 - __main__ - [0mINFO[0m - [0m✅ ✅ Downloaded 155847 bytes (0.1MB) - Type: text/html; charset=utf-8[0m
+2025-09-17 14:52:14 - __main__ - [35mENTITY[0m - [35m📄 Detected content type: text/html; charset=utf-8 → .html[0m
+2025-09-17 14:52:14 - __main__ - [35mENTITY[0m - [35m🔄 Using Traditional Pipeline for URL[0m
+2025-09-17 14:52:14 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m✅ Aho-Corasick engine initialized for government/regulatory + AI domains[0m
+2025-09-17 14:52:14 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 14:52:14 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m💾 Memory limit: 100MB per file, 1024MB service total[0m
+2025-09-17 14:52:14 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 14:52:14 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Conversion complete: 21ms (1/1 successful)[0m
+2025-09-17 14:52:14 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m💾 Total service memory: 0.0MB[0m
+2025-09-17 14:52:14 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 14:52:14 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m🧠 Layer 6: Semantic facts extracted - 104 facts found[0m
+2025-09-17 14:52:14 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Classification complete: 17ms (1/1 successful)[0m
+2025-09-17 14:52:14 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 14:52:14 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Enrichment complete: 0ms (1/1 successful)[0m
+2025-09-17 14:52:14 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 14:52:14 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Extraction complete: 0ms (1/1 successful)[0m
+2025-09-17 14:52:14 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 14:52:14 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m📝 Generating JSON knowledge file: ../output/fusion/tmp_pw9pb9r.json[0m
+2025-09-17 14:52:14 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m📄 Generated knowledge file: tmp_pw9pb9r.json (104 facts)[0m
+2025-09-17 14:52:14 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Write complete: 23ms (1/1 successful)[0m
+2025-09-17 14:56:20 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 14:56:20 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 14:56:20 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 14:56:20 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 14:56:20 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://ctgs.com[0m
+2025-09-17 14:56:20 - __main__ - [35mENTITY[0m - [35m🌐 Downloading: https://ctgs.com[0m
+2025-09-17 14:56:21 - __main__ - [0mINFO[0m - [0m✅ ✅ Downloaded 155847 bytes (0.1MB) - Type: text/html; charset=utf-8[0m
+2025-09-17 14:56:21 - __main__ - [35mENTITY[0m - [35m📄 Detected content type: text/html; charset=utf-8 → .html[0m
+2025-09-17 14:56:21 - __main__ - [31mERROR[0m - [31m❌ Failed to process URL https://ctgs.com: 'PosixPath' object has no attribute '_url_metadata'[0m
+2025-09-17 14:57:10 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 14:57:10 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 14:57:10 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 14:57:10 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 14:57:10 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://ctgs.com[0m
+2025-09-17 14:57:10 - __main__ - [35mENTITY[0m - [35m🌐 Downloading: https://ctgs.com[0m
+2025-09-17 14:57:10 - __main__ - [0mINFO[0m - [0m✅ ✅ Downloaded 155847 bytes (0.1MB) - Type: text/html; charset=utf-8[0m
+2025-09-17 14:57:10 - __main__ - [35mENTITY[0m - [35m📄 Detected content type: text/html; charset=utf-8 → .html[0m
+2025-09-17 14:57:10 - __main__ - [35mENTITY[0m - [35m🔄 Using Traditional Pipeline for URL[0m
+2025-09-17 14:57:10 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m✅ Aho-Corasick engine initialized for government/regulatory + AI domains[0m
+2025-09-17 14:57:10 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 14:57:10 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m💾 Memory limit: 100MB per file, 1024MB service total[0m
+2025-09-17 14:57:10 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 14:57:10 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Conversion complete: 36ms (1/1 successful)[0m
+2025-09-17 14:57:10 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m💾 Total service memory: 0.0MB[0m
+2025-09-17 14:57:10 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 14:57:10 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m🧠 Layer 6: Semantic facts extracted - 104 facts found[0m
+2025-09-17 14:57:10 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Classification complete: 18ms (1/1 successful)[0m
+2025-09-17 14:57:10 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 14:57:10 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Enrichment complete: 0ms (1/1 successful)[0m
+2025-09-17 14:57:10 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 14:57:10 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Extraction complete: 0ms (1/1 successful)[0m
+2025-09-17 14:57:10 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 14:57:10 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m📝 Generating JSON knowledge file: ../output/fusion/tmp49d65tyd.json[0m
+2025-09-17 14:57:10 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m📄 Generated knowledge file: tmp49d65tyd.json (104 facts)[0m
+2025-09-17 14:57:10 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Write complete: 24ms (1/1 successful)[0m
+2025-09-17 14:59:06 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 14:59:06 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 14:59:06 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 14:59:06 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 14:59:06 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://ctgs.com[0m
+2025-09-17 14:59:06 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 14:59:06 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 14:59:06 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 14:59:06 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 14:59:06 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 14:59:06 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:01:39 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 15:01:39 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 15:01:39 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 15:01:39 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 15:01:39 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://ctgs.com[0m
+2025-09-17 15:01:39 - __main__ - [35mENTITY[0m - [35m🌐 Downloading: https://ctgs.com[0m
+2025-09-17 15:01:39 - __main__ - [0mINFO[0m - [0m✅ ✅ Downloaded 155847 bytes (0.1MB) - Type: text/html; charset=utf-8[0m
+2025-09-17 15:01:39 - __main__ - [35mENTITY[0m - [35m📄 Detected content type: text/html; charset=utf-8 → .html[0m
+2025-09-17 15:01:39 - __main__ - [35mENTITY[0m - [35m🔄 Using Traditional Pipeline for URL[0m
+2025-09-17 15:01:39 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m✅ Aho-Corasick engine initialized for government/regulatory + AI domains[0m
+2025-09-17 15:01:39 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:01:39 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m💾 Memory limit: 100MB per file, 1024MB service total[0m
+2025-09-17 15:01:39 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:01:39 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Conversion complete: 36ms (1/1 successful)[0m
+2025-09-17 15:01:39 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m💾 Total service memory: 0.0MB[0m
+2025-09-17 15:01:39 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:01:40 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m🧠 Layer 6: Semantic facts extracted - 104 facts found[0m
+2025-09-17 15:01:40 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Classification complete: 18ms (1/1 successful)[0m
+2025-09-17 15:01:40 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:01:40 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Enrichment complete: 0ms (1/1 successful)[0m
+2025-09-17 15:01:40 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:01:40 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Extraction complete: 0ms (1/1 successful)[0m
+2025-09-17 15:01:40 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:01:40 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m📝 Generating JSON knowledge file: ../output/fusion/tmpaw6jsy1z.json[0m
+2025-09-17 15:01:40 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m📄 Generated knowledge file: tmpaw6jsy1z.json (104 facts)[0m
+2025-09-17 15:01:40 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Write complete: 24ms (1/1 successful)[0m
+2025-09-17 15:01:40 - __main__ - [35mENTITY[0m - [35m🔍 Result type: <class 'pipeline.in_memory_document.InMemoryDocument'>[0m
+2025-09-17 15:01:40 - __main__ - [35mENTITY[0m - [35m🔍 Result attributes: ['add_classification_data', 'add_enrichment_data', 'error_message', 'generate_final_markdown', 'generate_knowledge_json', 'get_memory_footprint', 'get_processing_summary', 'mark_failed', 'markdown_content', 'memory_limit_bytes', 'pages_processed', 'processing_start_time', 'record_stage_timing', 'semantic_json', 'set_conversion_data', 'set_semantic_data', 'source_file_path', 'source_filename', 'source_stem', 'stage_timings', 'success', 'yaml_frontmatter'][0m
+2025-09-17 15:36:42 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 15:36:42 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 15:36:42 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 15:36:42 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 15:36:42 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://ctgs.com[0m
+2025-09-17 15:36:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:36:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:36:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:36:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:36:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:36:42 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:37:17 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 15:37:17 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 15:37:17 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 15:37:17 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 15:37:17 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://ctgs.com[0m
+2025-09-17 15:37:17 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:37:17 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:37:17 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:37:17 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:37:17 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:37:17 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:37:31 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 15:37:31 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 15:37:31 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 15:37:31 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 15:37:31 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://ctgs.com[0m
+2025-09-17 15:37:31 - __main__ - [35mENTITY[0m - [35m🌐 Downloading: https://ctgs.com[0m
+2025-09-17 15:37:31 - urllib3.connectionpool - [36mDEBUG[0m - [36mStarting new HTTPS connection (1): ctgs.com:443[0m
+2025-09-17 15:37:31 - urllib3.connectionpool - [36mDEBUG[0m - [36mhttps://ctgs.com:443 "GET / HTTP/1.1" 200 None[0m
+2025-09-17 15:37:31 - __main__ - [0mINFO[0m - [0m✅ ✅ Downloaded 155847 bytes (0.1MB) - Type: text/html; charset=utf-8[0m
+2025-09-17 15:37:31 - __main__ - [0mINFO[0m - [0m✅ ✅ URL ready for classification - Status: 200[0m
+2025-09-17 15:37:31 - __main__ - [35mENTITY[0m - [35m📄 Detected content type: text/html; charset=utf-8 → .html[0m
+2025-09-17 15:37:31 - __main__ - [35mENTITY[0m - [35m🔄 Using Traditional Pipeline for URL[0m
+2025-09-17 15:37:31 - knowledge.aho_corasick_engine - [35mENTITY[0m - [35m📚 Loaded modular patterns:[0m
+2025-09-17 15:37:31 - knowledge.aho_corasick_engine - [35mENTITY[0m - [35m   🏛️  Domains: 209 (2106 keywords)[0m
+2025-09-17 15:37:31 - knowledge.aho_corasick_engine - [35mENTITY[0m - [35m   📄 Document Types: 219 (1462 keywords)[0m
+2025-09-17 15:37:31 - knowledge.aho_corasick_engine - [35mENTITY[0m - [35m   🔍 Entity Categories: 2 (8 total patterns)[0m
+2025-09-17 15:37:31 - knowledge.aho_corasick_engine - [36mDEBUG[0m - [36m⚡ Built modular Aho-Corasick automatons: 2.18ms[0m
+2025-09-17 15:37:31 - knowledge.aho_corasick_engine - [36mDEBUG[0m - [36m   🏛️  Domain patterns: 2019[0m
+2025-09-17 15:37:31 - knowledge.aho_corasick_engine - [36mDEBUG[0m - [36m   📄 Document type patterns: 1400[0m
+2025-09-17 15:37:31 - knowledge.aho_corasick_engine - [36mDEBUG[0m - [36m   🔍 Entity patterns: 0[0m
+2025-09-17 15:37:31 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m✅ Aho-Corasick engine initialized for government/regulatory + AI domains[0m
+2025-09-17 15:37:31 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:37:31 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m💾 Memory limit: 100MB per file, 1024MB service total[0m
+2025-09-17 15:37:31 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:37:31 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Conversion complete: 22ms (1/1 successful)[0m
+2025-09-17 15:37:31 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m💾 Total service memory: 0.0MB[0m
+2025-09-17 15:37:31 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:37:31 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Classification complete: 0ms (0/1 successful)[0m
+2025-09-17 15:37:31 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:37:31 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Enrichment complete: 0ms (0/1 successful)[0m
+2025-09-17 15:37:31 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:37:31 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Extraction complete: 0ms (0/1 successful)[0m
+2025-09-17 15:37:31 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:37:31 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Write complete: 0ms (0/1 successful)[0m
+2025-09-17 15:37:31 - __main__ - [35mENTITY[0m - [35m🔍 Result type: <class 'pipeline.in_memory_document.InMemoryDocument'>[0m
+2025-09-17 15:37:31 - __main__ - [35mENTITY[0m - [35m🔍 Result attributes: ['add_classification_data', 'add_enrichment_data', 'error_message', 'generate_final_markdown', 'generate_knowledge_json', 'get_memory_footprint', 'get_processing_summary', 'mark_failed', 'markdown_content', 'memory_limit_bytes', 'pages_processed', 'processing_start_time', 'record_stage_timing', 'semantic_json', 'set_conversion_data', 'set_semantic_data', 'source_file_path', 'source_filename', 'source_stem', 'source_url', 'stage_timings', 'success', 'url_metadata', 'yaml_frontmatter'][0m
+2025-09-17 15:37:31 - __main__ - [35mENTITY[0m - [35m🔍 Success: False[0m
+2025-09-17 15:37:31 - __main__ - [35mENTITY[0m - [35m🔍 Has output_path: False[0m
+2025-09-17 15:38:59 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 15:38:59 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 15:38:59 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 15:38:59 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 15:38:59 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://ctgs.com[0m
+2025-09-17 15:38:59 - __main__ - [35mENTITY[0m - [35m🌐 Downloading: https://ctgs.com[0m
+2025-09-17 15:38:59 - urllib3.connectionpool - [36mDEBUG[0m - [36mStarting new HTTPS connection (1): ctgs.com:443[0m
+2025-09-17 15:38:59 - urllib3.connectionpool - [36mDEBUG[0m - [36mhttps://ctgs.com:443 "GET / HTTP/1.1" 200 None[0m
+2025-09-17 15:38:59 - __main__ - [0mINFO[0m - [0m✅ ✅ Downloaded 155847 bytes (0.1MB) - Type: text/html; charset=utf-8[0m
+2025-09-17 15:38:59 - __main__ - [0mINFO[0m - [0m✅ ✅ URL ready for classification - Status: 200[0m
+2025-09-17 15:38:59 - __main__ - [35mENTITY[0m - [35m📄 Detected content type: text/html; charset=utf-8 → .html[0m
+2025-09-17 15:38:59 - __main__ - [35mENTITY[0m - [35m🔄 Using Traditional Pipeline for URL[0m
+2025-09-17 15:38:59 - knowledge.aho_corasick_engine - [35mENTITY[0m - [35m📚 Loaded modular patterns:[0m
+2025-09-17 15:38:59 - knowledge.aho_corasick_engine - [35mENTITY[0m - [35m   🏛️  Domains: 209 (2106 keywords)[0m
+2025-09-17 15:38:59 - knowledge.aho_corasick_engine - [35mENTITY[0m - [35m   📄 Document Types: 219 (1462 keywords)[0m
+2025-09-17 15:38:59 - knowledge.aho_corasick_engine - [35mENTITY[0m - [35m   🔍 Entity Categories: 2 (8 total patterns)[0m
+2025-09-17 15:39:00 - knowledge.aho_corasick_engine - [36mDEBUG[0m - [36m⚡ Built modular Aho-Corasick automatons: 2.23ms[0m
+2025-09-17 15:39:00 - knowledge.aho_corasick_engine - [36mDEBUG[0m - [36m   🏛️  Domain patterns: 2019[0m
+2025-09-17 15:39:00 - knowledge.aho_corasick_engine - [36mDEBUG[0m - [36m   📄 Document type patterns: 1400[0m
+2025-09-17 15:39:00 - knowledge.aho_corasick_engine - [36mDEBUG[0m - [36m   🔍 Entity patterns: 0[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m✅ Aho-Corasick engine initialized for government/regulatory + AI domains[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m💾 Memory limit: 100MB per file, 1024MB service total[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Conversion complete: 22ms (1/1 successful)[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m💾 Total service memory: 0.0MB[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:39:00 - comprehensive_entity_extractor - [36mDEBUG[0m - [36mExtracting entities with FLPC Rust regex...[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [35mENTITY[0m - [35m🧠 Starting semantic fact extraction from classification data...[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m🔍 Found entity sections in classification:[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   📊 Global entities: ['person', 'org', 'loc', 'gpe', 'date', 'time', 'money', 'percent', 'phone', 'regulation', 'url', 'measurement'][0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   🎯 Domain entities: ['financial', 'percentages', 'organizations', 'people', 'locations', 'regulations', 'statistics'][0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - global_person: 10 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - global_org: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - global_loc: 1 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - global_gpe: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - global_date: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - global_time: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - global_money: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - global_percent: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - global_phone: 1 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - global_regulation: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - global_url: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - global_measurement: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - domain_financial: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - domain_percentages: 1 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - domain_organizations: 6 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - domain_people: 85 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - domain_locations: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - domain_regulations: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m      - domain_statistics: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m🔄 Normalized 0 global + 0 domain entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m⬆️  Promoting classification entities to structured facts...[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m🔄 Dynamically promoting global entities: ['person', 'org', 'loc', 'gpe', 'date', 'time', 'money', 'percent', 'phone', 'regulation', 'url', 'measurement'][0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing global_person: 10 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing global_org: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing global_loc: 1 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing global_gpe: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing global_date: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing global_time: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing global_money: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing global_percent: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing global_phone: 1 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing global_regulation: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing global_url: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing global_measurement: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [35mENTITY[0m - [35m✅ Total global facts promoted: 12[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m🔄 Dynamically promoting domain entities: ['financial', 'percentages', 'organizations', 'people', 'locations', 'regulations', 'statistics'][0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing domain_financial: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing domain_percentages: 1 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing domain_organizations: 6 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing domain_people: 85 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing domain_locations: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing domain_regulations: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m   Processing domain_statistics: 0 entities[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [35mENTITY[0m - [35m✅ Total domain facts promoted: 92[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [36mDEBUG[0m - [36m🔍 Extracting semantic relationships from markdown content...[0m
+2025-09-17 15:39:00 - knowledge.extractors.semantic_fact_extractor - [35mENTITY[0m - [35m✅ Total semantic facts extracted: 104[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m🧠 Layer 6: Semantic facts extracted - 104 facts found[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Classification complete: 18ms (1/1 successful)[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Enrichment complete: 0ms (1/1 successful)[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Extraction complete: 0ms (1/1 successful)[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [36mDEBUG[0m - [36m🔍 Debug: Checking JSON generation for tmpoe2z_ezk[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [36mDEBUG[0m - [36m   - Has semantic_json attr: True[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [36mDEBUG[0m - [36m   - semantic_json exists: True[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [36mDEBUG[0m - [36m   - semantic_json type: <class 'dict'>[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m📝 Generating JSON knowledge file: ../output/fusion/tmpoe2z_ezk.json[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [35mENTITY[0m - [35m📄 Generated knowledge file: tmpoe2z_ezk.json (104 facts)[0m
+2025-09-17 15:39:00 - pipeline.fusion_pipeline - [0mINFO[0m - [0m✅ Write complete: 9ms (1/1 successful)[0m
+2025-09-17 15:39:00 - __main__ - [35mENTITY[0m - [35m🔍 Result type: <class 'pipeline.in_memory_document.InMemoryDocument'>[0m
+2025-09-17 15:39:00 - __main__ - [35mENTITY[0m - [35m🔍 Result attributes: ['add_classification_data', 'add_enrichment_data', 'error_message', 'generate_final_markdown', 'generate_knowledge_json', 'get_memory_footprint', 'get_processing_summary', 'mark_failed', 'markdown_content', 'memory_limit_bytes', 'pages_processed', 'processing_start_time', 'record_stage_timing', 'semantic_json', 'set_conversion_data', 'set_semantic_data', 'source_file_path', 'source_filename', 'source_stem', 'source_url', 'stage_timings', 'success', 'url_metadata', 'yaml_frontmatter'][0m
+2025-09-17 15:39:00 - __main__ - [35mENTITY[0m - [35m🔍 Success: True[0m
+2025-09-17 15:39:00 - __main__ - [35mENTITY[0m - [35m🔍 Has output_path: False[0m
+2025-09-17 15:39:00 - __main__ - [35mENTITY[0m - [35m🔍 Looking for: ../output/fusion/tmpoe2z_ezk.md[0m
+2025-09-17 15:39:00 - __main__ - [35mENTITY[0m - [35m🔍 Looking for: ../output/fusion/tmpoe2z_ezk.json[0m
+2025-09-17 15:39:00 - __main__ - [0mINFO[0m - [0m✅ 📝 Created markdown: ctgs.com.md[0m
+2025-09-17 15:39:00 - __main__ - [0mINFO[0m - [0m✅ 📊 Created knowledge: ctgs.com.json[0m
+2025-09-17 15:42:19 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-17 15:42:19 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-17 15:42:19 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 10[0m
+2025-09-17 15:42:19 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-17 15:42:19 - __main__ - [32mSTAGE[0m - [32m🔗 Found 36 URLs in MVP-FOUNDERS-JOURNEY-50-URLS.md[0m
+2025-09-17 15:42:19 - __main__ - [32mSTAGE[0m - [32m🚀 Processing 36 URLs...[0m
+2025-09-17 15:42:19 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.forbes.com/sites/alejandrocremades/2018/09/23/how-to-effectively-determine-your-market-size/[0m
+2025-09-17 15:42:19 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:42:19 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:42:19 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:42:19 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:42:19 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:42:19 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:42:19 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.forbes.com/sites/georgedeeb/2019/12/03/calculate-your-addressable-market-size-to-help-you-attract-investors/[0m
+2025-09-17 15:42:20 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:42:20 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:42:20 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:42:20 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:42:20 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:42:20 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:42:20 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.forbes.com/sites/abdoriani/2024/03/22/5-famous-startup-examples-of-finding-product-market-fit/[0m
+2025-09-17 15:42:21 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:42:21 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:42:21 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:42:21 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:42:21 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:42:21 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:42:21 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://techcrunch.com/2025/04/16/startup-funding-hit-records-in-q1-but-the-outlook-for-2025-is-still-awful/[0m
+2025-09-17 15:42:22 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:42:22 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:42:22 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:42:22 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:42:22 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:42:22 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:42:22 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://techcrunch.com/2024/01/15/startup-valuations-predictions-2024/[0m
+2025-09-17 15:42:22 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:42:22 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:42:22 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:42:22 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:42:22 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:42:22 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:42:22 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://techcrunch.com/2025/09/12/we-are-entering-a-golden-age-of-robotics-startups-and-not-just-because-of-ai/[0m
+2025-09-17 15:42:22 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:42:22 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:42:22 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:42:22 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:42:22 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:42:22 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:42:22 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://a16z.com/big-ideas-in-tech-2025/[0m
+2025-09-17 15:42:23 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:42:23 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:42:23 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:42:23 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:42:23 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:42:23 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:42:23 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://a16z.com/unbundling-the-bpo-how-ai-will-disrupt-outsourced-work/[0m
+2025-09-17 15:42:23 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:42:23 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:42:23 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:42:23 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:42:23 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:42:23 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:42:23 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://a16z.com/deconstructing-deel/[0m
+2025-09-17 15:42:24 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:42:24 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:42:24 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:42:24 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:42:24 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:42:24 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:42:24 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.cbinsights.com/research/report/venture-trends-q1-2025/[0m
+2025-09-17 15:42:25 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:42:25 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:42:25 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:42:25 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:42:25 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:42:25 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:42:25 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.cbinsights.com/research/report/fintech-trends-2024/[0m
+2025-09-17 15:42:27 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:42:27 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:42:27 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:42:27 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:42:27 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:42:27 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:42:27 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.cbinsights.com/research/report/insurtech-trends-q1-2025/[0m
+2025-09-17 15:42:28 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:42:28 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:42:28 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:42:28 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:42:28 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:42:28 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:42:28 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://hbr.org/2023/09/how-to-find-product-market-fit[0m
+2025-09-17 15:42:28 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://hbr.org/2023/09/how-to-find-product-market-fit[0m
+2025-09-17 15:42:28 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:42:28 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:28 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://hbr.org/2024/02/what-startups-get-wrong-about-scaling[0m
+2025-09-17 15:42:28 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://hbr.org/2024/02/what-startups-get-wrong-about-scaling[0m
+2025-09-17 15:42:28 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:42:28 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:28 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://hbr.org/2022/06/why-startups-fail[0m
+2025-09-17 15:42:29 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://hbr.org/2022/06/why-startups-fail[0m
+2025-09-17 15:42:29 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:42:29 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:29 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.mckinsey.com/industries/technology-media-and-telecommunications/our-insights/global-tech-trends-2023[0m
+2025-09-17 15:42:29 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.mckinsey.com/industries/technology-media-and-telecommunications/our-insights/global-tech-trends-2023[0m
+2025-09-17 15:42:29 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:42:29 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:29 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.mckinsey.com/capabilities/growth-marketing-and-sales/our-insights/startups-in-2024-and-beyond[0m
+2025-09-17 15:42:30 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.mckinsey.com/capabilities/growth-marketing-and-sales/our-insights/startups-in-2024-and-beyond[0m
+2025-09-17 15:42:30 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:42:30 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:30 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.mckinsey.com/featured-insights/innovation-and-growth/the-future-of-ai-innovation[0m
+2025-09-17 15:42:30 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.mckinsey.com/featured-insights/innovation-and-growth/the-future-of-ai-innovation[0m
+2025-09-17 15:42:30 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:42:30 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:30 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www2.deloitte.com/us/en/insights/industry/financial-services/fintech-lending-trends.html[0m
+2025-09-17 15:42:30 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www2.deloitte.com/us/en/insights/industry/financial-services/fintech-lending-trends.html[0m
+2025-09-17 15:42:31 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:42:31 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:31 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www2.deloitte.com/us/en/insights/industry/technology/future-of-cloud-computing.html[0m
+2025-09-17 15:42:31 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www2.deloitte.com/us/en/insights/industry/technology/future-of-cloud-computing.html[0m
+2025-09-17 15:42:31 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:42:31 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:31 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www2.deloitte.com/us/en/insights/focus/technology-trends.html[0m
+2025-09-17 15:42:32 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www2.deloitte.com/us/en/insights/focus/technology-trends.html[0m
+2025-09-17 15:42:32 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:42:32 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:32 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 15:42:32 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.bcg.com/publications/2023/state-of-startups[0m
+2025-09-17 15:42:32 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:42:32 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:32 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.bcg.com/publications/2022/ai-market-trends[0m
+2025-09-17 15:42:33 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.bcg.com/publications/2022/ai-market-trends[0m
+2025-09-17 15:42:33 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:42:33 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:33 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.bcg.com/publications/2024/future-of-venture-investing[0m
+2025-09-17 15:42:34 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.bcg.com/publications/2024/future-of-venture-investing[0m
+2025-09-17 15:42:34 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:42:34 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:34 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.pwc.com/us/en/industries/technology/publications/ai-predictions.html[0m
+2025-09-17 15:42:34 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.pwc.com/us/en/industries/technology/publications/ai-predictions.html[0m
+2025-09-17 15:42:34 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:42:34 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:34 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.pwc.com/us/en/industries/financial-services/library/venture-funding-trends.html[0m
+2025-09-17 15:42:35 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.pwc.com/us/en/industries/financial-services/library/venture-funding-trends.html[0m
+2025-09-17 15:42:35 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:42:35 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:35 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.pwc.com/us/en/library/global-top-100-companies-2024.html[0m
+2025-09-17 15:42:35 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.pwc.com/us/en/library/global-top-100-companies-2024.html[0m
+2025-09-17 15:42:35 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:42:35 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:35 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.ey.com/en_us/strategy/entrepreneurship-trends-2023[0m
+2025-09-17 15:42:36 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.ey.com/en_us/strategy/entrepreneurship-trends-2023[0m
+2025-09-17 15:42:36 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:42:36 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:36 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.ey.com/en_us/strategy/startup-ecosystem-trends[0m
+2025-09-17 15:42:37 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.ey.com/en_us/strategy/startup-ecosystem-trends[0m
+2025-09-17 15:42:37 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:42:37 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:37 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.ey.com/en_us/technology/global-tech-trends-2025[0m
+2025-09-17 15:42:38 - __main__ - [31mERROR[0m - [31m❌ HTTP 404 response from https://www.ey.com/en_us/technology/global-tech-trends-2025[0m
+2025-09-17 15:42:38 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 404 - not processable[0m
+2025-09-17 15:42:38 - __main__ - [31mERROR[0m - [31m📊 Status: 404, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:38 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.statista.com/topics/840/venture-capital/[0m
+2025-09-17 15:42:40 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:42:40 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:42:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:42:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:42:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:42:41 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:42:41 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.statista.com/topics/871/startups-in-the-us/[0m
+2025-09-17 15:42:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:42:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:42:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:42:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:42:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:42:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:42:44 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.statista.com/topics/3122/artificial-intelligence-ai-in-business/[0m
+2025-09-17 15:42:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-17 15:42:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 1 files to in-memory documents...[0m
+2025-09-17 15:42:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-17 15:42:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-17 15:42:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-17 15:42:47 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-17 15:42:47 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.crunchbase.com/hub/unicorn-startups[0m
+2025-09-17 15:42:47 - __main__ - [31mERROR[0m - [31m❌ HTTP 403 response from https://www.crunchbase.com/hub/unicorn-startups[0m
+2025-09-17 15:42:47 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 403 - not processable[0m
+2025-09-17 15:42:47 - __main__ - [31mERROR[0m - [31m📊 Status: 403, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:47 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.crunchbase.com/hub/recently-funded-startups[0m
+2025-09-17 15:42:47 - __main__ - [31mERROR[0m - [31m❌ HTTP 403 response from https://www.crunchbase.com/hub/recently-funded-startups[0m
+2025-09-17 15:42:47 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 403 - not processable[0m
+2025-09-17 15:42:47 - __main__ - [31mERROR[0m - [31m📊 Status: 403, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:47 - __main__ - [32mSTAGE[0m - [32m🌐 Processing URL: https://www.crunchbase.com/hub/most-innovative-companies[0m
+2025-09-17 15:42:47 - __main__ - [31mERROR[0m - [31m❌ HTTP 403 response from https://www.crunchbase.com/hub/most-innovative-companies[0m
+2025-09-17 15:42:47 - __main__ - [31mERROR[0m - [31m❌ URL validation failed: HTTP 403 - not processable[0m
+2025-09-17 15:42:47 - __main__ - [31mERROR[0m - [31m📊 Status: 403, Size: 0 bytes, Type: [0m
+2025-09-17 15:42:47 - __main__ - [31mERROR[0m - [31m❌ Error: 'dict' object has no attribute 'success'[0m

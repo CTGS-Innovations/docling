@@ -138,8 +138,26 @@ class FusionPipeline:
                             yaml_metadata = {}
                             markdown_content = content
                         
+                        # Check for URL metadata (companion file from URL processing)
+                        source_url = None
+                        url_metadata = None
+                        file_path = Path(result.file_path)
+                        metadata_file = file_path.parent / f"{file_path.stem}_url_metadata.json"
+                        if metadata_file.exists():
+                            try:
+                                import json
+                                with open(metadata_file, 'r') as f:
+                                    url_metadata = json.load(f)
+                                source_url = url_metadata.get('source_url')
+                                # Don't clean up yet - classification stage needs it
+                            except Exception:
+                                pass  # Continue with file processing if metadata read fails
+                        
                         # Create in-memory document
-                        doc = InMemoryDocument(result.file_path, self.memory_limit_mb)
+                        doc = InMemoryDocument(result.file_path, self.memory_limit_mb, source_url)
+                        # Store URL metadata for classification stage
+                        if url_metadata:
+                            doc.url_metadata = url_metadata
                         doc.set_conversion_data(markdown_content, yaml_metadata, result.pages)
                         doc.record_stage_timing('convert', (time.perf_counter() - stage_start) * 1000)
                         
@@ -156,11 +174,26 @@ class FusionPipeline:
                         Path(result.output_path).unlink()
                         
                     except Exception as e:
-                        doc = InMemoryDocument(result.file_path, self.memory_limit_mb)
+                        doc = InMemoryDocument(result.file_path, self.memory_limit_mb, source_url)
                         doc.mark_failed(f"Failed to load conversion result: {e}")
                         in_memory_docs.append(doc)
                 else:
-                    doc = InMemoryDocument(getattr(result, 'file_path', 'unknown'), self.memory_limit_mb)
+                    # Try to detect URL metadata for failed conversions too
+                    source_url = None
+                    if hasattr(result, 'file_path'):
+                        file_path = Path(result.file_path)
+                        metadata_file = file_path.parent / f"{file_path.stem}_url_metadata.json"
+                        if metadata_file.exists():
+                            try:
+                                import json
+                                with open(metadata_file, 'r') as f:
+                                    url_meta = json.load(f)
+                                source_url = url_meta.get('source_url')
+                                metadata_file.unlink()
+                            except Exception:
+                                pass
+                    
+                    doc = InMemoryDocument(getattr(result, 'file_path', 'unknown'), self.memory_limit_mb, source_url)
                     doc.mark_failed(f"Conversion failed: {getattr(result, 'error', 'Unknown error')}")
                     in_memory_docs.append(doc)
                 
@@ -321,6 +354,16 @@ class FusionPipeline:
                             json.dump(doc.semantic_json, f, indent=2)
                     
                     successful_writes += 1
+                    
+                    # Clean up URL metadata file after successful processing
+                    if hasattr(doc, 'url_metadata'):
+                        try:
+                            file_path = Path(doc.source_file_path)
+                            metadata_file = file_path.parent / f"{file_path.stem}_url_metadata.json"
+                            if metadata_file.exists():
+                                metadata_file.unlink()
+                        except Exception:
+                            pass  # Don't fail the whole process if cleanup fails
                     
                 except Exception as e:
                     doc.mark_failed(f"Write failed: {e}")
@@ -690,10 +733,29 @@ class FusionPipeline:
         file_path = Path(filename)
         content_length = len(content)
         
+        # Check for URL metadata to use proper naming
+        display_filename = file_path.name
+        display_stem = file_path.stem
+        
+        # Check for URL metadata file to use proper naming
+        metadata_file = file_path.parent / f"{file_path.stem}_url_metadata.json"
+        if metadata_file.exists():
+            try:
+                import json
+                with open(metadata_file, 'r') as f:
+                    url_meta = json.load(f)
+                safe_filename = url_meta.get('safe_filename', file_path.name)
+                display_filename = safe_filename
+                display_stem = safe_filename  # Remove extension if present
+                if '.' in display_stem:
+                    display_stem = '.'.join(display_stem.split('.')[:-1])
+            except Exception:
+                pass  # Use original filename if metadata read fails
+        
         return {
             'file_metadata': {
-                'filename': file_path.name,
-                'file_stem': file_path.stem,
+                'filename': display_filename,
+                'file_stem': display_stem,
                 'file_extension': file_path.suffix.lower(),
                 'content_length_chars': content_length,
                 'estimated_pages': max(1, content_length // 3000),  # Rough estimate

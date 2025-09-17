@@ -18,9 +18,37 @@ import time
 from pathlib import Path
 from typing import List, Dict, Any
 import json
+import requests
+from urllib.parse import urlparse
+import tempfile
 
 # Import our centralized logging configuration
 from utils.logging_config import setup_logging, get_fusion_logger
+
+
+class ConversionSuccess:
+    """Defines success criteria for different input types before classification stage"""
+    
+    @staticmethod
+    def validate_file(file_path: Path, content_size: int) -> tuple[bool, str, Dict]:
+        """Validate file conversion success"""
+        if not file_path.exists():
+            return False, "File does not exist", {}
+        if content_size == 0:
+            return False, "File is empty", {}
+        return True, "File ready for classification", {"source_type": "file"}
+    
+    @staticmethod 
+    def validate_url(response_code: int, content_size: int, content_type: str) -> tuple[bool, str, Dict]:
+        """Validate URL conversion success"""
+        if response_code != 200:
+            return False, f"HTTP {response_code} - not processable", {"http_status": response_code}
+        if content_size == 0:
+            return False, "Empty content received", {"http_status": response_code}
+        if content_type and not any(t in content_type.lower() for t in ['html', 'text', 'pdf', 'json']):
+            return False, f"Unsupported content type: {content_type}", {"http_status": response_code, "content_type": content_type}
+        return True, "URL ready for classification", {"http_status": response_code, "content_type": content_type}
+
 
 # Import extraction architecture
 from extraction import (
@@ -72,6 +100,395 @@ def process_single_file(extractor: BaseExtractor, file_path: Path, output_dir: P
         logger.logger.error(f"❌ Error: {result.error}")
     
     return result
+
+
+def download_url_content(url: str, max_size_mb: int = 10) -> tuple[bytes, str, str, int, Dict]:
+    """Download URL content to memory with size limit. 
+    
+    Returns: 
+        content: Downloaded bytes
+        content_type: MIME type from response headers  
+        file_ext: Appropriate file extension
+        status_code: HTTP response code
+        headers: Response headers dict
+    """
+    logger = get_fusion_logger(__name__)
+    max_size_bytes = max_size_mb * 1024 * 1024  # Convert MB to bytes
+    
+    try:
+        # Validate URL
+        parsed = urlparse(url)
+        if not parsed.scheme in ['http', 'https']:
+            raise ValueError(f"Invalid URL scheme: {parsed.scheme}")
+        
+        # Set headers to mimic browser request
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Accept-Encoding': 'gzip, deflate',
+            'Connection': 'keep-alive',
+        }
+        
+        logger.entity(f"🌐 Downloading: {url}")
+        
+        # Stream download to check size before loading into memory
+        response = requests.get(url, headers=headers, timeout=30, stream=True)
+        
+        # Capture response metadata immediately
+        status_code = response.status_code
+        response_headers = dict(response.headers)
+        
+        # Check status code before processing content
+        if status_code != 200:
+            response.close()
+            logger.logger.error(f"❌ HTTP {status_code} response from {url}")
+            return b'', '', '.html', status_code, response_headers
+        
+        response.raise_for_status()
+        
+        # Check content length header if available
+        content_length = response.headers.get('content-length')
+        if content_length and int(content_length) > max_size_bytes:
+            response.close()
+            raise ValueError(f"Content too large: {int(content_length)/1024/1024:.1f}MB > {max_size_mb}MB limit")
+        
+        # Download content with size checking
+        content = b''
+        for chunk in response.iter_content(chunk_size=8192):
+            content += chunk
+            if len(content) > max_size_bytes:
+                response.close()
+                raise ValueError(f"Content too large: >{max_size_mb}MB limit reached during download")
+        
+        content_type = response.headers.get('content-type', 'text/html').lower()
+        
+        # Determine appropriate file extension based on content type
+        if 'pdf' in content_type:
+            file_ext = '.pdf'
+        elif 'html' in content_type:
+            file_ext = '.html'
+        elif 'text/plain' in content_type:
+            file_ext = '.txt'
+        elif 'json' in content_type:
+            file_ext = '.json'
+        elif 'xml' in content_type:
+            file_ext = '.xml'
+        elif 'csv' in content_type:
+            file_ext = '.csv'
+        elif 'word' in content_type or 'msword' in content_type:
+            file_ext = '.docx'
+        elif 'excel' in content_type or 'spreadsheet' in content_type:
+            file_ext = '.xlsx'
+        else:
+            file_ext = '.html'  # Default to HTML for unknown types
+        
+        logger.success(f"✅ Downloaded {len(content)} bytes ({len(content)/1024/1024:.1f}MB) - Type: {content_type}")
+        
+        return content, content_type, file_ext, status_code, response_headers
+        
+    except requests.exceptions.RequestException as e:
+        logger.logger.error(f"❌ Failed to download {url}: {e}")
+        raise
+    except ValueError as e:
+        logger.logger.error(f"❌ {e}")
+        raise
+    except Exception as e:
+        logger.logger.error(f"❌ Error processing {url}: {e}")
+        raise
+
+
+def create_filename_from_url(url: str) -> str:
+    """Create a safe filename from URL that preserves the full URL information."""
+    # Remove protocol
+    clean_url = url.replace('https://', '').replace('http://', '')
+    
+    # Replace problematic characters with safe ones
+    safe_chars = {
+        '/': '_',
+        '?': '_',
+        '&': '_and_',
+        '=': '_eq_',
+        '#': '_hash_',
+        '%': '_pct_',
+        '+': '_plus_',
+        ' ': '_',
+        ':': '_',
+        ';': '_',
+        '<': '_lt_',
+        '>': '_gt_',
+        '"': '_quote_',
+        '|': '_pipe_',
+        '*': '_star_',
+        '\\': '_'
+    }
+    
+    filename = clean_url
+    for char, replacement in safe_chars.items():
+        filename = filename.replace(char, replacement)
+    
+    # Limit length but preserve meaningful parts
+    if len(filename) > 200:
+        # Keep domain and truncate path
+        parts = filename.split('_')
+        domain = parts[0] if parts else filename[:50]
+        rest = '_'.join(parts[1:])
+        if len(rest) > 150:
+            rest = rest[:150] + '_truncated'
+        filename = f"{domain}_{rest}"
+    
+    # Ensure it doesn't end with period or space
+    filename = filename.rstrip('. ')
+    
+    return filename
+
+
+def process_single_url(extractor: BaseExtractor, url: str, output_dir: Path = None, config: dict = None, quiet: bool = False) -> Dict[str, Any]:
+    """Process a single URL through the complete fusion pipeline (convert → classify → enrich → extract)."""
+    logger = get_fusion_logger(__name__)
+    temp_file = None
+    
+    try:
+        if not quiet:
+            logger.stage(f"🌐 Processing URL: {url}")
+        
+        # Download URL content to memory with size limit
+        content, content_type, file_ext, status_code, headers = download_url_content(url, max_size_mb=10)
+        
+        # Validate URL conversion success before proceeding to classification
+        success, message, validation_metadata = ConversionSuccess.validate_url(
+            status_code, len(content), content_type
+        )
+        
+        if not success:
+            logger.logger.error(f"❌ URL validation failed: {message}")
+            logger.logger.error(f"📊 Status: {status_code}, Size: {len(content)} bytes, Type: {content_type}")
+            return {
+                'success': False,
+                'error': message,
+                'url': url,
+                'status_code': status_code,
+                'content_type': content_type,
+                'size_bytes': len(content)
+            }
+        
+        logger.success(f"✅ {message} - Status: {status_code}")
+        
+        # Create safe filename from URL for final output
+        safe_filename = create_filename_from_url(url)
+        
+        # Log content type detection
+        logger.entity(f"📄 Detected content type: {content_type} → {file_ext}")
+        
+        # Create file with URL-based name for pipeline (ripples through entire system)
+        import tempfile
+        temp_dir = Path(tempfile.gettempdir())
+        temp_filename = f"{safe_filename}{file_ext}"
+        temp_path = temp_dir / temp_filename
+        
+        # Write content to URL-named file
+        with open(temp_path, 'wb') as f:
+            f.write(content)
+        
+        # Store URL metadata in a companion metadata file that the extractor can read
+        metadata_file = temp_path.parent / f"{temp_path.stem}_url_metadata.json"
+        url_metadata = {
+            'source_url': url,
+            'content_type': content_type,
+            'original_size': len(content),
+            'safe_filename': safe_filename,
+            'http_status': status_code,
+            'response_headers': headers,
+            'conversion_success': True,
+            'validation_message': message,
+            **validation_metadata  # Include validation metadata (http_status, content_type, etc.)
+        }
+        with open(metadata_file, 'w') as f:
+            json.dump(url_metadata, f)
+        
+        # Use the FULL FUSION PIPELINE (like file processing does)
+        # This ensures we get: Convert → Classify → Enrich → Extract
+        if config:
+            use_shared_memory = config.get('pipeline', {}).get('use_shared_memory', False)
+            
+            if use_shared_memory:
+                logger.entity(f"🏊 Using Shared Memory Pipeline for URL")
+                from pipeline.shared_memory_pipeline import SharedMemoryFusionPipeline
+                pipeline = SharedMemoryFusionPipeline(config)
+            else:
+                logger.entity(f"🔄 Using Traditional Pipeline for URL")
+                from pipeline.fusion_pipeline import FusionPipeline
+                pipeline = FusionPipeline(config)
+            
+            # Process single file through complete pipeline
+            batch_result = pipeline.process_files(extractor, [temp_path], output_dir or Path.cwd(), max_workers=1)
+            if len(batch_result) == 3:
+                results, extraction_time, resource_summary = batch_result
+            else:
+                results, extraction_time = batch_result
+            
+            # Get the result (should be single item)
+            if results:
+                result = results[0]
+                
+                # Debug: Check what attributes the result has
+                logger.entity(f"🔍 Result type: {type(result)}")
+                logger.entity(f"🔍 Result attributes: {[attr for attr in dir(result) if not attr.startswith('_')]}")
+                
+                # Update to use URL-based filename instead of temp filename
+                # InMemoryDocument has different attribute structure than ExtractionResult
+                success_check = getattr(result, 'success', True)  # Default to True for InMemoryDocument
+                logger.entity(f"🔍 Success: {success_check}")
+                logger.entity(f"🔍 Has output_path: {hasattr(result, 'output_path')}")
+                
+                if success_check:
+                    # InMemoryDocument doesn't have output_path - need to generate files ourselves
+                    # The pipeline already wrote the files with temp names, need to find and rename them
+                    output_dir_path = output_dir or Path.cwd()
+                    temp_stem = temp_path.stem
+                    
+                    # Find the generated files with temp names
+                    potential_md = output_dir_path / f"{temp_stem}.md"
+                    potential_json = output_dir_path / f"{temp_stem}.json"
+                    
+                    logger.entity(f"🔍 Looking for: {potential_md}")
+                    logger.entity(f"🔍 Looking for: {potential_json}")
+                    
+                    if potential_md.exists():
+                        # Rename markdown file to URL-based name
+                        new_md_output = potential_md.parent / f"{safe_filename}.md"
+                        potential_md.rename(new_md_output)
+                        logger.success(f"📝 Created markdown: {new_md_output.name}")
+                        
+                        # Also rename corresponding JSON file if it exists
+                        if potential_json.exists():
+                            new_json_output = potential_json.parent / f"{safe_filename}.json"
+                            potential_json.rename(new_json_output)
+                            logger.success(f"📊 Created knowledge: {new_json_output.name}")
+                        
+                        # Clean up any remaining temp files that might not have been renamed
+                        # Note: rename() should have moved the files, but check for safety
+                    else:
+                        logger.logger.warning(f"⚠️ Could not find expected output file: {potential_md}")
+                    
+                    # Update source information
+                    if hasattr(result, 'metadata'):
+                        if not result.metadata:
+                            result.metadata = {}
+                        result.metadata['source_url'] = url
+                        result.metadata['content_type'] = content_type
+                        result.metadata['original_size_bytes'] = len(content)
+                    
+                    # Update document path to show URL
+                    if hasattr(result, 'document_path'):
+                        result.document_path = url
+                        
+                return result
+            else:
+                raise Exception("Pipeline returned no results")
+        else:
+            # Fallback to extractor only (conversion only)
+            logger.entity(f"⚠️ No config provided - using conversion only")
+            result = extractor.extract_single(temp_path, output_dir or Path.cwd())
+            
+            # Update filename for fallback case
+            if result.success and hasattr(result, 'output_path') and result.output_path:
+                old_output = Path(result.output_path)
+                if old_output.exists():
+                    new_output = old_output.parent / f"{safe_filename}.md"
+                    old_output.rename(new_output)
+                    result.output_path = str(new_output)
+                    logger.success(f"📝 Created: {new_output.name}")
+            
+            return result
+        
+    except Exception as e:
+        logger.logger.error(f"❌ Failed to process URL {url}: {e}")
+        # Create a failed result object
+        from extraction.base_extractor import ExtractionResult
+        return ExtractionResult(
+            success=False,
+            file_path=url,
+            pages=0,
+            error=str(e)
+        )
+    finally:
+        # Clean up minimal temporary file and metadata file
+        if temp_file and Path(temp_file.name).exists():
+            try:
+                temp_path = Path(temp_file.name)
+                # Clean up main temp file
+                temp_path.unlink()
+                # Clean up metadata file if it still exists
+                metadata_file = temp_path.parent / f"{temp_path.stem}_url_metadata.json"
+                if metadata_file.exists():
+                    metadata_file.unlink()
+            except Exception:
+                pass  # Ignore cleanup errors
+
+
+def process_url_file(extractor: BaseExtractor, url_file_path: Path, output_dir: Path = None, config: dict = None) -> List[Dict[str, Any]]:
+    """Process URLs from a file (one URL per line)."""
+    logger = get_fusion_logger(__name__)
+    
+    if not url_file_path.exists():
+        logger.logger.error(f"❌ URL file not found: {url_file_path}")
+        return []
+    
+    # Read URLs from file
+    urls = []
+    with open(url_file_path, 'r', encoding='utf-8') as f:
+        for line_num, line in enumerate(f, 1):
+            line = line.strip()
+            if line and not line.startswith('#'):  # Skip empty lines and comments
+                urls.append(line)
+    
+    if not urls:
+        logger.logger.warning(f"No URLs found in {url_file_path}")
+        return []
+    
+    logger.stage(f"🔗 Found {len(urls)} URLs in {url_file_path.name}")
+    logger.stage(f"🚀 Processing {len(urls)} URLs...")
+    
+    results = []
+    start_time = time.time()
+    
+    for i, url in enumerate(urls, 1):
+        try:
+            logger.entity(f"📋 Processing {i}/{len(urls)}: {url[:60]}...")
+            result = process_single_url(extractor, url, output_dir, config, quiet=False)
+            results.append(result)
+            
+            # Show progress every 10 URLs
+            if i % 10 == 0:
+                elapsed = time.time() - start_time
+                rate = i / elapsed
+                logger.entity(f"  Progress: {i}/{len(urls)} ({rate:.1f} URLs/sec)")
+                
+        except KeyboardInterrupt:
+            logger.logger.warning(f"\n⚠️ Processing interrupted by user at URL {i}/{len(urls)}")
+            break
+        except Exception as e:
+            logger.logger.error(f"❌ Error processing URL {i}: {e}")
+            # Continue with next URL
+            continue
+    
+    # Final summary
+    total_time = time.time() - start_time
+    successful = sum(1 for r in results if r.success)
+    failed = len(results) - successful
+    rate = len(results) / total_time if total_time > 0 else 0
+    
+    logger.success(f"Completed: {successful} successful, {failed} failed ({rate:.1f} URLs/sec)")
+    
+    logger.stage(f"\n📊 URL Processing Complete:")
+    logger.stage(f"   Total URLs: {len(results)}")
+    logger.stage(f"   Successful: {successful}")
+    logger.stage(f"   Failed: {failed}")
+    logger.stage(f"   Total time: {total_time:.2f}s")
+    logger.stage(f"   Average rate: {rate:.1f} URLs/sec")
+    
+    return results
 
 
 def process_directory(extractor: BaseExtractor, directory: Path, 
@@ -304,6 +721,11 @@ Examples:
   python fusion_cli.py --directory ~/documents/ -q            # Process quietly
   python fusion_cli.py --directory ~/documents/ -v --log-file process.log
   
+  # URL processing
+  python fusion_cli.py --url https://example.com/article      # Single URL
+  python fusion_cli.py --url-file urls.txt                    # Multiple URLs from file
+  python fusion_cli.py --url-file MVP-FOUNDERS-JOURNEY-50-URLS.md  # Process founder URLs
+  
   # Pipeline control
   python fusion_cli.py --config config/fusion_config.yaml --stages all
   python fusion_cli.py --config config/fusion_config.yaml --convert-only -v
@@ -324,6 +746,8 @@ Examples:
     input_group = parser.add_mutually_exclusive_group(required=False)
     input_group.add_argument('--file', '-f', type=str, help='Process single file')
     input_group.add_argument('--directory', '-d', type=str, help='Process directory')
+    input_group.add_argument('--url', '-u', type=str, help='Process single URL')
+    input_group.add_argument('--url-file', type=str, help='Process URLs from file (one URL per line)')
     input_group.add_argument('--config-directories', action='store_true',
                            help='Process all directories specified in config file')
     input_group.add_argument('--performance-test', '-t', action='store_true', 
@@ -450,6 +874,19 @@ Examples:
             
             result = process_single_file(extractor, file_path, output_dir)
             
+        elif args.url:
+            # Process single URL
+            result = process_single_url(extractor, args.url, output_dir, config)
+            
+        elif args.url_file:
+            # Process URLs from file
+            url_file_path = Path(args.url_file)
+            if not url_file_path.exists():
+                logger.logger.error(f"❌ URL file not found: {url_file_path}")
+                sys.exit(1)
+            
+            results = process_url_file(extractor, url_file_path, output_dir, config)
+            
         elif args.directory:
             # Process directory
             directory = Path(args.directory).expanduser()
@@ -484,32 +921,59 @@ Examples:
             
             logger.success(f"\n✅ Processed {len(all_results)} total files across all directories")
             
-        elif args.config and not args.file and not args.directory and not args.performance_test:
+        elif args.config and not args.file and not args.directory and not args.url and not args.url_file and not args.performance_test:
             # Auto-process directories from config file when only --config is provided
             config_dirs = config.get('inputs', {}).get('directories', [])
-            if config_dirs:
-                # Collect all files from all directories first
-                logger.stage(f"🗂️  Scanning {len(config_dirs)} directories:")
-                for config_dir in config_dirs:
-                    logger.stage(f"   - {config_dir}")
-                
+            config_urls = config.get('inputs', {}).get('urls', [])
+            config_url_files = config.get('inputs', {}).get('url_files', [])
+            
+            if config_dirs or config_urls or config_url_files:
                 all_files = []
-                extensions = config.get('files', {}).get('supported_extensions', args.extensions)
+                all_urls = []
                 
-                for config_dir in config_dirs:
-                    directory = Path(config_dir).expanduser()
-                    if not directory.exists():
-                        logger.logger.warning(f"⚠️  Directory not found: {directory} (skipping)")
-                        continue
+                # Process directories if specified
+                if config_dirs:
+                    logger.stage(f"🗂️  Scanning {len(config_dirs)} directories:")
+                    for config_dir in config_dirs:
+                        logger.stage(f"   - {config_dir}")
                     
-                    # Collect files from this directory
-                    files = []
-                    for ext in extensions:
-                        files.extend(directory.glob(f"**/*{ext}"))
-                    all_files.extend(files)
+                    extensions = config.get('files', {}).get('supported_extensions', args.extensions)
                 
-                if not all_files:
-                    logger.logger.error(f"❌ No files found in any directories")
+                    for config_dir in config_dirs:
+                        directory = Path(config_dir).expanduser()
+                        if not directory.exists():
+                            logger.logger.warning(f"⚠️  Directory not found: {directory} (skipping)")
+                            continue
+                        
+                        # Collect files from this directory
+                        files = []
+                        for ext in extensions:
+                            files.extend(directory.glob(f"**/*{ext}"))
+                        all_files.extend(files)
+                
+                # Process URLs if specified
+                if config_urls:
+                    logger.stage(f"🔗 Processing {len(config_urls)} URLs from config:")
+                    all_urls.extend(config_urls)
+                
+                # Process URL files if specified  
+                if config_url_files:
+                    logger.stage(f"📄 Processing {len(config_url_files)} URL files from config:")
+                    for url_file_path in config_url_files:
+                        url_file = Path(url_file_path).expanduser()
+                        if not url_file.exists():
+                            logger.logger.warning(f"⚠️  URL file not found: {url_file} (skipping)")
+                            continue
+                        
+                        # Read URLs from file
+                        with open(url_file, 'r', encoding='utf-8') as f:
+                            for line in f:
+                                line = line.strip()
+                                if line and not line.startswith('#'):
+                                    all_urls.append(line)
+                
+                if not all_files and not all_urls:
+                    logger.logger.error(f"❌ No files or URLs found")
                     sys.exit(1)
                 
                 # Show summary before processing
@@ -520,38 +984,60 @@ Examples:
                 
                 logger.stage(f"\n📊 PROCESSING SUMMARY:")
                 logger.stage(f"   Total files: {len(all_files)}")
-                logger.stage(f"   File types: {dict(file_types)}")
+                if file_types:
+                    logger.stage(f"   File types: {dict(file_types)}")
+                logger.stage(f"   Total URLs: {len(all_urls)}")
                 logger.stage(f"   Workers: {max_workers}")
                 
-                # Process everything in one batch
-                logger.stage(f"\n🚀 Starting batch processing...")
+                # Process files and URLs
+                all_results = []
                 start_time = time.time()
                 
-                # Choose pipeline architecture based on configuration
-                use_shared_memory = config.get('pipeline', {}).get('use_shared_memory', False)
+                # Process files in batch if any
+                if all_files:
+                    logger.stage(f"\n🚀 Starting file batch processing...")
                 
-                if use_shared_memory:
-                    logger.stage(f"🏊 Using Shared Memory Pipeline (Edge Optimized)")
-                    from pipeline.shared_memory_pipeline import SharedMemoryFusionPipeline
-                    pipeline = SharedMemoryFusionPipeline(config)
-                else:
-                    logger.stage(f"🔄 Using Traditional In-Memory Pipeline")
-                    from pipeline.fusion_pipeline import FusionPipeline
-                    pipeline = FusionPipeline(config)
+                    # Choose pipeline architecture based on configuration
+                    use_shared_memory = config.get('pipeline', {}).get('use_shared_memory', False)
+                    
+                    if use_shared_memory:
+                        logger.stage(f"🏊 Using Shared Memory Pipeline (Edge Optimized)")
+                        from pipeline.shared_memory_pipeline import SharedMemoryFusionPipeline
+                        pipeline = SharedMemoryFusionPipeline(config)
+                    else:
+                        logger.stage(f"🔄 Using Traditional In-Memory Pipeline")
+                        from pipeline.fusion_pipeline import FusionPipeline
+                        pipeline = FusionPipeline(config)
+                    
+                    batch_result = pipeline.process_files(extractor, all_files, output_dir or Path.cwd(), max_workers=max_workers)
+                    if len(batch_result) == 3:
+                        file_results, extraction_time, resource_summary = batch_result
+                    else:
+                        file_results, extraction_time = batch_result
+                        resource_summary = None
+                    
+                    all_results.extend(file_results)
                 
-                batch_result = pipeline.process_files(extractor, all_files, output_dir or Path.cwd(), max_workers=max_workers)
-                if len(batch_result) == 3:
-                    results, extraction_time, resource_summary = batch_result
-                else:
-                    results, extraction_time = batch_result
-                    resource_summary = None
+                # Process URLs sequentially if any
+                if all_urls:
+                    logger.stage(f"\n🌐 Processing {len(all_urls)} URLs...")
+                    for i, url in enumerate(all_urls, 1):
+                        try:
+                            logger.entity(f"📋 Processing URL {i}/{len(all_urls)}: {url[:60]}...")
+                            url_result = process_single_url(extractor, url, output_dir, config)
+                            all_results.append(url_result)
+                        except Exception as e:
+                            logger.logger.error(f"❌ Error processing URL {i}: {e}")
+                            continue
+                
+                results = all_results
                     
                 total_time = time.time() - start_time
                 
-                # Calculate comprehensive metrics (InMemoryDocument objects)
-                successful = sum(1 for doc in results if doc.success)
+                # Calculate comprehensive metrics (works with both InMemoryDocument and ExtractionResult objects)
+                successful = sum(1 for doc in results if hasattr(doc, 'success') and doc.success)
                 failed = len(results) - successful
-                total_pages = sum(doc.pages_processed for doc in results if doc.success)
+                total_pages = sum(getattr(doc, 'pages_processed', getattr(doc, 'pages', 1)) for doc in results if hasattr(doc, 'success') and doc.success)
                 
                 # Calculate input data sizes by scanning all attempted files directly
                 total_input_bytes = 0
@@ -564,6 +1050,11 @@ Examples:
                         total_input_bytes += input_size
                     except:
                         pass
+                
+                # Add estimated size for URLs (can't measure precisely)
+                if all_urls:
+                    estimated_url_bytes = len(all_urls) * 50000  # Estimate 50KB per URL
+                    total_input_bytes += estimated_url_bytes
                 
                 # Count skipped files from results
                 for doc in results:

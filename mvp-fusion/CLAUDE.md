@@ -35,6 +35,23 @@ mvp-fusion/
 └── CLAUDE.md              # These rules
 ```
 
+### **Rule #9: Python Virtual Environment - MANDATORY**
+**CRITICAL**: When working in `/home/corey/projects/docling/mvp-fusion/`:
+- **ALWAYS** use the .venv-clean virtual environment for ALL Python commands
+- **NEVER** run `python` directly - always use `source .venv-clean/bin/activate && python`
+- This applies to: testing, running scripts, installing packages, debugging
+
+**Examples:**
+```bash
+# ✅ CORRECT
+cd /home/corey/projects/docling/mvp-fusion
+source .venv-clean/bin/activate && python fusion_cli.py --help
+
+# ❌ WRONG  
+cd /home/corey/projects/docling/mvp-fusion
+python fusion_cli.py --help
+```
+
 ## IMPLEMENTATION GUIDELINES
 
 ### **Before Creating New Files:**

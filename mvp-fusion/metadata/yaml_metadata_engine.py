@@ -44,21 +44,32 @@ class YAMLMetadataEngine:
         pass
     
     def generate_conversion_metadata(self, file_path: Path, page_count: int, 
-                                   extra_metadata: Optional[Dict[str, Any]] = None) -> str:
+                                   extra_metadata: Optional[Dict[str, Any]] = None,
+                                   source_url: Optional[str] = None,
+                                   content_type: Optional[str] = None,
+                                   original_size: Optional[int] = None,
+                                   http_status: Optional[int] = None,
+                                   response_headers: Optional[Dict] = None,
+                                   validation_success: Optional[bool] = None,
+                                   validation_message: Optional[str] = None) -> str:
         """
         Generate YAML frontmatter for document conversion.
         
         Args:
-            file_path: Path to source document
+            file_path: Path to source document (may be temp file for URLs)
             page_count: Number of pages extracted
             extra_metadata: Optional additional metadata to include
+            source_url: If provided, indicates this is from a URL (not file)
+            content_type: Content type from URL response
+            original_size: Original download size in bytes
             
         Returns:
             Complete YAML frontmatter as string
         """
         try:
             # Core conversion metadata
-            conversion_data = self._get_conversion_section(file_path, page_count)
+            conversion_data = self._get_conversion_section(file_path, page_count, source_url, content_type, original_size, 
+                                                         http_status, response_headers, validation_success, validation_message)
             
             # Start building YAML
             yaml_sections = ["---", "conversion:"]
@@ -82,28 +93,96 @@ class YAMLMetadataEngine:
             # Fallback to minimal metadata
             return self._generate_fallback_yaml(file_path, page_count)
     
-    def _get_conversion_section(self, file_path: Path, page_count: int) -> Dict[str, Any]:
+    def _get_conversion_section(self, file_path: Path, page_count: int, 
+                              source_url: Optional[str] = None,
+                              content_type: Optional[str] = None,
+                              original_size: Optional[int] = None,
+                              http_status: Optional[int] = None,
+                              response_headers: Optional[Dict] = None,
+                              validation_success: Optional[bool] = None,
+                              validation_message: Optional[str] = None) -> Dict[str, Any]:
         """Get conversion metadata section (all free operations)."""
-        # File stats (free from filesystem)
-        file_stats = file_path.stat()
-        file_size = file_stats.st_size
         
-        return {
-            "description": "High-Speed Document Conversion & Analysis",
-            "yaml_engine": self.ENGINE_NAME,
-            "yaml_schema_version": self.SCHEMA_VERSION,
-            "conversion_method": "mvp-fusion-highspeed",
-            "extractor": "HighSpeed_Markdown_General",
-            "source_type": "file",
-            "source_path": str(file_path.absolute()),
-            "filename": file_path.name,
-            "file_extension": file_path.suffix,
-            "format": file_path.suffix.upper().lstrip('.') if file_path.suffix else "UNKNOWN",
-            "size_bytes": file_size,
-            "size_human": self._format_file_size(file_size),
-            "conversion_date": time.strftime('%Y-%m-%dT%H:%M:%S'),
-            "page_count": page_count
-        }
+        if source_url:
+            # URL-based metadata
+            from fusion_cli import create_filename_from_url
+            url_filename = create_filename_from_url(source_url)
+            
+            # Determine format from content type or URL
+            if content_type:
+                if 'pdf' in content_type.lower():
+                    format_type = "PDF"
+                    file_ext = ".pdf"
+                elif 'html' in content_type.lower():
+                    format_type = "HTML"
+                    file_ext = ".html"
+                elif 'json' in content_type.lower():
+                    format_type = "JSON"
+                    file_ext = ".json"
+                elif 'xml' in content_type.lower():
+                    format_type = "XML"
+                    file_ext = ".xml"
+                else:
+                    format_type = "WEB_CONTENT"
+                    file_ext = ".html"
+            else:
+                format_type = "WEB_CONTENT"
+                file_ext = ".html"
+            
+            # Build URL-specific metadata
+            url_metadata = {
+                "description": "High-Speed URL Content Conversion & Analysis",
+                "yaml_engine": self.ENGINE_NAME,
+                "yaml_schema_version": self.SCHEMA_VERSION,
+                "conversion_method": "mvp-fusion-url-processing",
+                "extractor": "HighSpeed_Markdown_General",
+                "source_type": "url",
+                "source_path": source_url,
+                "filename": url_filename,
+                "file_extension": file_ext,
+                "format": format_type,
+                "content_type": content_type or "unknown",
+                "size_bytes": original_size or 0,
+                "size_human": self._format_file_size(original_size) if original_size else "unknown",
+                "conversion_date": time.strftime('%Y-%m-%dT%H:%M:%S'),
+                # Web-specific fields
+                "http_status": http_status or "unknown",
+                "validation_success": validation_success if validation_success is not None else True,
+                "validation_message": validation_message or "Unknown validation status",
+                "proceed_to_classification": validation_success if validation_success is not None else True
+            }
+            
+            # Add response headers if available (but limit to useful ones)
+            if response_headers:
+                useful_headers = {}
+                for header in ['server', 'last-modified', 'cache-control', 'content-encoding']:
+                    if header in response_headers:
+                        useful_headers[header] = response_headers[header]
+                if useful_headers:
+                    url_metadata["response_headers"] = useful_headers
+            
+            return url_metadata
+        else:
+            # File-based metadata (original behavior)
+            file_stats = file_path.stat()
+            file_size = file_stats.st_size
+            
+            return {
+                "description": "High-Speed Document Conversion & Analysis",
+                "yaml_engine": self.ENGINE_NAME,
+                "yaml_schema_version": self.SCHEMA_VERSION,
+                "conversion_method": "mvp-fusion-highspeed",
+                "extractor": "HighSpeed_Markdown_General",
+                "source_type": "file",
+                "source_path": str(file_path.absolute()),
+                "filename": file_path.name,
+                "file_extension": file_path.suffix,
+                "format": file_path.suffix.upper().lstrip('.') if file_path.suffix else "UNKNOWN",
+                "size_bytes": file_size,
+                "size_human": self._format_file_size(file_size),
+                "conversion_date": time.strftime('%Y-%m-%dT%H:%M:%S'),
+                "page_count": page_count
+            }
     
     def _format_file_size(self, size_bytes: int) -> str:
         """Convert bytes to human-readable format."""
@@ -178,17 +257,29 @@ conversion:
 
 # Convenience function for direct usage
 def generate_conversion_yaml(file_path: Path, page_count: int, 
-                           extra_metadata: Optional[Dict[str, Any]] = None) -> str:
+                           extra_metadata: Optional[Dict[str, Any]] = None,
+                           source_url: Optional[str] = None,
+                           content_type: Optional[str] = None,
+                           original_size: Optional[int] = None,
+                           http_status: Optional[int] = None,
+                           response_headers: Optional[Dict] = None,
+                           validation_success: Optional[bool] = None,
+                           validation_message: Optional[str] = None) -> str:
     """
     Convenience function for generating conversion YAML.
     
     Args:
-        file_path: Path to source document
+        file_path: Path to source document (may be temp file for URLs)
         page_count: Number of pages extracted
         extra_metadata: Optional additional metadata sections
+        source_url: If provided, indicates this is from a URL (not file)
+        content_type: Content type from URL response
+        original_size: Original download size in bytes
         
     Returns:
         Complete YAML frontmatter as string
     """
     engine = YAMLMetadataEngine()
-    return engine.generate_conversion_metadata(file_path, page_count, extra_metadata)
+    return engine.generate_conversion_metadata(file_path, page_count, extra_metadata, 
+                                             source_url, content_type, original_size,
+                                             http_status, response_headers, validation_success, validation_message)

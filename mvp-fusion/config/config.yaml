@@ -30,6 +30,13 @@ inputs:
   directories:
     - "~/projects/docling/cli/data_complex"
   
+  # URL sources - can process web content directly
+  urls: []
+  
+  # URL file sources - files containing lists of URLs to process
+  url_files:
+    - "MVP-FOUNDERS-JOURNEY-50-URLS.md"
+  
   # Skip file extensions for speed
   skip_extensions:
     - ".jpg"

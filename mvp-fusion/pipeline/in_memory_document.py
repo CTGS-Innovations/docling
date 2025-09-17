@@ -31,10 +31,11 @@ class InMemoryDocument:
     Memory Budget: <100MB per document, <1GB total service limit
     """
     
-    def __init__(self, source_file_path: str, memory_limit_mb: int = 100):
+    def __init__(self, source_file_path: str, memory_limit_mb: int = 100, source_url: Optional[str] = None):
         self.source_file_path = source_file_path
         self.source_filename = Path(source_file_path).name
         self.source_stem = Path(source_file_path).stem
+        self.source_url = source_url  # Track original URL if this is URL-based processing
         
         # Content containers
         self.markdown_content = ""
@@ -103,12 +104,25 @@ class InMemoryDocument:
             )
     
     def generate_final_markdown(self) -> str:
-        """Generate the final markdown file with complete YAML frontmatter"""
+        """Generate the final markdown file with clean YAML frontmatter (no semantic duplication)"""
         if not self.yaml_frontmatter:
             return self.markdown_content
             
-        # Serialize YAML frontmatter
-        yaml_content = yaml.dump(self.yaml_frontmatter, default_flow_style=False, sort_keys=False)
+        # Create clean YAML without semantic_facts (goes to JSON only)
+        clean_yaml = {}
+        for key, value in self.yaml_frontmatter.items():
+            if key == 'classification' and isinstance(value, dict):
+                # Clean classification section - remove semantic data
+                clean_classification = {}
+                for sub_key, sub_value in value.items():
+                    if sub_key not in ['semantic_facts', 'normalized_entities', 'semantic_summary']:
+                        clean_classification[sub_key] = sub_value
+                clean_yaml[key] = clean_classification
+            else:
+                clean_yaml[key] = value
+            
+        # Serialize clean YAML frontmatter
+        yaml_content = yaml.dump(clean_yaml, default_flow_style=False, sort_keys=False)
         
         # Combine YAML frontmatter with markdown content
         if self.markdown_content.startswith('---'):
@@ -157,9 +171,14 @@ class InMemoryDocument:
                 domain_count += len(entities)
         
         # Build knowledge data structure (matches temp file format)
+        # Use URL as source if available, otherwise use file path
+        source_reference = self.source_url if self.source_url else self.source_file_path
+        source_type = 'url' if self.source_url else 'file'
+        
         knowledge_data = {
             'source_info': {
-                'source_file': self.source_file_path,
+                'source_file': source_reference,
+                'source_type': source_type,
                 'extraction_timestamp': semantic_summary.get('timestamp', ''),
                 'extraction_engine': semantic_summary.get('extraction_engine', ''),
                 'processing_method': 'mvp-fusion-pipeline'

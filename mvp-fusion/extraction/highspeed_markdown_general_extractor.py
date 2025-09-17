@@ -132,9 +132,46 @@ def _extract_pdf_to_markdown(pdf_path_and_output_dir):
         markdown_content = []
         
         # Generate comprehensive YAML frontmatter (single-pass, no re-reading)
-        yaml_metadata = generate_conversion_yaml(pdf_path, page_count)
+        # Check if this is a URL-based extraction (look for companion metadata file)
+        metadata_file = pdf_path.parent / f"{pdf_path.stem}_url_metadata.json"
+        if metadata_file.exists():
+            # URL-based extraction - load metadata
+            try:
+                import json
+                with open(metadata_file, 'r') as f:
+                    url_meta = json.load(f)
+                yaml_metadata = generate_conversion_yaml(
+                    pdf_path, page_count,
+                    source_url=url_meta.get('source_url'),
+                    content_type=url_meta.get('content_type'), 
+                    original_size=url_meta.get('original_size'),
+                    http_status=url_meta.get('http_status'),
+                    response_headers=url_meta.get('response_headers'),
+                    validation_success=url_meta.get('conversion_success'),
+                    validation_message=url_meta.get('validation_message')
+                )
+                # Note: Metadata file cleanup handled by pipeline to avoid race conditions
+            except Exception:
+                # Fallback to regular file processing
+                yaml_metadata = generate_conversion_yaml(pdf_path, page_count)
+        else:
+            # Regular file-based extraction
+            yaml_metadata = generate_conversion_yaml(pdf_path, page_count)
         markdown_content.append(yaml_metadata)
-        markdown_content.append(f"\n# {pdf_path.name}\n\n")
+        
+        # Use URL-based filename if available, otherwise use file name
+        if metadata_file.exists():
+            try:
+                import json
+                with open(metadata_file, 'r') as f:
+                    url_meta = json.load(f)
+                header_name = url_meta.get('safe_filename', pdf_path.name)
+            except Exception:
+                header_name = pdf_path.name
+        else:
+            header_name = pdf_path.name
+            
+        markdown_content.append(f"\n# {header_name}\n\n")
         
         # Process each page with optimal block extraction (suppress MuPDF errors)
         with redirect_stderr(error_buffer):
@@ -235,8 +272,20 @@ class HighSpeed_Markdown_General_Extractor(BaseExtractor):
         # Use the optimized worker function
         result_dict = _extract_pdf_to_markdown((file_path, output_dir))
         
+        # Convert dictionary keys back to constructor parameters
+        # The to_dict() method changes 'file_path' to 'file'
+        if 'file' in result_dict:
+            result_dict['file_path'] = result_dict.pop('file')
+        if 'output' in result_dict:
+            result_dict['output_path'] = result_dict.pop('output')
+        
+        # Remove keys that aren't constructor parameters
+        constructor_keys = {'success', 'file_path', 'pages', 'output_path', 'error'}
+        filtered_dict = {k: v for k, v in result_dict.items() if k in constructor_keys}
+        other_metadata = {k: v for k, v in result_dict.items() if k not in constructor_keys}
+        
         # Convert back to ExtractionResult object
-        return ExtractionResult(**result_dict)
+        return ExtractionResult(**filtered_dict, **other_metadata)
     
     def extract_batch(self, file_paths: List[Union[str, Path]], 
                      output_dir: Union[str, Path], 
