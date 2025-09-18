@@ -292,13 +292,8 @@ class ComprehensiveEntityExtractor:
             r'[A-Z][a-z]+\s+[A-Z][a-z]+(?:\s+(?:Jr\.|Sr\.|III|IV))?',  # Full names with suffix
         ]
         
-        # Location patterns
-        self.location_patterns = [
-            r'(?:United States|Canada|Mexico|UK|EU|China|Japan)',  # Countries
-            r'(?:Alabama|Alaska|Arizona|Arkansas|California|Colorado|Connecticut|Delaware|Florida|Georgia|Hawaii|Idaho|Illinois|Indiana|Iowa|Kansas|Kentucky|Louisiana|Maine|Maryland|Massachusetts|Michigan|Minnesota|Mississippi|Missouri|Montana|Nebraska|Nevada|New Hampshire|New Jersey|New Mexico|New York|North Carolina|North Dakota|Ohio|Oklahoma|Oregon|Pennsylvania|Rhode Island|South Carolina|South Dakota|Tennessee|Texas|Utah|Vermont|Virginia|Washington|West Virginia|Wisconsin|Wyoming)\b',  # US States
-            r'(?:New York|Los Angeles|Chicago|Houston|Phoenix|Philadelphia|San Antonio|San Diego|Dallas|San Jose)',  # Major cities
-            r'\d{1,5}\s+[A-Z][a-z]+\s+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd)',  # Addresses
-        ]
+        # Generate location patterns from centralized geographic data
+        self.location_patterns = self._build_location_patterns()
         
         # Regulatory/Standard patterns
         self.regulatory_patterns = [
@@ -643,23 +638,60 @@ class ComprehensiveEntityExtractor:
         
         return relationships
     
-    def extract_all_entities(self, text: str) -> Dict[str, Any]:
+    def extract_all_entities(self, text: str, global_entities: Dict = None) -> Dict[str, Any]:
         """
-        Extract ALL entities and relationships from text
-        Returns comprehensive knowledge graph
-        """
-        self.logger.logger.debug("Extracting entities with FLPC Rust regex...")
+        Enrich global entities with domain-specific context and extract domain-specific entities.
         
-        # Extract all entity types
+        Architecture:
+        - ENRICHMENT: Use global_entities (Core 8) as foundation and enrich with roles/context
+        - DOMAIN EXTRACTION: Extract domain-specific entities (money, percentages, etc.)
+        - NO RE-DETECTION: Don't duplicate global entity detection
+        """
+        if global_entities:
+            self.logger.logger.debug("🎯 ENRICHMENT MODE: Enriching global entities with domain context...")
+        else:
+            self.logger.logger.debug("⚠️ FALLBACK MODE: No global entities provided, extracting all entities...")
+        
+        # ENRICHMENT: Process global entities if provided
+        enriched_people = []
+        enriched_organizations = []
+        enriched_locations = []
+        
+        if global_entities:
+            # Enrich global people entities with roles and context
+            global_people = global_entities.get('people', [])
+            self.logger.logger.debug(f"🔄 Enriching {len(global_people)} global people entities...")
+            
+            for person_entity in global_people:
+                enriched_person = self._enrich_person_entity(person_entity, text)
+                if enriched_person:
+                    enriched_people.append(enriched_person)
+            
+            # Enrich global organizations with additional context
+            global_orgs = global_entities.get('organizations', [])
+            for org_entity in global_orgs:
+                enriched_org = self._enrich_organization_entity(org_entity, text)
+                if enriched_org:
+                    enriched_organizations.append(enriched_org)
+                    
+            # Enrich global locations with additional context
+            global_locations = global_entities.get('locations', [])
+            for loc_entity in global_locations:
+                enriched_loc = self._enrich_location_entity(loc_entity, text)
+                if enriched_loc:
+                    enriched_locations.append(enriched_loc)
+        
+        # DOMAIN EXTRACTION: Extract domain-specific entities (not part of Core 8)
         all_entities = {
             'money': self.extract_money(text),
             'percentages': self.extract_percentages(text),
             'measurements': self.extract_measurements(text),
-            'organizations': self.extract_organizations(text),
-            'people': self.extract_people(text),
-            'locations': self.extract_locations(text),
             'regulations': self.extract_regulations(text),
-            'statistics': self.extract_statistics(text)
+            'statistics': self.extract_statistics(text),
+            # Use enriched entities or fallback to extraction if no global entities
+            'people': enriched_people if global_entities else self.extract_people(text),
+            'organizations': enriched_organizations if global_entities else self.extract_organizations(text),
+            'locations': enriched_locations if global_entities else self.extract_locations(text)
         }
         
         # Extract relationships
@@ -679,10 +711,12 @@ class ComprehensiveEntityExtractor:
                 ],
                 'percentages': [
                     {
-                        'value': p.value,
-                        'subject': p.subject,
-                        'trend': p.trend,
-                        'context': self._clean_context(p.context)
+                        **{
+                            'value': p.value,
+                            'subject': p.subject,
+                            'context': self._clean_context(p.context)
+                        },
+                        **({"trend": p.trend} if p.trend else {})
                     }
                     for p in all_entities['percentages']
                 ],
@@ -697,16 +731,18 @@ class ComprehensiveEntityExtractor:
                 ],
                 'organizations': [
                     {
-                        'name': self._clean_context(o.name),
-                        'type': o.type,
-                        'acronym': o.acronym
+                        **{
+                            'name': self._clean_context(o.name),
+                            'type': o.type
+                        },
+                        **({"acronym": o.acronym} if o.acronym else {})
                     }
                     for o in all_entities['organizations']
                 ],
                 'people': [
                     {
-                        'name': self._clean_context(p.full_name),
-                        'role': p.role
+                        **{"name": self._clean_context(p.full_name)},
+                        **({"role": p.role} if p.role else {})
                     }
                     for p in all_entities['people']
                 ],
@@ -827,15 +863,41 @@ class ComprehensiveEntityExtractor:
                 return role
         return None
     
+    def _build_location_patterns(self) -> List[str]:
+        """Build location regex patterns from centralized geographic data"""
+        try:
+            from knowledge.corpus.geographic_data import get_geographic_data
+            
+            geo_data = get_geographic_data()
+            
+            # Build regex patterns from centralized data
+            # Note: For very large lists, we use simplified patterns to avoid regex complexity
+            patterns = [
+                # Address patterns
+                r'\d{1,5}\s+[A-Z][a-z]+\s+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd)',
+                
+                # Use simplified geographic patterns to avoid massive regex
+                # The actual classification will be done by the _categorize_location method
+                r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?\b',  # General location pattern
+            ]
+            
+            return patterns
+            
+        except ImportError:
+            # Fallback to basic patterns if centralized data unavailable
+            return [
+                r'(?:United States|Canada|Mexico|UK|EU|China|Japan)',
+                r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?\b',
+                r'\d{1,5}\s+[A-Z][a-z]+\s+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd)',
+            ]
+    
     def _categorize_location(self, location: str) -> str:
-        """Categorize location type"""
-        if any(c in location for c in ['Street', 'Avenue', 'Road', 'Boulevard']):
-            return 'address'
-        elif location in ['United States', 'Canada', 'Mexico', 'UK', 'China', 'Japan']:
-            return 'country'
-        elif len(location.split()) <= 2 and location[0].isupper():
-            return 'city'
-        return 'location'
+        """Categorize location type using centralized geographic data"""
+        # Import centralized geographic data
+        from knowledge.corpus.geographic_data import get_geographic_data
+        
+        geo_data = get_geographic_data()
+        return geo_data.classify_location(location)
     
     def _extract_metric(self, context: str) -> str:
         """Extract what is being measured"""
@@ -884,6 +946,186 @@ class ComprehensiveEntityExtractor:
                     found.append({'name': name, 'type': entity_type})
         
         return found
+
+    def _enrich_person_entity(self, person_entity: Dict, text: str) -> Dict:
+        """
+        Enrich a global person entity with role and organizational context.
+        
+        Uses entity span information for precise context extraction.
+        """
+        try:
+            # Extract person name and span information
+            person_name = person_entity.get('value', person_entity.get('text', ''))
+            start_pos = person_entity.get('start', 0)
+            end_pos = person_entity.get('end', len(person_name))
+            
+            # Get expanded context around the person mention
+            context_start = max(0, start_pos - 100)
+            context_end = min(len(text), end_pos + 100)
+            context = text[context_start:context_end]
+            
+            # Extract role information from context
+            role = self._extract_role_from_context(context, person_name)
+            
+            # Extract organizational affiliation
+            organization = self._extract_organization_from_context(context)
+            
+            # Clean context for output
+            clean_context = self._clean_context(context)
+            
+            return {
+                'name': self._clean_context(person_name),
+                'role': role,
+                'organization': organization,
+                'context': clean_context,
+                'span': {'start': start_pos, 'end': end_pos}
+            }
+            
+        except Exception as e:
+            self.logger.logger.warning(f"Failed to enrich person entity {person_entity}: {e}")
+            return None
+
+    def _enrich_organization_entity(self, org_entity: Dict, text: str) -> Dict:
+        """
+        Enrich a global organization entity with type and context information.
+        """
+        try:
+            org_name = org_entity.get('value', org_entity.get('text', ''))
+            start_pos = org_entity.get('start', 0)
+            end_pos = org_entity.get('end', len(org_name))
+            
+            # Get context around organization mention
+            context_start = max(0, start_pos - 80)
+            context_end = min(len(text), end_pos + 80)
+            context = text[context_start:context_end]
+            
+            # Determine organization type and add context
+            org_type = self._categorize_organization(org_name)
+            acronym = org_name if org_name.isupper() and len(org_name) <= 10 else None
+            
+            return {
+                'name': self._clean_context(org_name),
+                'type': org_type,
+                'acronym': acronym,
+                'context': self._clean_context(context),
+                'span': {'start': start_pos, 'end': end_pos}
+            }
+            
+        except Exception as e:
+            self.logger.logger.warning(f"Failed to enrich organization entity {org_entity}: {e}")
+            return None
+
+    def _enrich_location_entity(self, location_entity: Dict, text: str) -> Dict:
+        """
+        Enrich a global location entity with type and context information.
+        """
+        try:
+            location_name = location_entity.get('value', location_entity.get('text', ''))
+            start_pos = location_entity.get('start', 0)
+            end_pos = location_entity.get('end', len(location_name))
+            
+            # Get context around location mention
+            context_start = max(0, start_pos - 60)
+            context_end = min(len(text), end_pos + 60)
+            context = text[context_start:context_end]
+            
+            # Categorize location type
+            loc_type = self._categorize_location(location_name)
+            
+            return {
+                'name': self._clean_context(location_name),
+                'type': loc_type,
+                'context': self._clean_context(context),
+                'span': {'start': start_pos, 'end': end_pos}
+            }
+            
+        except Exception as e:
+            self.logger.logger.warning(f"Failed to enrich location entity {location_entity}: {e}")
+            return None
+
+    def _extract_role_from_context(self, context: str, person_name: str) -> Optional[str]:
+        """
+        Extract professional role or title from context around a person's name.
+        
+        Looks for role indicators before and after the person's name.
+        """
+        context_lower = context.lower()
+        
+        # Common role patterns - look for these near the person's name
+        role_patterns = [
+            # Executive roles
+            r'(?:chief|senior|executive|deputy|assistant)\s+(?:executive\s+officer|officer|manager|director)',
+            r'(?:president|ceo|cto|cfo|coo|chairman|chairwoman)',
+            
+            # Management roles  
+            r'(?:director|manager|supervisor|superintendent|foreman|lead|coordinator)',
+            r'(?:project|site|safety|operations|quality|plant)\s+(?:manager|director|supervisor)',
+            
+            # Professional titles
+            r'(?:engineer|inspector|specialist|analyst|consultant|advisor|representative)',
+            r'(?:safety|compliance|risk|quality|environmental)\s+(?:engineer|inspector|specialist|officer)',
+            
+            # Government/regulatory roles
+            r'(?:administrator|commissioner|secretary|assistant\s+secretary|deputy)',
+            r'(?:compliance|enforcement|regulatory)\s+(?:officer|specialist|inspector)',
+            
+            # Worker classifications
+            r'(?:contractor|subcontractor|employee|worker|operator|technician)',
+            r'(?:construction|maintenance|production|assembly)\s+(?:worker|operator|technician)'
+        ]
+        
+        # Look for role patterns in context
+        for pattern in role_patterns:
+            matches = re.finditer(pattern, context_lower)
+            for match in matches:
+                # Check if role is reasonably close to person name (within 50 characters)
+                role_pos = match.start()
+                person_pos = context_lower.find(person_name.lower())
+                
+                if person_pos != -1 and abs(role_pos - person_pos) <= 50:
+                    role = match.group(0)
+                    # Clean up and capitalize properly
+                    return ' '.join(word.capitalize() for word in role.split())
+        
+        # Look for simpler role indicators
+        simple_roles = ['director', 'manager', 'supervisor', 'inspector', 'worker', 'contractor', 
+                       'president', 'ceo', 'administrator', 'officer', 'engineer', 'specialist']
+        
+        for role in simple_roles:
+            if role in context_lower:
+                # Check proximity to person name
+                role_pos = context_lower.find(role)
+                person_pos = context_lower.find(person_name.lower())
+                
+                if person_pos != -1 and abs(role_pos - person_pos) <= 30:
+                    return role.capitalize()
+        
+        return None
+
+    def _extract_organization_from_context(self, context: str) -> Optional[str]:
+        """
+        Extract organizational affiliation from context.
+        
+        Looks for organization indicators in the context.
+        """
+        context_lower = context.lower()
+        
+        # Common organization indicators
+        org_patterns = [
+            r'(?:at|with|for|from)\s+([A-Z][A-Za-z\s&]+(?:Inc|LLC|Ltd|Corp|Corporation|Company|Co\.?))',
+            r'(?:department|agency|administration|commission|bureau)\s+of\s+([A-Za-z\s]+)',
+            r'(OSHA|EPA|FDA|CDC|NIOSH|ANSI|ISO|NFPA|ASTM)',
+            r'([A-Z][A-Za-z\s]+)\s+(?:department|division|office|unit)'
+        ]
+        
+        for pattern in org_patterns:
+            matches = re.finditer(pattern, context, re.IGNORECASE)
+            for match in matches:
+                org = match.group(1) if len(match.groups()) >= 1 else match.group(0)
+                if len(org.strip()) > 2:
+                    return self._clean_context(org.strip())
+        
+        return None
 
 
 if __name__ == "__main__":

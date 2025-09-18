@@ -181,14 +181,46 @@ output:
 
 # File Processing Configuration
 files:
-  # Supported extensions (will process these)
+  # Supported extensions (comprehensive Docling support)
   supported_extensions:
-    - ".pdf"
-    - ".docx"
-    - ".doc"
-    - ".txt"
-    - ".md"
-    - ".html"
+    - ".pdf"           # PDF documents
+    - ".docx"          # Microsoft Word (modern)
+    - ".doc"           # Microsoft Word (legacy)
+    - ".xlsx"          # Microsoft Excel (modern)
+    - ".xls"           # Microsoft Excel (legacy)
+    - ".xlsm"          # Microsoft Excel (with macros)
+    - ".pptx"          # Microsoft PowerPoint (modern)
+    - ".ppt"           # Microsoft PowerPoint (legacy)
+    - ".html"          # HTML web pages
+    - ".htm"           # HTML alternative extension
+    - ".xml"           # XML documents
+    - ".nxml"          # Scientific XML (PubMed/JATS)
+    - ".txt"           # Plain text files
+    - ".md"            # Markdown documents
+    - ".csv"           # Comma-separated values
+    - ".tsv"           # Tab-separated values
+    - ".json"          # JSON data files
+    - ".asciidoc"      # AsciiDoc format
+    - ".rst"           # reStructuredText
+    - ".rtf"           # Rich Text Format
+    - ".odt"           # OpenDocument Text
+    - ".epub"          # E-book format
+    - ".tex"           # LaTeX documents
+    - ".latex"         # LaTeX alternative extension
+    - ".org"           # Org-mode documents
+    - ".textile"       # Textile markup
+    - ".wiki"          # Wiki markup
+    - ".mediawiki"     # MediaWiki format
+    - ".adoc"          # AsciiDoc alternative
+    - ".yaml"          # YAML files (documentation/config)
+    - ".yml"           # YAML alternative
+    - ".toml"          # TOML configuration
+    - ".ini"           # INI configuration
+    - ".cfg"           # Configuration files
+    - ".conf"          # Configuration files
+    - ".log"           # Log files (for analysis)
+    - ".rdoc"          # Ruby documentation
+    - ".pod"           # Perl documentation
   
   # Processing options
   recursive: true              # Process subdirectories

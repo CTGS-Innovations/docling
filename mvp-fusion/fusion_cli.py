@@ -555,8 +555,8 @@ def process_url_file(extractor: BaseExtractor, url_file_path: Path, output_dir: 
 
 
 def process_directory(extractor: BaseExtractor, directory: Path, 
-                     file_extensions: List[str] = None, output_dir: Path = None):
-    """Process all files in a directory using high-speed batch processing."""
+                     file_extensions: List[str] = None, output_dir: Path = None, config: dict = None):
+    """Process all files in a directory using full pipeline (not just extraction)."""
     logger = get_fusion_logger(__name__)
     if file_extensions is None:
         file_extensions = ['.txt', '.md', '.pdf', '.docx', '.doc']
@@ -580,8 +580,12 @@ def process_directory(extractor: BaseExtractor, directory: Path,
     
     start_time = time.time()
     
-    # Use the extractor's optimized batch processing
-    batch_result = extractor.extract_batch(files, output_dir or Path.cwd())
+    # Use full pipeline to support all stages (classify, enrich, extract)
+    from pipeline.fusion_pipeline import FusionPipeline
+    pipeline = FusionPipeline(config or {})
+    
+    # Process through complete pipeline
+    batch_result = pipeline.process_files(extractor, files, output_dir or Path.cwd())
     
     # Handle different return signatures (some extractors return resource summary)
     if len(batch_result) == 3:
@@ -936,13 +940,25 @@ Examples:
         
         # Execute command
         if args.file:
-            # Process single file
+            # Process single file through full pipeline (not just extraction)
             file_path = Path(args.file)
             if not file_path.exists():
                 logger.logger.error(f"❌ File not found: {file_path}")
                 sys.exit(1)
             
-            result = process_single_file(extractor, file_path, output_dir)
+            # Use full pipeline to support all stages (classify, enrich, extract)
+            from pipeline.fusion_pipeline import FusionPipeline
+            pipeline = FusionPipeline(config)
+            
+            # Process single file through complete pipeline
+            batch_result = pipeline.process_files(extractor, [file_path], output_dir or Path.cwd(), max_workers=1)
+            if len(batch_result) == 3:
+                results, extraction_time, resource_summary = batch_result
+            else:
+                results, extraction_time = batch_result
+            
+            # Get the result (should be single item)
+            result = results[0] if results else None
             
         elif args.url:
             # Process single URL
@@ -964,7 +980,7 @@ Examples:
                 logger.logger.error(f"❌ Directory not found: {directory}")
                 sys.exit(1)
             
-            results = process_directory(extractor, directory, args.extensions, output_dir)
+            results = process_directory(extractor, directory, args.extensions, output_dir, config)
             
         elif args.config_directories:
             # Process all directories from config
@@ -986,7 +1002,7 @@ Examples:
                     
                 logger.stage(f"\n📂 Processing directory: {directory}")
                 extensions = config.get('files', {}).get('supported_extensions', args.extensions)
-                results = process_directory(fusion, directory, extensions, output_dir)
+                results = process_directory(fusion, directory, extensions, output_dir, config)
                 all_results.extend(results if isinstance(results, list) else [results])
             
             logger.success(f"\n✅ Processed {len(all_results)} total files across all directories")

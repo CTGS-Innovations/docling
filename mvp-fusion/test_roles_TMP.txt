@@ -1,0 +1,3 @@
+John Smith is the CEO of TechCorp. He leads the engineering team and has over 15 years of experience.
+Sarah Johnson works as the VP of Marketing at DataSystems Inc. She manages a team of 20 people.
+Michael Chen serves as the CTO at InnovateLabs. He oversees product development.

@@ -82,6 +82,51 @@ class LightweightResourceMonitor:
         }
 
 
+def _extract_text_to_markdown(file_path_and_output_dir):
+    """
+    Worker function for text-based file extraction.
+    Handles markdown, text, config files, etc.
+    """
+    file_path, output_dir = file_path_and_output_dir
+    
+    try:
+        # Read the text file
+        with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+            content = f.read()
+        
+        # Get file metadata
+        file_stat = file_path.stat()
+        file_size = file_stat.st_size
+        
+        # Generate YAML metadata for text files
+        yaml_metadata = generate_conversion_yaml(
+            file_path, 
+            page_count=max(1, len(content) // 3000)  # Estimate pages
+        )
+        
+        # Combine metadata and content
+        markdown_content = [yaml_metadata, content]
+        final_content = '\n'.join(markdown_content)
+        
+        # Write output file
+        output_file = output_dir / f"{file_path.stem}.md"
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(final_content)
+        
+        return ExtractionResult(
+            success=True,
+            file_path=str(file_path),
+            pages=max(1, len(content) // 3000),
+            output_path=str(output_file)
+        ).to_dict()
+        
+    except Exception as e:
+        return ExtractionResult(
+            success=False,
+            file_path=str(file_path),
+            error=f"Text extraction failed: {str(e)}"
+        ).to_dict()
+
 def _extract_pdf_to_markdown(pdf_path_and_output_dir):
     """
     Worker function for multiprocessing extraction.
@@ -252,7 +297,35 @@ class HighSpeed_Markdown_General_Extractor(BaseExtractor):
             description="High-speed document extraction (2000+ pages/sec) with markdown output"
         )
         self.page_limit = page_limit
-        self.supported_formats = ['pdf', 'html', 'txt', 'xlsx', 'xls', 'docx', 'doc', 'csv', 'json', 'xml']
+        # Comprehensive format support based on Docling capabilities
+        self.supported_formats = [
+            'pdf',           # PDF documents
+            'docx', 'doc',   # Microsoft Word
+            'xlsx', 'xls', 'xlsm',  # Microsoft Excel
+            'pptx', 'ppt',   # Microsoft PowerPoint
+            'html', 'htm',   # Web pages
+            'xml', 'nxml',   # XML formats (including scientific)
+            'txt',           # Plain text
+            'md',            # Markdown
+            'csv', 'tsv',    # Tabular data
+            'json',          # JSON data
+            'asciidoc',      # AsciiDoc format
+            'rst',           # reStructuredText
+            'rtf',           # Rich Text Format
+            'odt',           # OpenDocument Text
+            'epub',          # E-book format
+            'tex', 'latex',  # LaTeX documents
+            'org',           # Org-mode
+            'textile',       # Textile markup
+            'wiki', 'mediawiki',  # Wiki formats
+            'adoc',          # AsciiDoc alt
+            'yaml', 'yml',   # YAML files
+            'toml',          # TOML config
+            'ini', 'cfg', 'conf',  # Config files
+            'log',           # Log files
+            'rdoc',          # Ruby docs
+            'pod',           # Perl docs
+        ]
         self.output_formats = ['markdown']
     
     def extract_single(self, file_path: Union[str, Path], output_dir: Union[str, Path], 
@@ -269,8 +342,18 @@ class HighSpeed_Markdown_General_Extractor(BaseExtractor):
                 error=f"Unsupported format: {file_path.suffix}"
             )
         
-        # Use the optimized worker function
-        result_dict = _extract_pdf_to_markdown((file_path, output_dir))
+        # Route to appropriate extraction function based on file type
+        text_formats = ['.txt', '.md', '.rst', '.org', '.textile', '.wiki', '.mediawiki',
+                       '.yaml', '.yml', '.toml', '.ini', '.cfg', '.conf', '.log',
+                       '.tex', '.latex', '.adoc', '.asciidoc', '.rdoc', '.pod',
+                       '.csv', '.tsv', '.json', '.xml', '.nxml', '.html', '.htm']
+        
+        if file_path.suffix.lower() in text_formats:
+            # Use text extraction for text-based formats
+            result_dict = _extract_text_to_markdown((file_path, output_dir))
+        else:
+            # Use PDF extraction for PDFs and other binary formats
+            result_dict = _extract_pdf_to_markdown((file_path, output_dir))
         
         # Convert dictionary keys back to constructor parameters
         # The to_dict() method changes 'file_path' to 'file'
@@ -317,14 +400,29 @@ class HighSpeed_Markdown_General_Extractor(BaseExtractor):
         if not valid_files:
             return [], 0.0, {}
         
-        # Prepare job arguments for multiprocessing
-        job_args = [(pdf_path, output_dir) for pdf_path in valid_files]
+        # Prepare job arguments for multiprocessing and route by file type
+        text_formats = ['.txt', '.md', '.rst', '.org', '.textile', '.wiki', '.mediawiki',
+                       '.yaml', '.yml', '.toml', '.ini', '.cfg', '.conf', '.log',
+                       '.tex', '.latex', '.adoc', '.asciidoc', '.rdoc', '.pod',
+                       '.csv', '.tsv', '.json', '.xml', '.nxml', '.html', '.htm']
+        
+        pdf_files = []
+        text_files = []
+        
+        for file_path in valid_files:
+            if file_path.suffix.lower() in text_formats:
+                text_files.append((file_path, output_dir))
+            else:
+                pdf_files.append((file_path, output_dir))
         
         start_time = time.perf_counter()
         
         # Execute with ProcessPoolExecutor for optimal parallel processing
         with ProcessPoolExecutor(max_workers=max_workers) as executor:
-            futures = [executor.submit(_extract_pdf_to_markdown, args) for args in job_args]
+            # Submit jobs for both text and PDF files
+            futures = []
+            futures.extend([executor.submit(_extract_text_to_markdown, args) for args in text_files])
+            futures.extend([executor.submit(_extract_pdf_to_markdown, args) for args in pdf_files])
             result_dicts = []
             
             # Show progress every 100 files for large batches

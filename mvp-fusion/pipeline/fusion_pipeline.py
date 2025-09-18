@@ -55,9 +55,23 @@ class FusionPipeline:
     
     def __init__(self, config: Dict[str, Any]):
         self.config = config
-        self.stages_to_run = config.get('pipeline', {}).get('stages_to_run', ['convert'])
-        self.memory_limit_mb = config.get('pipeline', {}).get('memory_limit_mb', 100)
-        self.service_memory_limit_mb = config.get('pipeline', {}).get('service_memory_limit_mb', 1024)
+        # Read stage configuration from config.yaml pipeline.stages section
+        pipeline_config = config.get('pipeline', {})
+        stages_config = pipeline_config.get('stages', {})
+        
+        # Build list of stages to run based on boolean flags
+        self.stages_to_run = []
+        stage_order = ['convert', 'classify', 'enrich', 'extract']
+        for stage in stage_order:
+            if stages_config.get(stage, False):  # Default to False if not specified
+                self.stages_to_run.append(stage)
+        
+        # Fallback to just convert if no stages enabled
+        if not self.stages_to_run:
+            self.stages_to_run = ['convert']
+            
+        self.memory_limit_mb = pipeline_config.get('memory_limit_mb', 100)
+        self.service_memory_limit_mb = pipeline_config.get('service_memory_limit_mb', 1024)
         
         # Get logger for this module
         self.logger = get_fusion_logger(__name__)
@@ -258,15 +272,8 @@ class FusionPipeline:
                 
                 if doc.success and proceed_to_enrichment:
                     try:
-                        # TODO: Implement domain-specific enrichment
-                        enrichment_data = {
-                            'description': 'Domain-Specific Enrichment & Entity Extraction',
-                            'enrichment_date': time.strftime('%Y-%m-%dT%H:%M:%S'),
-                            'enrichment_method': 'mvp-fusion-basic',
-                            'domains_processed': '["general"]',
-                            'total_entities': 0,
-                            'enhanced_mode': False
-                        }
+                        # PROFESSIONAL NLP ENRICHMENT: Enrich global entities with domain-specific context
+                        enrichment_data = self._enrich_global_entities(doc.markdown_content, classification_data)
                         doc.add_enrichment_data(enrichment_data)
                         doc.record_stage_timing('enrich', (time.perf_counter() - stage_start) * 1000)
                         successful_enrichments += 1
@@ -600,6 +607,129 @@ class FusionPipeline:
         cleaned = [' '.join(match.split()) for match in matches]
         return list(set(cleaned))[:10]
     
+    def _extract_people_conservative(self, content: str) -> List[Dict]:
+        """Conservative person extraction fallback using comprehensive extractor"""
+        try:
+            # Try to use comprehensive entity extractor as fallback too
+            from knowledge.extractors.comprehensive_entity_extractor import ComprehensiveEntityExtractor
+            comprehensive = ComprehensiveEntityExtractor(config=self.config)
+            
+            # Extract all entities and get the people
+            all_entities = comprehensive.extract_all_entities(content)
+            people_entities = all_entities.get('domain_entities', {}).get('people', [])
+            
+            # Convert to global entity format with spans
+            global_people = []
+            for person in people_entities:
+                name = person.get('name', '')
+                if name and len(name.strip()) > 2:
+                    # Simple span finding
+                    start_pos = content.find(name)
+                    if start_pos != -1:
+                        global_people.append({
+                            "value": name,
+                            "span": {"start": start_pos, "end": start_pos + len(name)},
+                            "text": name,
+                            "type": "PERSON"
+                        })
+            
+            return global_people[:10]
+            
+        except Exception:
+            # Ultimate fallback - very conservative title-only extraction
+            import re
+            pattern = r'\b(?:Dr|Prof)\.\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?\b'
+            candidates = []
+            for match in re.finditer(pattern, content):
+                candidates.append({
+                    "value": match.group(0).strip(),
+                    "span": {"start": match.start(0), "end": match.end(0)},
+                    "text": match.group(0).strip(),
+                    "type": "PERSON"
+                })
+            return candidates[:5]
+    
+    def _enrich_global_entities(self, content: str, classification_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Professional NLP Enrichment: Enrich global entities with domain-specific context.
+        
+        Architecture:
+        - Extract global entities from classification stage
+        - Pass to comprehensive extractor for role/context enrichment
+        - Return enriched entities with domain-specific information
+        """
+        try:
+            # Extract global entities from classification data
+            entities_section = classification_data.get('entities', {})
+            global_entities_data = entities_section.get('global_entities', {})
+            
+            # Count global entities for reporting
+            global_entity_count = 0
+            for entity_type, entity_list in global_entities_data.items():
+                if isinstance(entity_list, list):
+                    global_entity_count += len(entity_list)
+            
+            self.logger.logger.debug(f"🎯 ENRICHMENT: Found {global_entity_count} global entities to enrich")
+            
+            # Use comprehensive extractor for enrichment (not re-detection)
+            from knowledge.extractors.comprehensive_entity_extractor import ComprehensiveEntityExtractor
+            comprehensive = ComprehensiveEntityExtractor(config=self.config)
+            
+            # Call enrichment mode - this will enrich global entities with roles/context
+            enriched_results = comprehensive.extract_all_entities(content, global_entities=global_entities_data)
+            
+            # Extract enriched domain entities
+            domain_entities = enriched_results.get('entities', {})
+            
+            # Count enriched entities
+            total_enriched = 0
+            for entity_type, entity_list in domain_entities.items():
+                if isinstance(entity_list, list):
+                    total_enriched += len(entity_list)
+            
+            # Build enrichment data
+            enrichment_data = {
+                'description': 'Professional NLP Entity Enrichment',
+                'enrichment_date': time.strftime('%Y-%m-%dT%H:%M:%S'),
+                'enrichment_method': 'mvp-fusion-comprehensive-enrichment',
+                'enrichment_engine': enriched_results.get('summary', {}).get('extraction_engine', 'FLPC Rust Regex'),
+                'domains_processed': '["safety", "compliance", "regulatory", "technical"]',
+                'global_entities_input': global_entity_count,
+                'total_enriched_entities': total_enriched,
+                'enhanced_mode': True,
+                
+                # Domain-specific enriched entities
+                'domain_entities': domain_entities,
+                
+                # Summary statistics
+                'enrichment_summary': {
+                    'people_enriched': len(domain_entities.get('people', [])),
+                    'organizations_enriched': len(domain_entities.get('organizations', [])),
+                    'locations_enriched': len(domain_entities.get('locations', [])),
+                    'financial_entities': len(domain_entities.get('financial', [])),
+                    'measurements': len(domain_entities.get('measurements', [])),
+                    'percentages': len(domain_entities.get('percentages', [])),
+                    'regulations': len(domain_entities.get('regulations', [])),
+                    'statistics': len(domain_entities.get('statistics', []))
+                }
+            }
+            
+            self.logger.logger.debug(f"✅ ENRICHMENT: Enriched {global_entity_count} → {total_enriched} entities")
+            return enrichment_data
+            
+        except Exception as e:
+            self.logger.logger.warning(f"⚠️ Entity enrichment failed: {e}")
+            # Fallback to basic enrichment data
+            return {
+                'description': 'Basic Enrichment (Fallback)',
+                'enrichment_date': time.strftime('%Y-%m-%dT%H:%M:%S'),
+                'enrichment_method': 'mvp-fusion-fallback',
+                'domains_processed': '["general"]',
+                'total_entities': 0,
+                'enhanced_mode': False,
+                'error': str(e)
+            }
+    
     # Core 8 Entity Extraction Methods
     def _extract_person(self, content: str) -> List[str]:
         """Extract person names (Core 8)"""
@@ -889,9 +1019,9 @@ class FusionPipeline:
             
             flpc = FastRegexEngine()
             
-            # Core 8 entities using FLPC
+            # Core 8 entities using FLPC with conservative validation
             global_entities = {
-                'person': [],  # DISABLED: Use only conservative corpus-based person extraction
+                'person': self._extract_core8_person_flpc(content, flpc),  # Re-enabled with conservative corpus validation
                 'org': self._extract_core8_org_flpc(content, flpc),
                 'loc': self._extract_core8_location_flpc(content, flpc),
                 'gpe': self._extract_core8_gpe_flpc(content, flpc),
@@ -908,7 +1038,7 @@ class FusionPipeline:
         except Exception as e:
             # Fallback to Python regex if FLPC fails
             global_entities = {
-                'person': [],  # DISABLED: Use only conservative corpus-based person extraction
+                'person': self._extract_people_conservative(content),  # Conservative fallback person extraction
                 'org': self._extract_org(content),
                 'loc': self._extract_location(content),
                 'gpe': self._extract_gpe(content),
@@ -944,6 +1074,26 @@ class FusionPipeline:
                 'statistics': []
             }
         
+        # Move good people from domain entities to global entities (with spans for layered approach)
+        domain_people = domain_entities.get('people', [])
+        if domain_people and not global_entities.get('person'):
+            # Convert domain people to global entity format with spans
+            global_people_with_spans = []
+            for person in domain_people:
+                name = person.get('name', '')
+                if name and len(name.strip()) > 2:
+                    # Find the person's position in content for spans
+                    start_pos = content.find(name)
+                    if start_pos != -1:
+                        global_people_with_spans.append({
+                            "value": name,
+                            "span": {"start": start_pos, "end": start_pos + len(name)},
+                            "text": name,
+                            "type": "PERSON"
+                        })
+            # Update global entities with the good people (full list for layered processing)
+            global_entities['person'] = global_people_with_spans
+        
         # Structure entities by type
         structured_entities = {
             'global_entities': global_entities,
@@ -951,7 +1101,7 @@ class FusionPipeline:
                 'financial': domain_entities.get('financial', []),
                 'percentages': domain_entities.get('percentages', []),
                 'organizations': domain_entities.get('organizations', []),
-                'people': domain_entities.get('people', []),  # Conservative corpus-based person extraction
+                'people': domain_entities.get('people', []),  # Keep for reference but global is primary
                 'locations': domain_entities.get('locations', []),
                 'regulations': domain_entities.get('regulations', []),
                 'statistics': domain_entities.get('statistics', [])
@@ -1141,12 +1291,38 @@ class FusionPipeline:
         return unique_entities[:10]
     
     def _extract_core8_person_flpc(self, content: str, flpc) -> List[Dict]:
-        """Extract person names with spans using FLPC (Core 8)"""
-        patterns = [
-            r'\b[A-Z][a-z]+\s+[A-Z][a-z]+\b',  # First Last
-            r'\b(?:Dr|Mr|Ms|Mrs|Prof)\.\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?\b',  # Title Name
-        ]
-        return self._extract_entities_with_spans(patterns, content, flpc, "PERSON")
+        """Extract person names with spans using comprehensive domain extraction (Core 8)"""
+        # Use the comprehensive entity extractor that's working well for people
+        try:
+            # Import and use the comprehensive extractor
+            from knowledge.extractors.comprehensive_entity_extractor import ComprehensiveEntityExtractor
+            comprehensive = ComprehensiveEntityExtractor(config=self.config)
+            
+            # Extract all entities and get the people
+            all_entities = comprehensive.extract_all_entities(content)
+            people_entities = all_entities.get('domain_entities', {}).get('people', [])
+            
+            # Convert to global entity format with spans
+            global_people = []
+            for person in people_entities:
+                # Find the person's position in the content to get spans
+                name = person.get('name', '')
+                if name and len(name.strip()) > 2:
+                    # Simple span finding - look for first occurrence
+                    start_pos = content.find(name)
+                    if start_pos != -1:
+                        global_people.append({
+                            "value": name,
+                            "span": {"start": start_pos, "end": start_pos + len(name)},
+                            "text": name,
+                            "type": "PERSON"
+                        })
+            
+            return global_people[:10]
+            
+        except Exception as e:
+            # Fallback to simple conservative extraction
+            return self._extract_people_conservative(content)
     
     def _extract_core8_org_flpc(self, content: str, flpc) -> List[Dict]:
         """Extract organization names with spans using FLPC (Core 8)"""

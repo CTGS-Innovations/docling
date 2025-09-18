@@ -126,5 +126,26 @@ When errors or failures occur:
 ❌ Error occurs → immediately implement fallback/fix
 ✅ Error occurs → stop → discuss → get direction → implement
 
+### **Rule #10: Inline Test Documentation - MANDATORY**
+When using Python `-c` commands for testing or debugging:
+
+**ALWAYS** include a brief comment block at the top explaining:
+- **GOAL**: What I'm trying to test
+- **REASON**: Why I need to test this  
+- **PROBLEM**: What I think might be wrong
+
+**Example Format:**
+```python
+python -c "
+# GOAL: Test if semantic fact extractor works after method fix
+# REASON: Pipeline runs all stages but generates no JSON files
+# PROBLEM: Missing _extract_entity_context method causing extractor to fail
+
+# ... actual test code here ...
+"
+```
+
+**Purpose**: User can read the comment to understand the test context when execution isn't visible.
+
 ---
 **These rules prevent codebase clutter and maintain focus on performance and clarity.**

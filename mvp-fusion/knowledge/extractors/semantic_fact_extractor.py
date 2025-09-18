@@ -689,9 +689,19 @@ class SemanticFactExtractor:
                 'compliance_level': self._assess_compliance_level(entity.get('value', ''))
             })
         elif entity_type == 'person':
-            # DISABLE DUPLICATE PERSON EXTRACTION - Use only conservative corpus-based system
-            self.logger.logger.debug(f"🚫 SKIPPING person entity: '{entity.get('value', '')}' (using corpus-based extraction only)")
-            return None  # Don't create any person facts here - let ComprehensiveEntityExtractor handle all persons
+            # Process person entities that have already been validated
+            person_name = entity.get('value', '')
+            self.logger.logger.debug(f"✅ Creating semantic fact for validated person: '{person_name}'")
+            
+            # Extract additional context for the person
+            person_context = self._extract_role_context_from_person(entity, context)
+            
+            base_data.update({
+                'person_name': person_name,
+                'person_role': entity.get('role'),  # May come from enrichment
+                'person_organization': entity.get('organization'),  # May come from enrichment
+                'person_context': person_context
+            })
         elif entity_type == 'organization':
             base_data.update({
                 'organization_name': entity.get('value', ''),
@@ -793,14 +803,6 @@ class SemanticFactExtractor:
             return 'recommended'
         return 'informational'
     
-    def _extract_role_context(self, entity: Dict, context: str) -> str:
-        """Extract role context for person entities"""
-        # Simple role extraction - could be enhanced
-        roles = ['director', 'manager', 'supervisor', 'worker', 'inspector', 'ceo', 'president']
-        for role in roles:
-            if role in context.lower():
-                return role
-        return ""
     
     def _find_organization_context(self, entity: Dict, context: str) -> str:
         """Find organization affiliation for person"""
