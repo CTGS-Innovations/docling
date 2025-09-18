@@ -15208,3 +15208,47 @@
 💻 PROCESSING FOOTPRINT:[0m
 2025-09-18 13:07:25 - __main__ - [32mSTAGE[0m - [32m   🖥️  WORKERS: 2/16 cores (1 worker = 1 core)[0m
 2025-09-18 13:07:25 - __main__ - [32mSTAGE[0m - [32m   ⚡ EFFICIENCY: 30 pages/worker, 8.3 MB/worker[0m
+2025-09-18 16:02:09 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-18 16:02:09 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-18 16:02:09 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 38[0m
+2025-09-18 16:02:09 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-18 16:02:09 - __main__ - [32mSTAGE[0m - [32m📁 Processing 1 directories from config (default):[0m
+2025-09-18 16:02:09 - __main__ - [32mSTAGE[0m - [32m   - ~/projects/docling/cli/data_complex[0m
+2025-09-18 16:02:09 - __main__ - [32mSTAGE[0m - [32m
+📊 PROCESSING SUMMARY:[0m
+2025-09-18 16:02:09 - __main__ - [32mSTAGE[0m - [32m   Total files: 5[0m
+2025-09-18 16:02:09 - __main__ - [32mSTAGE[0m - [32m   File types: {'.pdf': 3, '.txt': 1, '.md': 1}[0m
+2025-09-18 16:02:09 - __main__ - [32mSTAGE[0m - [32m   Total URLs: 0[0m
+2025-09-18 16:02:09 - __main__ - [32mSTAGE[0m - [32m   Workers: 2[0m
+2025-09-18 16:02:09 - __main__ - [32mSTAGE[0m - [32m
+🚀 Starting file batch processing...[0m
+2025-09-18 16:02:09 - __main__ - [32mSTAGE[0m - [32m🔄 Using Traditional In-Memory Pipeline[0m
+2025-09-18 16:02:10 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-18 16:02:10 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 5 files to in-memory documents...[0m
+2025-09-18 16:02:10 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-18 16:02:10 - pipeline.fusion_pipeline - [33mWARNING[0m - [33m⚠️ Domain entity validation failed: No module named 'knowledge.corpus.geographic_data'[0m
+2025-09-18 16:02:10 - pipeline.fusion_pipeline - [33mWARNING[0m - [33m⚠️ Domain entity validation failed: No module named 'knowledge.corpus.geographic_data'[0m
+2025-09-18 16:02:11 - pipeline.fusion_pipeline - [33mWARNING[0m - [33m⚠️ Domain entity validation failed: No module named 'knowledge.corpus.geographic_data'[0m
+2025-09-18 16:02:11 - pipeline.fusion_pipeline - [33mWARNING[0m - [33m⚠️ Domain entity validation failed: No module named 'knowledge.corpus.geographic_data'[0m
+2025-09-18 16:02:12 - pipeline.fusion_pipeline - [33mWARNING[0m - [33m⚠️ Domain entity validation failed: No module named 'knowledge.corpus.geographic_data'[0m
+2025-09-18 16:02:12 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-18 16:02:12 - pipeline.fusion_pipeline - [33mWARNING[0m - [33m⚠️ Entity enrichment failed: No module named 'knowledge.corpus.geographic_data'[0m
+2025-09-18 16:02:12 - pipeline.fusion_pipeline - [33mWARNING[0m - [33m⚠️ Entity enrichment failed: No module named 'knowledge.corpus.geographic_data'[0m
+2025-09-18 16:02:12 - pipeline.fusion_pipeline - [33mWARNING[0m - [33m⚠️ Entity enrichment failed: No module named 'knowledge.corpus.geographic_data'[0m
+2025-09-18 16:02:12 - pipeline.fusion_pipeline - [33mWARNING[0m - [33m⚠️ Entity enrichment failed: No module named 'knowledge.corpus.geographic_data'[0m
+2025-09-18 16:02:12 - pipeline.fusion_pipeline - [33mWARNING[0m - [33m⚠️ Entity enrichment failed: No module named 'knowledge.corpus.geographic_data'[0m
+2025-09-18 16:02:12 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-18 16:02:12 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-18 16:02:12 - __main__ - [32mSTAGE[0m - [32m
+🚀 PROCESSING PERFORMANCE:[0m
+2025-09-18 16:02:12 - __main__ - [32mSTAGE[0m - [32m   🚀 PAGES/SEC: 24 (overall pipeline)[0m
+2025-09-18 16:02:12 - __main__ - [32mSTAGE[0m - [32m   ⚡ THROUGHPUT: 6.4 MB/sec raw document processing[0m
+2025-09-18 16:02:12 - __main__ - [32mSTAGE[0m - [32m   📊 INPUT: 17 MB across 5 files (61 pages)[0m
+2025-09-18 16:02:12 - __main__ - [32mSTAGE[0m - [32m   📊 OUTPUT: 0.5 MB in 5 markdown files[0m
+2025-09-18 16:02:12 - __main__ - [32mSTAGE[0m - [32m   🗜️  COMPRESSION: 97.1% smaller (eliminated formatting, images, bloat)[0m
+2025-09-18 16:02:12 - __main__ - [32mSTAGE[0m - [32m   📁 RESULTS: 5 successful[0m
+2025-09-18 16:02:12 - __main__ - [32mSTAGE[0m - [32m   ⏱️  TOTAL TIME: 2.59s[0m
+2025-09-18 16:02:12 - __main__ - [32mSTAGE[0m - [32m
+💻 PROCESSING FOOTPRINT:[0m
+2025-09-18 16:02:12 - __main__ - [32mSTAGE[0m - [32m   🖥️  WORKERS: 2/16 cores (1 worker = 1 core)[0m
+2025-09-18 16:02:12 - __main__ - [32mSTAGE[0m - [32m   ⚡ EFFICIENCY: 30 pages/worker, 8.3 MB/worker[0m
