@@ -22,6 +22,13 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 from utils.logging_config import get_fusion_logger
 
+# Import conservative person extractor
+try:
+    from utils.person_entity_extractor import PersonEntityExtractor
+    CONSERVATIVE_PERSON_AVAILABLE = True
+except ImportError:
+    CONSERVATIVE_PERSON_AVAILABLE = False
+
 @dataclass
 class MoneyEntity:
     """Financial amounts with context"""
