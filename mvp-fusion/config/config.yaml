@@ -220,6 +220,39 @@ logging:
   include_performance: true    # Include performance metrics in output
   max_log_size_mb: 100         # Rotate log files at this size
 
+# Entity Recognition Corpus Configuration
+corpus:
+  # Conservative person entity extraction settings
+  person_min_confidence: 0.7   # High accuracy threshold for person entities
+  
+  # Corpus file paths (relative to config directory or absolute paths)
+  # Set these paths to your actual corpus files when available
+  first_names_path: null       # e.g., "corpus/first_names_100k.json"
+  last_names_path: null        # e.g., "corpus/last_names_100k.json"  
+  organizations_path: null     # e.g., "corpus/organizations_100k.json"
+  
+  # Person extraction behavior
+  person_extraction:
+    mode: "conservative"       # "conservative", "balanced", or "aggressive"
+    require_multiple_evidence: true
+    min_evidence_count: 3
+    blacklist_ambiguous: true
+    require_full_name: true    # Prefer full names over single names
+    single_name_requires_title: true
+    reject_company_names: true
+    
+    # Confidence thresholds by name type
+    thresholds:
+      single_name: 0.85        # Very high for single names
+      full_name: 0.7           # High for full names  
+      with_title: 0.65         # Slightly lower with titles
+      
+    # Penalty multipliers for ambiguous cases
+    penalties:
+      ambiguous_name: 0.5
+      single_name: 0.6
+      common_word: 0.7
+
 # Error Handling
 error_handling:
   continue_on_error: true      # Don't stop pipeline on individual file errors

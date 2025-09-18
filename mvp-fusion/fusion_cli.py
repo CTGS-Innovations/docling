@@ -789,6 +789,11 @@ Examples:
   python fusion_cli.py --url-file urls.txt                    # Multiple URLs from file
   python fusion_cli.py --url-file MVP-FOUNDERS-JOURNEY-50-URLS.md  # Process founder URLs
   
+  # Config file processing (NEW: directories by default, URLs opt-in)
+  python fusion_cli.py --config config.yaml                   # Process directories only (DEFAULT)
+  python fusion_cli.py --config config.yaml --urls            # Process URLs from config
+  python fusion_cli.py --config config.yaml --urls -v         # Process URLs with verbose output
+  
   # Pipeline control
   python fusion_cli.py --config config/fusion_config.yaml --stages all
   python fusion_cli.py --config config/fusion_config.yaml --convert-only -v
@@ -819,6 +824,8 @@ Examples:
     # Configuration options
     parser.add_argument('--config', '-c', type=str, default='config/config.yaml',
                        help='Configuration file path (default: config/config.yaml)')
+    parser.add_argument('--urls', action='store_true',
+                       help='Process URLs from config file (directories are processed by default)')
     parser.add_argument('--output', '-o', type=str, help='Output directory')
     parser.add_argument('--batch-size', '-b', type=int, default=32, 
                        help='Batch size for parallel processing')
@@ -985,18 +992,19 @@ Examples:
             logger.success(f"\n✅ Processed {len(all_results)} total files across all directories")
             
         elif args.config and not args.file and not args.directory and not args.url and not args.url_file and not args.performance_test:
-            # Auto-process directories from config file when only --config is provided
+            # Auto-process from config file when only --config is provided
+            # DIRECTORIES ARE DEFAULT - URLs only processed if --urls flag provided
             config_dirs = config.get('inputs', {}).get('directories', [])
-            config_urls = config.get('inputs', {}).get('urls', [])
-            config_url_files = config.get('inputs', {}).get('url_files', [])
+            config_urls = config.get('inputs', {}).get('urls', []) if args.urls else []
+            config_url_files = config.get('inputs', {}).get('url_files', []) if args.urls else []
             
-            if config_dirs or config_urls or config_url_files:
+            if config_dirs or (args.urls and (config_urls or config_url_files)):
                 all_files = []
                 all_urls = []
                 
-                # Process directories if specified
+                # Process directories if specified (DEFAULT behavior)
                 if config_dirs:
-                    logger.stage(f"🗂️  Scanning {len(config_dirs)} directories:")
+                    logger.stage(f"📁 Processing {len(config_dirs)} directories from config (default):")
                     for config_dir in config_dirs:
                         logger.stage(f"   - {config_dir}")
                     
@@ -1014,14 +1022,14 @@ Examples:
                             files.extend(directory.glob(f"**/*{ext}"))
                         all_files.extend(files)
                 
-                # Process URLs if specified
-                if config_urls:
-                    logger.stage(f"🔗 Processing {len(config_urls)} URLs from config:")
+                # Process URLs if specified (EXPLICIT --urls flag required)
+                if args.urls and config_urls:
+                    logger.stage(f"🔗 Processing {len(config_urls)} URLs from config (--urls flag provided):")
                     all_urls.extend(config_urls)
                 
-                # Process URL files if specified  
-                if config_url_files:
-                    logger.stage(f"📄 Processing {len(config_url_files)} URL files from config:")
+                # Process URL files if specified (EXPLICIT --urls flag required)
+                if args.urls and config_url_files:
+                    logger.stage(f"📄 Processing {len(config_url_files)} URL files from config (--urls flag provided):")
                     for url_file_path in config_url_files:
                         url_file = Path(url_file_path).expanduser()
                         if not url_file.exists():
@@ -1036,7 +1044,12 @@ Examples:
                                     all_urls.append(line)
                 
                 if not all_files and not all_urls:
-                    logger.logger.error(f"❌ No files or URLs found")
+                    if not config_dirs and not args.urls:
+                        logger.logger.error(f"❌ No directories found in config. Use --urls flag to process URLs.")
+                    elif not config_dirs and args.urls and not config_urls and not config_url_files:
+                        logger.logger.error(f"❌ No URLs found in config despite --urls flag.")
+                    else:
+                        logger.logger.error(f"❌ No files or URLs found")
                     sys.exit(1)
                 
                 # Show summary before processing
@@ -1212,7 +1225,8 @@ Examples:
                 
                 logger.success(f"   ✅ SUCCESS RATE: {(successful/len(results)*100):.1f}% ({successful}/{len(results)})")
             else:
-                logger.logger.error(f"❌ No input specified and no directories in config file")
+                logger.logger.error(f"❌ No directories found in config file. Add directories to config or use --file, --directory, --url, or --url-file.")
+                logger.logger.info(f"💡 Tip: Use --urls flag to process URLs from config file.")
                 sys.exit(1)
             
         elif args.performance_test:

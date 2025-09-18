@@ -36,6 +36,14 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 from utils.logging_config import get_fusion_logger
 
+# Import conservative person entity extractor
+try:
+    from utils.person_entity_extractor import PersonEntityExtractor
+    PERSON_EXTRACTOR_AVAILABLE = True
+except ImportError:
+    PERSON_EXTRACTOR_AVAILABLE = False
+    PersonEntityExtractor = None
+
 @dataclass
 class SemanticFact:
     """Base class for all semantic facts"""
@@ -103,6 +111,16 @@ class ActionFact(SemanticFact):
     action_verb: str = ""
     object: str = ""
     modifiers: List[str] = field(default_factory=list)
+
+@dataclass
+class PersonFact(SemanticFact):
+    """Conservative person entity with high-accuracy validation"""
+    person_name: str = ""
+    role_context: str = ""
+    organization_affiliation: str = ""
+    name_components: Dict[str, str] = field(default_factory=dict)  # first, last names
+    validation_evidence: List[str] = field(default_factory=list)
+    ambiguity_score: float = 0.0
     
 @dataclass
 class CausalFact(SemanticFact):
@@ -118,11 +136,31 @@ class SemanticFactExtractor:
     Implements fact assembly pipeline: entities → normalized entities → typed facts
     """
     
-    def __init__(self):
+    def __init__(self, config: Optional[Dict] = None):
         self.logger = get_fusion_logger(__name__)
         self.canonical_map = self._build_canonical_map()
         self.fact_patterns = self._build_fact_patterns()
         self.aho_corasick = self._build_normalizer()
+        
+        # Initialize conservative person extractor if available
+        self.person_extractor = None
+        if PERSON_EXTRACTOR_AVAILABLE and config:
+            corpus_config = config.get('corpus', {})
+            try:
+                self.person_extractor = PersonEntityExtractor(
+                    first_names_path=Path(corpus_config.get('first_names_path')) if corpus_config.get('first_names_path') else None,
+                    last_names_path=Path(corpus_config.get('last_names_path')) if corpus_config.get('last_names_path') else None,
+                    organizations_path=Path(corpus_config.get('organizations_path')) if corpus_config.get('organizations_path') else None,
+                    min_confidence=corpus_config.get('person_min_confidence', 0.7)
+                )
+                self.logger.entity("✅ Conservative person extractor initialized with corpus")
+            except Exception as e:
+                self.logger.logger.warning(f"⚠️ Could not initialize person extractor: {e}")
+                self.person_extractor = None
+        elif PERSON_EXTRACTOR_AVAILABLE:
+            # Initialize with default settings (no corpus files)
+            self.person_extractor = PersonEntityExtractor(min_confidence=0.7)
+            self.logger.entity("✅ Conservative person extractor initialized (no corpus)")
         
     def _build_canonical_map(self) -> Dict[str, Dict[str, str]]:
         """Build canonical normalization mapping for entities"""
@@ -399,6 +437,96 @@ class SemanticFactExtractor:
                 
         return facts
     
+    def _extract_conservative_person_facts(self, text: str, normalized_entities: Dict) -> List[PersonFact]:
+        """Extract person facts using conservative validation"""
+        facts = []
+        
+        if not self.person_extractor:
+            self.logger.logger.debug("⚠️ Person extractor not available, skipping person fact extraction")
+            return facts
+        
+        try:
+            # Use the conservative person extractor
+            persons = self.person_extractor.extract_persons(text)
+            
+            for person in persons:
+                # Extract name components
+                tokens = person['text'].split()
+                name_components = {}
+                if len(tokens) >= 2:
+                    name_components['first_name'] = tokens[0]
+                    name_components['last_name'] = tokens[-1]
+                    if len(tokens) > 2:
+                        name_components['middle_names'] = ' '.join(tokens[1:-1])
+                elif len(tokens) == 1:
+                    name_components['single_name'] = tokens[0]
+                
+                # Create person fact
+                fact = PersonFact(
+                    fact_type='PersonFact',
+                    confidence=person['confidence'],
+                    span={'start': person['position'], 'end': person['position'] + len(person['text'])},
+                    raw_text=person['text'],
+                    person_name=person['text'],
+                    role_context=self._extract_role_context_from_person(person, text),
+                    organization_affiliation=self._extract_org_context_from_person(person, text),
+                    name_components=name_components,
+                    validation_evidence=person.get('evidence', []),
+                    ambiguity_score=1.0 - person['confidence'],  # Higher ambiguity = lower confidence
+                    normalized_entities=normalized_entities
+                )
+                facts.append(fact)
+                
+            self.logger.logger.debug(f"✅ Extracted {len(facts)} conservative person facts")
+            
+        except Exception as e:
+            self.logger.logger.error(f"❌ Error in conservative person extraction: {e}")
+            
+        return facts
+    
+    def _extract_role_context_from_person(self, person: Dict, text: str) -> str:
+        """Extract role context for a person from the surrounding text"""
+        context = person.get('context', '')
+        if not context:
+            return ""
+        
+        # Look for role indicators
+        role_patterns = [
+            r'(CEO|CTO|CFO|COO|President|Director|Manager|Supervisor|Coordinator)',
+            r'(Founder|Co-founder|Co-Founder)',
+            r'(Professor|Dr\.|Doctor|Ph\.D)',
+            r'(Inspector|Investigator|Agent|Officer)',
+            r'(Engineer|Scientist|Researcher|Analyst)'
+        ]
+        
+        for pattern in role_patterns:
+            match = re.search(pattern, context, re.IGNORECASE)
+            if match:
+                return match.group(1)
+        
+        return ""
+    
+    def _extract_org_context_from_person(self, person: Dict, text: str) -> str:
+        """Extract organization context for a person"""
+        context = person.get('context', '')
+        if not context:
+            return ""
+        
+        # Look for organization indicators
+        org_patterns = [
+            r'(OSHA|EPA|FDA|NIOSH|DOL)',  # Government agencies
+            r'([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\s+(?:Inc|LLC|Corp|Corporation|Company))',  # Companies
+            r'([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\s+(?:University|Institute|College))',  # Educational
+            r'([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\s+(?:Department|Agency|Administration))'  # Government
+        ]
+        
+        for pattern in org_patterns:
+            match = re.search(pattern, context)
+            if match:
+                return match.group(1)
+        
+        return ""
+    
     def _extract_action_facts(self, text: str, normalized_entities: Dict) -> List[ActionFact]:
         """Extract action facts (subject-verb-object)"""
         facts = []
@@ -501,8 +629,14 @@ class SemanticFactExtractor:
                 if isinstance(entity, dict):
                     # Create semantic fact based on entity type
                     semantic_fact = self._create_dynamic_semantic_fact(entity_type, entity, markdown_content)
-                    if semantic_fact:
+                    if semantic_fact:  # Only add non-None facts
                         promoted_facts[entity_type].append(semantic_fact)
+                    elif entity_type == 'person':
+                        # Log rejected person entities for visibility
+                        self.logger.logger.debug(f"🚫 Filtered out false person: '{entity.get('value', 'unknown')}'")
+        
+        # Remove empty fact type lists
+        promoted_facts = {k: v for k, v in promoted_facts.items() if v}
         
         total_promoted = sum(len(facts) for facts in promoted_facts.values())
         self.logger.entity(f"✅ Total facts promoted: {total_promoted}")
@@ -555,11 +689,54 @@ class SemanticFactExtractor:
                 'compliance_level': self._assess_compliance_level(entity.get('value', ''))
             })
         elif entity_type == 'person':
-            base_data.update({
-                'person_name': entity.get('value', ''),
-                'role_context': self._extract_role_context(entity, context),
-                'organization_affiliation': self._find_organization_context(entity, context)
-            })
+            # Use conservative person validation if available
+            person_name = entity.get('value', '')
+            if self.person_extractor and person_name:
+                # Re-validate the person with conservative rules
+                person_context = self._extract_financial_context(entity, context)  # Reuse context extraction
+                
+                # Create a more realistic context for validation
+                validation_text = f"The document mentions {person_name} in the context: {person_context}"
+                conservative_persons = self.person_extractor.extract_persons(validation_text)
+                
+                # Check if the person passes conservative validation
+                validated_person = None
+                for cp in conservative_persons:
+                    if person_name.lower() in cp['text'].lower() or cp['text'].lower() in person_name.lower():
+                        validated_person = cp
+                        break
+                
+                if validated_person and validated_person['confidence'] >= 0.7:
+                    # Upgrade to validated person fact
+                    base_data.update({
+                        'person_name': person_name,
+                        'role_context': self._extract_role_context(entity, context),
+                        'organization_affiliation': self._find_organization_context(entity, context),
+                        'conservative_validation': True,
+                        'conservative_confidence': validated_person['confidence'],
+                        'validation_evidence': validated_person.get('evidence', []),
+                        'fact_type': 'ValidatedPersonFact'
+                    })
+                else:
+                    # Failed conservative validation - REJECT this entity entirely
+                    self.logger.logger.debug(f"🚫 REJECTED person entity: '{person_name}' (failed conservative validation)")
+                    return None  # Don't create a fact for this entity
+            else:
+                # No conservative extractor - be very conservative and reject ambiguous names
+                if self._is_likely_false_person_name(person_name):
+                    self.logger.logger.debug(f"🚫 REJECTED person entity: '{person_name}' (likely false positive)")
+                    return None  # Don't create a fact for this entity
+                    
+                # Fallback to basic person extraction with warning
+                base_data.update({
+                    'person_name': person_name,
+                    'role_context': self._extract_role_context(entity, context),
+                    'organization_affiliation': self._find_organization_context(entity, context),
+                    'conservative_validation': False,
+                    'validation_failure_reason': 'Conservative extractor not available'
+                })
+                # Heavily penalize unvalidated persons
+                base_data['confidence'] *= 0.3
         elif entity_type == 'organization':
             base_data.update({
                 'organization_name': entity.get('value', ''),
@@ -753,6 +930,69 @@ class SemanticFactExtractor:
         """Extract temporal context around date"""
         return self._extract_financial_context(entity, context)  # Reuse logic
     
+    def _is_likely_false_person_name(self, name: str) -> bool:
+        """Detect likely false positive person names"""
+        name_lower = name.lower()
+        
+        # Document structure elements
+        document_fragments = {
+            'general requirements', 'introduction working', 'contents introduction',
+            'rules this', 'health act', 'labor occupational', 'health administration',
+            'health review', 'specific types', 'portable ladders', 'fixed ladders',
+            'ladder safety', 'defective ladders', 'stairways used', 'during construction',
+            'temporary stairs', 'stair rails', 'training requirements', 'health program',
+            'management guidelines', 'state programs', 'consultation services',
+            'voluntary protection', 'strategic partnership', 'alliance program',
+            'electronic information', 'further assistance', 'regional offices'
+        }
+        
+        # Equipment and structural elements
+        equipment_terms = {
+            'all ladders', 'ladders all', 'ladders the', 'stairways the',
+            'handrails requirements', 'midrails midrails', 'safety devices',
+            'mounting ladder', 'related support', 'do not'
+        }
+        
+        # Organizational fragments and addresses
+        org_fragments = {
+            'health achievement', 'recognition program', 'federal register',
+            'the federal', 'the occupational', 'training institute',
+            'education centers', 'consultation program', 'publications office',
+            'constitution avenue', 'federal building', 'varick street',
+            'the curtis', 'independence mall', 'west suite', 'west philadelphia',
+            'south arlington', 'heights road', 'expert advisors',
+            'electronic compliance', 'assistance tools', 'technical links',
+            'government printing', 'forsyth street', 'south dearborn',
+            'griffin street', 'city center', 'main street', 'kansas city',
+            'american samoa', 'northern mariana', 'stevenson street',
+            'san francisco', 'third avenue', 'area offices', 'state plans'
+        }
+        
+        # Check against all known false positive patterns
+        all_false_patterns = document_fragments | equipment_terms | org_fragments
+        
+        if name_lower in all_false_patterns:
+            return True
+            
+        # Additional heuristic checks
+        # Names that are clearly procedural/document terms
+        if any(word in name_lower for word in ['requirements', 'guidelines', 'procedures', 'regulations']):
+            return True
+            
+        # Names that are clearly addresses/locations without person context
+        if any(word in name_lower for word in ['street', 'avenue', 'building', 'center', 'office']):
+            return True
+            
+        # Names that are equipment or technical terms
+        if any(word in name_lower for word in ['ladder', 'stair', 'rail', 'device', 'system']):
+            return True
+            
+        # Names that are procedural terms
+        if any(word in name_lower for word in ['program', 'service', 'assistance', 'consultation']):
+            return True
+            
+        return False
+    
     def _extract_semantic_relationships(self, markdown_content: str, facts: Dict) -> List[Dict]:
         """Extract semantic relationships between entities"""
         relationships = []
@@ -802,7 +1042,11 @@ class SemanticFactExtractor:
             "percentages": 1,  # Keep all (usually relevant)
             "url": 1,          # Keep all (usually important)
             "gpe": 1,          # Keep all (geopolitical entities usually relevant)
-            "financial": 1     # Keep all (usually important)
+            "financial": 1,    # Keep all (usually important)
+            "conservative_persons": 1,  # Keep all conservative person facts (already validated)
+            "personfact": 1,   # Keep all person facts
+            "validatedpersonfact": 1,  # Keep all validated person facts
+            "unvalidatedpersonfact": 1  # Keep all unvalidated person facts (for analysis)
         }
         
         # Step 3: Build frequency map with normalization
@@ -849,13 +1093,35 @@ class SemanticFactExtractor:
                 filtered_facts[fact_type] = facts
                 continue
             
+            # Special handling for conservative person facts - always keep them
+            if fact_type == 'conservative_persons':
+                self.logger.logger.debug(f"🎯 Preserving {len(facts)} conservative person facts (already validated)")
+                filtered_facts[fact_type] = facts
+                continue
+                
             filtered_list = []
             
             for fact in facts:
                 canonical_name = fact.get('canonical_name', '').strip()
                 entity_type = fact.get('entity_type', '').lower()
+                fact_type_lower = fact.get('fact_type', '').lower()
                 
-                # Skip empty names
+                # Special handling for person facts - use different criteria
+                if 'person' in fact_type_lower or entity_type == 'person':
+                    # Person facts use conservative validation results
+                    if fact.get('conservative_validation') is True:
+                        # Validated person - keep regardless of frequency
+                        fact['validation_status'] = 'conservative_validated'
+                        filtered_list.append(fact)
+                        continue
+                    elif fact.get('conservative_validation') is False:
+                        # Failed validation - mark but keep for analysis
+                        fact['validation_status'] = 'conservative_rejected'
+                        fact['confidence'] *= 0.3  # Heavily penalize
+                        filtered_list.append(fact)
+                        continue
+                
+                # Skip empty names for other types
                 if not canonical_name:
                     continue
                 
@@ -881,8 +1147,11 @@ class SemanticFactExtractor:
                     removed_counts[f"{entity_type}_low_frequency"] = removed_counts.get(f"{entity_type}_low_frequency", 0) + 1
             
             if filtered_list:
-                # Sort by frequency (highest first)
-                filtered_list.sort(key=lambda x: x.get('frequency_score', 0), reverse=True)
+                # Sort by frequency (highest first), but put validated persons first
+                filtered_list.sort(key=lambda x: (
+                    1 if x.get('validation_status') == 'conservative_validated' else 0,
+                    x.get('frequency_score', 0)
+                ), reverse=True)
                 filtered_facts[fact_type] = filtered_list
         
         # Step 5: Log filtering results
@@ -935,6 +1204,14 @@ class SemanticFactExtractor:
         self.logger.logger.debug("⬆️  Promoting YAML entities to structured facts...")
         all_facts = self._promote_yaml_entities_to_facts(existing_entities, markdown_content)
         
+        # Step 4.5: Extract conservative person facts from full text (additional validation)
+        if self.person_extractor and markdown_content:
+            self.logger.logger.debug("👥 Extracting conservative person facts from markdown...")
+            conservative_person_facts = self._extract_conservative_person_facts(markdown_content, normalized_entities)
+            if conservative_person_facts:
+                all_facts['conservative_persons'] = conservative_person_facts
+                self.logger.entity(f"✅ Found {len(conservative_person_facts)} conservative person facts")
+        
         # Step 5: Apply normalization + threshold filtering to reduce noise
         self.logger.logger.debug("🧹 Applying normalization and threshold filtering...")
         all_facts = self._apply_entity_normalization_and_filtering(all_facts)
@@ -950,51 +1227,31 @@ class SemanticFactExtractor:
         total_facts = sum(len(facts) for facts in all_facts.values())
         self.logger.entity(f"✅ Total semantic facts extracted: {total_facts}")
         
+        # Build semantic facts structure - handle dynamic fact types
+        semantic_facts_output = {}
+        
+        # Process all fact types in all_facts
+        for fact_type, facts in all_facts.items():
+            if isinstance(facts, list) and facts:
+                # Convert facts to serializable format
+                processed_facts = []
+                for fact in facts:
+                    if hasattr(fact, '__dict__'):
+                        # Convert dataclass to dict
+                        fact_dict = {k: v for k, v in fact.__dict__.items() if not k.startswith('_')}
+                    elif isinstance(fact, dict):
+                        # Already a dict
+                        fact_dict = fact
+                    else:
+                        # Convert to string representation
+                        fact_dict = {'raw_text': str(fact), 'confidence': 0.5}
+                    
+                    processed_facts.append(fact_dict)
+                
+                semantic_facts_output[fact_type] = processed_facts
+        
         result = {
-            'semantic_facts': {
-                'regulation_citations': [
-                    {
-                        'regulation_id': f.regulation_id,
-                        'authority': f.issuing_authority,
-                        'raw_text': f.raw_text,
-                        'span': f.span,
-                        'confidence': f.confidence
-                    }
-                    for f in all_facts['regulation_citations']
-                ],
-                'requirements': [
-                    {
-                        'requirement': f.requirement_text,
-                        'modality': f.modality,
-                        'raw_text': f.raw_text,
-                        'span': f.span,
-                        'confidence': f.confidence
-                    }
-                    for f in all_facts['requirements']
-                ],
-                'financial_impacts': [
-                    {
-                        'amount': f.amount,
-                        'currency': f.currency,
-                        'impact_type': f.impact_type,
-                        'raw_text': f.raw_text,
-                        'span': f.span,
-                        'confidence': f.confidence
-                    }
-                    for f in all_facts['financial_impacts']
-                ],
-                'action_facts': [
-                    {
-                        'subject': f.subject,
-                        'action': f.action_verb,
-                        'object': f.object,
-                        'raw_text': f.raw_text,
-                        'span': f.span,
-                        'confidence': f.confidence
-                    }
-                    for f in all_facts['action_facts']
-                ]
-            },
+            'semantic_facts': semantic_facts_output,
             'normalized_entities': normalized_entities,
             'semantic_summary': {
                 'total_facts': total_facts,
