@@ -735,6 +735,11 @@ class SemanticFactExtractor:
                 'temporal_context': temporal_context
             })
         
+        # Filter out empty facts to prevent data pollution
+        if not raw_text.strip() and not canonical_name.strip():
+            self.logger.logger.debug(f"🚫 Skipping empty {entity_type} fact with no content")
+            return None
+            
         return base_data
     
     def _determine_authority(self, regulation_text: str) -> str:
@@ -777,13 +782,40 @@ class SemanticFactExtractor:
         return 'USD'  # Default
     
     def _extract_financial_context(self, entity: Dict, context: str) -> str:
-        """Extract financial context around money entity"""
+        """Extract financial context using sentence boundaries (industry best practice)"""
         span = entity.get('span', {})
-        if span and context:
-            start = max(0, span.get('start', 0) - 100)
-            end = min(len(context), span.get('end', 0) + 100)
-            return context[start:end].strip()
-        return ""
+        if not span or not context:
+            return ""
+            
+        entity_start = span.get('start', 0)
+        entity_end = span.get('end', 0)
+        
+        # Find sentence boundaries around the entity
+        # Look backwards for sentence start
+        sentence_start = max(0, entity_start - 200)
+        for i in range(entity_start - 1, sentence_start, -1):
+            if context[i] in '.!?':
+                sentence_start = i + 1
+                break
+        
+        # Look forwards for sentence end  
+        sentence_end = min(len(context), entity_end + 200)
+        for i in range(entity_end, sentence_end):
+            if context[i] in '.!?':
+                sentence_end = i + 1
+                break
+                
+        # Extract complete sentences and clean up
+        context_text = context[sentence_start:sentence_end].strip()
+        
+        # Remove partial sentences at start/end
+        if not context_text.startswith(('.', '!', '?')):
+            # Find first complete sentence
+            first_sentence = context_text.find('. ')
+            if first_sentence != -1:
+                context_text = context_text[first_sentence + 2:]
+        
+        return context_text
     
     def _classify_regulation_domain(self, regulation_text: str) -> str:
         """Classify the domain of a regulation"""

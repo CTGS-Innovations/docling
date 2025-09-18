@@ -13223,3 +13223,41 @@
 2025-09-18 05:50:44 - __main__ - [32mSTAGE[0m - [32m   Failed: 0[0m
 2025-09-18 05:50:44 - __main__ - [32mSTAGE[0m - [32m   Total time: 2.32s[0m
 2025-09-18 05:50:44 - __main__ - [32mSTAGE[0m - [32m   Average rate: 2.2 files/sec[0m
+2025-09-18 05:54:44 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-18 05:54:44 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-18 05:54:44 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 38[0m
+2025-09-18 05:54:44 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-18 05:54:44 - __main__ - [32mSTAGE[0m - [32m📁 Found 5 files in complex_pdfs[0m
+2025-09-18 05:54:44 - __main__ - [32mSTAGE[0m - [32m🚀 Processing 5 files...[0m
+2025-09-18 05:54:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-18 05:54:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 5 files to in-memory documents...[0m
+2025-09-18 05:54:44 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-18 05:54:46 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-18 05:54:46 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-18 05:54:46 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-18 05:54:47 - __main__ - [32mSTAGE[0m - [32m
+📊 Processing Complete:[0m
+2025-09-18 05:54:47 - __main__ - [32mSTAGE[0m - [32m   Total files: 5[0m
+2025-09-18 05:54:47 - __main__ - [32mSTAGE[0m - [32m   Successful: 5[0m
+2025-09-18 05:54:47 - __main__ - [32mSTAGE[0m - [32m   Failed: 0[0m
+2025-09-18 05:54:47 - __main__ - [32mSTAGE[0m - [32m   Total time: 2.30s[0m
+2025-09-18 05:54:47 - __main__ - [32mSTAGE[0m - [32m   Average rate: 2.2 files/sec[0m
+2025-09-18 05:58:24 - __main__ - [32mSTAGE[0m - [32m🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+2025-09-18 05:58:24 - __main__ - [32mSTAGE[0m - [32m⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+2025-09-18 05:58:24 - __main__ - [32mSTAGE[0m - [32m🔧 Workers: 2 | Formats: 38[0m
+2025-09-18 05:58:24 - __main__ - [32mSTAGE[0m - [32m📁 Output directory: ../output/fusion[0m
+2025-09-18 05:58:24 - __main__ - [32mSTAGE[0m - [32m📁 Found 5 files in complex_pdfs[0m
+2025-09-18 05:58:24 - __main__ - [32mSTAGE[0m - [32m🚀 Processing 5 files...[0m
+2025-09-18 05:58:24 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+2025-09-18 05:58:24 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 1: Converting 5 files to in-memory documents...[0m
+2025-09-18 05:58:24 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📋 Stage 2: Classifying documents in memory...[0m
+2025-09-18 05:58:26 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m🔍 Stage 3: Enriching documents in memory...[0m
+2025-09-18 05:58:26 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m📄 Stage 4: Extracting semantic rules in memory...[0m
+2025-09-18 05:58:26 - pipeline.fusion_pipeline - [32mSTAGE[0m - [32m💾 Final Stage: Writing processed documents to disk...[0m
+2025-09-18 05:58:26 - __main__ - [32mSTAGE[0m - [32m
+📊 Processing Complete:[0m
+2025-09-18 05:58:26 - __main__ - [32mSTAGE[0m - [32m   Total files: 5[0m
+2025-09-18 05:58:26 - __main__ - [32mSTAGE[0m - [32m   Successful: 5[0m
+2025-09-18 05:58:26 - __main__ - [32mSTAGE[0m - [32m   Failed: 0[0m
+2025-09-18 05:58:26 - __main__ - [32mSTAGE[0m - [32m   Total time: 2.31s[0m
+2025-09-18 05:58:26 - __main__ - [32mSTAGE[0m - [32m   Average rate: 2.2 files/sec[0m
