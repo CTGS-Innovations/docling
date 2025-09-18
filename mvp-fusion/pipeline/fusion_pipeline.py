@@ -1094,17 +1094,20 @@ class FusionPipeline:
             # Update global entities with the good people (full list for layered processing)
             global_entities['person'] = global_people_with_spans
         
-        # Structure entities by type
+        # Apply validation to domain entities before structuring (same rules as enrichment)
+        validated_domain_entities = self._apply_domain_entity_validation(domain_entities)
+        
+        # Structure entities by type with validated data
         structured_entities = {
             'global_entities': global_entities,
             'domain_entities': {
-                'financial': domain_entities.get('financial', []),
-                'percentages': domain_entities.get('percentages', []),
-                'organizations': domain_entities.get('organizations', []),
-                'people': domain_entities.get('people', []),  # Keep for reference but global is primary
-                'locations': domain_entities.get('locations', []),
-                'regulations': domain_entities.get('regulations', []),
-                'statistics': domain_entities.get('statistics', [])
+                'financial': validated_domain_entities.get('financial', []),
+                'percentages': validated_domain_entities.get('percentages', []),
+                'organizations': validated_domain_entities.get('organizations', []),
+                'people': validated_domain_entities.get('people', []),  # Now validated
+                'locations': validated_domain_entities.get('locations', []),
+                'regulations': validated_domain_entities.get('regulations', []),
+                'statistics': validated_domain_entities.get('statistics', [])
             }
         }
         
@@ -1130,6 +1133,63 @@ class FusionPipeline:
         result.update(entity_insights)
         
         return result
+
+    def _apply_domain_entity_validation(self, domain_entities: Dict) -> Dict:
+        """
+        Apply consistent validation rules to domain entities (same as enrichment validation)
+        Ensures all entity outputs follow quality standards regardless of processing flow
+        """
+        try:
+            # Import the comprehensive extractor to reuse its validation methods
+            from knowledge.extractors.comprehensive_entity_extractor import ComprehensiveEntityExtractor
+            validator = ComprehensiveEntityExtractor()
+            
+            validated_entities = {}
+            
+            # Apply validation to each entity type
+            for entity_type, entities in domain_entities.items():
+                if not isinstance(entities, list):
+                    validated_entities[entity_type] = entities
+                    continue
+                    
+                validated_list = []
+                for entity in entities:
+                    # Apply entity quality validation
+                    entity_name = entity.get('name', '') if isinstance(entity, dict) else str(entity)
+                    
+                    # Skip if fails basic quality check
+                    if not validator._validate_entity_quality(entity_name, entity_type):
+                        continue
+                        
+                    # Apply context validation based on entity type
+                    if entity_type == 'people' and isinstance(entity, dict):
+                        if not validator._has_meaningful_context(entity):
+                            continue
+                    elif entity_type == 'organizations' and isinstance(entity, dict):
+                        if not validator._has_meaningful_organization_context(entity):
+                            continue
+                    elif entity_type == 'locations' and isinstance(entity, dict):
+                        if not validator._has_meaningful_location_context(entity):
+                            continue
+                    
+                    validated_list.append(entity)
+                
+                validated_entities[entity_type] = validated_list
+                
+                # Log validation results
+                original_count = len(entities)
+                validated_count = len(validated_list)
+                if original_count > validated_count:
+                    self.logger.logger.debug(f"🚫 Filtered {original_count - validated_count} low-quality {entity_type} entities")
+            
+            # Apply cross-contamination prevention
+            validated_entities = validator._prevent_entity_cross_contamination(validated_entities)
+            
+            return validated_entities
+            
+        except Exception as e:
+            self.logger.logger.warning(f"⚠️ Domain entity validation failed: {e}")
+            return domain_entities  # Return unvalidated if validation fails
     
     def _layer5_deep_domain_entities(self, content: str, domain_scores: Dict[str, float]) -> Dict[str, Any]:
         """

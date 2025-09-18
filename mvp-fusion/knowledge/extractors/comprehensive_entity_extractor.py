@@ -637,6 +637,146 @@ class ComprehensiveEntityExtractor:
                             relationships.append(rel)
         
         return relationships
+
+    def _validate_entity_quality(self, entity_name: str, entity_type: str) -> bool:
+        """
+        Entity quality validation - filter noise and ensure well-formed entities
+        Returns True if entity passes quality gates, False if it's noise
+        """
+        if not entity_name or not entity_name.strip():
+            return False
+            
+        # Remove common noise patterns
+        noise_patterns = [
+            r'^[A-Z]+$',  # All caps single words like "THE", "AND"
+            r'^\d+$',     # Pure numbers
+            r'^[^\w\s]+$', # Pure punctuation
+            r'^(test|max|size|len|page|real|world|an|open|large)$',  # Common parsing artifacts
+            r'^\w{1,2}$', # Single/double character fragments
+        ]
+        
+        for pattern in noise_patterns:
+            if re.match(pattern, entity_name, re.IGNORECASE):
+                return False
+        
+        # Type-specific validation
+        if entity_type == 'person':
+            # Person names should have reasonable structure
+            words = entity_name.split()
+            if len(words) < 2 or len(words) > 4:  # Names typically 2-4 words
+                return False
+            # Check against technical terms, algorithms, and methods that got misclassified
+            non_person_terms = [
+                'expression', 'recognition', 'network', 'mathematical', 'universal',
+                'monte carlo', 'neural', 'gradient', 'algorithm', 'model', 'method',
+                'learning', 'training', 'optimization', 'regression', 'classification',
+                'deep', 'machine', 'artificial', 'intelligence', 'transformer', 'attention'
+            ]
+            if any(term in entity_name.lower() for term in non_person_terms):
+                return False
+                
+        elif entity_type == 'location':
+            # Import centralized location validation
+            from knowledge.corpus.geographic_data import get_reference_data
+            ref_data = get_reference_data()
+            
+            # Only accept verified locations or address indicators
+            if not (ref_data.is_country(entity_name) or 
+                   ref_data.is_us_state(entity_name) or 
+                   ref_data.is_major_city(entity_name) or
+                   any(indicator in entity_name for indicator in ref_data.address_indicators)):
+                return False
+                
+        return True
+
+    def _has_meaningful_context(self, entity: Dict) -> bool:
+        """
+        Enforce minimum information threshold - only include entities with meaningful context
+        Prevents useless name-only lists that provide no value
+        """
+        # For people: require at least role OR organization OR meaningful context
+        if 'name' in entity:
+            name = entity.get('name', '').strip()
+            role = entity.get('role', '').strip() if entity.get('role') else ''
+            organization = entity.get('organization', '').strip() if entity.get('organization') else ''
+            context = entity.get('context', '').strip() if entity.get('context') else ''
+            
+            # Must have at least one meaningful piece of information beyond just the name
+            has_role = role and role.lower() not in ['none', 'null', 'unknown', '']
+            has_org = organization and organization.lower() not in ['none', 'null', 'unknown', '']
+            has_context = context and len(context) > 20  # Meaningful context should be substantive
+            
+            if not (has_role or has_org or has_context):
+                self.logger.logger.debug(f"🚫 Filtering context-less entity: {name} (no role, org, or meaningful context)")
+                return False
+                
+        return True
+
+    def _has_meaningful_organization_context(self, entity: Dict) -> bool:
+        """Ensure organizations have meaningful enrichment beyond just name"""
+        name = entity.get('name', '').strip()
+        org_type = entity.get('type', '').strip() if entity.get('type') else ''
+        context = entity.get('context', '').strip() if entity.get('context') else ''
+        acronym = entity.get('acronym', '').strip() if entity.get('acronym') else ''
+        
+        # Must have meaningful type, context, or acronym
+        has_type = org_type and org_type.lower() not in ['organization', 'unknown', 'none']
+        has_context = context and len(context) > 20
+        has_acronym = acronym and acronym != name
+        
+        if not (has_type or has_context or has_acronym):
+            self.logger.logger.debug(f"🚫 Filtering context-less organization: {name}")
+            return False
+        return True
+
+    def _has_meaningful_location_context(self, entity: Dict) -> bool:
+        """Ensure locations have meaningful enrichment and are verified"""
+        name = entity.get('name', '').strip()
+        loc_type = entity.get('type', '').strip() if entity.get('type') else ''
+        context = entity.get('context', '').strip() if entity.get('context') else ''
+        
+        # First, validate it's a real location using our reference data
+        if not self._validate_entity_quality(name, 'location'):
+            return False
+            
+        # Must have meaningful type or context
+        has_type = loc_type and loc_type.lower() not in ['location', 'unknown', 'none']
+        has_context = context and len(context) > 15
+        
+        if not (has_type or has_context):
+            self.logger.logger.debug(f"🚫 Filtering context-less location: {name}")
+            return False
+        return True
+
+    def _prevent_entity_cross_contamination(self, all_entities: Dict) -> Dict:
+        """
+        Prevent people names from appearing in locations and vice versa
+        Enforces entity type purity using cross-validation
+        """
+        people_names = set()
+        if 'people' in all_entities:
+            people_names = {person.get('name', '').strip() for person in all_entities['people']}
+        
+        # Remove people names from locations
+        if 'locations' in all_entities:
+            all_entities['locations'] = [
+                loc for loc in all_entities['locations'] 
+                if loc.get('name', '').strip() not in people_names
+            ]
+            
+        # Remove obvious location names from people (less common but possible)
+        from knowledge.corpus.geographic_data import get_reference_data
+        ref_data = get_reference_data()
+        
+        if 'people' in all_entities:
+            all_entities['people'] = [
+                person for person in all_entities['people']
+                if not (ref_data.is_country(person.get('name', '')) or 
+                       ref_data.is_us_state(person.get('name', '')) or
+                       ref_data.is_major_city(person.get('name', '')))
+            ]
+            
+        return all_entities
     
     def extract_all_entities(self, text: str, global_entities: Dict = None) -> Dict[str, Any]:
         """
@@ -664,22 +804,34 @@ class ComprehensiveEntityExtractor:
             
             for person_entity in global_people:
                 enriched_person = self._enrich_person_entity(person_entity, text)
-                if enriched_person:
+                # Apply enrichment quality gates - only include if meaningfully enriched
+                if enriched_person and self._has_meaningful_context(enriched_person):
                     enriched_people.append(enriched_person)
+                else:
+                    person_name = person_entity.get('value', person_entity.get('text', ''))
+                    self.logger.logger.debug(f"🚫 Skipping person '{person_name}' - insufficient enrichment")
             
             # Enrich global organizations with additional context
             global_orgs = global_entities.get('organizations', [])
             for org_entity in global_orgs:
                 enriched_org = self._enrich_organization_entity(org_entity, text)
-                if enriched_org:
+                # Apply enrichment quality gates - only include if meaningfully enriched
+                if enriched_org and self._has_meaningful_organization_context(enriched_org):
                     enriched_organizations.append(enriched_org)
+                else:
+                    org_name = org_entity.get('value', org_entity.get('text', ''))
+                    self.logger.logger.debug(f"🚫 Skipping organization '{org_name}' - insufficient enrichment")
                     
             # Enrich global locations with additional context
             global_locations = global_entities.get('locations', [])
             for loc_entity in global_locations:
                 enriched_loc = self._enrich_location_entity(loc_entity, text)
-                if enriched_loc:
+                # Apply enrichment quality gates - only include if meaningfully enriched
+                if enriched_loc and self._has_meaningful_location_context(enriched_loc):
                     enriched_locations.append(enriched_loc)
+                else:
+                    loc_name = loc_entity.get('value', loc_entity.get('text', ''))
+                    self.logger.logger.debug(f"🚫 Skipping location '{loc_name}' - insufficient enrichment")
         
         # DOMAIN EXTRACTION: Extract domain-specific entities (not part of Core 8)
         all_entities = {
@@ -789,6 +941,35 @@ class ComprehensiveEntityExtractor:
                 'timestamp': datetime.now().isoformat()
             }
         }
+        
+        # Apply entity quality validation and cross-contamination prevention
+        self.logger.logger.debug("🔍 Applying entity quality validation...")
+        
+        # Filter out noise entities AND enforce minimum information threshold
+        if 'people' in result:
+            original_people_count = len(result['people'])
+            result['people'] = [
+                person for person in result['people'] 
+                if (self._validate_entity_quality(person.get('name', ''), 'person') and
+                    self._has_meaningful_context(person))
+            ]
+            filtered_people = original_people_count - len(result['people'])
+            if filtered_people > 0:
+                self.logger.logger.debug(f"🚫 Filtered {filtered_people} low-quality/context-less people entities")
+        
+        if 'locations' in result:
+            original_loc_count = len(result['locations'])
+            result['locations'] = [
+                loc for loc in result['locations'] 
+                if self._validate_entity_quality(loc.get('name', ''), 'location')
+            ]
+            filtered_locs = original_loc_count - len(result['locations'])
+            if filtered_locs > 0:
+                self.logger.logger.debug(f"🚫 Filtered {filtered_locs} low-quality location entities")
+        
+        # Prevent cross-contamination between entity types
+        result = self._prevent_entity_cross_contamination(result)
+        self.logger.logger.debug("✅ Entity validation and deduplication complete")
         
         return result
     
@@ -959,10 +1140,8 @@ class ComprehensiveEntityExtractor:
             start_pos = person_entity.get('start', 0)
             end_pos = person_entity.get('end', len(person_name))
             
-            # Get expanded context around the person mention
-            context_start = max(0, start_pos - 100)
-            context_end = min(len(text), end_pos + 100)
-            context = text[context_start:context_end]
+            # Get context using sentence boundaries (industry best practice)
+            context = self._extract_financial_context(person_entity, text)
             
             # Extract role information from context
             role = self._extract_role_from_context(context, person_name)
@@ -994,10 +1173,8 @@ class ComprehensiveEntityExtractor:
             start_pos = org_entity.get('start', 0)
             end_pos = org_entity.get('end', len(org_name))
             
-            # Get context around organization mention
-            context_start = max(0, start_pos - 80)
-            context_end = min(len(text), end_pos + 80)
-            context = text[context_start:context_end]
+            # Get context using sentence boundaries (industry best practice)
+            context = self._extract_financial_context(org_entity, text)
             
             # Determine organization type and add context
             org_type = self._categorize_organization(org_name)
@@ -1024,10 +1201,8 @@ class ComprehensiveEntityExtractor:
             start_pos = location_entity.get('start', 0)
             end_pos = location_entity.get('end', len(location_name))
             
-            # Get context around location mention
-            context_start = max(0, start_pos - 60)
-            context_end = min(len(text), end_pos + 60)
-            context = text[context_start:context_end]
+            # Get context using sentence boundaries (industry best practice)
+            context = self._extract_financial_context(location_entity, text)
             
             # Categorize location type
             loc_type = self._categorize_location(location_name)

@@ -73,14 +73,12 @@ class ReferenceData:
         if location in self.us_states:
             return 'state'
         
-        # Major cities
+        # Major cities (only if in our verified list)
         if location in self.major_cities:
             return 'city'
         
-        # General fallback - if it's short and capitalized, likely a city
-        if len(location.split()) <= 2 and location[0].isupper():
-            return 'city'
-        
+        # NO fallback classification - only classify what we can verify
+        # This prevents false positives like people names being classified as cities
         return 'location'
     
     def is_us_state(self, location: str) -> bool:
