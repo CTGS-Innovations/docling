@@ -1,0 +1,405 @@
+# Geopolitical Entities (GPE) Corpus
+# Entities with governmental/political authority, not just geographic locations
+
+# === GOVERNMENT FORMS ===
+United States government
+U.S. government  
+US government
+Federal government
+Federal Government
+United States of America
+USA
+United States
+
+# === STATE GOVERNMENTS (algorithmic - generated from us_states) ===
+State of Alabama
+State of Alaska
+State of Arizona
+State of Arkansas
+State of California
+State of Colorado
+State of Connecticut
+State of Delaware
+State of Florida
+State of Georgia
+State of Hawaii
+State of Idaho
+State of Illinois
+State of Indiana
+State of Iowa
+State of Kansas
+State of Kentucky
+State of Louisiana
+State of Maine
+State of Maryland
+State of Massachusetts
+State of Michigan
+State of Minnesota
+State of Mississippi
+State of Missouri
+State of Montana
+State of Nebraska
+State of Nevada
+State of New Hampshire
+State of New Jersey
+State of New Mexico
+State of New York
+State of North Carolina
+State of North Dakota
+State of Ohio
+State of Oklahoma
+State of Oregon
+State of Pennsylvania
+State of Rhode Island
+State of South Carolina
+State of South Dakota
+State of Tennessee
+State of Texas
+State of Utah
+State of Vermont
+State of Virginia
+State of Washington
+State of West Virginia
+State of Wisconsin
+State of Wyoming
+
+# === MAJOR CITY GOVERNMENTS ===
+City of New York
+City of Los Angeles
+City of Chicago
+City of Houston
+City of Phoenix
+City of Philadelphia
+City of San Antonio
+City of San Diego
+City of Dallas
+City of San Jose
+City of Austin
+City of Jacksonville
+City of Fort Worth
+City of Columbus
+City of Charlotte
+City of San Francisco
+City of Indianapolis
+City of Seattle
+City of Denver
+City of Washington
+
+# === INTERNATIONAL ORGANIZATIONS ===
+United Nations
+UN
+NATO
+North Atlantic Treaty Organization
+European Union
+EU
+World Health Organization
+WHO
+International Monetary Fund
+IMF
+World Bank
+World Trade Organization
+WTO
+International Criminal Court
+ICC
+African Union
+AU
+Association of Southeast Asian Nations
+ASEAN
+Organization of American States
+OAS
+Arab League
+G7
+G8
+G20
+OPEC
+Organization of the Petroleum Exporting Countries
+
+# === SOVEREIGN ENTITIES (Official Names) ===
+People's Republic of China
+Russian Federation
+United Kingdom of Great Britain and Northern Ireland
+Federal Republic of Germany
+French Republic
+Kingdom of Sweden
+Kingdom of Norway
+Kingdom of Denmark
+Kingdom of Spain
+Italian Republic
+Republic of India
+Federative Republic of Brazil
+Republic of South Africa
+Commonwealth of Australia
+Canada
+Republic of Korea
+Democratic People's Republic of Korea
+State of Israel
+Islamic Republic of Iran
+Kingdom of Saudi Arabia
+Republic of Turkey
+Republic of Indonesia
+Republic of the Philippines
+Socialist Republic of Vietnam
+Republic of Singapore
+United Arab Emirates
+Kingdom of Jordan
+Republic of Egypt
+Federal Democratic Republic of Ethiopia
+Republic of Kenya
+Republic of Ghana
+Republic of Nigeria
+Republic of Argentina
+Republic of Chile
+Republic of Colombia
+Republic of Mexico
+Republic of Venezuela
+
+# === REGIONAL POLITICAL ENTITIES ===
+European Parliament
+Council of the European Union
+European Central Bank
+Eurozone
+European Economic Area
+North American Free Trade Agreement
+NAFTA
+United States-Mexico-Canada Agreement
+USMCA
+Commonwealth of Nations
+British Commonwealth
+
+# === FEDERAL/PROVINCIAL GOVERNMENTS ===
+Government of Canada
+Parliament of Canada
+Province of Ontario
+Province of Quebec
+Province of British Columbia
+Government of Australia
+Commonwealth of Australia
+State of New South Wales
+State of Victoria
+State of Queensland
+
+# === DEMONYMS (Individuals) ===
+American
+Canadian
+Mexican
+Brazilian
+Argentinian
+Argentine
+Chilean
+Colombian
+Venezuelan
+British
+English
+Scottish
+Welsh
+Irish
+French
+German
+Italian
+Spanish
+Portuguese
+Dutch
+Belgian
+Swiss
+Austrian
+Swedish
+Norwegian
+Danish
+Finnish
+Polish
+Czech
+Hungarian
+Greek
+Turkish
+Russian
+Ukrainian
+Belarusian
+Georgian
+Armenian
+Chinese
+Japanese
+Korean
+North Korean
+South Korean
+Indian
+Pakistani
+Bangladeshi
+Nepalese
+Sri Lankan
+Indonesian
+Filipino
+Philippine
+Vietnamese
+Thai
+Cambodian
+Malaysian
+Singaporean
+Australian
+New Zealander
+Kiwi
+Egyptian
+Nigerian
+Kenyan
+Ghanaian
+Ethiopian
+South African
+Moroccan
+Algerian
+Tunisian
+Saudi
+Emirati
+Qatari
+Jordanian
+Israeli
+Iranian
+Iraqi
+Syrian
+Lebanese
+
+# === COLLECTIVE FORMS ===
+Americans
+Canadians
+Mexicans
+Brazilians
+Argentinians
+Argentines
+Chileans
+Colombians
+Venezuelans
+Britons
+British people
+English people
+Scots
+Welsh people
+Irish people
+French people
+Germans
+Italians
+Spaniards
+Portuguese people
+Dutch people
+Belgians
+Swiss people
+Austrians
+Swedes
+Norwegians
+Danes
+Finns
+Poles
+Czechs
+Hungarians
+Greeks
+Turks
+Russians
+Ukrainians
+Belarusians
+Georgians
+Armenians
+Chinese people
+Japanese people
+Koreans
+North Koreans
+South Koreans
+Indians
+Pakistanis
+Bangladeshis
+Nepalese people
+Sri Lankans
+Indonesians
+Filipinos
+Philippine people
+Vietnamese people
+Thais
+Cambodians
+Malaysians
+Singaporeans
+Australians
+New Zealanders
+Kiwis
+Egyptians
+Nigerians
+Kenyans
+Ghanaians
+Ethiopians
+South Africans
+Moroccans
+Algerians
+Tunisians
+Saudis
+Emiratis
+Qataris
+Jordanians
+Israelis
+Iranians
+Iraqis
+Syrians
+Lebanese people
+
+# === REGIONAL & GEOPOLITICAL BLOCS ===
+Middle East
+Middle Eastern
+Latin America
+Latin American
+Central America
+South America
+North America
+North American
+Africa
+African
+Sub-Saharan Africa
+Sub-Saharan African
+West Africa
+West African
+East Africa
+East African
+Southern Africa
+Southern African
+Asia
+Asian
+East Asia
+East Asian
+South Asia
+South Asian
+Southeast Asia
+Southeast Asian
+Oceania
+Oceanian
+Europe
+European
+Western Europe
+Western European
+Eastern Europe
+Eastern European
+Northern Europe
+Northern European
+Southern Europe
+Southern European
+Eurasia
+Eurasian
+Arab world
+Arab
+Muslim world
+Western world
+The West
+Global North
+Global South
+
+# === LANGUAGE-LINKED IDENTITIES ===
+Arabic
+Arab
+Swahili
+Hindi
+Urdu
+Mandarin
+Cantonese
+Spanish-speaking
+French-speaking
+English-speaking
+German-speaking
+Portuguese-speaking
+Russian-speaking
+Persian
+Farsi
+Hebrew
+Turkish
+Greek

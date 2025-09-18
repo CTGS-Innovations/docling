@@ -31,7 +31,7 @@ import multiprocessing as mp
 from concurrent.futures import ThreadPoolExecutor
 from queue import Queue, Empty, Full
 from pathlib import Path
-from typing import List, Dict, Any, Union, Optional
+from typing import List, Dict, Any, Union, Optional, Set
 from dataclasses import dataclass
 
 from utils.logging_config import get_fusion_logger
@@ -129,6 +129,9 @@ class ServiceProcessor:
                         min_confidence=0.7
                     )
                     self.logger.logger.debug("✅ Conservative person extractor initialized with 429K first names, 99K last names, 139K orgs")
+                
+                # Load GPE corpus for geopolitical entity recognition
+                self.gpe_corpus = self._load_gpe_corpus()
                 
                 self.logger.logger.debug("✅ Real extractors initialized")
             except Exception as e:
@@ -237,9 +240,42 @@ class ServiceProcessor:
         loc_pattern = r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*,\s*[A-Z]{2}\b|\b\d+\s+[A-Z][a-z]+\s+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Drive|Dr|Lane|Ln|Way|Court|Ct|Plaza|Place|Pl)\b'
         entities['location'] = self._extract_entities_with_spans(content, loc_pattern, 'LOCATION')[:20]
         
-        # GPE (Geo-political entities)
-        gpe_pattern = r'\b(?:United States|USA|US|Canada|Mexico|China|Japan|Germany|France|UK|United Kingdom|California|Texas|Florida|New York|Illinois|Pennsylvania|Ohio|Georgia|North Carolina|Michigan)\b'
-        entities['gpe'] = self._extract_entities_with_spans(content, gpe_pattern, 'GPE', re.IGNORECASE)[:20]
+        # GPE (Geo-political entities) - Use comprehensive corpus
+        gpe_entities = []
+        if hasattr(self, 'gpe_corpus') and self.gpe_corpus:
+            # Use corpus-based matching for high accuracy
+            for gpe_name in self.gpe_corpus:
+                if len(gpe_name) > 2:  # Skip very short entries
+                    # Use word boundary matching for precise detection
+                    gpe_pattern = r'\b' + re.escape(gpe_name) + r'\b'
+                    matches = list(re.finditer(gpe_pattern, content, re.IGNORECASE))
+                    for match in matches:
+                        clean_text = self._clean_entity_text(match.group(0))
+                        if self._is_valid_entity_text(clean_text):
+                            # Handle FLPC vs Python re API differences
+                            try:
+                                start = match.start(0)
+                                end = match.end(0)
+                            except TypeError:
+                                start = match.start()
+                                end = match.end()
+                                
+                            entity = {
+                                'value': clean_text,
+                                'text': clean_text,
+                                'type': 'GPE',
+                                'span': {
+                                    'start': start,
+                                    'end': end
+                                }
+                            }
+                            gpe_entities.append(entity)
+        else:
+            # Fallback to basic patterns
+            gpe_pattern = r'\b(?:United States|USA|US|Canada|Mexico|China|Japan|Germany|France|UK|United Kingdom)\b'
+            gpe_entities = self._extract_entities_with_spans(content, gpe_pattern, 'GPE', re.IGNORECASE)
+        
+        entities['gpe'] = self._deduplicate_entities(gpe_entities)[:20]
         
         # DATE - Multiple patterns
         date_patterns = [
@@ -335,13 +371,21 @@ class ServiceProcessor:
                     continue
                 seen.add(clean_text)
                 
+                # Handle FLPC vs Python re API differences
+                try:
+                    start = match.start(0)
+                    end = match.end(0)
+                except TypeError:
+                    start = match.start()
+                    end = match.end()
+                    
                 entity = {
                     'value': clean_text,
                     'text': clean_text, 
                     'type': entity_type,
                     'span': {
-                        'start': match.start(),
-                        'end': match.end()
+                        'start': start,
+                        'end': end
                     }
                 }
                 entities.append(entity)
@@ -417,6 +461,27 @@ class ServiceProcessor:
                 return role
                 
         return None
+    
+    def _load_gpe_corpus(self) -> Set[str]:
+        """Load geopolitical entities corpus for GPE recognition."""
+        gpe_file = Path("knowledge/corpus/foundation_data/geopolitical_entities_2025_09_18.txt")
+        gpe_entities = set()
+        
+        try:
+            if gpe_file.exists():
+                with open(gpe_file, 'r', encoding='utf-8') as f:
+                    for line in f:
+                        line = line.strip()
+                        # Skip comments and empty lines
+                        if line and not line.startswith('#'):
+                            gpe_entities.add(line)
+                self.logger.logger.debug(f"✅ Loaded {len(gpe_entities)} GPE entities from corpus")
+            else:
+                self.logger.logger.warning(f"⚠️  GPE corpus file not found: {gpe_file}")
+        except Exception as e:
+            self.logger.logger.warning(f"⚠️  Failed to load GPE corpus: {e}")
+        
+        return gpe_entities
     
     def _quick_content_scan(self, content: str) -> Dict[str, bool]:
         """

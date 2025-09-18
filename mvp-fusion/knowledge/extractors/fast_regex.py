@@ -174,6 +174,14 @@ class FastRegexEngine:
         
         return results
     
+    def escape(self, pattern: str) -> str:
+        """Drop-in replacement for re.escape"""
+        try:
+            return flpc.escape(pattern)
+        except Exception:
+            # Fallback to Python re
+            return re.escape(pattern)
+    
     def _convert_flags(self, python_flags: int) -> int:
         """Convert Python re flags to FLPC flags"""
         flpc_flags = 0
