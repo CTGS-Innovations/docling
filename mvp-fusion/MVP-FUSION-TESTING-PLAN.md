@@ -1,177 +1,118 @@
-# MVP-Fusion Testing & Performance Plan
-**Step-by-Step Development with Performance Validation**
+# MVP-FUSION I/O + CPU SERVICE ARCHITECTURE IMPLEMENTATION
 
----
+## **OBJECTIVE**
+Transform MVP-Fusion from single-threaded `[Main]` processing to clean I/O + CPU service architecture with proper worker attribution and phase visibility.
 
-## Development Methodology
+## **CORE PRINCIPLES**
+1. **Single Source of Truth**: One definitive implementation, no duplicates
+2. **Clean Architecture**: I/O worker handles file operations, CPU workers handle processing
+3. **Performance First**: Async queue between I/O and CPU, no blocking
+4. **Clear Observability**: Phase-worker logging shows exactly what's happening where
+5. **Service-Ready**: Deployable on edge locations with separated concerns
 
-### **Step-by-Step Iteration Process**
+## **LOGGING ARCHITECTURE**
+
+### **Phase-Worker Attribution Format:**
 ```
-Implement → Test → Validate → Gate Decision → Next Step
-```
-
-**Development Commands:**
-- `python fusion_cli.py --convert-only`   ✅ (Step 1 Complete)
-- `python fusion_cli.py --classify-only`  🔄 (Step 2 In Progress)  
-- `python fusion_cli.py --enrich-only`    ⏭️ (Step 3 Pending)
-- `python fusion_cli.py --extract-only`   ⏭️ (Step 4 Pending)
-
-### **Gate Criteria for Each Step:**
-- **Functionality**: Stage works correctly and completely
-- **Performance**: Meets timing budgets (<50ms for classify/enrich)
-- **Quality**: Output matches or exceeds MVP Hyper baseline
-- **Integration**: Reads previous stage outputs correctly
-
----
-
-## Testing Infrastructure
-
-### **Development Testing (Fast Iteration)**
-**Location**: `/home/corey/projects/docling/cli/data_complex/`
-- **Files**: 3 test PDFs (Complex1, Complex2, 3124-stairways-and-ladders)
-- **Purpose**: Rapid development iteration and feature validation
-- **Output**: `/home/corey/projects/docling/output/fusion/`
-
-### **Performance Testing (Reality Check)**  
-**Location**: `/home/corey/projects/docling/cli/data_osha/`
-- **Files**: Hundreds of real-world OSHA documents
-- **Variety**: Different sizes, shapes, complexity levels
-- **Purpose**: Performance threshold validation at scale
-- **Critical**: Uses source PDFs (not pre-converted markdown)
-
----
-
-## Performance Budgets
-
-### **Per-File Processing Budget**
-```
-🚀 CONVERSION: ~X ms per page (scales with document size)
-📋 CLASSIFICATION: <50ms per file (flat cost, any size)  
-🔍 ENRICHMENT: <50ms per file (flat cost, any size)
-📄 EXTRACTION: TBD ms per file (flat cost, any size)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-YAML OVERHEAD: <100ms per file (independent of file size)
+[PHASE-WORKER] module_name - Message (optional metrics)
 ```
 
-### **Performance Validation Requirements**
-- **Development**: 3 files meeting timing budgets
-- **Stress Test**: Hundreds of OSHA documents meeting same budgets
-- **Source**: Must test complete pipeline starting from PDF files
-- **Measurement**: Per-stage timing breakdown required
+### **Log Levels:**
+- **STAGING-MAIN**: Service coordination, startup/shutdown, final results
+- **CONVERSION-IO**: File reading, PDF conversion, markdown loading
+- **QUEUE-IO**: Work queue operations with system metrics (queue, RAM, CPU)
+- **CLASSIFICATION-CPU1/CPU2**: Document type detection, pattern loading
+- **ENRICHMENT-CPU1/CPU2**: Entity enhancement, relationship processing
+- **SEMANTICS-CPU1/CPU2**: Entity extraction, semantic analysis
+- **WRITER-IO**: Disk persistence operations
+- **INFO-MAIN**: System configuration, deployment profile
 
----
-
-## Development Stages
-
-### **✅ Step 1: Conversion (Complete)**
-**Status**: Working with basic YAML frontmatter
-```yaml
----
-conversion:
-  description: "High-Speed Document Conversion & Analysis"
-  yaml_engine: "mvp-fusion-yaml-v1" 
-  yaml_schema_version: "1.0"
-  # ... file metadata
----
+### **Target Flow Example (2 files):**
+```
+[INFO-MAIN] deployment_manager - Workers: 2, Memory: 6553MB
+[STAGING-MAIN] service_processor - Starting I/O + CPU service: 1 I/O + 2 CPU workers
+[CONVERSION-IO] service_processor - Converting PDF: Complex2.pdf
+[QUEUE-IO] service_processor - Queued: Complex2.pdf (queue: 1/100, ram: 45%, cpu: 23%)
+[CLASSIFICATION-CPU1] aho_corasick_engine - Loaded modular patterns: Domains 209
+[SEMANTICS-CPU1] semantic_fact_extractor - Global entities: person:139, org:4, loc:2
+[WRITER-IO] service_processor - Writing JSON knowledge: Complex2.json
+[STAGING-MAIN] service_processor - Service processing complete: 2 results in 1.87s
 ```
 
-### **🔄 Step 2: Classification (In Progress)**
-**Requirement**: Add classification section to existing YAML
-**Target**: Match MVP Hyper classification quality
-```yaml
-classification:
-  description: "Document Classification & Type Detection"
-  document_types: '["safety", "compliance"]'
-  universal_entities_found: 243
-  money: '["$4", "$250"]'
-  phone: '["(404) 562-2300"]'
-  regulation: '["29 CFR 1926.1050"]'
-  # ... entity extraction results
-```
-**Performance**: <50ms per file
-**Input**: Existing markdown files from Step 1
-**Output**: Enhanced markdown with conversion + classification YAML
+## **IMPLEMENTATION CHECKLIST**
 
-### **⏭️ Step 3: Enrichment (Pending)**
-**Requirement**: Add enrichment section to existing YAML  
-**Target**: Domain-specific entity extraction
-```yaml
-enrichment:
-  description: "Domain-Specific Enrichment & Entity Extraction"
-  domains_processed: '["safety", "compliance"]'
-  total_entities: 42
-  # ... domain-specific results
-```
-**Performance**: <50ms per file
-**Input**: Markdown files from Step 2
-**Output**: Enhanced markdown with conversion + classification + enrichment YAML
+### **Phase 1: Logging Infrastructure**  READY TO IMPLEMENT
+- [ ] Update `utils/logging_config.py` to support phase-worker format
+- [ ] Add system metrics collection (psutil for RAM/CPU at queue handoffs)
+- [ ] Test new logging format with simple example
+- [ ] Verify worker thread name mapping works correctly
 
-### **⏭️ Step 4: Extraction (Pending)**
-**Requirement**: Generate semantic rules JSON files
-**Target**: Knowledge extraction matching MVP Hyper
-**Performance**: TBD ms per file  
-**Input**: Markdown files from Step 3
-**Output**: Enhanced markdown + separate `.semantic.json` files
+### **Phase 2: ServiceProcessor Integration** =� PLANNED
+- [ ] Modify `fusion_cli.py` to use ServiceProcessor instead of FusionPipeline
+- [ ] Update CLI to instantiate ServiceProcessor with config
+- [ ] Route file processing through `process_files_service()` method
+- [ ] Test basic I/O + CPU separation with sample files
 
----
+### **Phase 3: Real Processing Integration** = DESIGN PHASE  
+- [ ] Connect I/O worker to actual PDF conversion (not mock content)
+- [ ] Connect CPU workers to real entity extraction pipeline
+- [ ] Integrate with existing `knowledge/extractors/` modules
+- [ ] Route classification through CPU workers properly
 
-## Performance Testing Protocol
+### **Phase 4: Queue Implementation** =� DESIGN PHASE
+- [ ] Implement `WorkItem` dataclass for queue messages
+- [ ] Add queue size monitoring and backpressure handling
+- [ ] Implement system metrics at handoff points (queue, RAM, CPU)
+- [ ] Add queue timeout and error handling
 
-### **Development Cycle Testing**
-1. **Implement** stage functionality
-2. **Test** on 3-file development set  
-3. **Validate** timing and quality
-4. **Gate decision**: Pass/fail before next stage
+### **Phase 5: Testing & Validation** >� TESTING PHASE
+- [ ] Test with single file processing
+- [ ] Test with batch processing (5+ files)
+- [ ] Verify I/O worker shows in logs during PDF conversion
+- [ ] Verify CPU workers show proper entity extraction
+- [ ] Compare performance vs old pipeline
 
-### **Performance Validation Testing**
-1. **Complete pipeline** working on development set
-2. **Run OSHA corpus** (hundreds of PDFs)
-3. **Measure** per-stage timing breakdown
-4. **Validate** all budgets maintained at scale
-5. **Stress test** memory and resource usage
+### **Phase 6: Cleanup** >� CLEANUP PHASE
+- [ ] Remove old FusionPipeline references once ServiceProcessor works
+- [ ] Clean up any duplicate logging statements
+- [ ] Update documentation and examples
+- [ ] Verify no performance regressions
 
-### **Success Criteria**
-- **Functionality**: All stages work end-to-end
-- **Performance**: <100ms YAML overhead per file maintained on OSHA corpus
-- **Quality**: Entity extraction matching or exceeding MVP Hyper
-- **Scalability**: Performance holds across document variety
-- **Service-ready**: Single-file processing optimized
+## **CURRENT STATUS**
+- **Architecture Design**:  Complete
+- **Logging Design**:  Complete  
+- **Implementation**: = Ready to start Phase 1
 
----
+## **CONCERNS & MITIGATIONS**
 
-## Baseline Comparisons
+### **Performance Concerns**: L None
+- Queue operations are O(1)
+- System metrics are cached/non-blocking
+- Async I/O + CPU is faster than sequential
+- Only exposes existing bottlenecks
 
-### **MVP Hyper Baseline (3 Test Files)**
-- `3124-stairways-and-ladders.md`: 38KB output, rich classification
-- `Complex1.md`: 59KB output, 243 entities found
-- `Complex2.md`: 56KB output, comprehensive metadata
-- `.semantic.json`: ~350-470 bytes per file
+### **Complexity Concerns**:  Managed
+- ServiceProcessor encapsulates all complexity
+- Clear separation of concerns
+- Existing CLI interface unchanged
+- Fallback to old pipeline if needed
 
-### **MVP Fusion Targets**
-- **Quality**: Match or exceed MVP Hyper entity extraction
-- **Performance**: Beat MVP Hyper pipeline timing  
-- **Completeness**: Full YAML + semantic JSON output
-- **Service Architecture**: Optimized for single-file processing
+### **Integration Risk**:  Low
+- Can test alongside existing pipeline
+- Phase rollout reduces risk
+- Worker attribution is additive
+- No breaking changes to output
 
----
+## **SUCCESS CRITERIA**
+1.  **I/O worker visible** in logs during file operations
+2.  **CPU workers visible** in logs during entity extraction  
+3.  **System metrics** show queue health at handoffs
+4.  **Performance maintained** or improved vs current pipeline
+5.  **Clean logs** with no duplicate [Main] entries
+6.  **Service architecture** ready for edge deployment
 
-## Risk Management
-
-### **Performance Risks**
-- **Classification timing**: Ensure <50ms budget maintained
-- **Memory usage**: Monitor for leaks during large batch processing
-- **Quality regression**: Maintain entity extraction accuracy
-
-### **Development Risks**  
-- **Integration issues**: Each stage must read previous stage correctly
-- **YAML complexity**: Progressive YAML building without file re-reading
-- **Service compatibility**: Maintain single-file processing focus
-
-### **Mitigation Strategies**
-- **Step-by-step validation**: No advancement until current stage solid
-- **Continuous benchmarking**: Regular OSHA corpus performance checks  
-- **Quality gates**: Automated comparison with MVP Hyper baselines
-
----
-
-**This testing plan ensures we build a production-ready MVP-Fusion system that exceeds MVP Hyper performance while maintaining quality and service architecture principles.**
+## **NEXT STEPS**
+1. **Phase 1**: Implement logging infrastructure with phase-worker format
+2. **Test**: Verify new logging with simple ServiceProcessor test
+3. **Phase 2**: Replace FusionPipeline in main CLI
+4. **Validate**: Ensure I/O worker shows during real processing

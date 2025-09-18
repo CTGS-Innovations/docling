@@ -1,0 +1,674 @@
+╭───────────────────────────────────────────────────╮
+│ ✻ Welcome to Claude Code!                         │
+│                                                   │
+│   /help for help, /status for your current setup  │
+│                                                   │
+│   cwd: /home/corey/projects/docling               │
+╰───────────────────────────────────────────────────╯
+
+● I'll continue by integrating the ServiceProcessor with the main CLI to replace the old extractor pathway, so the I/O worker becomes visible in the main logs during PDF conversion and entity extraction.
+
+● Let me first examine the current CLI structure to understand how to integrate our ServiceProcessor:
+
+● Read(mvp-fusion/fusion_cli.py)
+  ⎿  Read 1391 lines (ctrl+r to expand)
+
+● Now let me look at the ServiceProcessor to understand its structure:
+
+● Read(mvp-fusion/pipeline/service_processor.py)
+  ⎿  Read 283 lines (ctrl+r to expand)
+  ⎿  Interrupted by user
+
+> Let's have a quick conversation. I want to set expectation of when the I-O worker perhaps this is what we initialize initially and then he does all of the staging and the knowledge. The core is sick, loading, and then 
+  the main data pipeline. There's a lot of different logging names of entity which I think are wrong. They're not doing the function that we want, and so we would have to rename it. But this might be the I-O worker that's
+   kind of doing all this stuff. And then loading the file and then simply just circling back and loading files that it wants. Let me know if you like this pattern because I think it's very clean. 2025-09-18 19:23:13,755 
+  [STAGE] utils.deployment_manager - [Main] 🚀 Deployment Profile: Local Development/CLI
+  2025-09-18 19:23:13,755 [INFO] utils.deployment_manager -    High-performance local machine or development server
+  2025-09-18 19:23:13,755 [INFO] utils.deployment_manager -    Workers: 8
+  2025-09-18 19:23:13,755 [STAGE] __main__ - [Main] 🔧 MVP-Fusion Engine: HighSpeed_Markdown_General
+  2025-09-18 19:23:13,755 [STAGE] __main__ - [Main] ⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output
+  2025-09-18 19:23:13,755 [STAGE] __main__ - [Main] 🔧 Workers: 8 | Formats: 38
+  2025-09-18 19:23:13,755 [INFO] utils.deployment_manager -    Workers: 8
+  2025-09-18 19:23:13,755 [INFO] utils.deployment_manager -    Memory: 6553MB usable (8192MB * 0.8)
+  2025-09-18 19:23:13,755 [INFO] utils.deployment_manager -    Queue Size: 100
+  2025-09-18 19:23:13,755 [STAGE] __main__ - [Main] 🚀 Profile: Local Development/CLI | Memory: 6553MB
+  2025-09-18 19:23:13,755 [STAGE] __main__ - [Main] 📁 Output directory: ../output/fusion
+  2025-09-18 19:23:13,755 [STAGE] __main__ - [Main] 📁 Processing 1 directories from config (default):
+  2025-09-18 19:23:13,755 [STAGE] __main__ - [Main]    - ~/projects/docling/cli/data_complex
+  2025-09-18 19:23:13,757 [STAGE] __main__ - [Main] 
+  📊 PROCESSING SUMMARY:
+  2025-09-18 19:23:13,757 [STAGE] __main__ - [Main]    Total files: 5
+  2025-09-18 19:23:13,757 [STAGE] __main__ - [Main]    File types: {'.pdf': 3, '.txt': 1, '.md': 1}
+  2025-09-18 19:23:13,757 [STAGE] __main__ - [Main]    Total URLs: 0
+  2025-09-18 19:23:13,757 [STAGE] __main__ - [Main]    Workers: 8
+  2025-09-18 19:23:13,757 [STAGE] __main__ - [Main] 
+  🚀 Starting file batch processing...
+  2025-09-18 19:23:13,757 [STAGE] __main__ - [Main] 🔄 Using Traditional In-Memory Pipeline
+  2025-09-18 19:23:13,893 [ENTITY] knowledge.aho_corasick_engine - [Main] 📚 Loaded modular patterns:
+  2025-09-18 19:23:13,894 [ENTITY] knowledge.aho_corasick_engine - [Main]    🏛️  Domains: 209 (2106 keywords)
+  2025-09-18 19:23:13,894 [ENTITY] knowledge.aho_corasick_engine - [Main]    📄 Document Types: 219 (1462 keywords)
+  2025-09-18 19:23:13,894 [ENTITY] knowledge.aho_corasick_engine - [Main]    🔍 Entity Categories: 2 (8 total patterns)
+  2025-09-18 19:23:13,896 [DEBUG] knowledge.aho_corasick_engine - ⚡ Built modular Aho-Corasick automatons: 2.13ms
+  2025-09-18 19:23:13,896 [DEBUG] knowledge.aho_corasick_engine -    🏛️  Domain patterns: 2019
+  2025-09-18 19:23:13,896 [DEBUG] knowledge.aho_corasick_engine -    📄 Document type patterns: 1400
+  2025-09-18 19:23:13,896 [DEBUG] knowledge.aho_corasick_engine -    🔍 Entity patterns: 0
+  2025-09-18 19:23:13,896 [ENTITY] knowledge.extractors.semantic_fact_extractor - [Main] ✅ Conservative person extractor initialized (no corpus)
+  2025-09-18 19:23:13,896 [ENTITY] pipeline.fusion_pipeline - [Main] ✅ Aho-Corasick engine initialized for government/regulatory + AI domains
+  2025-09-18 19:23:13,896 [STAGE] pipeline.fusion_pipeline - [Main] 🚀 In-Memory Pipeline: convert → classify → enrich → extract
+  2025-09-18 19:23:13,896 [ENTITY] pipeline.fusion_pipeline - [Main] 💾 Memory limit: 100MB per file, 1024MB service total
+  2025-09-18 19:23:13,896 [STAGE] pipeline.fusion_pipeline - [Main] 📄 Stage 1: Converting 5 files to in-memory documents...
+  2025-09-18 19:23:13,968 [INFO] pipeline.fusion_pipeline - ✅ Conversion complete: 72ms (5/5 successful)
+  2025-09-18 19:23:13,968 [ENTITY] pipeline.fusion_pipeline - [Main] 💾 Total service memory: 0.2MB
+  2025-09-18 19:23:13,968 [STAGE] pipeline.fusion_pipeline - [Main] 📋 Stage 2: Classifying documents in memory with 8 workers...
+
+> continue
+
+● I love this pattern! You're absolutely right - the I/O worker should handle all the initial staging, loading, and preparation work. Looking at your logs, I can see exactly what you mean about the logging names being
+  wrong.
+
+  The current flow shows:
+  1. Main thread doing all the heavy lifting (conversion, classification, enrichment, extraction)
+  2. No visible I/O worker in the logs
+  3. Entity/Stage logging that doesn't match the actual I/O + CPU worker responsibilities
+
+  Here's what I think should happen:
+
+  I/O Worker should handle:
+  - 📄 Stage 1: Converting 5 files to in-memory documents... ← This should be [I/O]
+  - File reading, PDF conversion, markdown loading
+  - All the initial document preparation
+  - Feeding work items to CPU workers
+
+  CPU Workers should handle:
+  - 📋 Stage 2: Classifying documents... ← This should be [CPU-1], [CPU-2], etc.
+  - Entity extraction, semantic analysis
+  - All the compute-intensive processing
+
+  The pattern is very clean because:
+  1. Single responsibility: I/O worker owns all file operations, CPU workers own all processing
+  2. Clear separation: No mixed concerns between I/O and compute
+  3. Scalable: Can adjust CPU workers based on cores, I/O stays at 1
+  4. Service-ready: Perfect for edge deployment
+
+  Should I integrate the ServiceProcessor with the main CLI so we can see the clean [I/O] and [CPU-1] workers in action, replacing all those [Main] entries with proper worker attribution?
+
+> Let's go through some iterations of what the log should look like so we can align first and then execute that plan.
+
+● Great idea! Let's design the ideal logging flow first so we're aligned, then implement it.
+
+  Here's what I think the log progression should look like with clean I/O + CPU worker separation:
+
+  Current (Wrong) vs Target (Right) Logging
+
+  INITIALIZATION PHASE
+
+  Current: [Main] 🔧 MVP-Fusion Engine: HighSpeed_Markdown_General
+  Target:  [Main] 🔧 MVP-Fusion Engine: HighSpeed_Markdown_General
+
+  Current: [Main] 🚀 Profile: Local Development/CLI | Memory: 6553MB
+  Target:  [Main] 🚀 Profile: Local Development/CLI | Memory: 6553MB
+
+  SERVICE STARTUP
+
+  Current: [Main] 🔄 Using Traditional In-Memory Pipeline
+  Target:  [Main] 🏗️  Starting I/O + CPU service: 1 I/O + 8 CPU workers
+  Target:  [Main] ✅ Service started: 1 I/O worker + 8 CPU workers
+
+  I/O WORKER PHASE (File Reading, PDF Conversion, Loading)
+
+  Current: [Main] 📄 Stage 1: Converting 5 files to in-memory documents...
+  Target:  [I/O]  📥 Starting ingestion of 5 files
+  Target:  [I/O]  🔄 Converting PDF to markdown: Complex2.pdf
+  Target:  [I/O]  📂 Reading file: ENTITY_EXTRACTION_TXT_DOCUMENT.txt
+  Target:  [I/O]  ✅ Queued for CPU processing: Complex2.pdf
+  Target:  [I/O]  ✅ Ingestion completed: 5 files queued for CPU processing
+
+  CPU WORKER PHASE (Entity Extraction, Classification, Analysis)
+
+  Current: [Main] 📋 Stage 2: Classifying documents in memory with 8 workers...
+  Target:  [CPU-1] ⚙️  Processing entities: Complex2.pdf
+  Target:  [CPU-3] ⚙️  Processing entities: simple_markdown.md  
+  Target:  [CPU-2] ⚙️  Processing entities: 3124-stairways-and-ladders.pdf
+  Target:  [CPU-1] 📊 Global entities: person:139, org:4, loc:2, money:10
+  Target:  [CPU-3] 🎯 Domain entities: organizations:7, locations:33
+  Target:  [CPU-2] ✅ Completed processing: 3124-stairways-and-ladders.pdf
+
+  COMPLETION PHASE
+
+  Current: [Main] ✅ Processing complete: 5 results in 2.34s
+  Target:  [Main] ✅ Service processing complete: 5 results in 2.34s
+  Target:  [Main] 🛑 Stopping I/O + CPU service...
+
+  Key Changes:
+
+  1. [Main] only for: Service coordination, final results, configuration
+  2. [I/O] for: File reading, PDF conversion, markdown loading, queueing
+  3. [CPU-1], [CPU-2], etc. for: Entity extraction, classification, semantic analysis
+  4. Clear handoff: I/O completes → CPU workers take over → Main summarizes
+
+  Does this logging progression look right to you? Should I adjust any of the worker responsibilities or logging messages?
+
+> No, I still like the debug and the entity classification enrichment. These are all really good debug style information. And then I like the main, I like the I-O, but I don't like the double main where I have main main. 
+  Can we iterate and make it a little cleaner?
+
+● Absolutely! You're right - the double [Main] is messy and we should keep all the good debug/entity/classification info. Let me clean this up:
+
+  Cleaner Logging Flow (Iteration 2)
+
+  INITIALIZATION PHASE (Single Main section)
+
+  [Main] 🔧 MVP-Fusion Engine: HighSpeed_Markdown_General
+  [Main] ⚡ Performance: High-speed document extraction (2000+ pages/sec)
+  [Main] 🚀 Profile: Local Development/CLI | Memory: 6553MB
+  [Main] 📁 Output directory: ../output/fusion
+  [Main] 📊 PROCESSING SUMMARY: 5 files, 8 workers
+  [Main] 🏗️  Starting I/O + CPU service: 1 I/O + 8 CPU workers
+
+  I/O WORKER PHASE (File Operations)
+
+  [I/O]  📥 Starting ingestion of 5 files
+  [I/O]  🔄 Converting PDF to markdown: Complex2.pdf
+  [I/O]  📂 Reading file: simple_markdown.md
+  [I/O]  ✅ Queued for CPU processing: Complex2.pdf
+  [I/O]  ✅ Ingestion completed: 5 files → CPU queue
+
+  KEEP ALL THE GOOD DEBUG INFO (CPU Workers)
+
+  [CPU-1] 📚 Loaded modular patterns: Domains: 209, Document Types: 219
+  [CPU-2] ⚡ Built modular Aho-Corasick automatons: 2.13ms
+  [CPU-1] ✅ Conservative person extractor initialized (no corpus)
+  [CPU-3] ⚙️  Processing entities: Complex2.pdf
+  [CPU-1] 📊 Global entities: person:139, org:4, loc:2, money:10
+  [CPU-2] 🎯 Domain entities: organizations:7, locations:33
+  [CPU-3] ✅ Completed processing: Complex2.pdf
+
+  SINGLE COMPLETION SECTION (Back to Main)
+
+  [Main] ✅ Service processing complete: 5 results in 2.34s
+  [Main] 🚀 PAGES/SEC: 2,140 (overall pipeline)
+  [Main] ✅ SUCCESS RATE: 100% (5/5)
+
+  Key Fixes:
+
+  1. Single Main block at start - no scattered Main entries
+  2. Keep all debug/entity info but attribute to CPU workers
+  3. Clean I/O section for file operations only
+  4. Single completion block back to Main for summary
+
+  Better? Should I adjust the flow or worker attribution?
+
+> 2025-09-18 19:29:01,615 [STAGE] utils.deployment_manager - [Main] 🚀 Deployment Profile: Local Development/CLI
+  2025-09-18 19:29:01,615 [INFO] utils.deployment_manager -    High-performance local machine or development server
+  2025-09-18 19:29:01,615 [INFO] utils.deployment_manager -    Workers: 2
+  2025-09-18 19:29:01,615 [STAGE] __main__ - [Main] 🔧 MVP-Fusion Engine: HighSpeed_Markdown_General
+  2025-09-18 19:29:01,615 [STAGE] __main__ - [Main] ⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output
+  2025-09-18 19:29:01,615 [STAGE] __main__ - [Main] 🔧 Workers: 2 | Formats: 38
+  2025-09-18 19:29:01,615 [INFO] utils.deployment_manager -    Workers: 2
+  2025-09-18 19:29:01,615 [INFO] utils.deployment_manager -    Memory: 6553MB usable (8192MB * 0.8)
+  2025-09-18 19:29:01,615 [INFO] utils.deployment_manager -    Queue Size: 100
+  2025-09-18 19:29:01,615 [STAGE] __main__ - [Main] 🚀 Profile: Local Development/CLI | Memory: 6553MB
+  2025-09-18 19:29:01,615 [STAGE] __main__ - [Main] 📁 Output directory: ../output/fusion
+  2025-09-18 19:29:01,615 [STAGE] __main__ - [Main] 📁 Processing 1 directories from config (default):
+  2025-09-18 19:29:01,615 [STAGE] __main__ - [Main]    - ~/projects/docling/cli/data_complex
+  2025-09-18 19:29:01,617 [STAGE] __main__ - [Main] 
+  📊 PROCESSING SUMMARY:
+  2025-09-18 19:29:01,617 [STAGE] __main__ - [Main]    Total files: 5
+  2025-09-18 19:29:01,618 [STAGE] __main__ - [Main]    File types: {'.pdf': 3, '.txt': 1, '.md': 1}
+  2025-09-18 19:29:01,618 [STAGE] __main__ - [Main]    Total URLs: 0
+  2025-09-18 19:29:01,618 [STAGE] __main__ - [Main]    Workers: 2
+  2025-09-18 19:29:01,618 [STAGE] __main__ - [Main] 
+  🚀 Starting file batch processing...
+  2025-09-18 19:29:01,618 [STAGE] __main__ - [Main] 🔄 Using Traditional In-Memory Pipeline
+  2025-09-18 19:29:01,754 [ENTITY] knowledge.aho_corasick_engine - [Main] 📚 Loaded modular patterns:
+  2025-09-18 19:29:01,754 [ENTITY] knowledge.aho_corasick_engine - [Main]    🏛️  Domains: 209 (2106 keywords)
+  2025-09-18 19:29:01,754 [ENTITY] knowledge.aho_corasick_engine - [Main]    📄 Document Types: 219 (1462 keywords)
+  2025-09-18 19:29:01,754 [ENTITY] knowledge.aho_corasick_engine - [Main]    🔍 Entity Categories: 2 (8 total patterns)
+  2025-09-18 19:29:01,757 [DEBUG] knowledge.aho_corasick_engine - ⚡ Built modular Aho-Corasick automatons: 2.14ms
+  2025-09-18 19:29:01,757 [DEBUG] knowledge.aho_corasick_engine -    🏛️  Domain patterns: 2019
+  2025-09-18 19:29:01,757 [DEBUG] knowledge.aho_corasick_engine -    📄 Document type patterns: 1400
+  2025-09-18 19:29:01,757 [DEBUG] knowledge.aho_corasick_engine -    🔍 Entity patterns: 0
+  2025-09-18 19:29:01,757 [ENTITY] knowledge.extractors.semantic_fact_extractor - [Main] ✅ Conservative person extracto     I'm trying to be brief, but let's figure out all of our possible log levels and when we should 
+  add IO to the right and CPU to the right. All right, we want date time and we definitely want to know where it's being called as far as traceability to where that particular area of focus is. And so our logs are very 
+  clean, but we need to clean it up. Did you help me with some examples?
+
+● Perfect! Let's map out all the log levels and when each worker type should be used. Looking at your current logs, here's the breakdown:
+
+  Log Level Categories & Worker Attribution
+
+  [STAGE] - Major pipeline phases
+
+  Current: [STAGE] __main__ - [Main] 🚀 Starting file batch processing...
+  Target:  [STAGE] __main__ - [Main] 🏗️  Starting I/O + CPU service: 1 I/O + 2 CPU workers
+
+  Current: [STAGE] pipeline.fusion_pipeline - [Main] 📄 Stage 1: Converting 5 files...
+  Target:  [STAGE] pipeline.service_processor - [I/O] 📥 Starting ingestion of 5 files
+
+  [ENTITY] - Knowledge/pattern loading & entity processing
+
+  Current: [ENTITY] knowledge.aho_corasick_engine - [Main] 📚 Loaded modular patterns:
+  Target:  [ENTITY] knowledge.aho_corasick_engine - [CPU-1] 📚 Loaded modular patterns:
+
+  Current: [ENTITY] knowledge.extractors.semantic_fact_extractor - [Main] ✅ Conservative person extractor
+  Target:  [ENTITY] knowledge.extractors.semantic_fact_extractor - [CPU-1] ✅ Conservative person extractor
+
+  [DEBUG] - Performance metrics & detailed diagnostics
+
+  Current: [DEBUG] knowledge.aho_corasick_engine - ⚡ Built modular Aho-Corasick automatons: 2.14ms
+  Target:  [DEBUG] knowledge.aho_corasick_engine - [CPU-1] ⚡ Built modular Aho-Corasick automatons: 2.14ms
+
+  [INFO] - Configuration & system info
+
+  Current: [INFO] utils.deployment_manager - Workers: 2
+  Target:  [INFO] utils.deployment_manager - [Main] Workers: 2 (stays Main - system config)
+
+  Worker Attribution Rules:
+
+  [Main] - System coordination only
+
+  - Configuration loading
+  - Service startup/shutdown
+  - Final results summary
+  - Deployment profile info
+
+  [I/O] - File operations only
+
+  - PDF conversion
+  - File reading
+  - Markdown loading
+  - Work queueing
+
+  [CPU-1], [CPU-2], etc. - Processing only
+
+  - Entity extraction
+  - Pattern loading
+  - Classification
+  - Semantic analysis
+
+  Clean Example Flow:
+
+  [STAGE] __main__ - [Main] 🔧 MVP-Fusion Engine: HighSpeed_Markdown_General
+  [STAGE] __main__ - [Main] 🏗️  Starting I/O + CPU service: 1 I/O + 2 CPU workers
+  [STAGE] pipeline.service_processor - [I/O] 📥 Starting ingestion of 5 files
+  [ENTITY] knowledge.aho_corasick_engine - [CPU-1] 📚 Loaded modular patterns: Domains: 209
+  [DEBUG] knowledge.aho_corasick_engine - [CPU-1] ⚡ Built automatons: 2.14ms
+  [STAGE] pipeline.service_processor - [I/O] 🔄 Converting PDF: Complex2.pdf
+  [ENTITY] knowledge.extractors.semantic_fact_extractor - [CPU-2] ⚙️  Processing entities: Complex2.pdf
+  [STAGE] __main__ - [Main] ✅ Service processing complete: 5 results in 2.34s
+
+  Does this worker attribution make sense? Should I adjust any of the level assignments?
+
+> It's just not capturing the flow correctly. It's, um, I don't like staging main and then another main. And so you got some duplicate there. We can literally just call that whole section staging and clean it up. We don't
+   need emojis. I'll be honest, emojis are not required. I love the coloring though. And so let's talk about if we have staging, we have all the phases of work that we're doing. We no longer use debug. We don't need it. 
+  We are in debug mode. And so we have conversion. We have classification. We have enrichments. We have semantics. We have possibly staging, info, main, all of these particular types. Some use the IOCPU. Some use the CPU 
+  IOCPU. All right. We need to know what phase we're in and what processor or IOCROOP is getting used. Show that.
+
+● Got it! You want clean, focused logging without duplication. Let me redesign this with clear phases and worker attribution:
+
+  Clean Log Level Design
+
+  STAGING - Pipeline phases (no duplicate Main)
+
+  [STAGING] service_processor - [Main] Starting I/O + CPU service: 1 I/O + 2 CPU workers
+  [STAGING] service_processor - [I/O] Starting ingestion of 5 files
+  [STAGING] service_processor - [Main] Service processing complete: 5 results in 2.34s
+
+  CONVERSION - File operations
+
+  [CONVERSION] service_processor - [I/O] Converting PDF: Complex2.pdf
+  [CONVERSION] service_processor - [I/O] Reading file: simple_markdown.md
+  [CONVERSION] service_processor - [I/O] Queued for CPU processing: Complex2.pdf
+
+  CLASSIFICATION - Document type detection
+
+  [CLASSIFICATION] aho_corasick_engine - [CPU-1] Loaded modular patterns: Domains 209, Types 219
+  [CLASSIFICATION] aho_corasick_engine - [CPU-2] Built automatons: 2.14ms
+  [CLASSIFICATION] fusion_pipeline - [CPU-1] Classifying documents with 2 workers
+
+  ENRICHMENT - Entity enhancement
+
+  [ENRICHMENT] semantic_fact_extractor - [CPU-1] Conservative person extractor initialized
+  [ENRICHMENT] entity_disambiguator - [CPU-2] Processing entity relationships
+
+  SEMANTICS - Entity extraction
+
+  [SEMANTICS] semantic_fact_extractor - [CPU-1] Processing entities: Complex2.pdf
+  [SEMANTICS] semantic_fact_extractor - [CPU-1] Global entities: person:139, org:4, loc:2
+  [SEMANTICS] semantic_fact_extractor - [CPU-2] Domain entities: organizations:7, locations:33
+
+  INFO - System configuration
+
+  [INFO] deployment_manager - [Main] Workers: 2, Memory: 6553MB
+  [INFO] deployment_manager - [Main] Profile: Local Development/CLI
+
+  Worker Attribution Rules:
+
+  - [Main]: Service coordination, final results
+  - [I/O]: File reading, PDF conversion, queueing
+  - [CPU-1], [CPU-2]: All processing work
+
+  Does this flow capture what you want? Clean phases, no emoji clutter, clear worker attribution?
+
+> Yeah, but you can move over the IO and the CPU to the actual log title. So it would say staging dash IO 1 or classification dash CPU 1. You can move that information over there.
+
+● Perfect! That's much cleaner. Move the worker info into the log level itself:
+
+  Clean Log Level Design with Worker in Title
+
+  STAGING-MAIN - Service coordination
+
+  [STAGING-MAIN] service_processor - Starting I/O + CPU service: 1 I/O + 2 CPU workers
+  [STAGING-MAIN] service_processor - Service processing complete: 5 results in 2.34s
+
+  STAGING-IO - Pipeline coordination by I/O worker
+
+  [STAGING-IO] service_processor - Starting ingestion of 5 files
+  [STAGING-IO] service_processor - Ingestion completed: 5 files queued
+
+  CONVERSION-IO - File operations
+
+  [CONVERSION-IO] service_processor - Converting PDF: Complex2.pdf
+  [CONVERSION-IO] service_processor - Reading file: simple_markdown.md
+  [CONVERSION-IO] service_processor - Queued for CPU processing: Complex2.pdf
+
+  CLASSIFICATION-CPU1 - Document type detection
+
+  [CLASSIFICATION-CPU1] aho_corasick_engine - Loaded modular patterns: Domains 209, Types 219
+  [CLASSIFICATION-CPU1] aho_corasick_engine - Built automatons: 2.14ms
+  [CLASSIFICATION-CPU2] fusion_pipeline - Classifying documents with 2 workers
+
+  ENRICHMENT-CPU1 - Entity enhancement
+
+  [ENRICHMENT-CPU1] semantic_fact_extractor - Conservative person extractor initialized
+  [ENRICHMENT-CPU2] entity_disambiguator - Processing entity relationships
+
+  SEMANTICS-CPU1 - Entity extraction
+
+  [SEMANTICS-CPU1] semantic_fact_extractor - Processing entities: Complex2.pdf
+  [SEMANTICS-CPU1] semantic_fact_extractor - Global entities: person:139, org:4, loc:2
+  [SEMANTICS-CPU2] semantic_fact_extractor - Domain entities: organizations:7, locations:33
+
+  INFO-MAIN - System configuration
+
+  [INFO-MAIN] deployment_manager - Workers: 2, Memory: 6553MB
+  [INFO-MAIN] deployment_manager - Profile: Local Development/CLI
+
+  This gives us clean phase identification plus worker attribution in one compact log level. Should I implement this logging structure?
+
+> Yep, I think there's one more area that we haven't done and that's when we save it or write it to disk. There is a possibly another conversion. I think it might be conversion where it persists it to disk, or maybe 
+  that's an entirely separate structure where it's a writer, and it would use IO where it would write to disk.
+
+● Excellent point! We need a separate phase for disk persistence. I think WRITER-IO makes the most sense since writing to disk is an I/O operation:
+
+  Complete Log Level Design with Disk Writing
+
+  STAGING-MAIN - Service coordination
+
+  [STAGING-MAIN] service_processor - Starting I/O + CPU service: 1 I/O + 2 CPU workers
+  [STAGING-MAIN] service_processor - Service processing complete: 5 results in 2.34s
+
+  CONVERSION-IO - File input operations
+
+  [CONVERSION-IO] service_processor - Converting PDF: Complex2.pdf
+  [CONVERSION-IO] service_processor - Reading file: simple_markdown.md
+  [CONVERSION-IO] service_processor - Queued for CPU processing: Complex2.pdf
+
+  CLASSIFICATION-CPU1 - Document type detection
+
+  [CLASSIFICATION-CPU1] aho_corasick_engine - Loaded modular patterns: Domains 209, Types 219
+  [CLASSIFICATION-CPU2] fusion_pipeline - Classifying documents with 2 workers
+
+  ENRICHMENT-CPU1 - Entity enhancement
+
+  [ENRICHMENT-CPU1] semantic_fact_extractor - Conservative person extractor initialized
+  [ENRICHMENT-CPU2] entity_disambiguator - Processing entity relationships
+
+  SEMANTICS-CPU1 - Entity extraction
+
+  [SEMANTICS-CPU1] semantic_fact_extractor - Processing entities: Complex2.pdf
+  [SEMANTICS-CPU1] semantic_fact_extractor - Global entities: person:139, org:4, loc:2
+
+  WRITER-IO - Disk persistence operations
+
+  [WRITER-IO] service_processor - Writing markdown: Complex2.md
+  [WRITER-IO] service_processor - Writing JSON knowledge: Complex2.json
+  [WRITER-IO] service_processor - Saved 5 files to ../output/fusion
+
+  INFO-MAIN - System configuration
+
+  [INFO-MAIN] deployment_manager - Workers: 2, Memory: 6553MB
+
+  Perfect flow: CONVERSION-IO (read from disk) → CPU processing → WRITER-IO (write to disk). Should I implement this complete logging structure?
+
+> Are we missing anything? I think we have most everything covered.
+
+● Looking at our complete logging design, I think we have all the major phases covered:
+
+  Complete Flow Coverage:
+
+  1. STAGING-MAIN: Service startup/coordination ✅
+  2. CONVERSION-IO: File reading, PDF conversion ✅
+  3. CLASSIFICATION-CPU: Document type detection ✅
+  4. ENRICHMENT-CPU: Entity enhancement ✅
+  5. SEMANTICS-CPU: Entity extraction ✅
+  6. WRITER-IO: Disk persistence ✅
+  7. INFO-MAIN: System configuration ✅
+
+  The only thing I can think of that might be missing is error handling - should we have something like:
+  - ERROR-IO: File read failures, PDF conversion errors
+  - ERROR-CPU: Entity extraction failures, processing errors
+  - ERROR-MAIN: Service failures, configuration errors
+
+  But maybe errors just use the same log level as the phase that failed (e.g., [CONVERSION-IO] Failed to read file: corrupt.pdf)?
+
+  Other than error handling, I think we've got complete coverage of the I/O + CPU service flow. Should I proceed with implementing this logging structure in the ServiceProcessor integration?
+
+> Should I owe when I owe does chime in? Should I owe tell us the queue? Should there be a conversion? Should there be a queue tag with I.
+
+● Great question! Yes, I think we need QUEUE-IO to show the handoff between I/O and CPU workers. This gives us visibility into the async work passing:
+
+  Complete Flow with Queue Visibility:
+
+  CONVERSION-IO - File input operations
+
+  [CONVERSION-IO] service_processor - Converting PDF: Complex2.pdf
+  [CONVERSION-IO] service_processor - Reading file: simple_markdown.md
+
+  QUEUE-IO - Work queue operations
+
+  [QUEUE-IO] service_processor - Queued for CPU processing: Complex2.pdf (queue: 3/100)
+  [QUEUE-IO] service_processor - Queued for CPU processing: simple_markdown.md (queue: 4/100)
+  [QUEUE-IO] service_processor - Queue full, dropping: large_file.pdf
+  [QUEUE-IO] service_processor - CPU workers consuming queue (queue: 2/100)
+
+  CLASSIFICATION-CPU1 - CPU workers pick up from queue
+
+  [CLASSIFICATION-CPU1] aho_corasick_engine - Processing work item: Complex2.pdf
+  [CLASSIFICATION-CPU2] fusion_pipeline - Processing work item: simple_markdown.md
+
+  This gives us:
+  1. CONVERSION-IO: File operations
+  2. QUEUE-IO: Queue status, backpressure, handoff visibility
+  3. CPU processing: What each worker is actually processing
+  4. WRITER-IO: Final disk operations
+
+  The queue logging shows us:
+  - What's being queued
+  - Queue fill level (3/100)
+  - Backpressure issues (queue full, dropping)
+  - CPU consumption rate
+
+  Should I implement this QUEUE-IO logging to show the I/O → CPU handoff?
+
+> Yeah, if the, at the time that handoff happens, maybe we can, if it's at no cost and we have it, and it's run time, and it doesn't take any additional resources. At those handoff points, we could figure out the Q size, 
+  how much RAM we have, and maybe how much CPU load is there. As long as it's free, we could, the show it during the handoff.
+
+● Perfect! Let's add lightweight system metrics at the handoff points since they're essentially free:
+
+  QUEUE-IO with Free System Metrics:
+
+  QUEUE-IO - Work queue with system state
+
+  [QUEUE-IO] service_processor - Queued: Complex2.pdf (queue: 3/100, ram: 45%, cpu: 23%)
+  [QUEUE-IO] service_processor - Queued: simple_markdown.md (queue: 4/100, ram: 47%, cpu: 28%)
+  [QUEUE-IO] service_processor - CPU pickup: Complex2.pdf (queue: 3/100, ram: 52%, cpu: 85%)
+  [QUEUE-IO] service_processor - Queue full, dropping: large_file.pdf (queue: 100/100, ram: 78%, cpu: 95%)
+
+  These metrics are essentially free:
+  - Queue size: Already tracked (self.work_queue.qsize())
+  - RAM: psutil.virtual_memory().percent (lightweight)
+  - CPU: psutil.cpu_percent(interval=None) (non-blocking, uses cached value)
+
+  The handoff logging shows:
+  1. Queue operations with current fill level
+  2. System pressure (RAM/CPU) at critical moments
+  3. Backpressure detection when resources are tight
+  4. Performance correlation between queue depth and system load
+
+  This gives us real-time insight into whether the queue is backing up due to:
+  - I/O being faster than CPU processing
+  - System resource constraints
+  - Optimal queue sizing
+
+  Should I implement this lightweight system monitoring in the QUEUE-IO logging?
+
+> Now show us everything that we got and a simple flow of processing say two files.
+
+● Complete Logging Design - Processing 2 Files
+
+  Here's the full flow for processing Complex2.pdf and simple_markdown.md:
+
+  [INFO-MAIN] deployment_manager - Workers: 2, Memory: 6553MB
+  [INFO-MAIN] deployment_manager - Profile: Local Development/CLI
+  [STAGING-MAIN] service_processor - Starting I/O + CPU service: 1 I/O + 2 CPU workers
+
+  [CONVERSION-IO] service_processor - Converting PDF: Complex2.pdf
+  [CONVERSION-IO] service_processor - Reading file: simple_markdown.md
+  [QUEUE-IO] service_processor - Queued: Complex2.pdf (queue: 1/100, ram: 45%, cpu: 23%)
+  [QUEUE-IO] service_processor - Queued: simple_markdown.md (queue: 2/100, ram: 47%, cpu: 25%)
+  [STAGING-IO] service_processor - Ingestion completed: 2 files queued
+
+  [CLASSIFICATION-CPU1] aho_corasick_engine - Loaded modular patterns: Domains 209, Types 219
+  [CLASSIFICATION-CPU1] aho_corasick_engine - Built automatons: 2.14ms
+  [QUEUE-IO] service_processor - CPU pickup: Complex2.pdf (queue: 1/100, ram: 52%, cpu: 45%)
+  [CLASSIFICATION-CPU1] fusion_pipeline - Processing work item: Complex2.pdf
+  [QUEUE-IO] service_processor - CPU pickup: simple_markdown.md (queue: 0/100, ram: 54%, cpu: 67%)
+  [CLASSIFICATION-CPU2] fusion_pipeline - Processing work item: simple_markdown.md
+
+  [ENRICHMENT-CPU1] semantic_fact_extractor - Conservative person extractor initialized
+  [ENRICHMENT-CPU2] entity_disambiguator - Processing entity relationships
+
+  [SEMANTICS-CPU1] semantic_fact_extractor - Processing entities: Complex2.pdf
+  [SEMANTICS-CPU1] semantic_fact_extractor - Global entities: person:139, org:4, loc:2
+  [SEMANTICS-CPU2] semantic_fact_extractor - Processing entities: simple_markdown.md
+  [SEMANTICS-CPU2] semantic_fact_extractor - Global entities: person:3, org:1
+
+  [WRITER-IO] service_processor - Writing markdown: Complex2.md
+  [WRITER-IO] service_processor - Writing JSON knowledge: Complex2.json
+  [WRITER-IO] service_processor - Writing markdown: simple_markdown.md
+  [WRITER-IO] service_processor - Writing JSON knowledge: simple_markdown.json
+  [WRITER-IO] service_processor - Saved 2 files to ../output/fusion
+
+  [STAGING-MAIN] service_processor - Service processing complete: 2 results in 1.87s
+
+  Flow Summary:
+
+  1. System startup (INFO-MAIN, STAGING-MAIN)
+  2. I/O ingestion (CONVERSION-IO, QUEUE-IO with metrics)
+  3. CPU processing (CLASSIFICATION, ENRICHMENT, SEMANTICS with CPU1/CPU2)
+  4. Disk persistence (WRITER-IO)
+  5. Completion (STAGING-MAIN)
+
+  Clean phases, clear worker attribution, system metrics at handoffs, no duplicates. Ready to implement?
+
+> Any concerns with this approach are we in any way shape or form, adding a blocker or performance problem? I think this just exposes all the blocking we have, but is this pattern good?
+
+● Excellent question! This pattern is actually performance-positive because it:
+
+  Performance Benefits:
+
+  Exposes Real Bottlenecks
+
+  [QUEUE-IO] - Queued: file1.pdf (queue: 95/100, ram: 78%, cpu: 95%)
+  [QUEUE-IO] - Queue full, dropping: file2.pdf (queue: 100/100, ram: 85%, cpu: 98%)
+  Shows us: CPU workers are the bottleneck, not I/O
+
+  Zero-Cost Metrics
+
+  - Queue size: Already tracked internally (self.work_queue.qsize())
+  - RAM/CPU: psutil with interval=None (cached, non-blocking)
+  - Log formatting: Minimal string operations
+
+  Async Architecture
+
+  - I/O worker: Never blocks CPU workers
+  - CPU workers: Process independently
+  - Queue: Natural backpressure valve
+
+  No New Blockers Added:
+
+  Current (Bad) Pattern
+
+  [Main] Convert file1 → [Main] Extract file1 → [Main] Convert file2 → [Main] Extract file2
+  Sequential, single-threaded, blocking
+
+  New (Good) Pattern
+
+  [I/O] Convert file1 + file2 → [Queue] → [CPU1] Extract file1 || [CPU2] Extract file2
+  Parallel, async, non-blocking
+
+  The Only "Cost":
+
+  - Log volume: More detailed visibility (but that's the goal)
+  - String formatting: Negligible (~0.1ms per log line)
+
+  This pattern reveals existing bottlenecks rather than creating new ones. The async I/O + CPU separation with queue buffering is fundamentally faster than the current sequential approach.
+
+  Verdict: This is a performance improvement with better observability. No concerns!
+
+> '/home/corey/projects/docling/mvp-fusion/MVP-FUSION-TESTING-PLAN.md'   I've cleaned up this file right here. Why don't we put our entire solution here? So we can have a to-do checklist to what needs to happen and just 
+  to stay focused throughout the process and we can begin.   at any notes concerns and overall principles that you think we need to follow to make sure we stay aligned to the skull.
+
+✻ Thinking…
+
+  The user wants me to read the MVP-FUSION-TESTING-PLAN.md file and put our entire solution/plan there as a to-do checklist. This makes sense - we've been discussing the logging architecture and ServiceProcessor 
+  integration, and now we need to document the full plan and implementation steps.
+
+  Let me read the file first to see what's already there, then create a comprehensive plan.
+
+● Perfect! Let me read the current testing plan and then create our comprehensive solution checklist there.
+
+● Read(mvp-fusion/MVP-FUSION-TESTING-PLAN.md)
+  ⎿  Read 1 line (ctrl+r to expand)
+
+✻ Thinking…
+
+  The file exists but is very short (1 line). Let me read it without an offset to see what's there.
+
+● Read(mvp-fusion/MVP-FUSION-TESTING-PLAN.md)
+  ⎿  Read 1 line (ctrl+r to expand)
+
+✻ Thinking…
+
+  The file seems to be nearly empty (just 1 line). Let me try reading it without any offset parameters to see what's there.
+
+● Read(mvp-fusion/MVP-FUSION-TESTING-PLAN.md)
+  ⎿  Read 1 line (ctrl+r to expand)
+
+✻ Thinking…
+
+  It seems the file is almost empty. Let me just write our complete solution plan to it since the user said they cleaned it up and wants us to put our entire solution there.
+
+● Let me create our comprehensive solution plan in that file:
+
+● Write(mvp-fusion/MVP-FUSION-TESTING-PLAN.md)
+  ⎿  Wrote 118 lines to mvp-fusion/MVP-FUSION-TESTING-PLAN.md                                                                                                  
+     # MVP-FUSION I/O + CPU SERVICE ARCHITECTURE IMPLEMENTATION
+     ## **OBJECTIVE**
+     Transform MVP-Fusion from single-threaded `[Main]` processing to clean I/O + CPU service architecture with proper worker attribution and phase visibility.
+     ## **CORE PRINCIPLES**
+     1. **Single Source of Truth**: One definitive implementation, no duplicates
+     2. **Clean Architecture**: I/O worker handles file operations, CPU workers handle processing
+     3. **Performance First**: Async queue between I/O and CPU, no blocking
+     4. **Clear Observability**: Phase-worker logging shows exactly what's happening where
+     … +108 lines (ctrl+r to expand)
+
