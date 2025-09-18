@@ -5,6 +5,7 @@ Provides structured logging with multiple verbosity levels.
 
 import logging
 import sys
+import threading
 from typing import Optional, Dict, Any
 from pathlib import Path
 from datetime import datetime
@@ -124,12 +125,55 @@ class ColoredFormatter(logging.Formatter):
     RESET = '\033[0m'
     
     def format(self, record):
+        # Add worker tags for all levels (not just DEBUG) for I/O + CPU architecture visibility
+        worker_tag = self._get_worker_tag()
+        if worker_tag != 'Main':  # Only tag non-main threads
+            record.levelname = f"{record.levelname}:{worker_tag}"
+        
         # Add color codes
         levelname = record.levelname
-        if levelname in self.COLORS:
-            record.levelname = f"{self.COLORS[levelname]}{levelname}{self.RESET}"
-            record.msg = f"{self.COLORS[levelname]}{record.msg}{self.RESET}"
+        if levelname in self.COLORS or ':' in levelname:
+            # Handle tagged levels like DEBUG:CPU-1, STAGE:I/O, etc.
+            base_level = levelname.split(':')[0]
+            color = self.COLORS.get(base_level, '\033[0m')
+            record.levelname = f"{color}{levelname}{self.RESET}"
+            record.msg = f"{color}{record.msg}{self.RESET}"
         return super().format(record)
+    
+    def _get_worker_tag(self) -> str:
+        """Generate compact worker tag from thread name for I/O + CPU architecture"""
+        thread_name = threading.current_thread().name
+        
+        # Map thread patterns to clean worker types
+        if thread_name == 'MainThread':
+            return 'Main'
+        elif 'IOWorker' in thread_name or thread_name.startswith('IO-'):
+            # I/O worker for ingestion (downloads, file reads, PDF conversion)
+            return 'I/O'
+        elif 'CPUWorker' in thread_name or thread_name.startswith('CPU-'):
+            # CPU workers for processing (entity extraction, classification)
+            if '-' in thread_name:
+                worker_num = thread_name.split('-')[-1]
+                return f'CPU-{worker_num}'
+            else:
+                return 'CPU-?'
+        elif thread_name.startswith('ThreadPoolExecutor'):
+            # Map ThreadPoolExecutor threads to CPU workers
+            if '_' in thread_name:
+                worker_num = thread_name.split('_')[-1]
+                return f'CPU-{worker_num}'
+            else:
+                return 'CPU-?'
+        elif 'Worker' in thread_name:
+            # Legacy worker patterns - map to CPU workers
+            if '-' in thread_name:
+                worker_num = thread_name.split('-')[-1]
+                return f'CPU-{worker_num}'
+            else:
+                return 'CPU-?'
+        else:
+            # Fallback for unknown thread patterns
+            return f'T-{thread_name[:3]}'
 
 
 class JsonFormatter(logging.Formatter):
@@ -137,13 +181,54 @@ class JsonFormatter(logging.Formatter):
     
     def format(self, record):
         import json
+        
+        # Add worker tags for all levels in JSON too
+        levelname = record.levelname
+        worker_tag = self._get_worker_tag()
+        if worker_tag != 'Main':  # Only tag non-main threads
+            levelname = f"{levelname}:{worker_tag}"
+        
         log_obj = {
             'timestamp': datetime.utcnow().isoformat(),
-            'level': record.levelname,
+            'level': levelname,
             'logger': record.name,
             'message': record.getMessage(),
         }
         
+    def _get_worker_tag(self) -> str:
+        """Generate compact worker tag from thread name for I/O + CPU architecture"""
+        thread_name = threading.current_thread().name
+        
+        # Map thread patterns to clean worker types
+        if thread_name == 'MainThread':
+            return 'Main'
+        elif 'IOWorker' in thread_name or thread_name.startswith('IO-'):
+            # I/O worker for ingestion (downloads, file reads, PDF conversion)
+            return 'I/O'
+        elif 'CPUWorker' in thread_name or thread_name.startswith('CPU-'):
+            # CPU workers for processing (entity extraction, classification)
+            if '-' in thread_name:
+                worker_num = thread_name.split('-')[-1]
+                return f'CPU-{worker_num}'
+            else:
+                return 'CPU-?'
+        elif thread_name.startswith('ThreadPoolExecutor'):
+            # Map ThreadPoolExecutor threads to CPU workers
+            if '_' in thread_name:
+                worker_num = thread_name.split('_')[-1]
+                return f'CPU-{worker_num}'
+            else:
+                return 'CPU-?'
+        elif 'Worker' in thread_name:
+            # Legacy worker patterns - map to CPU workers
+            if '-' in thread_name:
+                worker_num = thread_name.split('-')[-1]
+                return f'CPU-{worker_num}'
+            else:
+                return 'CPU-?'
+        else:
+            # Fallback for unknown thread patterns
+            return f'T-{thread_name[:3]}'
         # Add extra fields if present
         if hasattr(record, 'extra_fields'):
             log_obj.update(record.extra_fields)

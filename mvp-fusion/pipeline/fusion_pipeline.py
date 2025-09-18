@@ -225,6 +225,7 @@ class FusionPipeline:
         # Stage 2: CLASSIFY (if requested)
         if 'classify' in self.stages_to_run:
             self.logger.stage(f"📋 Stage 2: Classifying documents in memory with {max_workers} workers...")
+            self.logger.logger.debug(f"🎯 CLASSIFICATION DEBUG: About to start classification logic")
             stage_start = time.perf_counter()
             
             # Parallel classification using ThreadPoolExecutor
@@ -235,6 +236,9 @@ class FusionPipeline:
             
             def classify_document(doc, worker_num):
                 """Classify a single document with worker ID tracking"""
+                import threading
+                thread_name = threading.current_thread().name
+                self.logger.logger.debug(f"🔧 Classification worker started: thread={thread_name}, worker_num={worker_num}")
                 set_worker_id(f"Worker-{worker_num}")
                 
                 # Check if this document should proceed to classification
@@ -243,9 +247,11 @@ class FusionPipeline:
                 
                 if doc.success and proceed_to_classification:
                     try:
+                        self.logger.logger.debug(f"🧠 Processing classification for {doc.source_filename}")
                         classification_data = self._generate_classification_data(doc.markdown_content, doc.source_filename)
                         doc.add_classification_data(classification_data)
                         doc.record_stage_timing('classify', (time.perf_counter() - stage_start) * 1000)
+                        self.logger.logger.debug(f"✅ Classification completed for {doc.source_filename}")
                         return True
                     except MemoryOverflowError as e:
                         doc.mark_failed(str(e))
@@ -274,18 +280,24 @@ class FusionPipeline:
                 return False
             
             # Execute classification in parallel
+            self.logger.logger.debug(f"🚀 Starting ThreadPoolExecutor with {max_workers} workers for {len(in_memory_docs)} documents")
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
                 # Submit all classification tasks
                 futures = []
                 for i, doc in enumerate(in_memory_docs):
                     worker_num = (i % max_workers) + 1
+                    self.logger.logger.debug(f"💬 Submitting {doc.source_filename} to worker {worker_num}")
                     future = executor.submit(classify_document, doc, worker_num)
                     futures.append(future)
                 
                 # Collect results as they complete
+                self.logger.logger.debug(f"📊 Waiting for {len(futures)} classification tasks to complete...")
                 for future in as_completed(futures):
                     if future.result():
                         successful_classifications += 1
+                        self.logger.logger.debug(f"✅ Classification task completed successfully ({successful_classifications}/{len(futures)})")
+                    else:
+                        self.logger.logger.debug(f"❌ Classification task failed")
             
             stage_time = (time.perf_counter() - stage_start) * 1000
             self.logger.success(f"Classification complete: {stage_time:.0f}ms ({successful_classifications}/{len(in_memory_docs)} successful)")
