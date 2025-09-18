@@ -258,9 +258,9 @@ corpus:
   person_min_confidence: 0.7   # High accuracy threshold for person entities
   
   # Corpus file paths (relative to config directory or absolute paths)
-  # Using corrected final corpus files - perfect balance of clean data + legitimate names
-  first_names_path: "knowledge/corpus/foundation_data/first_names_all_corrected_final.txt"
-  last_names_path: "knowledge/corpus/foundation_data/last_names_top_corrected_final.txt"  
+  # Using date-certain final corpus files - cleaned September 18, 2025
+  first_names_path: "knowledge/corpus/foundation_data/first_names_2025_09_18.txt"
+  last_names_path: "knowledge/corpus/foundation_data/last_names_2025_09_18.txt"  
   organizations_path: "knowledge/corpus/foundation_data/organizations_100k.txt"
   
   # Person extraction behavior
