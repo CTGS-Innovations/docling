@@ -953,9 +953,9 @@ Examples:
         deployment_manager = DeploymentManager(config, args.profile)
         max_workers = deployment_manager.get_max_workers(args.workers)
         
-        logger.stage(f"🔧 MVP-Fusion Engine: {extractor.name}")
-        logger.stage(f"⚡ Performance: {extractor.description}")
-        logger.stage(f"🔧 Workers: {max_workers} | Formats: {len(extractor.get_supported_formats())}")
+        logger.staging(f"MVP-Fusion Engine: {extractor.name}")
+        logger.staging(f"Performance: {extractor.description}")
+        logger.staging(f"Workers: {max_workers} | Formats: {len(extractor.get_supported_formats())}")
         
         # Display deployment profile summary
         profile_summary = deployment_manager.get_profile_summary()
@@ -963,7 +963,7 @@ Examples:
             memory_info = f" | Memory: {profile_summary['memory_limit_mb']}MB" if profile_summary['memory_limit_mb'] else " | Memory: Unlimited"
         else:
             memory_info = " | Memory Management: Disabled"
-        logger.stage(f"🚀 Profile: {profile_summary['name']}{memory_info}")
+        logger.staging(f"Profile: {profile_summary['name']}{memory_info}")
         
         # Determine output directory
         output_dir = None
@@ -973,7 +973,7 @@ Examples:
             output_dir = Path(config['output']['base_directory']).expanduser()
         
         if output_dir:
-            logger.stage(f"📁 Output directory: {output_dir}")
+            logger.staging(f"Output directory: {output_dir}")
         
         # Execute command
         if args.file:
@@ -1057,9 +1057,9 @@ Examples:
                 
                 # Process directories if specified (DEFAULT behavior)
                 if config_dirs:
-                    logger.stage(f"📁 Processing {len(config_dirs)} directories from config (default):")
+                    logger.staging(f"Processing {len(config_dirs)} directories from config (default):")
                     for config_dir in config_dirs:
-                        logger.stage(f"   - {config_dir}")
+                        logger.staging(f"   - {config_dir}")
                     
                     extensions = config.get('files', {}).get('supported_extensions', args.extensions)
                 
@@ -1111,12 +1111,12 @@ Examples:
                     ext = file_path.suffix.lower()
                     file_types[ext] = file_types.get(ext, 0) + 1
                 
-                logger.stage(f"\n📊 PROCESSING SUMMARY:")
-                logger.stage(f"   Total files: {len(all_files)}")
+                logger.staging(f"📊 PROCESSING SUMMARY:")
+                logger.staging(f"   Total files: {len(all_files)}")
                 if file_types:
-                    logger.stage(f"   File types: {dict(file_types)}")
-                logger.stage(f"   Total URLs: {len(all_urls)}")
-                logger.stage(f"   Workers: {max_workers}")
+                    logger.staging(f"   File types: {dict(file_types)}")
+                logger.staging(f"   Total URLs: {len(all_urls)}")
+                logger.staging(f"   Workers: {max_workers}")
                 
                 # Process files and URLs
                 all_results = []
@@ -1124,28 +1124,17 @@ Examples:
                 
                 # Process files in batch if any
                 if all_files:
-                    logger.stage(f"\n🚀 Starting file batch processing...")
+                    logger.staging(f"Starting file batch processing...")
                 
-                    # Choose pipeline architecture based on configuration
-                    use_shared_memory = config.get('pipeline', {}).get('use_shared_memory', False)
+                    # Use new I/O + CPU service architecture
+                    from pipeline.service_processor import ServiceProcessor
+                    processor = ServiceProcessor(config, max_workers)
                     
-                    if use_shared_memory:
-                        logger.stage(f"🏊 Using Shared Memory Pipeline (Edge Optimized)")
-                        from pipeline.shared_memory_pipeline import SharedMemoryFusionPipeline
-                        pipeline = SharedMemoryFusionPipeline(config)
-                    else:
-                        logger.stage(f"🔄 Using Traditional In-Memory Pipeline")
-                        from pipeline.fusion_pipeline import FusionPipeline
-                        pipeline = FusionPipeline(config)
-                    
-                    batch_result = pipeline.process_files(extractor, all_files, output_dir or Path.cwd(), max_workers=max_workers)
-                    if len(batch_result) == 3:
-                        file_results, extraction_time, resource_summary = batch_result
-                    else:
-                        file_results, extraction_time = batch_result
-                        resource_summary = None
+                    # Process files through I/O + CPU service
+                    file_results, extraction_time = processor.process_files_service(all_files, output_dir or Path.cwd())
                     
                     all_results.extend(file_results)
+                    resource_summary = None  # TODO: Add resource summary to ServiceProcessor
                 
                 # Process URLs sequentially if any
                 if all_urls:

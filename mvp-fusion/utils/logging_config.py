@@ -10,12 +10,38 @@ from typing import Optional, Dict, Any
 from pathlib import Path
 from datetime import datetime
 
+try:
+    import psutil
+    PSUTIL_AVAILABLE = True
+except ImportError:
+    PSUTIL_AVAILABLE = False
+
+
+def get_system_metrics() -> str:
+    """Get lightweight system metrics for queue handoff logging."""
+    if not PSUTIL_AVAILABLE:
+        return ""
+    
+    try:
+        # Get non-blocking cached values
+        ram_percent = psutil.virtual_memory().percent
+        cpu_percent = psutil.cpu_percent(interval=None)  # Non-blocking, uses cached value
+        return f"ram: {ram_percent:.0f}%, cpu: {cpu_percent:.0f}%"
+    except:
+        return ""
+
 
 class FusionLogLevel:
     """Custom log levels for fusion-specific messages."""
-    PERFORMANCE = 35  # Between INFO (20) and WARNING (30)
-    STAGE = 25        # Between INFO and PERFORMANCE
-    ENTITY = 15       # Between DEBUG (10) and INFO (20)
+    PERFORMANCE = 35     # Between INFO (20) and WARNING (30)
+    STAGING = 25         # Service coordination and pipeline phases
+    CONVERSION = 24      # File operations and PDF conversion
+    QUEUE = 23           # Work queue operations with metrics
+    CLASSIFICATION = 22  # Document type detection
+    ENRICHMENT = 21      # Entity enhancement
+    SEMANTICS = 20       # Entity extraction and semantic analysis
+    WRITER = 19          # Disk persistence operations
+    ENTITY = 15          # Legacy entity level (for compatibility)
     
 
 def setup_logging(
@@ -39,15 +65,21 @@ def setup_logging(
     """
     # Add custom levels
     logging.addLevelName(FusionLogLevel.PERFORMANCE, "PERF")
-    logging.addLevelName(FusionLogLevel.STAGE, "STAGE")
+    logging.addLevelName(FusionLogLevel.STAGING, "STAGING")
+    logging.addLevelName(FusionLogLevel.CONVERSION, "CONVERSION")
+    logging.addLevelName(FusionLogLevel.QUEUE, "QUEUE")
+    logging.addLevelName(FusionLogLevel.CLASSIFICATION, "CLASSIFICATION")
+    logging.addLevelName(FusionLogLevel.ENRICHMENT, "ENRICHMENT")
+    logging.addLevelName(FusionLogLevel.SEMANTICS, "SEMANTICS")
+    logging.addLevelName(FusionLogLevel.WRITER, "WRITER")
     logging.addLevelName(FusionLogLevel.ENTITY, "ENTITY")
     
     # Map verbosity to log levels
     level_map = {
-        0: logging.WARNING,     # QUIET: Errors and critical info only
-        1: FusionLogLevel.STAGE, # NORMAL: Stage progress + important info
-        2: FusionLogLevel.ENTITY,# VERBOSE: Detailed processing info
-        3: logging.DEBUG         # DEBUG: Everything
+        0: logging.WARNING,         # QUIET: Errors and critical info only
+        1: FusionLogLevel.STAGING,  # NORMAL: Stage progress + important info
+        2: FusionLogLevel.SEMANTICS,# VERBOSE: Detailed processing info
+        3: logging.DEBUG            # DEBUG: Everything
     }
     
     root_logger = logging.getLogger()
@@ -113,29 +145,43 @@ class ColoredFormatter(logging.Formatter):
     """Formatter that adds colors to log output."""
     
     COLORS = {
-        'DEBUG': '\033[36m',      # Cyan
-        'ENTITY': '\033[35m',      # Magenta
-        'INFO': '\033[0m',         # Default
-        'STAGE': '\033[32m',       # Green
-        'PERF': '\033[33m',        # Yellow
-        'WARNING': '\033[33m',     # Yellow
-        'ERROR': '\033[31m',       # Red
-        'CRITICAL': '\033[1;31m',  # Bold Red
+        'DEBUG': '\033[36m',         # Cyan
+        'ENTITY': '\033[35m',        # Magenta  
+        'INFO': '\033[0m',           # Default
+        'STAGING': '\033[32m',       # Green - Service coordination
+        'CONVERSION': '\033[94m',    # Light Blue - File operations
+        'QUEUE': '\033[96m',         # Light Cyan - Queue operations
+        'CLASSIFICATION': '\033[93m', # Light Yellow - Classification
+        'ENRICHMENT': '\033[95m',    # Light Magenta - Enrichment
+        'SEMANTICS': '\033[97m',     # White - Semantic processing
+        'WRITER': '\033[92m',        # Light Green - Writing operations
+        'PERF': '\033[33m',          # Yellow
+        'WARNING': '\033[33m',       # Yellow
+        'ERROR': '\033[31m',         # Red
+        'CRITICAL': '\033[1;31m',    # Bold Red
     }
     RESET = '\033[0m'
     
     def format(self, record):
-        # Add worker tags for all levels (not just DEBUG) for I/O + CPU architecture visibility
+        # Convert to phase-worker format: [PHASE-WORKER]
         worker_tag = self._get_worker_tag()
-        if worker_tag != 'Main':  # Only tag non-main threads
-            record.levelname = f"{record.levelname}:{worker_tag}"
+        phase = record.levelname
         
-        # Add color codes
+        # Create phase-worker combination
+        if worker_tag == 'Main':
+            if phase in ['STAGING', 'INFO', 'WARNING', 'ERROR']:
+                record.levelname = f"[{phase}-MAIN]"
+            else:
+                record.levelname = f"[{phase}-MAIN]"
+        else:
+            record.levelname = f"[{phase}-{worker_tag}]"
+        
+        # Add color codes for the combined phase-worker
         levelname = record.levelname
-        if levelname in self.COLORS or ':' in levelname:
-            # Handle tagged levels like DEBUG:CPU-1, STAGE:I/O, etc.
-            base_level = levelname.split(':')[0]
-            color = self.COLORS.get(base_level, '\033[0m')
+        # Extract base phase for color lookup
+        if levelname.startswith('[') and '-' in levelname:
+            base_phase = levelname[1:].split('-')[0]
+            color = self.COLORS.get(base_phase, '\033[0m')
             record.levelname = f"{color}{levelname}{self.RESET}"
             record.msg = f"{color}{record.msg}{self.RESET}"
         return super().format(record)
@@ -258,8 +304,8 @@ def configure_module_loggers(verbosity: int) -> None:
         logging.getLogger('knowledge').setLevel(logging.ERROR)
     elif verbosity == 1:  # NORMAL
         # Show important progress messages
-        logging.getLogger('fusion').setLevel(FusionLogLevel.STAGE)
-        logging.getLogger('pipeline').setLevel(FusionLogLevel.STAGE)
+        logging.getLogger('fusion').setLevel(FusionLogLevel.STAGING)
+        logging.getLogger('pipeline').setLevel(FusionLogLevel.STAGING)
         logging.getLogger('knowledge').setLevel(logging.WARNING)
     elif verbosity == 2:  # VERBOSE
         # Show detailed metrics and entity counts
@@ -277,10 +323,43 @@ class LoggerAdapter:
     def __init__(self, logger: logging.Logger):
         self.logger = logger
     
+    def staging(self, message: str, **kwargs) -> None:
+        """Log a service staging message."""
+        self.logger.log(FusionLogLevel.STAGING, message, **kwargs)
+    
+    def conversion(self, message: str, **kwargs) -> None:
+        """Log a file conversion message."""
+        self.logger.log(FusionLogLevel.CONVERSION, message, **kwargs)
+    
+    def queue(self, message: str, queue_size: Optional[int] = None, queue_max: Optional[int] = None, **kwargs) -> None:
+        """Log a queue operation message with optional system metrics."""
+        if queue_size is not None and queue_max is not None:
+            metrics = get_system_metrics()
+            if metrics:
+                message = f"{message} (queue: {queue_size}/{queue_max}, {metrics})"
+            else:
+                message = f"{message} (queue: {queue_size}/{queue_max})"
+        self.logger.log(FusionLogLevel.QUEUE, message, **kwargs)
+    
+    def classification(self, message: str, **kwargs) -> None:
+        """Log a classification message."""
+        self.logger.log(FusionLogLevel.CLASSIFICATION, message, **kwargs)
+        
+    def enrichment(self, message: str, **kwargs) -> None:
+        """Log an enrichment message."""
+        self.logger.log(FusionLogLevel.ENRICHMENT, message, **kwargs)
+        
+    def semantics(self, message: str, **kwargs) -> None:
+        """Log a semantic processing message."""
+        self.logger.log(FusionLogLevel.SEMANTICS, message, **kwargs)
+        
+    def writer(self, message: str, **kwargs) -> None:
+        """Log a writer operation message."""
+        self.logger.log(FusionLogLevel.WRITER, message, **kwargs)
+    
     def stage(self, message: str, **kwargs) -> None:
-        """Log a processing stage message."""
-        from .worker_utils import get_worker_prefix
-        self.logger.log(FusionLogLevel.STAGE, f"{get_worker_prefix()} {message}", **kwargs)
+        """Log a processing stage message (legacy compatibility)."""
+        self.logger.log(FusionLogLevel.STAGING, message, **kwargs)
     
     def performance(self, message: str, metrics: Optional[Dict[str, Any]] = None) -> None:
         """Log performance metrics."""
@@ -332,7 +411,7 @@ def log_performance(message: str, **metrics) -> None:
 
 def log_stage(message: str) -> None:
     """Log a stage/progress message."""
-    logging.log(FusionLogLevel.STAGE, message)
+    logging.log(FusionLogLevel.STAGING, message)
 
 
 def log_entity(message: str, count: Optional[int] = None) -> None:

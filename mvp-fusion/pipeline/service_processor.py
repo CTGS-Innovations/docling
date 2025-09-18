@@ -20,14 +20,27 @@ from typing import List, Dict, Any, Union, Optional
 from dataclasses import dataclass
 
 from utils.logging_config import get_fusion_logger
+from pipeline.in_memory_document import InMemoryDocument
+
+# Import real extraction functions
+try:
+    import fitz  # PyMuPDF for PDF processing
+except ImportError:
+    fitz = None
+
+# Import real entity extraction
+try:
+    from knowledge.extractors.semantic_fact_extractor import SemanticFactExtractor
+    from knowledge.aho_corasick_engine import AhoCorasickEngine
+except ImportError:
+    SemanticFactExtractor = None
+    AhoCorasickEngine = None
 
 
 @dataclass
 class WorkItem:
     """Work item passed from I/O worker to CPU workers"""
-    file_path: Path
-    markdown_content: str
-    source_filename: str
+    document: 'InMemoryDocument'  # Pass the actual document object, not just markdown
     metadata: Dict[str, Any]
     ingestion_time: float
 
@@ -39,12 +52,18 @@ class ServiceProcessor:
     Separates I/O-bound ingestion from CPU-bound processing with async queue.
     """
     
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: Dict[str, Any], max_workers: int = None):
         self.config = config
         self.logger = get_fusion_logger(__name__)
         
-        # Worker configuration
-        self.cpu_workers = mp.cpu_count()  # Match CPU cores exactly
+        # Worker configuration - use CLI override if provided, otherwise config
+        if max_workers is not None:
+            self.cpu_workers = max_workers  # Use CLI override
+        else:
+            # Fallback to config file
+            from utils.deployment_manager import DeploymentManager
+            deployment_manager = DeploymentManager(config)
+            self.cpu_workers = deployment_manager.get_max_workers()
         self.queue_size = config.get('pipeline', {}).get('queue_size', 100)
         self.memory_limit_mb = config.get('pipeline', {}).get('memory_limit_mb', 100)
         
@@ -56,8 +75,31 @@ class ServiceProcessor:
         self.io_worker = None
         self.cpu_executor = None
         
-        self.logger.stage(f"🏗️  Service Processor initialized: 1 I/O + {self.cpu_workers} CPU workers")
+        # Initialize real extractors (shared across CPU workers)
+        self.aho_corasick_engine = None
+        self.semantic_extractor = None
+        self._initialize_extractors()
+        
+        self.logger.staging(f"Service Processor initialized: 1 I/O + {self.cpu_workers} CPU workers")
         self.logger.logger.debug(f"📋 Queue size: {self.queue_size}, Memory limit: {self.memory_limit_mb}MB")
+    
+    def _initialize_extractors(self):
+        """Initialize real entity extractors for CPU workers"""
+        if AhoCorasickEngine and SemanticFactExtractor:
+            try:
+                # Initialize Aho-Corasick engine for pattern matching
+                self.aho_corasick_engine = AhoCorasickEngine(self.config)
+                
+                # Initialize semantic fact extractor
+                self.semantic_extractor = SemanticFactExtractor()
+                
+                self.logger.logger.debug("✅ Real extractors initialized")
+            except Exception as e:
+                self.logger.logger.warning(f"⚠️  Failed to initialize extractors: {e}")
+                self.aho_corasick_engine = None
+                self.semantic_extractor = None
+        else:
+            self.logger.logger.warning("⚠️  Real extractors not available - using mock processing")
     
     def start_service(self):
         """Start the I/O + CPU worker service"""
@@ -66,7 +108,7 @@ class ServiceProcessor:
             return
         
         self.active = True
-        self.logger.stage("🚀 Starting I/O + CPU service...")
+        self.logger.staging("Starting I/O + CPU service...")
         
         # Start CPU worker pool
         self.cpu_executor = ThreadPoolExecutor(
@@ -74,14 +116,14 @@ class ServiceProcessor:
             thread_name_prefix="CPUWorker"
         )
         
-        self.logger.stage(f"✅ Service started: 1 I/O worker + {self.cpu_workers} CPU workers")
+        self.logger.staging(f"Service started: 1 I/O worker + {self.cpu_workers} CPU workers")
     
     def stop_service(self):
         """Stop the I/O + CPU worker service"""
         if not self.active:
             return
         
-        self.logger.stage("🛑 Stopping I/O + CPU service...")
+        self.logger.staging("Stopping I/O + CPU service...")
         self.active = False
         
         # Stop CPU workers
@@ -89,7 +131,43 @@ class ServiceProcessor:
             self.cpu_executor.shutdown(wait=True)
             self.cpu_executor = None
         
-        self.logger.stage("✅ Service stopped")
+        self.logger.staging("Service stopped")
+    
+    def _convert_pdf_to_markdown(self, pdf_path: Path) -> str:
+        """Convert PDF to markdown using PyMuPDF (real conversion)"""
+        if not fitz:
+            return f"# {pdf_path.name}\n\nPyMuPDF not available - mock content"
+        
+        try:
+            doc = fitz.open(str(pdf_path))
+            page_count = len(doc)
+            
+            # Skip files that are too large
+            if page_count > 100:
+                doc.close()
+                return f"# {pdf_path.name}\n\nSkipped: {page_count} pages (>100 limit)"
+            
+            # Extract text from all pages
+            markdown_content = [f"# {pdf_path.stem}\n"]
+            
+            for page_num in range(page_count):
+                page = doc[page_num]
+                
+                # Use blocks method for fastest extraction
+                blocks = page.get_text("blocks")
+                if blocks:
+                    markdown_content.append(f"\n## Page {page_num + 1}\n")
+                    for block in blocks:
+                        if block[4]:  # Check if block contains text
+                            text = block[4].strip()
+                            if text:
+                                markdown_content.append(text + "\n")
+            
+            doc.close()
+            return '\n'.join(markdown_content)
+            
+        except Exception as e:
+            return f"# {pdf_path.name}\n\nPDF conversion error: {str(e)}"
     
     def _io_worker_ingestion(self, file_paths: List[Path]) -> None:
         """
@@ -104,7 +182,7 @@ class ServiceProcessor:
         # Set thread name for worker tagging
         threading.current_thread().name = "IOWorker-1"
         
-        self.logger.stage(f"📥 I/O worker starting ingestion of {len(file_paths)} files")
+        self.logger.staging(f"I/O worker starting ingestion of {len(file_paths)} files")
         
         for i, file_path in enumerate(file_paths):
             if not self.active:
@@ -113,13 +191,12 @@ class ServiceProcessor:
             ingestion_start = time.perf_counter()
             
             try:
-                self.logger.logger.debug(f"📂 Reading file: {file_path.name}")
+                self.logger.conversion(f"Reading file: {file_path.name}")
                 
-                # Simulate file reading and PDF conversion (I/O bound)
+                # Real file processing (I/O bound)
                 if file_path.suffix.lower() == '.pdf':
-                    self.logger.logger.debug(f"🔄 Converting PDF to markdown: {file_path.name}")
-                    # TODO: Actual PDF conversion logic here
-                    markdown_content = f"# Converted content from {file_path.name}\n\nSample markdown content..."
+                    self.logger.conversion(f"Converting PDF to markdown: {file_path.name}")
+                    markdown_content = self._convert_pdf_to_markdown(file_path)
                 else:
                     # Read text files directly
                     with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
@@ -148,9 +225,9 @@ class ServiceProcessor:
         for _ in range(self.cpu_workers):
             self.work_queue.put(None)  # Sentinel value
         
-        self.logger.stage(f"✅ I/O worker completed ingestion of {len(file_paths)} files")
+        self.logger.staging(f"I/O worker completed ingestion of {len(file_paths)} files")
     
-    def _cpu_worker_processing(self, worker_id: int) -> List[Dict[str, Any]]:
+    def _cpu_worker_processing(self, worker_id: int) -> List[InMemoryDocument]:
         """
         CPU Worker: Handle all CPU-bound operations.
         
@@ -178,21 +255,66 @@ class ServiceProcessor:
                 # Process work item (CPU bound)
                 processing_start = time.perf_counter()
                 
-                self.logger.logger.debug(f"⚙️  Processing entities: {work_item.source_filename}")
+                self.logger.semantics(f"Processing entities: {work_item.source_filename}")
                 
-                # TODO: Actual entity extraction, classification, semantic analysis
-                # This is where the real CPU-intensive work happens
-                processed_result = {
-                    'file_path': str(work_item.file_path),
-                    'source_filename': work_item.source_filename,
-                    'processing_time': time.perf_counter() - processing_start,
-                    'ingestion_time': work_item.metadata.get('conversion_time', 0),
-                    'queue_wait_time': processing_start - work_item.ingestion_time,
-                    'worker_id': worker_id,
-                    'success': True
-                }
+                # Create InMemoryDocument object first
+                result = InMemoryDocument(
+                    source_file_path=str(work_item.file_path),
+                    memory_limit_mb=self.memory_limit_mb
+                )
+                result.markdown_content = work_item.markdown_content
                 
-                results.append(processed_result)
+                # Real entity extraction and classification
+                try:
+                    if self.aho_corasick_engine and self.semantic_extractor:
+                        # Real classification with Aho-Corasick
+                        self.logger.classification(f"Classifying document: {work_item.source_filename}")
+                        classification_result = self.aho_corasick_engine.classify_document(
+                            work_item.markdown_content, 
+                            work_item.source_filename
+                        )
+                        
+                        if classification_result:
+                            result.yaml_frontmatter['classification'] = classification_result
+                            
+                            # Real semantic extraction
+                            self.logger.semantics(f"Extracting semantic facts: {work_item.source_filename}")
+                            semantic_facts = self.semantic_extractor.extract_semantic_facts_from_classification(
+                                classification_result, 
+                                work_item.markdown_content
+                            )
+                            
+                            if semantic_facts:
+                                result.semantic_json = semantic_facts
+                                
+                                # Log entity counts (following Rule #11 format)
+                                global_facts = semantic_facts.get('global_entities', {})
+                                domain_facts = semantic_facts.get('domain_entities', {})
+                                
+                                if global_facts:
+                                    global_counts = [f"{k}:{len(v)}" for k, v in global_facts.items() if v]
+                                    if global_counts:
+                                        self.logger.semantics(f"Global entities: {', '.join(global_counts)}")
+                                
+                                if domain_facts:
+                                    domain_counts = [f"{k}:{len(v)}" for k, v in domain_facts.items() if v]
+                                    if domain_counts:
+                                        self.logger.semantics(f"Domain entities: {', '.join(domain_counts)}")
+                        
+                        result.success = True
+                    else:
+                        # Fallback to mock processing
+                        result.success = True
+                        self.logger.logger.debug(f"⚠️  Using mock processing for {work_item.source_filename}")
+                        
+                except Exception as e:
+                    self.logger.logger.error(f"❌ Entity extraction failed for {work_item.source_filename}: {e}")
+                    result.success = False
+                    result.mark_failed(f"Entity extraction error: {e}")
+                
+                processing_time = time.perf_counter() - processing_start
+                
+                results.append(result)
                 self.logger.logger.debug(f"✅ Completed processing: {work_item.source_filename}")
                 
             except Empty:
@@ -204,19 +326,19 @@ class ServiceProcessor:
         self.logger.logger.debug(f"🏁 CPU worker {worker_id} finished: {len(results)} items processed")
         return results
     
-    def process_files_service(self, file_paths: List[Path]) -> tuple[List[Dict[str, Any]], float]:
+    def process_files_service(self, file_paths: List[Path], output_dir: Path = None) -> tuple[List[InMemoryDocument], float]:
         """
         Process files using clean I/O + CPU service architecture.
         
         Returns:
-            Tuple of (results_list, total_processing_time)
+            Tuple of (in_memory_documents_list, total_processing_time)
         """
         if not self.active:
             self.start_service()
         
         total_start = time.perf_counter()
         
-        self.logger.stage(f"🚀 Processing {len(file_paths)} files with I/O + CPU service")
+        self.logger.staging(f"Processing {len(file_paths)} files with I/O + CPU service")
         
         # Start I/O worker thread
         io_thread = threading.Thread(
@@ -234,7 +356,7 @@ class ServiceProcessor:
         
         # Wait for I/O completion
         io_thread.join()
-        self.logger.stage("✅ I/O ingestion completed")
+        self.logger.staging("I/O ingestion completed")
         
         # Collect CPU results
         all_results = []
@@ -245,9 +367,54 @@ class ServiceProcessor:
         
         total_time = time.perf_counter() - total_start
         
-        self.logger.stage(f"✅ Service processing complete: {len(all_results)} results in {total_time:.2f}s")
+        self.logger.staging(f"Service processing complete: {len(all_results)} results in {total_time:.2f}s")
+        
+        # Write files to disk (WRITER-IO phase)
+        if all_results:
+            self._write_results_to_disk(all_results, output_dir or Path.cwd())
         
         return all_results, total_time
+    
+    def _write_results_to_disk(self, results: List[InMemoryDocument], output_dir: Path):
+        """WRITER-IO phase: Write processed documents to disk"""
+        # Set thread name for I/O worker attribution 
+        original_name = threading.current_thread().name
+        threading.current_thread().name = "IOWorker-1"
+        
+        try:
+            successful_writes = 0
+            
+            for doc in results:
+                if doc.success and doc.markdown_content:
+                    try:
+                        # Write markdown file
+                        md_filename = f"{doc.source_stem}.md"
+                        md_path = output_dir / md_filename
+                        
+                        self.logger.writer(f"Writing markdown: {md_filename}")
+                        with open(md_path, 'w', encoding='utf-8') as f:
+                            f.write(doc.markdown_content)
+                        
+                        # Write JSON knowledge file if we have semantic data
+                        if doc.semantic_json:
+                            json_filename = f"{doc.source_stem}.json"
+                            json_path = output_dir / json_filename
+                            
+                            self.logger.writer(f"Writing JSON knowledge: {json_filename}")
+                            import json
+                            with open(json_path, 'w', encoding='utf-8') as f:
+                                json.dump(doc.semantic_json, f, indent=2)
+                        
+                        successful_writes += 1
+                        
+                    except Exception as e:
+                        self.logger.logger.error(f"❌ Failed to write {doc.source_filename}: {e}")
+            
+            self.logger.writer(f"Saved {successful_writes} files to {output_dir}")
+            
+        finally:
+            # Restore original thread name
+            threading.current_thread().name = original_name
 
 
 if __name__ == "__main__":
