@@ -693,13 +693,31 @@ class SemanticFactExtractor:
             person_name = entity.get('value', '')
             self.logger.logger.debug(f"✅ Creating semantic fact for validated person: '{person_name}'")
             
-            # Extract additional context for the person
+            # Extract role and organization using improved comprehensive extraction
+            try:
+                from knowledge.extractors.comprehensive_entity_extractor import ComprehensiveEntityExtractor
+                comprehensive_extractor = ComprehensiveEntityExtractor()
+                
+                # Use improved role extraction that handles transitional connectors
+                extracted_role = comprehensive_extractor._extract_role_from_context(context, person_name)
+                extracted_org = comprehensive_extractor._extract_organization_from_context(context)
+                
+                # Use extracted values or fall back to entity values
+                person_role = extracted_role or entity.get('role')
+                person_org = extracted_org or entity.get('organization')
+                
+            except Exception as e:
+                self.logger.logger.debug(f"Fallback to basic role extraction: {e}")
+                person_role = entity.get('role')
+                person_org = entity.get('organization')
+            
+            # Extract context for the person
             person_context = self._extract_role_context_from_person(entity, context)
             
             base_data.update({
                 'person_name': person_name,
-                'person_role': entity.get('role'),  # May come from enrichment
-                'person_organization': entity.get('organization'),  # May come from enrichment
+                'person_role': person_role,  # Now uses improved extraction
+                'person_organization': person_org,  # Now uses improved extraction
                 'person_context': person_context
             })
         elif entity_type == 'organization':

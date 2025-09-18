@@ -118,6 +118,16 @@ class PersonEntityExtractor:
             'airbnb', 'spotify', 'slack', 'zoom', 'adobe'
         }
         
+        # Job titles that are also legitimate names - filter out when used as titles
+        self.JOB_TITLE_NAMES = {
+            'chief', 'executive', 'officer', 'director', 'president',
+            'manager', 'supervisor', 'coordinator', 'administrator',
+            'secretary', 'treasurer', 'chairman', 'chairwoman',
+            'vice', 'assistant', 'deputy', 'senior', 'junior',
+            'lead', 'head', 'principal', 'captain', 'major',
+            'general', 'colonel', 'lieutenant', 'sergeant'
+        }
+        
     def _init_patterns(self):
         """Initialize regex patterns for person detection"""
         
@@ -263,6 +273,61 @@ class PersonEntityExtractor:
                 candidate.evidence.append('ambiguous_common_word')
                 return True
                 
+        # Check for job title sequences (e.g., "Chief Executive Officer")
+        if self._is_job_title_sequence(candidate):
+            candidate.evidence.append('job_title_sequence')
+            return True
+                
+        return False
+    
+    def _is_job_title_sequence(self, candidate: PersonCandidate) -> bool:
+        """Check if candidate is a sequence of job title words"""
+        tokens_lower = [t.lower() for t in candidate.tokens]
+        
+        # Exact matches for known job title sequences (most specific first)
+        title_sequences = [
+            ['chief', 'executive', 'officer'],
+            ['chief', 'financial', 'officer'], 
+            ['chief', 'technology', 'officer'],
+            ['chief', 'operating', 'officer'],
+            ['chief', 'information', 'officer'],
+            ['chief', 'marketing', 'officer'],
+            ['vice', 'president', 'of', 'operations'],
+            ['vice', 'president', 'of', 'engineering'],
+            ['vice', 'president', 'of', 'marketing'],
+            ['senior', 'vice', 'president'],
+            ['executive', 'vice', 'president'],
+            ['deputy', 'chief', 'executive'],
+            ['assistant', 'deputy', 'director']
+        ]
+        
+        # Check for exact title sequence matches
+        for sequence in title_sequences:
+            if tokens_lower == sequence:
+                return True
+        
+        # For patterns like "Title + Name", check if it starts with obvious title word
+        # but allow historical/famous names (like "President Lincoln")
+        if len(tokens_lower) == 2:
+            first_word = tokens_lower[0]
+            second_word = tokens_lower[1]
+            
+            # Check if it's "Title + Title" pattern (like "Vice President")
+            if first_word in self.JOB_TITLE_NAMES and second_word in self.JOB_TITLE_NAMES:
+                return True
+                
+            # For "Title + Name" pattern, be more permissive - allow historical names
+            # Only filter out obvious title-only patterns
+            historical_names = {'lincoln', 'washington', 'jefferson', 'roosevelt', 'kennedy'}
+            if first_word in self.JOB_TITLE_NAMES and second_word not in historical_names:
+                # Check if second word looks like a real name (in name corpus)
+                has_first_name = second_word in self.first_names
+                has_last_name = second_word in self.last_names
+                
+                # If second word is not in name corpus, it's likely a title
+                if not (has_first_name or has_last_name):
+                    return True
+                    
         return False
     
     def _is_likely_organization(self, candidate: PersonCandidate) -> bool:

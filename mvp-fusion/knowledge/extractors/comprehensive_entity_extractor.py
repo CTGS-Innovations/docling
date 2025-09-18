@@ -114,65 +114,97 @@ class ComprehensiveEntityExtractor:
     Maximizes information extraction from any document
     """
     
+    # Class-level cache for name dictionaries to prevent repeated loading
+    _cached_first_names = None
+    _cached_last_names = None
+    _cached_organizations = None
+    _cache_initialized = False
+    
     def __init__(self, config: Optional[Dict] = None):
         self.logger = get_fusion_logger(__name__)
         # All patterns use FLPC Rust regex for performance
         self._initialize_patterns()
         
-        # Initialize conservative person extractor
+        # Initialize conservative person extractor with caching
         self.person_extractor = None
         if CONSERVATIVE_PERSON_AVAILABLE:
             try:
-                # Try to load with corpus configuration
+                # Initialize corpus cache if not already done
+                self._initialize_name_cache(config)
+                
                 corpus_config = config.get('corpus', {}) if config else {}
                 
-                # Load corpus files if paths are provided
-                first_names_path = corpus_config.get('first_names_path')
-                last_names_path = corpus_config.get('last_names_path')
-                organizations_path = corpus_config.get('organizations_path')
+                # Create PersonEntityExtractor without loading files (we'll inject cached data)
+                self.person_extractor = PersonEntityExtractor(min_confidence=corpus_config.get('person_min_confidence', 0.7))
                 
-                # Convert string paths to Path objects
-                first_names_path = Path(first_names_path) if first_names_path else None
-                last_names_path = Path(last_names_path) if last_names_path else None
-                organizations_path = Path(organizations_path) if organizations_path else None
-                
-                self.person_extractor = PersonEntityExtractor(
-                    first_names_path=first_names_path,
-                    last_names_path=last_names_path,  
-                    organizations_path=organizations_path,
-                    min_confidence=corpus_config.get('person_min_confidence', 0.7)
-                )
-                
-                # Load default corpus if no paths provided
-                if not any([first_names_path, last_names_path]):
-                    self._load_default_corpus()
+                # Inject cached name dictionaries
+                self.person_extractor.first_names = self._cached_first_names or set()
+                self.person_extractor.last_names = self._cached_last_names or set()
+                self.person_extractor.organizations = self._cached_organizations or set()
                     
-                self.logger.logger.debug("✅ Conservative person extractor initialized")
+                self.logger.logger.debug("✅ Conservative person extractor initialized with cached dictionaries")
             except Exception as e:
                 self.logger.logger.warning(f"⚠️ Could not initialize conservative person extractor: {e}")
                 self.person_extractor = None
     
-    def _load_default_corpus(self):
-        """Load default corpus from foundation data files"""
+    @classmethod
+    def _initialize_name_cache(cls, config: Optional[Dict] = None):
+        """Initialize class-level name dictionary cache (loads only once)"""
+        if cls._cache_initialized:
+            return
+            
         try:
-            base_dir = Path(__file__).parent.parent / 'corpus' / 'foundation_data'
+            corpus_config = config.get('corpus', {}) if config else {}
             
-            # Load first names
-            first_names_file = base_dir / 'first_names_top.txt'
-            if first_names_file.exists():
-                with open(first_names_file, 'r') as f:
-                    self.person_extractor.first_names = {line.strip().lower() for line in f if line.strip()}
-                self.logger.logger.debug(f"Loaded {len(self.person_extractor.first_names)} first names")
+            # Try to load from configured paths first
+            first_names_path = corpus_config.get('first_names_path')
+            last_names_path = corpus_config.get('last_names_path')
+            organizations_path = corpus_config.get('organizations_path')
             
-            # Load last names  
-            last_names_file = base_dir / 'last_names_top.txt'
-            if last_names_file.exists():
-                with open(last_names_file, 'r') as f:
-                    self.person_extractor.last_names = {line.strip().lower() for line in f if line.strip()}
-                self.logger.logger.debug(f"Loaded {len(self.person_extractor.last_names)} last names")
+            if first_names_path and Path(first_names_path).exists():
+                with open(first_names_path, 'r') as f:
+                    cls._cached_first_names = {line.strip().lower() for line in f if line.strip()}
+            elif not first_names_path:
+                # Load default first names
+                base_dir = Path(__file__).parent.parent / 'corpus' / 'foundation_data'
+                first_names_file = base_dir / 'first_names_top.txt'
+                if first_names_file.exists():
+                    with open(first_names_file, 'r') as f:
+                        cls._cached_first_names = {line.strip().lower() for line in f if line.strip()}
+                        
+            if last_names_path and Path(last_names_path).exists():
+                with open(last_names_path, 'r') as f:
+                    cls._cached_last_names = {line.strip().lower() for line in f if line.strip()}
+            elif not last_names_path:
+                # Load default last names
+                base_dir = Path(__file__).parent.parent / 'corpus' / 'foundation_data'
+                last_names_file = base_dir / 'last_names_top.txt'
+                if last_names_file.exists():
+                    with open(last_names_file, 'r') as f:
+                        cls._cached_last_names = {line.strip().lower() for line in f if line.strip()}
+                        
+            if organizations_path and Path(organizations_path).exists():
+                with open(organizations_path, 'r') as f:
+                    cls._cached_organizations = {line.strip().lower() for line in f if line.strip()}
+            else:
+                cls._cached_organizations = set()  # Default empty set
+                
+            # Mark cache as initialized
+            cls._cache_initialized = True
+            
+            # Log cache loading (only once)
+            logger = get_fusion_logger(__name__)
+            if cls._cached_first_names:
+                logger.logger.debug(f"📚 Cached {len(cls._cached_first_names)} first names (loaded once)")
+            if cls._cached_last_names:
+                logger.logger.debug(f"📚 Cached {len(cls._cached_last_names)} last names (loaded once)")
+            if cls._cached_organizations:
+                logger.logger.debug(f"📚 Cached {len(cls._cached_organizations)} organizations (loaded once)")
                 
         except Exception as e:
-            self.logger.logger.warning(f"Could not load default corpus: {e}")
+            logger = get_fusion_logger(__name__)
+            logger.logger.warning(f"Could not initialize name cache: {e}")
+            cls._cache_initialized = True  # Mark as initialized to prevent retries
     
     def _clean_context(self, context: str) -> str:
         """Clean context text by normalizing whitespace, removing line breaks, and handling unicode"""
@@ -1226,45 +1258,61 @@ class ComprehensiveEntityExtractor:
         """
         context_lower = context.lower()
         
-        # Common role patterns - look for these near the person's name
+        # Universal role patterns with transitional connectors - works across all domains
         role_patterns = [
-            # Executive roles
-            r'(?:chief|senior|executive|deputy|assistant)\s+(?:executive\s+officer|officer|manager|director)',
-            r'(?:president|ceo|cto|cfo|coo|chairman|chairwoman)',
+            # Universal title pattern with "of/for/in/at" connectors
+            r'(?P<title>\w+(?:\s+\w+){0,3})(?:\s+(?:of|for|in|at)\s+(?P<department>\w+(?:\s+\w+){0,3}))',
             
-            # Management roles  
-            r'(?:director|manager|supervisor|superintendent|foreman|lead|coordinator)',
-            r'(?:project|site|safety|operations|quality|plant)\s+(?:manager|director|supervisor)',
+            # C-level and executive roles (universal across industries)
+            r'(?:chief|senior|executive|deputy|assistant|associate|junior)\s+\w+(?:\s+\w+){0,2}',
+            r'(?:president|ceo|cto|cfo|coo|cmo|ciso|chairman|chairwoman|chairperson)',
             
-            # Professional titles
-            r'(?:engineer|inspector|specialist|analyst|consultant|advisor|representative)',
-            r'(?:safety|compliance|risk|quality|environmental)\s+(?:engineer|inspector|specialist|officer)',
+            # Universal management/leadership roles
+            r'(?:director|manager|supervisor|head|lead|coordinator|administrator)(?:\s+of\s+\w+(?:\s+\w+){0,2})?',
+            r'(?:vice\s+president|vp|evp|svp)(?:\s+of\s+\w+(?:\s+\w+){0,2})?',
             
-            # Government/regulatory roles
-            r'(?:administrator|commissioner|secretary|assistant\s+secretary|deputy)',
-            r'(?:compliance|enforcement|regulatory)\s+(?:officer|specialist|inspector)',
+            # Domain-flexible professional titles
+            r'(?:\w+)\s+(?:engineer|scientist|researcher|developer|designer|architect|specialist|analyst|consultant)',
+            r'(?:\w+)\s+(?:officer|inspector|investigator|examiner|auditor|advisor|strategist)',
             
-            # Worker classifications
-            r'(?:contractor|subcontractor|employee|worker|operator|technician)',
-            r'(?:construction|maintenance|production|assembly)\s+(?:worker|operator|technician)'
+            # Academic/Research roles (for education domain)
+            r'(?:professor|lecturer|dean|provost|researcher|fellow)(?:\s+of\s+\w+(?:\s+\w+){0,2})?',
+            r'(?:principal\s+investigator|postdoc|research\s+assistant|teaching\s+assistant)',
+            
+            # Healthcare/Medical roles (for healthcare domain)
+            r'(?:doctor|physician|surgeon|nurse|therapist|technician)(?:\s+of\s+\w+(?:\s+\w+){0,2})?',
+            r'(?:medical\s+director|chief\s+of\s+\w+|head\s+of\s+\w+)',
+            
+            # Legal/Financial roles (for legal/finance domains)
+            r'(?:attorney|lawyer|counsel|partner|associate)(?:\s+at\s+\w+(?:\s+\w+){0,2})?',
+            r'(?:banker|trader|broker|advisor|accountant|auditor)(?:\s+at\s+\w+(?:\s+\w+){0,2})?',
+            
+            # Creative/Media roles (for media/entertainment domains)
+            r'(?:editor|writer|producer|director|designer|artist)(?:\s+(?:of|for|at)\s+\w+(?:\s+\w+){0,2})?',
+            r'(?:journalist|reporter|correspondent|anchor|host)',
+            
+            # Universal pattern: [Person] as [Role] at/with/for [Organization]
+            r'(?:as|serves\s+as|works\s+as|acting)\s+(?P<role>\w+(?:\s+\w+){0,3})',
+            r'(?P<role>\w+(?:\s+\w+){0,3})(?:\s+at|\s+with|\s+for)\s+(?P<org>\w+(?:\s+\w+){0,2})'
         ]
         
-        # Look for role patterns in context
+        # Look for role patterns in context (use original case for better extraction)
         for pattern in role_patterns:
-            matches = re.finditer(pattern, context_lower)
+            matches = re.finditer(pattern, context, re.IGNORECASE)
             for match in matches:
                 # Check if role is reasonably close to person name (within 50 characters)
-                role_pos = match.start()
-                person_pos = context_lower.find(person_name.lower())
+                role_pos = match.start(0)  # Use group 0 (full match) position
+                person_pos = context.lower().find(person_name.lower())
                 
                 if person_pos != -1 and abs(role_pos - person_pos) <= 50:
-                    role = match.group(0)
+                    # Get the full matched role text (preserves "of Engineering" etc.)
+                    role = match.group(0).strip()
                     # Clean up and capitalize properly
                     return ' '.join(word.capitalize() for word in role.split())
         
-        # Look for simpler role indicators
-        simple_roles = ['director', 'manager', 'supervisor', 'inspector', 'worker', 'contractor', 
-                       'president', 'ceo', 'administrator', 'officer', 'engineer', 'specialist']
+        # Only use simple role indicators as last resort fallback
+        # (Complex patterns should have already matched "Director of Engineering" etc.)
+        simple_roles = ['worker', 'contractor', 'employee', 'intern', 'assistant']
         
         for role in simple_roles:
             if role in context_lower:
