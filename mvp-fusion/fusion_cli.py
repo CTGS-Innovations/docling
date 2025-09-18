@@ -24,6 +24,7 @@ import tempfile
 
 # Import our centralized logging configuration
 from utils.logging_config import setup_logging, get_fusion_logger
+from utils.deployment_manager import DeploymentManager
 
 
 class ConversionSuccess:
@@ -344,8 +345,8 @@ def process_single_url(extractor: BaseExtractor, url: str, output_dir: Path = No
                 from pipeline.fusion_pipeline import FusionPipeline
                 pipeline = FusionPipeline(config)
             
-            # Process single file through complete pipeline
-            batch_result = pipeline.process_files(extractor, [temp_path], output_dir or Path.cwd(), max_workers=1)
+            # Process single file through complete pipeline (use configured workers even for single files)
+            batch_result = pipeline.process_files(extractor, [temp_path], output_dir or Path.cwd(), max_workers=max_workers)
             if len(batch_result) == 3:
                 results, extraction_time, resource_summary = batch_result
             else:
@@ -477,8 +478,9 @@ def process_url_file(extractor: BaseExtractor, url_file_path: Path, output_dir: 
     results = []
     start_time = time.time()
     
-    # Get parallel processing configuration
-    max_workers = config.get('performance', {}).get('max_workers', 2)
+    # Get parallel processing configuration from deployment manager
+    deployment_manager = DeploymentManager(config)
+    max_workers = deployment_manager.get_max_workers()
     
     # Process URLs in parallel using ThreadPoolExecutor (same pattern as file processing)
     from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -844,6 +846,11 @@ Examples:
     parser.add_argument('--workers', '-w', type=int, 
                        help='Workers (cores): 1=524 p/s, 4=2014 p/s, 8=3454 p/s (sweet spot), 16=4160 p/s')
     parser.add_argument('--memory-limit', type=int, help='Memory limit in GB')
+    parser.add_argument('--profile', '-p', type=str,
+                       choices=['local', 'cloudflare', 'aws', 'gcp', 'docker', 'disabled'],
+                       help='Deployment profile: local, cloudflare, aws, gcp, docker, disabled')
+    parser.add_argument('--list-profiles', action='store_true',
+                       help='List all available deployment profiles and exit')
     parser.add_argument('--extractor', '-e', type=str,
                        choices=['highspeed_markdown_general', 'highaccuracy_markdown_general', 
                                'highspeed_json_pdf', 'specialized_markdown_legal'],
@@ -881,6 +888,25 @@ Examples:
     
     # Load base configuration first to get logging defaults
     config = _load_and_override_config(args)
+    
+    # Handle profile listing (early exit)
+    if args.list_profiles:
+        print("🚀 Available Deployment Profiles:")
+        print("=" * 60)
+        profiles = DeploymentManager.list_available_profiles(config)
+        for profile_name, profile_info in profiles.items():
+            status = "✅ Enabled" if profile_info['enabled'] else "❌ Disabled"
+            print(f"\n📦 {profile_name.upper()}")
+            print(f"   Name: {profile_info['name']}")
+            print(f"   Description: {profile_info['description']}")
+            print(f"   Workers: {profile_info['max_workers']}")
+            print(f"   Memory: {profile_info['memory_mb']}MB" if isinstance(profile_info['memory_mb'], int) else f"   Memory: {profile_info['memory_mb']}")
+            print(f"   Status: {status}")
+        
+        current_profile = config.get('deployment', {}).get('active_profile', 'local')
+        print(f"\n🔧 Current Active Profile: {current_profile}")
+        print(f"\n💡 Usage: python fusion_cli.py --profile {current_profile} [other options]")
+        sys.exit(0)
     
     # Setup logging with proper verbosity levels
     # Priority: CLI flags > config file > defaults
@@ -922,11 +948,22 @@ Examples:
             'page_limit': config.get('performance', {}).get('page_limit', 100)
         }
         extractor = create_extractor(extractor_name, extractor_config)
-        max_workers = args.workers or config.get('performance', {}).get('max_workers', 2)
+        
+        # Initialize deployment manager with optional profile override
+        deployment_manager = DeploymentManager(config, args.profile)
+        max_workers = deployment_manager.get_max_workers(args.workers)
         
         logger.stage(f"🔧 MVP-Fusion Engine: {extractor.name}")
         logger.stage(f"⚡ Performance: {extractor.description}")
         logger.stage(f"🔧 Workers: {max_workers} | Formats: {len(extractor.get_supported_formats())}")
+        
+        # Display deployment profile summary
+        profile_summary = deployment_manager.get_profile_summary()
+        if profile_summary['memory_management_enabled']:
+            memory_info = f" | Memory: {profile_summary['memory_limit_mb']}MB" if profile_summary['memory_limit_mb'] else " | Memory: Unlimited"
+        else:
+            memory_info = " | Memory Management: Disabled"
+        logger.stage(f"🚀 Profile: {profile_summary['name']}{memory_info}")
         
         # Determine output directory
         output_dir = None
@@ -950,8 +987,8 @@ Examples:
             from pipeline.fusion_pipeline import FusionPipeline
             pipeline = FusionPipeline(config)
             
-            # Process single file through complete pipeline
-            batch_result = pipeline.process_files(extractor, [file_path], output_dir or Path.cwd(), max_workers=1)
+            # Process single file through complete pipeline (use configured workers even for single files)
+            batch_result = pipeline.process_files(extractor, [file_path], output_dir or Path.cwd(), max_workers=max_workers)
             if len(batch_result) == 3:
                 results, extraction_time, resource_summary = batch_result
             else:

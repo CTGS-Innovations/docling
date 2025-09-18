@@ -119,6 +119,7 @@ class ComprehensiveEntityExtractor:
     _cached_last_names = None
     _cached_organizations = None
     _cache_initialized = False
+    _cache_logged = False  # Track if cache loading has been logged
     
     def __init__(self, config: Optional[Dict] = None):
         self.logger = get_fusion_logger(__name__)
@@ -142,7 +143,10 @@ class ComprehensiveEntityExtractor:
                 self.person_extractor.last_names = self._cached_last_names or set()
                 self.person_extractor.organizations = self._cached_organizations or set()
                     
-                self.logger.logger.debug("✅ Conservative person extractor initialized with cached dictionaries")
+                # Log only once per class, not per worker
+                if not hasattr(ComprehensiveEntityExtractor, '_initialization_logged'):
+                    self.logger.logger.debug("✅ Conservative person extractor initialized with cached dictionaries")
+                    ComprehensiveEntityExtractor._initialization_logged = True
             except Exception as e:
                 self.logger.logger.warning(f"⚠️ Could not initialize conservative person extractor: {e}")
                 self.person_extractor = None
@@ -192,14 +196,16 @@ class ComprehensiveEntityExtractor:
             # Mark cache as initialized
             cls._cache_initialized = True
             
-            # Log cache loading (only once)
+            # Log cache loading (only once across all workers)
             logger = get_fusion_logger(__name__)
-            if cls._cached_first_names:
-                logger.logger.debug(f"📚 Cached {len(cls._cached_first_names)} first names (loaded once)")
-            if cls._cached_last_names:
-                logger.logger.debug(f"📚 Cached {len(cls._cached_last_names)} last names (loaded once)")
-            if cls._cached_organizations:
-                logger.logger.debug(f"📚 Cached {len(cls._cached_organizations)} organizations (loaded once)")
+            if not cls._cache_logged:
+                if cls._cached_first_names:
+                    logger.logger.debug(f"📚 Cached {len(cls._cached_first_names)} first names (loaded once)")
+                if cls._cached_last_names:
+                    logger.logger.debug(f"📚 Cached {len(cls._cached_last_names)} last names (loaded once)")
+                if cls._cached_organizations:
+                    logger.logger.debug(f"📚 Cached {len(cls._cached_organizations)} organizations (loaded once)")
+                cls._cache_logged = True
                 
         except Exception as e:
             logger = get_fusion_logger(__name__)
@@ -822,7 +828,10 @@ class ComprehensiveEntityExtractor:
         if global_entities:
             self.logger.logger.debug("🎯 ENRICHMENT MODE: Enriching global entities with domain context...")
         else:
-            self.logger.logger.debug("⚠️ FALLBACK MODE: No global entities provided, extracting all entities...")
+            # Log extraction mode only once per class to reduce spam
+            if not hasattr(ComprehensiveEntityExtractor, '_extraction_logged'):
+                self.logger.logger.debug("🔍 FULL EXTRACTION MODE: No global entities provided, extracting all entities from scratch")
+                ComprehensiveEntityExtractor._extraction_logged = True
         
         # ENRICHMENT: Process global entities if provided
         enriched_people = []
@@ -925,8 +934,12 @@ class ComprehensiveEntityExtractor:
                 ],
                 'people': [
                     {
-                        **{"name": self._clean_context(p.full_name)},
-                        **({"role": p.role} if p.role else {})
+                        'value': self._clean_context(p.full_name),
+                        'text': self._clean_context(p.full_name),
+                        'type': 'PERSON',
+                        'span': {'start': 0, 'end': len(p.full_name)},  # Approximate span
+                        **({"role": p.role} if p.role else {}),
+                        **({"organization": p.organization} if p.organization else {})
                     }
                     for p in all_entities['people']
                 ],

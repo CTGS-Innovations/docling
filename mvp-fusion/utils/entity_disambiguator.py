@@ -53,6 +53,9 @@ class EntityDisambiguator:
     5. High-confidence scoring based on corpus matches + context
     """
     
+    # Class variable to control "once per class" logging
+    _validation_logged = False
+    
     def __init__(self, corpus_dir: Optional[Path] = None):
         self.logger = get_fusion_logger(__name__)
         
@@ -197,8 +200,10 @@ class EntityDisambiguator:
             elif org_details.get('company_type'):
                 entity_subtype = org_details['company_type'].upper()
             
-            self.logger.entity(f"🔍 Corpus validation for '{entity_text}': "
-                             f"Person={person_confidence:.2f}, Org={org_confidence:.2f}")
+            # "Once per class" validation logging to reduce spam
+            if not EntityDisambiguator._validation_logged:
+                self.logger.entity(f"🔍 Corpus validation active: Person vs Org disambiguation")
+                EntityDisambiguator._validation_logged = True
         
         # Enhance with contextual clues
         lower_context = context.sentence.lower()
@@ -310,8 +315,7 @@ class EntityDisambiguator:
             elif org_details.get('is_known_company'):
                 entity_subtype = 'CORPORATION'
             
-            self.logger.entity(f"🔍 Corpus validation for '{entity_text}': "
-                             f"Org={org_confidence:.2f}, Person={person_confidence:.2f}")
+            # Validation logging already shown once per class instance
         
         # Enhance with contextual patterns
         lower_context = context.sentence.lower()

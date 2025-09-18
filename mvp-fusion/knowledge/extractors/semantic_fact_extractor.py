@@ -28,9 +28,11 @@ from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
 import json
+import time
 import yaml
 import sys
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Import centralized logging
 sys.path.append(str(Path(__file__).parent.parent.parent))
@@ -612,31 +614,77 @@ class SemanticFactExtractor:
         
         return normalized
     
+    def _process_person_entity_parallel(self, entity: Dict, entity_type: str, markdown_content: str, worker_id: int) -> Optional[Dict]:
+        """Process a single person entity with worker tracking"""
+        from utils.worker_utils import set_worker_id
+        set_worker_id(f"Person-{worker_id}")
+        
+        return self._create_dynamic_semantic_fact(entity_type, entity, markdown_content)
+    
     def _promote_yaml_entities_to_facts(self, existing_entities: Dict, markdown_content: str) -> Dict[str, List]:
         """Dynamic promotion of any YAML entities to structured semantic facts"""
         promoted_facts = {}
         
-        self.logger.logger.debug(f"🔄 Dynamically promoting entities: {list(existing_entities.keys())}")
+        # Collect entity counts for structured logging
+        entity_counts = {}
         
         for entity_type, entities in existing_entities.items():
             if not isinstance(entities, list):
                 continue
-                
-            self.logger.logger.debug(f"   Processing {entity_type}: {len(entities)} entities")
+            
+            if len(entities) > 0:
+                entity_counts[entity_type] = len(entities)
             promoted_facts[entity_type] = []
             
-            for entity in entities:
-                if isinstance(entity, dict):
-                    # Create semantic fact based on entity type
-                    semantic_fact = self._create_dynamic_semantic_fact(entity_type, entity, markdown_content)
-                    if semantic_fact:  # Only add non-None facts
-                        promoted_facts[entity_type].append(semantic_fact)
-                    elif entity_type == 'person':
-                        # Log rejected person entities for visibility
-                        self.logger.logger.debug(f"🚫 Filtered out false person: '{entity.get('value', 'unknown')}'")
+            # Use parallel processing for person entities to improve performance
+            if entity_type == 'person' and len(entities) > 4:  # Only parallelize if worth the overhead
+                person_start_time = time.perf_counter()
+                max_workers = min(4, len(entities))  # Cap at 4 workers for person processing
+                self.logger.logger.debug(f"🔧 Using {max_workers} parallel workers for {len(entities)} person entities")
+                
+                with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                    # Submit all person entity processing tasks
+                    future_to_entity = {}
+                    for i, entity in enumerate(entities):
+                        if isinstance(entity, dict):
+                            worker_id = (i % max_workers) + 1
+                            future = executor.submit(self._process_person_entity_parallel, entity, entity_type, markdown_content, worker_id)
+                            future_to_entity[future] = entity
+                    
+                    # Collect results as they complete
+                    for future in as_completed(future_to_entity):
+                        entity = future_to_entity[future]
+                        try:
+                            semantic_fact = future.result()
+                            if semantic_fact:
+                                promoted_facts[entity_type].append(semantic_fact)
+                            else:
+                                # Log rejected person entities for visibility
+                                self.logger.logger.debug(f"🚫 Filtered out false person: '{entity.get('value', 'unknown')}'")
+                        except Exception as e:
+                            self.logger.logger.warning(f"⚠️ Error processing person entity {entity.get('value', 'unknown')}: {e}")
+                
+                person_duration = (time.perf_counter() - person_start_time) * 1000
+                self.logger.logger.debug(f"✅ Parallel person processing completed in {person_duration:.1f}ms ({len(entities)} entities)")
+            else:
+                # Sequential processing for non-person entities or small person lists
+                for entity in entities:
+                    if isinstance(entity, dict):
+                        # Create semantic fact based on entity type
+                        semantic_fact = self._create_dynamic_semantic_fact(entity_type, entity, markdown_content)
+                        if semantic_fact:  # Only add non-None facts
+                            promoted_facts[entity_type].append(semantic_fact)
+                        elif entity_type == 'person':
+                            # Log rejected person entities for visibility
+                            self.logger.logger.debug(f"🚫 Filtered out false person: '{entity.get('value', 'unknown')}'")
         
         # Remove empty fact type lists
         promoted_facts = {k: v for k, v in promoted_facts.items() if v}
+        
+        # Structured entity logging - one line summary
+        if entity_counts:
+            entity_summary = ", ".join([f"{entity_type}:{count}" for entity_type, count in entity_counts.items()])
+            self.logger.logger.debug(f"📊 Global entities: {entity_summary}")
         
         total_promoted = sum(len(facts) for facts in promoted_facts.values())
         self.logger.entity(f"✅ Total facts promoted: {total_promoted}")
@@ -659,9 +707,15 @@ class SemanticFactExtractor:
     
     def _create_dynamic_semantic_fact(self, entity_type: str, entity: Dict, context: str) -> Optional[Dict]:
         """Create semantic fact dynamically based on entity type"""
+        # EFFICIENCY: Early validation - check if entity has valid content before expensive processing
+        raw_value = entity.get('value', entity.get('text', ''))
+        if not raw_value or not raw_value.strip():
+            # Skip logging for clearly empty entities - no need to spam logs
+            return None
+            
         # Apply universal text cleaning to all text fields
-        raw_text = self._universal_text_clean(entity.get('value', entity.get('text', '')))
-        canonical_name = self._universal_text_clean(self._get_canonical_name(entity.get('value', ''), entity_type))
+        raw_text = self._universal_text_clean(raw_value)
+        canonical_name = self._universal_text_clean(self._get_canonical_name(raw_value, entity_type))
         
         base_data = {
             'fact_type': f"{entity_type.title()}Fact",
@@ -691,20 +745,49 @@ class SemanticFactExtractor:
         elif entity_type == 'person':
             # Process person entities that have already been validated
             person_name = entity.get('value', '')
-            self.logger.logger.debug(f"✅ Creating semantic fact for validated person: '{person_name}'")
+            person_start_time = time.perf_counter()
+            from utils.worker_utils import get_worker_prefix
+            self.logger.logger.debug(f"{get_worker_prefix()} ✅ Creating semantic fact for validated person: '{person_name}'")
             
-            # Extract role and organization using improved comprehensive extraction
+            # Extract role and organization efficiently - use existing data first
             try:
-                from knowledge.extractors.comprehensive_entity_extractor import ComprehensiveEntityExtractor
-                comprehensive_extractor = ComprehensiveEntityExtractor()
+                t1 = time.perf_counter()
                 
-                # Use improved role extraction that handles transitional connectors
-                extracted_role = comprehensive_extractor._extract_role_from_context(context, person_name)
-                extracted_org = comprehensive_extractor._extract_organization_from_context(context)
+                # EFFICIENCY RULE: Use existing entity data first (already extracted via FLPC)
+                person_role = entity.get('role')
+                person_org = entity.get('organization')
                 
-                # Use extracted values or fall back to entity values
-                person_role = extracted_role or entity.get('role')
-                person_org = extracted_org or entity.get('organization')
+                # Only do expensive re-extraction if data is missing
+                if not person_role or not person_org:
+                    # Use singleton comprehensive extractor for missing data only
+                    if not hasattr(self, '_comprehensive_extractor'):
+                        from knowledge.extractors.comprehensive_entity_extractor import ComprehensiveEntityExtractor
+                        self._comprehensive_extractor = ComprehensiveEntityExtractor()
+                    comprehensive_extractor = self._comprehensive_extractor
+                    
+                    t2 = time.perf_counter()
+                    
+                    # Only extract missing role
+                    if not person_role:
+                        extracted_role = comprehensive_extractor._extract_role_from_context(context, person_name)
+                        person_role = extracted_role
+                        
+                    # Only extract missing organization  
+                    if not person_org:
+                        extracted_org = comprehensive_extractor._extract_organization_from_context(context)
+                        person_org = extracted_org
+                        
+                    t3 = time.perf_counter()
+                    
+                    # Log only when expensive re-extraction occurs
+                    reextraction_time = (t3 - t2) * 1000
+                    if reextraction_time > 10:
+                        self.logger.logger.debug(f"🔍 '{person_name}' re-extraction: {reextraction_time:.1f}ms (missing data)")
+                else:
+                    # Log efficient path
+                    efficient_time = (time.perf_counter() - t1) * 1000
+                    if efficient_time < 1:
+                        self.logger.logger.debug(f"⚡ '{person_name}' used existing data: {efficient_time:.2f}ms")
                 
             except Exception as e:
                 self.logger.logger.debug(f"Fallback to basic role extraction: {e}")
@@ -712,7 +795,12 @@ class SemanticFactExtractor:
                 person_org = entity.get('organization')
             
             # Extract context for the person
+            t5 = time.perf_counter()
             person_context = self._extract_role_context_from_person(entity, context)
+            t6 = time.perf_counter()
+            context_time = (t6 - t5) * 1000
+            if context_time > 10:
+                self.logger.logger.debug(f"🔍 '{person_name}' context extraction: {context_time:.1f}ms")
             
             base_data.update({
                 'person_name': person_name,
@@ -720,6 +808,11 @@ class SemanticFactExtractor:
                 'person_organization': person_org,  # Now uses improved extraction
                 'person_context': person_context
             })
+            
+            # Log timing for person processing
+            person_duration = (time.perf_counter() - person_start_time) * 1000
+            from utils.worker_utils import get_worker_prefix
+            self.logger.logger.debug(f"{get_worker_prefix()} ⏱️  Person '{person_name}' processed in {person_duration:.1f}ms")
         elif entity_type == 'organization':
             base_data.update({
                 'organization_name': entity.get('value', ''),
@@ -753,11 +846,6 @@ class SemanticFactExtractor:
                 'temporal_context': temporal_context
             })
         
-        # Filter out empty facts to prevent data pollution
-        if not raw_text.strip() and not canonical_name.strip():
-            self.logger.logger.debug(f"🚫 Skipping empty {entity_type} fact with no content")
-            return None
-            
         return base_data
     
     def _determine_authority(self, regulation_text: str) -> str:
@@ -1283,23 +1371,36 @@ class SemanticFactExtractor:
         global_entities = entities_section.get('global_entities', {})
         domain_entities = entities_section.get('domain_entities', {})
         
-        self.logger.logger.debug(f"🔍 Found entity sections in classification:")
-        self.logger.logger.debug(f"   📊 Global entities: {list(global_entities.keys()) if global_entities else 'None'}")
-        self.logger.logger.debug(f"   🎯 Domain entities: {list(domain_entities.keys()) if domain_entities else 'None'}")
-        
-        # Log entity counts for visibility
+        # STRUCTURED ENTITY LOGGING RULE: 2-line summary format for each layer
+        # Line 1: Global entities summary
         if global_entities:
+            global_counts = []
             for entity_type, entities in global_entities.items():
                 count = len(entities) if isinstance(entities, list) else 1
-                self.logger.logger.debug(f"      - global_{entity_type}: {count} entities")
+                if count > 0:
+                    global_counts.append(f"{entity_type}:{count}")
+            
+            if global_counts:
+                self.logger.logger.debug(f"📊 Global entities: {', '.join(global_counts)}")
+            else:
+                self.logger.logger.debug("📊 Global entities: none found")
+        else:
+            self.logger.logger.debug("📊 Global entities: none found")
         
+        # Line 2: Domain entities summary  
         if domain_entities:
+            domain_counts = []
             for entity_type, entities in domain_entities.items():
                 count = len(entities) if isinstance(entities, list) else 1
-                self.logger.logger.debug(f"      - domain_{entity_type}: {count} entities")
-        
-        if not global_entities and not domain_entities:
-            self.logger.logger.debug("   ⚠️  No entities found in classification structure")
+                if count > 0:
+                    domain_counts.append(f"{entity_type}:{count}")
+            
+            if domain_counts:
+                self.logger.logger.debug(f"🎯 Domain entities: {', '.join(domain_counts)}")
+            else:
+                self.logger.logger.debug("🎯 Domain entities: none found")
+        else:
+            self.logger.logger.debug("🎯 Domain entities: none found")
         
         # Step 2: Normalize entities from both global and domain classifications
         global_normalized = self._normalize_classification_entities(global_entities)
@@ -1384,28 +1485,76 @@ class SemanticFactExtractor:
         
         return normalized
     
+    def _process_classification_person_entity_parallel(self, entity: Dict, entity_type: str, markdown_content: str, source: str, worker_id: int) -> Optional[Dict]:
+        """Process a single classification person entity with worker tracking"""
+        from utils.worker_utils import set_worker_id
+        set_worker_id(f"ClassPerson-{worker_id}")
+        
+        semantic_fact = self._create_dynamic_semantic_fact(entity_type, entity, markdown_content)
+        if semantic_fact:
+            # Add source information to semantic fact
+            semantic_fact['extraction_source'] = source
+            semantic_fact['fact_type'] = f"{source.title()}{entity_type.title()}Fact"
+        return semantic_fact
+    
     def _promote_classification_entities_to_facts(self, existing_entities: Dict, markdown_content: str, source: str = "unknown") -> Dict[str, List]:
         """Dynamic promotion of classification entities to structured semantic facts"""
         promoted_facts = {}
         
-        self.logger.logger.debug(f"🔄 Dynamically promoting {source} entities: {list(existing_entities.keys())}")
+        # Collect entity counts for structured logging
+        entity_counts = {}
         
         for entity_type, entities in existing_entities.items():
             if not isinstance(entities, list):
                 continue
-                
-            self.logger.logger.debug(f"   Processing {source}_{entity_type}: {len(entities)} entities")
+            
+            if len(entities) > 0:
+                entity_counts[entity_type] = len(entities)
             promoted_facts[entity_type] = []
             
-            for entity in entities:
-                if isinstance(entity, dict):
-                    # Create semantic fact based on entity type
-                    semantic_fact = self._create_dynamic_semantic_fact(entity_type, entity, markdown_content)
-                    if semantic_fact:
-                        # Add source information to semantic fact
-                        semantic_fact['extraction_source'] = source
-                        semantic_fact['fact_type'] = f"{source.title()}{entity_type.title()}Fact"
-                        promoted_facts[entity_type].append(semantic_fact)
+            # Use parallel processing for person entities to improve performance
+            if entity_type == 'person' and len(entities) > 4:  # Only parallelize if worth the overhead
+                person_start_time = time.perf_counter()
+                max_workers = min(4, len(entities))  # Cap at 4 workers for person processing
+                self.logger.logger.debug(f"🔧 Using {max_workers} parallel workers for {len(entities)} {source} person entities")
+                
+                with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                    # Submit all person entity processing tasks
+                    future_to_entity = {}
+                    for i, entity in enumerate(entities):
+                        if isinstance(entity, dict):
+                            worker_id = (i % max_workers) + 1
+                            future = executor.submit(self._process_classification_person_entity_parallel, entity, entity_type, markdown_content, source, worker_id)
+                            future_to_entity[future] = entity
+                    
+                    # Collect results as they complete
+                    for future in as_completed(future_to_entity):
+                        entity = future_to_entity[future]
+                        try:
+                            semantic_fact = future.result()
+                            if semantic_fact:
+                                promoted_facts[entity_type].append(semantic_fact)
+                        except Exception as e:
+                            self.logger.logger.warning(f"⚠️ Error processing {source} person entity {entity.get('value', 'unknown')}: {e}")
+                
+                person_duration = (time.perf_counter() - person_start_time) * 1000
+                self.logger.logger.debug(f"✅ Parallel {source} person processing completed in {person_duration:.1f}ms ({len(entities)} entities)")
+            else:
+                # Sequential processing for non-person entities or small person lists
+                for entity in entities:
+                    if isinstance(entity, dict):
+                        # Create semantic fact based on entity type
+                        semantic_fact = self._create_dynamic_semantic_fact(entity_type, entity, markdown_content)
+                        if semantic_fact:
+                            # Add source information to semantic fact
+                            semantic_fact['extraction_source'] = source
+                            semantic_fact['fact_type'] = f"{source.title()}{entity_type.title()}Fact"
+                            promoted_facts[entity_type].append(semantic_fact)
+        
+        # Structured entity logging - one line summary
+        if entity_counts:
+            entity_summary = ", ".join([f"{entity_type}:{count}" for entity_type, count in entity_counts.items()])
+            self.logger.logger.debug(f"🎯 Domain entities: {entity_summary}")
         
         total_promoted = sum(len(facts) for facts in promoted_facts.values())
         self.logger.entity(f"✅ Total {source} facts promoted: {total_promoted}")

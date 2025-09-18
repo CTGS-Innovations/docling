@@ -61,18 +61,16 @@ def setup_logging(
     else:
         formatter = create_console_formatter(verbosity, use_colors)
     
-    # Console handler
+    # Console handler (with colors if enabled)
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setFormatter(formatter)
     root_logger.addHandler(console_handler)
     
-    # File handler (if specified)
+    # File handler (if specified) - ALWAYS without colors for clean files
     if log_file:
         file_handler = logging.FileHandler(log_file)
-        file_formatter = logging.Formatter(
-            '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S'
-        )
+        # Create clean formatter without ANSI colors for file output
+        file_formatter = create_console_formatter(verbosity, use_colors=False)
         file_handler.setFormatter(file_formatter)
         root_logger.addHandler(file_handler)
     
@@ -196,7 +194,8 @@ class LoggerAdapter:
     
     def stage(self, message: str, **kwargs) -> None:
         """Log a processing stage message."""
-        self.logger.log(FusionLogLevel.STAGE, message, **kwargs)
+        from .worker_utils import get_worker_prefix
+        self.logger.log(FusionLogLevel.STAGE, f"{get_worker_prefix()} {message}", **kwargs)
     
     def performance(self, message: str, metrics: Optional[Dict[str, Any]] = None) -> None:
         """Log performance metrics."""
@@ -205,9 +204,10 @@ class LoggerAdapter:
     
     def entity(self, message: str, count: Optional[int] = None) -> None:
         """Log entity extraction details."""
+        from .worker_utils import get_worker_prefix
         if count is not None:
             message = f"{message} ({count} items)"
-        self.logger.log(FusionLogLevel.ENTITY, message)
+        self.logger.log(FusionLogLevel.ENTITY, f"{get_worker_prefix()} {message}")
     
     def success(self, message: str) -> None:
         """Log success messages (maps to INFO)."""

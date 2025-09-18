@@ -53,6 +53,10 @@ class FusionPipeline:
     Memory-first architecture for CloudFlare Workers deployment.
     """
     
+    # Class variables to control "once per class" enrichment logging
+    _enrichment_logged = False
+    _enrichment_summary_logged = False
+    
     def __init__(self, config: Dict[str, Any]):
         self.config = config
         # Read stage configuration from config.yaml pipeline.stages section
@@ -220,11 +224,19 @@ class FusionPipeline:
         
         # Stage 2: CLASSIFY (if requested)
         if 'classify' in self.stages_to_run:
-            self.logger.stage(f"📋 Stage 2: Classifying documents in memory...")
+            self.logger.stage(f"📋 Stage 2: Classifying documents in memory with {max_workers} workers...")
             stage_start = time.perf_counter()
             
+            # Parallel classification using ThreadPoolExecutor
+            from concurrent.futures import ThreadPoolExecutor, as_completed
+            from utils.worker_utils import set_worker_id
+            
             successful_classifications = 0
-            for doc in in_memory_docs:
+            
+            def classify_document(doc, worker_num):
+                """Classify a single document with worker ID tracking"""
+                set_worker_id(f"Worker-{worker_num}")
+                
                 # Check if this document should proceed to classification
                 conversion_data = doc.yaml_frontmatter.get('conversion', {})
                 proceed_to_classification = conversion_data.get('proceed_to_classification', True)
@@ -234,11 +246,13 @@ class FusionPipeline:
                         classification_data = self._generate_classification_data(doc.markdown_content, doc.source_filename)
                         doc.add_classification_data(classification_data)
                         doc.record_stage_timing('classify', (time.perf_counter() - stage_start) * 1000)
-                        successful_classifications += 1
+                        return True
                     except MemoryOverflowError as e:
                         doc.mark_failed(str(e))
+                        return False
                     except Exception as e:
                         doc.mark_failed(f"Classification failed: {e}")
+                        return False
                 elif not proceed_to_classification:
                     # Document failed validation - add skip documentation
                     http_status = conversion_data.get('http_status', 'unknown')
@@ -255,6 +269,23 @@ class FusionPipeline:
                     }
                     doc.add_classification_data(skip_classification)
                     doc.record_stage_timing('classify', 0)  # No processing time for skipped docs
+                    return False
+                
+                return False
+            
+            # Execute classification in parallel
+            with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                # Submit all classification tasks
+                futures = []
+                for i, doc in enumerate(in_memory_docs):
+                    worker_num = (i % max_workers) + 1
+                    future = executor.submit(classify_document, doc, worker_num)
+                    futures.append(future)
+                
+                # Collect results as they complete
+                for future in as_completed(futures):
+                    if future.result():
+                        successful_classifications += 1
             
             stage_time = (time.perf_counter() - stage_start) * 1000
             self.logger.success(f"Classification complete: {stage_time:.0f}ms ({successful_classifications}/{len(in_memory_docs)} successful)")
@@ -533,7 +564,8 @@ class FusionPipeline:
                 layers_processed.append('layer6_semantic_facts')
                 layer_timings['layer6_semantic_facts'] = (time.perf_counter() - layer6_start) * 1000
                 
-                self.logger.entity(f"🧠 Layer 6: Semantic facts extracted - {semantic_facts.get('semantic_summary', {}).get('total_facts', 0)} facts found")
+                total_facts = semantic_facts.get('semantic_summary', {}).get('total_facts', 0)
+                self.logger.entity(f"🧠 Layer 6: Semantic facts extracted - {total_facts} facts found [{filename}]")
                 
             except Exception as e:
                 self.logger.logger.warning(f"⚠️  Layer 6 semantic extraction failed: {e}")
@@ -669,7 +701,10 @@ class FusionPipeline:
                 if isinstance(entity_list, list):
                     global_entity_count += len(entity_list)
             
-            self.logger.logger.debug(f"🎯 ENRICHMENT: Found {global_entity_count} global entities to enrich")
+            # "Once per class" enrichment logging to reduce spam
+            if not FusionPipeline._enrichment_logged:
+                self.logger.logger.debug(f"🎯 ENRICHMENT: Processing global entities with domain context...")
+                FusionPipeline._enrichment_logged = True
             
             # Use comprehensive extractor for enrichment (not re-detection)
             from knowledge.extractors.comprehensive_entity_extractor import ComprehensiveEntityExtractor
@@ -714,7 +749,7 @@ class FusionPipeline:
                 }
             }
             
-            self.logger.logger.debug(f"✅ ENRICHMENT: Enriched {global_entity_count} → {total_enriched} entities")
+            # Enrichment summary logging already shown once per class
             return enrichment_data
             
         except Exception as e:
@@ -1142,7 +1177,11 @@ class FusionPipeline:
         try:
             # Import the comprehensive extractor to reuse its validation methods
             from knowledge.extractors.comprehensive_entity_extractor import ComprehensiveEntityExtractor
-            validator = ComprehensiveEntityExtractor()
+            
+            # Use singleton pattern to avoid repeated initialization
+            if not hasattr(self, '_entity_validator'):
+                self._entity_validator = ComprehensiveEntityExtractor()
+            validator = self._entity_validator
             
             validated_entities = {}
             

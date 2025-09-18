@@ -1,0 +1,50 @@
+[utils.deployment_manager] [32m[Main] 🚀 Deployment Profile: Local Development/CLI[0m
+[utils.deployment_manager] [0m   High-performance local machine or development server[0m
+[utils.deployment_manager] [0m   Workers: 8[0m
+[__main__] [32m[Main] 🔧 MVP-Fusion Engine: HighSpeed_Markdown_General[0m
+[__main__] [32m[Main] ⚡ Performance: High-speed document extraction (2000+ pages/sec) with markdown output[0m
+[__main__] [32m[Main] 🔧 Workers: 8 | Formats: 38[0m
+[utils.deployment_manager] [0m   Workers: 8[0m
+[utils.deployment_manager] [0m   Memory: 6553MB usable (8192MB * 0.8)[0m
+[utils.deployment_manager] [0m   Queue Size: 100[0m
+[__main__] [32m[Main] 🚀 Profile: Local Development/CLI | Memory: 6553MB[0m
+[__main__] [32m[Main] 📁 Output directory: ../output/fusion[0m
+[__main__] [32m[Main] 📁 Found 5 files in data_complex[0m
+[__main__] [32m[Main] 🚀 Processing 5 files...[0m
+[pipeline.fusion_pipeline] [35m[Main] ✅ Aho-Corasick engine initialized for government/regulatory + AI domains[0m
+[pipeline.fusion_pipeline] [32m[Main] 🚀 In-Memory Pipeline: convert → classify → enrich → extract[0m
+[pipeline.fusion_pipeline] [35m[Main] 💾 Memory limit: 100MB per file, 1024MB service total[0m
+[pipeline.fusion_pipeline] [32m[Main] 📄 Stage 1: Converting 5 files to in-memory documents...[0m
+[pipeline.fusion_pipeline] [0m✅ Conversion complete: 91ms (5/5 successful)[0m
+[pipeline.fusion_pipeline] [35m[Main] 💾 Total service memory: 0.2MB[0m
+[pipeline.fusion_pipeline] [32m[Main] 📋 Stage 2: Classifying documents in memory with 2 workers...[0m
+[pipeline.fusion_pipeline] [35m[Worker-2] 🧠 Layer 6: Semantic facts extracted - 88 facts found [ENTITY_EXTRACTION_MD_DOCUMENT.md][0m
+[pipeline.fusion_pipeline] [35m[Worker-1] 🧠 Layer 6: Semantic facts extracted - 88 facts found [ENTITY_EXTRACTION_TXT_DOCUMENT.txt][0m
+[pipeline.fusion_pipeline] [35m[Worker-1] 🧠 Layer 6: Semantic facts extracted - 43 facts found [3124-stairways-and-ladders.pdf][0m
+[pipeline.fusion_pipeline] [35m[Worker-2] 🧠 Layer 6: Semantic facts extracted - 16 facts found [Complex2.pdf][0m
+[pipeline.fusion_pipeline] [35m[Worker-1] 🧠 Layer 6: Semantic facts extracted - 7 facts found [Complex1.pdf][0m
+[pipeline.fusion_pipeline] [0m✅ Classification complete: 1849ms (5/5 successful)[0m
+[pipeline.fusion_pipeline] [32m[Main] 🔍 Stage 3: Enriching documents in memory...[0m
+[pipeline.fusion_pipeline] [0m✅ Enrichment complete: 23ms (5/5 successful)[0m
+[pipeline.fusion_pipeline] [32m[Main] 📄 Stage 4: Extracting semantic rules in memory...[0m
+[pipeline.fusion_pipeline] [0m✅ Extraction complete: 2ms (5/5 successful)[0m
+[pipeline.fusion_pipeline] [32m[Main] 💾 Final Stage: Writing processed documents to disk...[0m
+[pipeline.fusion_pipeline] [35m[Main] 📝 Generating JSON knowledge file: ../output/fusion/ENTITY_EXTRACTION_TXT_DOCUMENT.json[0m
+[pipeline.fusion_pipeline] [35m[Main] 📄 Generated knowledge file: ENTITY_EXTRACTION_TXT_DOCUMENT.json (88 facts)[0m
+[pipeline.fusion_pipeline] [35m[Main] 📝 Generating JSON knowledge file: ../output/fusion/ENTITY_EXTRACTION_MD_DOCUMENT.json[0m
+[pipeline.fusion_pipeline] [35m[Main] 📄 Generated knowledge file: ENTITY_EXTRACTION_MD_DOCUMENT.json (88 facts)[0m
+[pipeline.fusion_pipeline] [35m[Main] 📝 Generating JSON knowledge file: ../output/fusion/3124-stairways-and-ladders.json[0m
+[pipeline.fusion_pipeline] [35m[Main] 📄 Generated knowledge file: 3124-stairways-and-ladders.json (43 facts)[0m
+[pipeline.fusion_pipeline] [35m[Main] 📝 Generating JSON knowledge file: ../output/fusion/Complex2.json[0m
+[pipeline.fusion_pipeline] [35m[Main] 📄 Generated knowledge file: Complex2.json (16 facts)[0m
+[pipeline.fusion_pipeline] [35m[Main] 📝 Generating JSON knowledge file: ../output/fusion/Complex1.json[0m
+[pipeline.fusion_pipeline] [35m[Main] 📄 Generated knowledge file: Complex1.json (7 facts)[0m
+[pipeline.fusion_pipeline] [0m✅ Write complete: 85ms (5/5 successful)[0m
+[__main__] [0m✅ Completed: 5 successful, 0 failed (2 files/sec)[0m
+[__main__] [32m[Main] 
+📊 Processing Complete:[0m
+[__main__] [32m[Main]    Total files: 5[0m
+[__main__] [32m[Main]    Successful: 5[0m
+[__main__] [32m[Main]    Failed: 0[0m
+[__main__] [32m[Main]    Total time: 2.20s[0m
+[__main__] [32m[Main]    Average rate: 2.3 files/sec[0m

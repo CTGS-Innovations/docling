@@ -147,5 +147,35 @@ python -c "
 
 **Purpose**: User can read the comment to understand the test context when execution isn't visible.
 
+### **Rule #11: Structured Entity Logging Standard**
+For entity processing across all layers (Global, Domain, Future layers):
+
+**MANDATORY FORMAT**: Maximum 2 lines per processing layer
+```
+📊 Global entities: person:139, org:4, loc:2, money:10, date:5
+🎯 Domain entities: organizations:7, locations:33, financial:12
+```
+
+**Requirements:**
+- **One line per layer** (Global, Domain, etc.)
+- **Only show non-zero counts** (skip empty categories)
+- **Use consistent emojis**: 📊 Global, 🎯 Domain, 🧠 Semantic, etc.
+- **Condensed format**: `category:count, category:count`
+- **NO individual entity logging** (no "- global_person: 139 entities" spam)
+
+**Purpose**: 
+- Shows knowledge baseline before enrichment/classification
+- Enables quick scanning of entity distribution
+- Reduces log noise from verbose entity-by-entity output
+- Scalable for future processing layers
+
+**Example Expansion for Future Layers:**
+```
+📊 Global entities: person:139, org:4, money:10
+🎯 Domain entities: organizations:7, locations:33  
+🧠 Semantic entities: facts:45, rules:12, relationships:8
+🔗 Linked entities: canonical:156, resolved:23
+```
+
 ---
 **These rules prevent codebase clutter and maintain focus on performance and clarity.**

@@ -3,7 +3,65 @@
 # High-Performance Document Processing Pipeline
 # Optimized for raw speed while maintaining output quality
 
-# Global Performance Settings
+# MVP-Fusion Deployment Profiles
+deployment:
+  # Current active profile - change this one line to switch everything
+  active_profile: "local"
+  
+  # Available deployment profiles
+  profiles:
+    local:
+      name: "Local Development/CLI"
+      description: "High-performance local machine or development server"
+      memory_mb: 8192
+      memory_threshold: 0.8        # Use 80% of available memory
+      max_workers: 8
+      queue_size: 100
+      enabled: true
+      
+    cloudflare:
+      name: "Cloudflare Workers"
+      description: "Cloudflare edge computing with strict memory limits"
+      memory_mb: 128
+      memory_threshold: 0.7        # Conservative for edge deployment
+      max_workers: 2               # Limited CPU on edge
+      queue_size: 5
+      enabled: true
+      
+    aws:
+      name: "AWS Lambda/EC2"
+      description: "Amazon Web Services cloud deployment"
+      memory_mb: 512
+      memory_threshold: 0.8
+      max_workers: 4
+      queue_size: 20
+      enabled: true
+      
+    gcp:
+      name: "Google Cloud Platform"
+      description: "Google Cloud Functions/Compute Engine"
+      memory_mb: 1024
+      memory_threshold: 0.75
+      max_workers: 6
+      queue_size: 30
+      enabled: true
+      
+    docker:
+      name: "Docker Container"
+      description: "Containerized deployment with resource limits"
+      memory_mb: 2048
+      memory_threshold: 0.8
+      max_workers: 4
+      queue_size: 50
+      enabled: true
+      
+    disabled:
+      name: "No Memory Management"
+      description: "Disable memory management and queue limits"
+      enabled: false
+      # When disabled, use unlimited memory and workers from performance section
+
+# Global Performance Settings (fallback when deployment profile disabled)
 performance:
   # Aggressive performance mode
   mode: "extreme"  # Options: "balanced", "aggressive", "extreme"
