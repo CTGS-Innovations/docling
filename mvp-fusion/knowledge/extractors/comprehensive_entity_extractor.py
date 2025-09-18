@@ -114,19 +114,102 @@ class ComprehensiveEntityExtractor:
     Maximizes information extraction from any document
     """
     
-    def __init__(self):
+    def __init__(self, config: Optional[Dict] = None):
         self.logger = get_fusion_logger(__name__)
         # All patterns use FLPC Rust regex for performance
         self._initialize_patterns()
+        
+        # Initialize conservative person extractor
+        self.person_extractor = None
+        if CONSERVATIVE_PERSON_AVAILABLE:
+            try:
+                # Try to load with corpus configuration
+                corpus_config = config.get('corpus', {}) if config else {}
+                
+                # Load corpus files if paths are provided
+                first_names_path = corpus_config.get('first_names_path')
+                last_names_path = corpus_config.get('last_names_path')
+                organizations_path = corpus_config.get('organizations_path')
+                
+                # Convert string paths to Path objects
+                first_names_path = Path(first_names_path) if first_names_path else None
+                last_names_path = Path(last_names_path) if last_names_path else None
+                organizations_path = Path(organizations_path) if organizations_path else None
+                
+                self.person_extractor = PersonEntityExtractor(
+                    first_names_path=first_names_path,
+                    last_names_path=last_names_path,  
+                    organizations_path=organizations_path,
+                    min_confidence=corpus_config.get('person_min_confidence', 0.7)
+                )
+                
+                # Load default corpus if no paths provided
+                if not any([first_names_path, last_names_path]):
+                    self._load_default_corpus()
+                    
+                self.logger.logger.debug("✅ Conservative person extractor initialized")
+            except Exception as e:
+                self.logger.logger.warning(f"⚠️ Could not initialize conservative person extractor: {e}")
+                self.person_extractor = None
+    
+    def _load_default_corpus(self):
+        """Load default corpus from foundation data files"""
+        try:
+            base_dir = Path(__file__).parent.parent / 'corpus' / 'foundation_data'
+            
+            # Load first names
+            first_names_file = base_dir / 'first_names_top.txt'
+            if first_names_file.exists():
+                with open(first_names_file, 'r') as f:
+                    self.person_extractor.first_names = {line.strip().lower() for line in f if line.strip()}
+                self.logger.logger.debug(f"Loaded {len(self.person_extractor.first_names)} first names")
+            
+            # Load last names  
+            last_names_file = base_dir / 'last_names_top.txt'
+            if last_names_file.exists():
+                with open(last_names_file, 'r') as f:
+                    self.person_extractor.last_names = {line.strip().lower() for line in f if line.strip()}
+                self.logger.logger.debug(f"Loaded {len(self.person_extractor.last_names)} last names")
+                
+        except Exception as e:
+            self.logger.logger.warning(f"Could not load default corpus: {e}")
     
     def _clean_context(self, context: str) -> str:
-        """Clean context text by normalizing whitespace and removing line breaks"""
+        """Clean context text by normalizing whitespace, removing line breaks, and handling unicode"""
         if not context:
             return ""
+        
+        # Clean up unicode and special characters for clean text output
+        try:
+            # Replace common problematic unicode sequences with readable equivalents
+            context = context.replace('\\u2014', '—')  # em-dash
+            context = context.replace('\\u2013', '–')  # en-dash
+            context = context.replace('\\u2019', "'")  # right single quote
+            context = context.replace('\\u201c', '"')  # left double quote
+            context = context.replace('\\u201d', '"')  # right double quote
+            
+            # Remove any remaining escape sequences that could cause encoding issues
+            import re
+            context = re.sub(r'\\x[0-9a-fA-F]{2}', ' ', context)  # Remove \xXX sequences
+            context = re.sub(r'\\u[0-9a-fA-F]{4}', ' ', context)  # Remove \uXXXX sequences
+            
+        except:
+            pass  # Keep original if processing fails
+            
         # Replace multiple whitespace chars (including newlines) with single space
         cleaned = ' '.join(context.split()).strip()
-        # Limit context length to prevent excessive output
-        return cleaned[:200] if len(cleaned) > 200 else cleaned
+        
+        # Limit context length to prevent excessive output, but break at word boundaries
+        if len(cleaned) > 200:
+            # Find the last space before the 200 char limit to avoid cutting mid-word
+            truncated = cleaned[:200]
+            last_space = truncated.rfind(' ')
+            if last_space > 150:  # Only break at word boundary if it's reasonably close
+                return truncated[:last_space] + "..."
+            else:
+                return truncated + "..."
+        
+        return cleaned
     
     def _is_valid_entity(self, entity_text: str) -> bool:
         """Validate entity to filter out malformed entries with formatting issues"""
@@ -396,8 +479,34 @@ class ComprehensiveEntityExtractor:
         return entities
     
     def extract_people(self, text: str) -> List[PersonEntity]:
-        """Attempt to extract person names"""
+        """Extract person names using conservative validation"""
         entities = []
+        
+        # Use conservative person extractor if available
+        if self.person_extractor:
+            try:
+                conservative_persons = self.person_extractor.extract_persons(text)
+                self.logger.logger.debug(f"🎯 Conservative person extractor found {len(conservative_persons)} validated persons")
+                
+                for person in conservative_persons:
+                    # Extract role from context
+                    role = self._extract_role(person.get('context', ''))
+                    
+                    entity = PersonEntity(
+                        full_name=person['text'],
+                        role=role,
+                        organization=None  # Could be enhanced
+                    )
+                    entities.append(entity)
+                    
+                return entities
+                
+            except Exception as e:
+                self.logger.logger.warning(f"Conservative person extraction failed: {e}")
+                # Fall back to original method below
+        
+        # Fallback to original regex-based method (with minimal filtering)
+        self.logger.logger.debug("🔄 Falling back to regex-based person extraction")
         seen = set()
         
         for pattern in self.person_patterns:
@@ -408,7 +517,7 @@ class ComprehensiveEntityExtractor:
                 # Clean the name to remove line breaks
                 clean_name = self._clean_context(name)
                 
-                # Filter out common false positives
+                # Apply very strict filtering to reduce false positives
                 if clean_name not in seen and not self._is_false_positive_name(clean_name):
                     seen.add(clean_name)
                     name = clean_name
@@ -564,7 +673,7 @@ class ComprehensiveEntityExtractor:
                         'amount': m.amount,
                         'currency': m.currency,
                         'normalized': m.normalized_value,
-                        'context': self._clean_context(m.context)[:100]
+                        'context': self._clean_context(m.context)
                     }
                     for m in all_entities['money']
                 ],
@@ -573,7 +682,7 @@ class ComprehensiveEntityExtractor:
                         'value': p.value,
                         'subject': p.subject,
                         'trend': p.trend,
-                        'context': self._clean_context(p.context)[:100]
+                        'context': self._clean_context(p.context)
                     }
                     for p in all_entities['percentages']
                 ],
@@ -588,7 +697,7 @@ class ComprehensiveEntityExtractor:
                 ],
                 'organizations': [
                     {
-                        'name': o.name,
+                        'name': self._clean_context(o.name),
                         'type': o.type,
                         'acronym': o.acronym
                     }
@@ -596,7 +705,7 @@ class ComprehensiveEntityExtractor:
                 ],
                 'people': [
                     {
-                        'name': p.full_name,
+                        'name': self._clean_context(p.full_name),
                         'role': p.role
                     }
                     for p in all_entities['people']

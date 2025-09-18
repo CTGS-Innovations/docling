@@ -689,54 +689,9 @@ class SemanticFactExtractor:
                 'compliance_level': self._assess_compliance_level(entity.get('value', ''))
             })
         elif entity_type == 'person':
-            # Use conservative person validation if available
-            person_name = entity.get('value', '')
-            if self.person_extractor and person_name:
-                # Re-validate the person with conservative rules
-                person_context = self._extract_financial_context(entity, context)  # Reuse context extraction
-                
-                # Create a more realistic context for validation
-                validation_text = f"The document mentions {person_name} in the context: {person_context}"
-                conservative_persons = self.person_extractor.extract_persons(validation_text)
-                
-                # Check if the person passes conservative validation
-                validated_person = None
-                for cp in conservative_persons:
-                    if person_name.lower() in cp['text'].lower() or cp['text'].lower() in person_name.lower():
-                        validated_person = cp
-                        break
-                
-                if validated_person and validated_person['confidence'] >= 0.7:
-                    # Upgrade to validated person fact
-                    base_data.update({
-                        'person_name': person_name,
-                        'role_context': self._extract_role_context(entity, context),
-                        'organization_affiliation': self._find_organization_context(entity, context),
-                        'conservative_validation': True,
-                        'conservative_confidence': validated_person['confidence'],
-                        'validation_evidence': validated_person.get('evidence', []),
-                        'fact_type': 'ValidatedPersonFact'
-                    })
-                else:
-                    # Failed conservative validation - REJECT this entity entirely
-                    self.logger.logger.debug(f"🚫 REJECTED person entity: '{person_name}' (failed conservative validation)")
-                    return None  # Don't create a fact for this entity
-            else:
-                # No conservative extractor - be very conservative and reject ambiguous names
-                if self._is_likely_false_person_name(person_name):
-                    self.logger.logger.debug(f"🚫 REJECTED person entity: '{person_name}' (likely false positive)")
-                    return None  # Don't create a fact for this entity
-                    
-                # Fallback to basic person extraction with warning
-                base_data.update({
-                    'person_name': person_name,
-                    'role_context': self._extract_role_context(entity, context),
-                    'organization_affiliation': self._find_organization_context(entity, context),
-                    'conservative_validation': False,
-                    'validation_failure_reason': 'Conservative extractor not available'
-                })
-                # Heavily penalize unvalidated persons
-                base_data['confidence'] *= 0.3
+            # DISABLE DUPLICATE PERSON EXTRACTION - Use only conservative corpus-based system
+            self.logger.logger.debug(f"🚫 SKIPPING person entity: '{entity.get('value', '')}' (using corpus-based extraction only)")
+            return None  # Don't create any person facts here - let ComprehensiveEntityExtractor handle all persons
         elif entity_type == 'organization':
             base_data.update({
                 'organization_name': entity.get('value', ''),

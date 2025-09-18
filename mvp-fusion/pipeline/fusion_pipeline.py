@@ -345,6 +345,12 @@ class FusionPipeline:
             try:
                 # Write final markdown file (both success and failure cases)
                 final_markdown = doc.generate_final_markdown()
+                
+                # Clean content to ensure proper UTF-8 encoding
+                # Remove null bytes and other problematic characters that cause binary file detection
+                final_markdown = final_markdown.replace('\x00', '')  # Remove null bytes
+                final_markdown = ''.join(char for char in final_markdown if ord(char) >= 32 or char in '\n\r\t')  # Keep only printable chars + whitespace
+                
                 output_file = output_dir / f"{doc.source_stem}.md"
                 
                 with open(output_file, 'w', encoding='utf-8') as f:
@@ -539,23 +545,35 @@ class FusionPipeline:
         
         return classification_data
     
-    def _extract_money(self, content: str) -> List[str]:
-        """Extract monetary amounts from content"""
+    def _extract_entities_with_spans_regex(self, pattern: str, content: str, entity_type: str) -> List[Dict]:
+        """Helper method to extract entities with spans using Python regex (fallback for FLPC)"""
+        entities = []
+        for match in re.finditer(pattern, content):
+            entities.append({
+                'value': match.group(),
+                'span': {
+                    'start': match.start(),
+                    'end': match.end()
+                },
+                'text': match.group(),
+                'type': entity_type
+            })
+        return entities
+    
+    def _extract_money(self, content: str) -> List[Dict]:
+        """Extract monetary amounts from content with spans"""
         pattern = r'\$[\d,]+(?:\.\d{2})?|\$\d+'
-        return list(set(re.findall(pattern, content)))[:10]  # Limit to 10 items
+        return self._extract_entities_with_spans_regex(pattern, content, "MONEY")[:10]
     
-    def _extract_phone(self, content: str) -> List[str]:
-        """Extract phone numbers from content"""
+    def _extract_phone(self, content: str) -> List[Dict]:
+        """Extract phone numbers from content with spans"""
         pattern = r'\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}'
-        return list(set(re.findall(pattern, content)))[:10]
+        return self._extract_entities_with_spans_regex(pattern, content, "PHONE")[:10]
     
-    def _extract_regulation(self, content: str) -> List[str]:
-        """Extract regulation references from content"""
+    def _extract_regulation(self, content: str) -> List[Dict]:
+        """Extract regulation references from content with spans"""
         pattern = r'\d+\s*CFR\s*\d+(?:\.\d+)*'
-        matches = re.findall(pattern, content)
-        # Clean up whitespace and newlines
-        cleaned = [' '.join(match.split()) for match in matches]
-        return list(set(cleaned))[:10]
+        return self._extract_entities_with_spans_regex(pattern, content, "REGULATION")[:10]
     
     def _extract_dates(self, content: str) -> List[str]:
         """Extract dates from content"""
@@ -873,7 +891,7 @@ class FusionPipeline:
             
             # Core 8 entities using FLPC
             global_entities = {
-                'person': self._extract_core8_person_flpc(content, flpc),
+                'person': [],  # DISABLED: Use only conservative corpus-based person extraction
                 'org': self._extract_core8_org_flpc(content, flpc),
                 'loc': self._extract_core8_location_flpc(content, flpc),
                 'gpe': self._extract_core8_gpe_flpc(content, flpc),
@@ -887,10 +905,10 @@ class FusionPipeline:
                 'url': self._extract_core8_url_flpc(content, flpc),
                 'measurement': self._extract_core8_measurement_flpc(content, flpc)
             }
-        except Exception:
+        except Exception as e:
             # Fallback to Python regex if FLPC fails
             global_entities = {
-                'person': self._extract_person(content),
+                'person': [],  # DISABLED: Use only conservative corpus-based person extraction
                 'org': self._extract_org(content),
                 'loc': self._extract_location(content),
                 'gpe': self._extract_gpe(content),
@@ -911,7 +929,7 @@ class FusionPipeline:
             sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'knowledge', 'extractors'))
             from comprehensive_entity_extractor import ComprehensiveEntityExtractor
             
-            extractor = ComprehensiveEntityExtractor()
+            extractor = ComprehensiveEntityExtractor(config=self.config)
             domain_results = extractor.extract_all_entities(content)
             domain_entities = domain_results['entities']
         except Exception:
@@ -933,7 +951,7 @@ class FusionPipeline:
                 'financial': domain_entities.get('financial', []),
                 'percentages': domain_entities.get('percentages', []),
                 'organizations': domain_entities.get('organizations', []),
-                'people': domain_entities.get('people', []),
+                'people': domain_entities.get('people', []),  # Conservative corpus-based person extraction
                 'locations': domain_entities.get('locations', []),
                 'regulations': domain_entities.get('regulations', []),
                 'statistics': domain_entities.get('statistics', [])
@@ -1133,8 +1151,8 @@ class FusionPipeline:
     def _extract_core8_org_flpc(self, content: str, flpc) -> List[Dict]:
         """Extract organization names with spans using FLPC (Core 8)"""
         patterns = [
-            r'\b[A-Z][A-Za-z]*(?:\s+[A-Z][A-Za-z]*)*\s+(?:Inc|Corp|LLC|Ltd|Company|Organization|Institute|University|College)\b',
-            r'\b(?:OSHA|FDA|EPA|NASA|FBI|CIA|DOD|USDA)\b',
+            r'[A-Z][A-Za-z]*(?:\s+[A-Z][A-Za-z]*)*\s+(?:Inc|Corp|LLC|Ltd|Company|Organization|Institute|University|College|Berkeley)',
+            r'(?:OSHA|FDA|EPA|NASA|FBI|CIA|DOD|USDA|UC Berkeley)',
         ]
         return self._extract_entities_with_spans(patterns, content, flpc, "ORG")
     
@@ -1179,8 +1197,8 @@ class FusionPipeline:
     def _extract_core8_percent_flpc(self, content: str, flpc) -> List[Dict]:
         """Extract percentages with spans using FLPC (Core 8)"""
         patterns = [
-            r'\b\d+(?:\.\d+)?%\b',
-            r'\b\d+(?:\.\d+)?\s*percent\b',
+            r'\d+(?:\.\d+)?%',
+            r'\d+(?:\.\d+)?\s*percent',
         ]
         return self._extract_entities_with_spans(patterns, content, flpc, "PERCENT")
     

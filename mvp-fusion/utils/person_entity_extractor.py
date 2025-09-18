@@ -201,8 +201,8 @@ class PersonEntityExtractor:
         candidates = []
         
         # Simple tokenization (you might want to use spaCy or NLTK for better results)
-        # Look for capitalized word sequences
-        pattern = r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,3}\b'
+        # Look for capitalized word sequences, including common suffixes
+        pattern = r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,3}(?:\s+(?:Jr\.?|Sr\.?|III|IV|V|II|PhD|MD|Esq\.?))?\b'
         
         for match in re.finditer(pattern, text):
             name = match.group()
@@ -210,6 +210,10 @@ class PersonEntityExtractor:
             
             # Skip single letters or very short names
             if len(name) < 3:
+                continue
+            
+            # Early blacklist filtering to prevent bad candidates
+            if self._is_geographic_location(name) or self._is_publication_name(name):
                 continue
                 
             # Get context (±50 characters)
@@ -233,13 +237,19 @@ class PersonEntityExtractor:
         text_lower = candidate.text.lower()
         tokens_lower = [t.lower() for t in candidate.tokens]
         
-        # Check company founder names
-        if any(name in tokens_lower for name in self.COMPANY_FOUNDER_NAMES):
-            # Only accept with very strong evidence (title)
-            if not re.search(r"(Mr\.|Ms\.|Dr\.)\s+" + re.escape(candidate.text), 
-                           candidate.context):
-                candidate.evidence.append('blacklisted_founder_name')
+        # Check company founder names - only for single token matches or obvious company contexts
+        if len(candidate.tokens) == 1 and tokens_lower[0] in self.COMPANY_FOUNDER_NAMES:
+            # Single word company names like "Disney", "Ford" 
+            # But allow if there's a title (Mr. Disney is a person, not a company)
+            has_title = bool(re.search(r"(Mr\.|Ms\.|Mrs\.|Dr\.|Prof\.)\s+" + re.escape(candidate.text), 
+                                     candidate.context, re.IGNORECASE))
+            if not has_title:
+                candidate.evidence.append('blacklisted_founder_name_single')
                 return True
+        elif text_lower in self.COMPANY_FOUNDER_NAMES:
+            # Full text matches a company name
+            candidate.evidence.append('blacklisted_founder_name_full')
+            return True
                 
         # Check tech companies
         if text_lower in self.TECH_COMPANIES:
@@ -272,56 +282,171 @@ class PersonEntityExtractor:
                 
         return False
     
+    def _is_geographic_location(self, text: str) -> bool:
+        """Check if text matches common geographic patterns"""
+        text_lower = text.lower()
+        
+        # Common geographic patterns
+        geographic_patterns = [
+            # State patterns
+            r'^new\s+(york|jersey|mexico|hampshire)$',
+            r'^south\s+(carolina|dakota|california)$', 
+            r'^north\s+(carolina|dakota|california)$',
+            r'^west\s+(virginia|virginia)$',
+            
+            # Street/address patterns  
+            r'.+\s+(street|st|avenue|ave|road|rd|boulevard|blvd|drive|dr)$',
+            r'^(north|south|east|west)\s+\w+\s+(street|avenue|road|drive)$',
+            
+            # Common city patterns
+            r'^(los\s+angeles|san\s+francisco|new\s+orleans|las\s+vegas)$',
+        ]
+        
+        for pattern in geographic_patterns:
+            if re.match(pattern, text_lower):
+                return True
+                
+        return False
+    
+    def _is_publication_name(self, text: str) -> bool:
+        """Check if text matches publication name patterns"""
+        text_lower = text.lower()
+        
+        # Known publication patterns
+        publication_patterns = [
+            r'^federal\s+register',  # Match "Federal Register" even with additional words
+            r'^wall\s+street\s+journal',
+            r'^new\s+york\s+times',
+            r'^washington\s+post',
+            r'.*\s+(journal|magazine|review|register|bulletin|newsletter)',  # Any ending with these
+            r'.*\s+(times|post|herald|tribune|gazette)',
+        ]
+        
+        for pattern in publication_patterns:
+            if re.match(pattern, text_lower):
+                return True
+                
+        return False
+    
+    def _has_title_context(self, candidate: PersonCandidate) -> bool:
+        """Check if candidate has title/role context"""
+        # Check for title in context (before the name)
+        title_pattern = r"(Mr\.|Ms\.|Mrs\.|Dr\.|Prof\.|Professor|CEO|President|Director|Founder|Chairman|Manager)\s+" + re.escape(candidate.text)
+        has_title = bool(re.search(title_pattern, candidate.context, re.IGNORECASE))
+        
+        # Also check for role-based titles after the name
+        role_pattern = re.escape(candidate.text) + r",?\s+(CEO|President|Director|Founder|Chairman|Manager|Engineer|Scientist)"
+        has_role_title = bool(re.search(role_pattern, candidate.context, re.IGNORECASE))
+        
+        return has_title or has_role_title
+    
+    def _has_suffix(self, text: str) -> bool:
+        """Check if name has common suffixes"""
+        suffix_pattern = r'\b(Jr\.?|Sr\.?|III|IV|V|II|PhD|MD|Esq\.?)$'
+        return bool(re.search(suffix_pattern, text, re.IGNORECASE))
+    
     def _calculate_evidence_score(self, candidate: PersonCandidate, full_text: str) -> float:
-        """Calculate evidence score using simple, clear rules"""
+        """Calculate evidence score using position-aware corpus validation with depth scoring"""
         
         # Parse name components
         tokens = candidate.tokens
         if not tokens:
             return 0.0
+        
+        # Quick blacklist check for obvious false positives
+        if self._is_geographic_location(candidate.text):
+            candidate.evidence.append('geographic_location_rejected')
+            return 0.0
             
-        first_token = tokens[0].lower()
-        last_token = tokens[-1].lower() if len(tokens) > 1 else ""
+        if self._is_publication_name(candidate.text):
+            candidate.evidence.append('publication_name_rejected')
+            return 0.0
         
-        # Check for title in context (before the name)
-        title_pattern = r"(Mr\.|Ms\.|Mrs\.|Dr\.|Prof\.|Professor|CEO|President|Director|Founder)\s+" + re.escape(candidate.text)
-        has_title = bool(re.search(title_pattern, candidate.context, re.IGNORECASE))
+        # Position-aware corpus validation
+        # Handle titles - if first token is a title, skip it for validation
+        titles = {'mr.', 'ms.', 'mrs.', 'dr.', 'prof.', 'professor', 'ceo', 'president', 'director', 'founder', 'chairman', 'manager'}
+        if tokens[0].lower() in titles and len(tokens) > 1:
+            first_token = tokens[1].lower()  # Skip title, use next token as first name
+            name_start_index = 1
+        else:
+            first_token = tokens[0].lower()
+            name_start_index = 0
         
-        # Also check for role-based titles after the name
-        role_pattern = re.escape(candidate.text) + r",?\s+(CEO|President|Director|Founder)"
-        has_role_title = bool(re.search(role_pattern, candidate.context, re.IGNORECASE))
+        # Handle suffixes - if last token is a suffix, use second-to-last as last name
+        suffixes = {'jr', 'jr.', 'sr', 'sr.', 'iii', 'iv', 'v', 'ii', 'phd', 'md', 'esq', 'esq.'}
+        if len(tokens) > 1 and tokens[-1].lower() in suffixes:
+            last_token = tokens[-2].lower() if len(tokens) > name_start_index + 1 else ""
+            name_end_index = -2
+        else:
+            last_token = tokens[-1].lower() if len(tokens) > name_start_index else ""
+            name_end_index = -1
         
-        has_title = has_title or has_role_title
+        # First position must be in first_names corpus
+        has_valid_first = first_token in self.first_names
+        if not has_valid_first:
+            candidate.evidence.append('invalid_first_name')
+            return 0.0
         
-        # Check against name corpora
-        has_first = first_token in self.first_names
-        has_last = last_token in self.last_names if last_token else False
+        # For single token, only accept if in first names with title
+        if len(tokens) == 1:
+            has_title = self._has_title_context(candidate)
+            if has_title and has_valid_first:
+                candidate.evidence.extend(['title', 'single_first_name'])
+                return 0.6
+            return 0.0
         
-        # Apply YOUR EXACT LOGIC:
+        # Last position must be in last_names corpus  
+        has_valid_last = last_token in self.last_names
+        if not has_valid_last:
+            candidate.evidence.append('invalid_last_name')
+            return 0.0
         
-        # IDEAL: Title + First Name + Last Name = High Confidence
-        if has_title and has_first and has_last:
-            candidate.evidence.extend(['title', 'first_name', 'last_name'])
-            return 0.9
+        # Base score for valid first + last name
+        base_score = 0.7
+        candidate.evidence.extend(['first_name', 'last_name'])
+        
+        # Depth scoring - add bonuses for additional validation
+        bonus_score = 0.0
+        
+        # Title prefix bonus
+        has_title = self._has_title_context(candidate)
+        if has_title:
+            bonus_score += 0.3
+            candidate.evidence.append('title')
+        
+        # Middle name validation bonus (check against both first and last name corpus)
+        actual_name_tokens = len(tokens) - name_start_index  # Exclude title
+        if name_end_index == -2:  # Has suffix
+            actual_name_tokens -= 1  # Exclude suffix
+        
+        if actual_name_tokens > 2:  # Has middle names
+            # Get middle tokens between first name and last name
+            middle_start = name_start_index + 1
+            if name_end_index == -2:  # Has suffix
+                middle_end = len(tokens) - 2  # Exclude last name and suffix
+            else:
+                middle_end = len(tokens) - 1  # Exclude last name only
+                
+            middle_tokens = tokens[middle_start:middle_end]
+            valid_middle_count = 0
             
-        # VERY GOOD: First Name + Last Name (both in corpus) = High Confidence
-        if has_first and has_last and len(tokens) >= 2:
-            candidate.evidence.extend(['first_name', 'last_name'])
-            return 0.85
-            
-        # GOOD: Title + Last Name = Medium-High Confidence  
-        if has_title and has_last:
-            candidate.evidence.extend(['title', 'last_name'])
-            return 0.8
-            
-        # MAYBE: Single First Name (if in corpus) = Lower Confidence
-        if len(tokens) == 1 and has_first:
-            candidate.evidence.append('single_first_name')
-            return 0.6
-            
-        # REJECT: Everything else
-        candidate.evidence.append('failed_name_validation')
-        return 0.0
+            for middle_token in middle_tokens:
+                middle_lower = middle_token.lower()
+                # Middle names can be either first names or last names
+                if middle_lower in self.first_names or middle_lower in self.last_names:
+                    valid_middle_count += 1
+                    
+            if middle_tokens and valid_middle_count == len(middle_tokens):  # All middle names valid
+                bonus_score += 0.2 * valid_middle_count
+                candidate.evidence.append(f'valid_middle_names_{valid_middle_count}')
+        
+        # Suffix bonus (Jr., Sr., III, etc.)
+        if self._has_suffix(candidate.text):
+            bonus_score += 0.1
+            candidate.evidence.append('suffix')
+        
+        final_score = min(base_score + bonus_score, 1.0)  # Cap at 1.0
+        return final_score
     
     def _calculate_pattern_score(self, candidate: PersonCandidate) -> float:
         """Calculate pattern matching score"""

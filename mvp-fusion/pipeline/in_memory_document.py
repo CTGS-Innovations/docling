@@ -121,8 +121,14 @@ class InMemoryDocument:
             else:
                 clean_yaml[key] = value
             
-        # Serialize clean YAML frontmatter
-        yaml_content = yaml.dump(clean_yaml, default_flow_style=False, sort_keys=False)
+        # Serialize clean YAML frontmatter with no line wrapping
+        yaml_content = yaml.dump(
+            clean_yaml, 
+            default_flow_style=False, 
+            sort_keys=False,
+            width=float('inf'),  # Prevent line wrapping
+            allow_unicode=True   # Properly handle unicode characters
+        )
         
         # Combine YAML frontmatter with markdown content
         if self.markdown_content.startswith('---'):
