@@ -62,3 +62,4 @@ mvp-fusion/compressed_outputs/fusion.tar.xz
 mvp-fusion/compressed_outputs/fusion.tar.zst
 mvp-fusion/fusion_pipeline.log
 NER/
+mvp-f.tar
