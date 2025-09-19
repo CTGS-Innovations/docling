@@ -35,6 +35,7 @@ from typing import List, Dict, Any, Union, Optional, Set
 from dataclasses import dataclass
 
 from utils.logging_config import get_fusion_logger
+from utils.phase_manager import get_phase_manager, set_current_phase, add_files_processed, add_pages_processed, get_phase_performance_report
 from pipeline.in_memory_document import InMemoryDocument
 from metadata.yaml_metadata_engine import YAMLMetadataEngine
 
@@ -59,6 +60,13 @@ try:
 except ImportError:
     CONSERVATIVE_PERSON_AVAILABLE = False
 
+# Import entity normalizer for structured data enhancement
+try:
+    from knowledge.extractors.entity_normalizer import EntityNormalizer
+    ENTITY_NORMALIZER_AVAILABLE = True
+except ImportError:
+    ENTITY_NORMALIZER_AVAILABLE = False
+
 
 @dataclass
 class WorkItem:
@@ -79,6 +87,23 @@ class ServiceProcessor:
         self.config = config
         self.logger = get_fusion_logger(__name__)
         self.yaml_engine = YAMLMetadataEngine()  # Initialize YAML metadata engine
+        
+        # Phase-specific loggers for clearer identification
+        self.pdf_converter = get_fusion_logger("pdf_converter")
+        self.document_classifier = get_fusion_logger("document_classifier") 
+        self.core8_extractor = get_fusion_logger("core8_extractor")
+        self.entity_extraction = get_fusion_logger("entity_extraction")
+        self.semantic_analyzer = get_fusion_logger("semantic_analyzer")
+        
+        # Service coordination loggers
+        self.service_coordinator = get_fusion_logger("service_coordinator")
+        self.document_processor = get_fusion_logger("document_processor")
+        self.file_writer = get_fusion_logger("file_writer")
+        self.memory_manager = get_fusion_logger("memory_manager")
+        self.queue_manager = get_fusion_logger("queue_manager")
+        
+        # Initialize phase manager
+        self.phase_manager = get_phase_manager()
         
         # Worker configuration - use CLI override if provided, otherwise config
         if max_workers is not None:
@@ -105,8 +130,9 @@ class ServiceProcessor:
         self.person_extractor = None
         self._initialize_extractors()
         
-        self.logger.staging(f"Service Processor initialized: 1 I/O + {self.cpu_workers} CPU workers")
-        self.logger.logger.debug(f"📋 Queue size: {self.queue_size}, Memory limit: {self.memory_limit_mb}MB")
+        self.service_coordinator.staging(f"Service Processor initialized: 1 I/O + {self.cpu_workers} CPU workers")
+        set_current_phase('initialization')
+        self.phase_manager.log('memory_manager', f"📋 Queue size: {self.queue_size}, Memory limit: {self.memory_limit_mb}MB")
     
     def _initialize_extractors(self):
         """Initialize real entity extractors for CPU workers"""
@@ -128,19 +154,31 @@ class ServiceProcessor:
                         organizations_path=corpus_dir / "organizations_2025_09_18.txt",
                         min_confidence=0.7
                     )
-                    self.logger.logger.debug("✅ Conservative person extractor initialized with 429K first names, 99K last names, 139K orgs")
+                    set_current_phase('initialization')
+                    self.phase_manager.log('core8_extractor', "✅ Conservative person extractor initialized with 429K first names, 99K last names, 139K orgs")
                 
                 # Load GPE corpus for geopolitical entity recognition
                 self.gpe_corpus = self._load_gpe_corpus()
                 
-                self.logger.logger.debug("✅ Real extractors initialized")
+                # Initialize entity normalizer for structured data enhancement
+                if ENTITY_NORMALIZER_AVAILABLE:
+                    self.entity_normalizer = EntityNormalizer()
+                    set_current_phase('initialization')
+                    self.phase_manager.log('core8_extractor', "✅ Entity normalizer initialized for structured data enhancement")
+                else:
+                    self.entity_normalizer = None
+                
+                set_current_phase('initialization')
+                self.phase_manager.log('core8_extractor', "✅ Real extractors initialized")
             except Exception as e:
                 self.logger.logger.warning(f"⚠️  Failed to initialize extractors: {e}")
                 self.aho_corasick_engine = None
                 self.semantic_extractor = None
                 self.person_extractor = None
+                self.entity_normalizer = None
         else:
             self.logger.logger.warning("⚠️  Real extractors not available - using mock processing")
+            self.entity_normalizer = None
     
     def start_service(self):
         """Start the I/O + CPU worker service"""
@@ -149,7 +187,7 @@ class ServiceProcessor:
             return
         
         self.active = True
-        self.logger.staging("Starting I/O + CPU service...")
+        self.service_coordinator.staging("Starting I/O + CPU service...")
         
         # Start CPU worker pool
         self.cpu_executor = ThreadPoolExecutor(
@@ -157,14 +195,14 @@ class ServiceProcessor:
             thread_name_prefix="CPUWorker"
         )
         
-        self.logger.staging(f"Service started: 1 I/O worker + {self.cpu_workers} CPU workers")
+        self.service_coordinator.staging(f"Service started: 1 I/O worker + {self.cpu_workers} CPU workers")
     
     def stop_service(self):
         """Stop the I/O + CPU worker service"""
         if not self.active:
             return
         
-        self.logger.staging("Stopping I/O + CPU service...")
+        self.service_coordinator.staging("Stopping I/O + CPU service...")
         self.active = False
         
         # Stop CPU workers
@@ -172,7 +210,7 @@ class ServiceProcessor:
             self.cpu_executor.shutdown(wait=True)
             self.cpu_executor = None
         
-        self.logger.staging("Service stopped")
+        self.service_coordinator.staging("Service stopped")
     
     def _extract_universal_entities(self, content: str) -> Dict[str, List]:
         """
@@ -187,7 +225,8 @@ class ServiceProcessor:
         if self.person_extractor:
             try:
                 conservative_persons = self.person_extractor.extract_persons(content)
-                self.logger.logger.debug(f"🎯 Conservative person extractor found {len(conservative_persons)} validated persons")
+                set_current_phase('entity_extraction')
+                self.phase_manager.log('core8_extractor', f"🎯 Conservative person extractor found {len(conservative_persons)} validated persons")
                 
                 entities['person'] = []
                 for person in conservative_persons:
@@ -475,7 +514,8 @@ class ServiceProcessor:
                         # Skip comments and empty lines
                         if line and not line.startswith('#'):
                             gpe_entities.add(line)
-                self.logger.logger.debug(f"✅ Loaded {len(gpe_entities)} GPE entities from corpus")
+                set_current_phase('entity_extraction')
+                self.phase_manager.log('entity_extraction', f"✅ Loaded {len(gpe_entities)} GPE entities from corpus")
             else:
                 self.logger.logger.warning(f"⚠️  GPE corpus file not found: {gpe_file}")
         except Exception as e:
@@ -553,7 +593,7 @@ class ServiceProcessor:
         # Set thread name for worker tagging
         threading.current_thread().name = "IOWorker-1"
         
-        self.logger.staging(f"I/O worker starting ingestion of {len(file_paths)} files")
+        self.queue_manager.staging(f"I/O worker starting ingestion of {len(file_paths)} files")
         
         for i, file_path in enumerate(file_paths):
             if not self.active:
@@ -566,7 +606,7 @@ class ServiceProcessor:
                 
                 # Real file processing (I/O bound)
                 if file_path.suffix.lower() == '.pdf':
-                    self.logger.conversion(f"Converting PDF to markdown: {file_path.name}")
+                    self.pdf_converter.conversion(f"Converting PDF to markdown: {file_path.name}")
                     markdown_content = self._convert_pdf_to_markdown(file_path)
                 else:
                     # Read text files directly
@@ -612,7 +652,10 @@ class ServiceProcessor:
                 import yaml
                 doc.yaml_frontmatter = yaml.safe_load(yaml_content.replace('---\n', '').replace('\n---', ''))
                 
-                self.logger.logger.debug(f"📄 Created InMemoryDocument with basic YAML: {file_path.name}")
+                set_current_phase('document_processing')
+                add_files_processed(1)
+                add_pages_processed(page_count)
+                self.phase_manager.log('document_processor', f"📄 Created InMemoryDocument with basic YAML: {file_path.name}")
                 
                 # Create work item for CPU workers (now passes the document)
                 work_item = WorkItem(
@@ -637,7 +680,7 @@ class ServiceProcessor:
         for _ in range(self.cpu_workers):
             self.work_queue.put(None)  # Sentinel value
         
-        self.logger.staging(f"I/O worker completed ingestion of {len(file_paths)} files")
+        self.queue_manager.staging(f"I/O worker completed ingestion of {len(file_paths)} files")
     
     def _cpu_worker_processing(self, worker_id: int) -> List[InMemoryDocument]:
         """
@@ -653,7 +696,8 @@ class ServiceProcessor:
         threading.current_thread().name = f"CPUWorker-{worker_id}"
         
         results = []
-        self.logger.logger.debug(f"🧠 CPU worker {worker_id} started")
+        set_current_phase('service_coordination')
+        self.phase_manager.log('service_coordinator', f"🧠 CPU worker {worker_id} started")
         
         while self.active:
             try:
@@ -670,14 +714,15 @@ class ServiceProcessor:
                 # Get the InMemoryDocument from I/O worker (shared memory handoff)
                 doc = work_item.document
                 
-                self.logger.semantics(f"Processing entities: {doc.source_filename}")
-                self.logger.logger.debug(f"📄 Received InMemoryDocument with YAML: {doc.source_filename}")
+                self.entity_extraction.semantics(f"Processing entities: {doc.source_filename}")
+                set_current_phase('document_processing')
+                self.phase_manager.log('document_processor', f"📄 Received InMemoryDocument with YAML: {doc.source_filename}")
                 
                 # Real entity extraction and classification (enrich existing document)
                 try:
                     if self.aho_corasick_engine and self.semantic_extractor:
                         # Real classification with Aho-Corasick
-                        self.logger.classification(f"Classifying document: {doc.source_filename}")
+                        self.document_classifier.classification(f"Classifying document: {doc.source_filename}")
                         
                         # Get domain and document type classifications
                         domain_results = self.aho_corasick_engine.classify_domains(doc.markdown_content)
@@ -706,8 +751,7 @@ class ServiceProcessor:
                             'primary_domain_confidence': primary_domain_confidence,
                             'primary_document_type': primary_document_type,
                             'primary_doctype_confidence': primary_doctype_confidence,
-                            'domain_routing': routing_decisions,
-                            'source_file': doc.source_filename
+                            'domain_routing': routing_decisions
                         }
                         
                         if classification_result:
@@ -718,11 +762,40 @@ class ServiceProcessor:
                                 doc.yaml_frontmatter['processing'] = {}
                             doc.yaml_frontmatter['processing']['stage'] = 'classified'
                             
-                            self.logger.logger.debug(f"📋 Added classification to YAML: {doc.source_filename}")
+                            set_current_phase('classification')
+                            # Get page count from document metadata
+                            doc_page_count = doc.yaml_frontmatter.get('page_count', 0)
+                            add_pages_processed(doc_page_count)
+                            self.phase_manager.log('document_classifier', f"📋 Added classification to YAML: {doc.source_filename}")
                             
                             # Extract Core 8 Universal Entities
-                            self.logger.enrichment(f"Extracting entities: {doc.source_filename}")
+                            self.core8_extractor.enrichment(f"Extracting entities: {doc.source_filename}")
                             entities = self._extract_universal_entities(doc.markdown_content)
+                            
+                            # Normalize entities for structured data enhancement
+                            if self.entity_normalizer:
+                                normalized_entities = {}
+                                normalization_count = 0
+                                
+                                for entity_type, entity_list in entities.items():
+                                    normalized_list = []
+                                    for entity in entity_list:
+                                        # Normalize entity while preserving original structure
+                                        normalized_entity = self.entity_normalizer.normalize_entity(entity)
+                                        normalized_list.append(normalized_entity)
+                                        
+                                        # Count successful normalizations
+                                        if 'normalized' in normalized_entity and 'error' not in normalized_entity['normalized']:
+                                            normalization_count += 1
+                                    
+                                    normalized_entities[entity_type] = normalized_list
+                                
+                                # Use normalized entities
+                                entities = normalized_entities
+                                
+                                # Log normalization success
+                                if normalization_count > 0:
+                                    self.core8_extractor.enrichment(f"🔧 Normalized {normalization_count} entities with structured data")
                             
                             # Add entity extraction to YAML
                             doc.yaml_frontmatter['entities'] = entities
@@ -742,12 +815,16 @@ class ServiceProcessor:
                                     core8_counts.append(f"{entity_type}:{count}")
                             
                             if core8_counts:
-                                self.logger.semantics(f"📊 Global entities: {', '.join(core8_counts)}")
+                                self.core8_extractor.semantics(f"📊 Global entities: {', '.join(core8_counts)}")
                             
-                            self.logger.logger.debug(f"🔍 Extracted {doc.yaml_frontmatter['entity_insights']['total_entities_found']} total entities")
+                            set_current_phase('entity_extraction')
+                            # Get page count from document metadata
+                            doc_page_count = doc.yaml_frontmatter.get('page_count', 0)
+                            add_pages_processed(doc_page_count)
+                            self.phase_manager.log('entity_extraction', f"🔍 Extracted {doc.yaml_frontmatter['entity_insights']['total_entities_found']} total entities")
                             
                             # Real semantic extraction
-                            self.logger.semantics(f"Extracting semantic facts: {doc.source_filename}")
+                            self.semantic_analyzer.semantics(f"Extracting semantic facts: {doc.source_filename}")
                             semantic_facts = self.semantic_extractor.extract_semantic_facts_from_classification(
                                 classification_result, 
                                 doc.markdown_content
@@ -761,7 +838,11 @@ class ServiceProcessor:
                                     doc.yaml_frontmatter['processing'] = {}
                                 doc.yaml_frontmatter['processing']['stage'] = 'extracted'
                                 
-                                self.logger.logger.debug(f"🔍 Added semantic JSON to document: {doc.source_filename}")
+                                set_current_phase('semantic_analysis')
+                                # Get page count from document metadata
+                                doc_page_count = doc.yaml_frontmatter.get('page_count', 0)
+                                add_pages_processed(doc_page_count)
+                                self.phase_manager.log('semantic_analyzer', f"🔍 Added semantic JSON to document: {doc.source_filename}")
                                 
                                 # Log entity counts (following Rule #11 format)
                                 global_facts = semantic_facts.get('global_entities', {})
@@ -770,19 +851,20 @@ class ServiceProcessor:
                                 if global_facts:
                                     global_counts = [f"{k}:{len(v)}" for k, v in global_facts.items() if v]
                                     if global_counts:
-                                        self.logger.semantics(f"Global entities: {', '.join(global_counts)}")
+                                        self.semantic_analyzer.semantics(f"Global entities: {', '.join(global_counts)}")
                                 
                                 if domain_facts:
                                     domain_counts = [f"{k}:{len(v)}" for k, v in domain_facts.items() if v]
                                     if domain_counts:
-                                        self.logger.semantics(f"Domain entities: {', '.join(domain_counts)}")
+                                        self.semantic_analyzer.semantics(f"Domain entities: {', '.join(domain_counts)}")
                         
                         doc.success = True
                     else:
                         # Fallback to mock processing
                         doc.success = True
                         doc.yaml_frontmatter['processing']['stage'] = 'mock_processed'
-                        self.logger.logger.debug(f"⚠️  Using mock processing for {doc.source_filename}")
+                        set_current_phase('document_processing')
+                        self.phase_manager.log('document_processor', f"⚠️  Using mock processing for {doc.source_filename}")
                         
                 except Exception as e:
                     self.logger.logger.error(f"❌ Entity extraction failed for {doc.source_filename}: {e}")
@@ -793,7 +875,8 @@ class ServiceProcessor:
                 
                 # Return the enriched document
                 results.append(doc)
-                self.logger.logger.debug(f"✅ Completed processing: {doc.source_filename}")
+                set_current_phase('document_processing')
+                self.phase_manager.log('document_processor', f"✅ Completed processing: {doc.source_filename}")
                 
             except Empty:
                 # Normal timeout, continue checking
@@ -801,7 +884,7 @@ class ServiceProcessor:
             except Exception as e:
                 self.logger.logger.error(f"❌ CPU worker {worker_id} error: {e}")
         
-        self.logger.logger.debug(f"🏁 CPU worker {worker_id} finished: {len(results)} items processed")
+        self.document_processor.logger.debug(f"🏁 CPU worker {worker_id} finished: {len(results)} items processed")
         return results
     
     def process_files_service(self, file_paths: List[Path], output_dir: Path = None) -> tuple[List[InMemoryDocument], float]:
@@ -816,7 +899,7 @@ class ServiceProcessor:
         
         total_start = time.perf_counter()
         
-        self.logger.staging(f"Processing {len(file_paths)} files with I/O + CPU service")
+        self.service_coordinator.staging(f"Processing {len(file_paths)} files with I/O + CPU service")
         
         # Start I/O worker thread
         io_thread = threading.Thread(
@@ -834,18 +917,18 @@ class ServiceProcessor:
         
         # Wait for I/O completion
         io_thread.join()
-        self.logger.staging("I/O ingestion completed")
+        self.queue_manager.staging("I/O ingestion completed")
         
         # Collect CPU results
         all_results = []
         for i, future in enumerate(cpu_futures):
             worker_results = future.result()
             all_results.extend(worker_results)
-            self.logger.logger.debug(f"📊 CPU worker {i+1} returned {len(worker_results)} results")
+            self.document_processor.logger.debug(f"📊 CPU worker {i+1} returned {len(worker_results)} results")
         
         total_time = time.perf_counter() - total_start
         
-        self.logger.staging(f"Service processing complete: {len(all_results)} results in {total_time:.2f}s")
+        self.service_coordinator.staging(f"Service processing complete: {len(all_results)} results in {total_time:.2f}s")
         
         # Write files to disk (WRITER-IO phase)
         if all_results:
@@ -869,7 +952,7 @@ class ServiceProcessor:
                         yaml_size = len(str(doc.yaml_frontmatter)) if doc.yaml_frontmatter else 0
                         json_size = len(str(doc.semantic_json)) if doc.semantic_json else 0
                         
-                        self.logger.logger.debug(f"📄 Document state: {doc.source_filename} - YAML: {yaml_size}B, JSON: {json_size}B")
+                        self.memory_manager.logger.debug(f"📄 Document state: {doc.source_filename} - YAML: {yaml_size}B, JSON: {json_size}B")
                         
                         # Write markdown file (with YAML frontmatter)
                         md_filename = f"{doc.source_stem}.md"
@@ -888,15 +971,12 @@ class ServiceProcessor:
                             if 'conversion' in doc.yaml_frontmatter:
                                 ordered_yaml['conversion'] = doc.yaml_frontmatter['conversion']
                             
-                            # 2. Source info
-                            if 'source' in doc.yaml_frontmatter:
-                                ordered_yaml['source'] = doc.yaml_frontmatter['source']
-                            
-                            # 3. Content detection (pre-screening flags)
+                            # 2. Content analysis (pre-screening flags)
                             if 'content_detection' in doc.yaml_frontmatter:
-                                ordered_yaml['content_detection'] = doc.yaml_frontmatter['content_detection']
+                                import copy
+                                ordered_yaml['content_analysis'] = copy.deepcopy(doc.yaml_frontmatter['content_detection'])
                             
-                            # 4. Processing info (merge processing and processing_info)
+                            # 3. Processing info (merge processing and processing_info)
                             processing = {}
                             if 'processing' in doc.yaml_frontmatter:
                                 processing.update(doc.yaml_frontmatter['processing'])
@@ -905,19 +985,63 @@ class ServiceProcessor:
                             if processing:
                                 ordered_yaml['processing'] = processing
                             
-                            # 5. Classification LAST (uses all the above info)
+                            # 4. Domain Classification (enhanced structure)
                             if 'classification' in doc.yaml_frontmatter:
-                                ordered_yaml['classification'] = doc.yaml_frontmatter['classification']
+                                import copy
+                                classification_data = copy.deepcopy(doc.yaml_frontmatter['classification'])
+                                if 'source_file' in classification_data:
+                                    del classification_data['source_file']
+                                
+                                # Build enhanced domain_classification structure
+                                domain_classification = {}
+                                
+                                # Routing decisions FIRST (drives classification)
+                                if 'domain_routing' in classification_data:
+                                    domain_classification['routing'] = copy.deepcopy(classification_data['domain_routing'])
+                                
+                                # Top domains and document types (configurable top 5)
+                                domains = classification_data.get('domains', {})
+                                document_types = classification_data.get('document_types', {})
+                                
+                                # Get top 5 domains with scores > 0.5
+                                top_domains = [(k, v) for k, v in sorted(domains.items(), key=lambda x: x[1], reverse=True) 
+                                             if v > 0.5][:5]
+                                top_doc_types = [(k, v) for k, v in sorted(document_types.items(), key=lambda x: x[1], reverse=True) 
+                                               if v > 0.5][:5]
+                                
+                                if top_domains:
+                                    domain_classification['top_domains'] = [k for k, v in top_domains]
+                                if top_doc_types:
+                                    domain_classification['top_document_types'] = [k for k, v in top_doc_types]
+                                
+                                # Full detailed breakdowns (only scores > 0.5)
+                                filtered_domains = {k: v for k, v in domains.items() if v > 0.5}
+                                filtered_doc_types = {k: v for k, v in document_types.items() if v > 0.5}
+                                
+                                if filtered_domains:
+                                    domain_classification['domains'] = filtered_domains
+                                if filtered_doc_types:
+                                    domain_classification['document_types'] = filtered_doc_types
+                                
+                                ordered_yaml['domain_classification'] = domain_classification
+                            
+                            # 5. Source info
+                            if 'source' in doc.yaml_frontmatter:
+                                ordered_yaml['source'] = doc.yaml_frontmatter['source']
                             
                             # Add any other sections not explicitly ordered
                             for key, value in doc.yaml_frontmatter.items():
-                                if key not in ordered_yaml and key not in ['processing_info']:
+                                if key not in ordered_yaml and key not in ['processing_info', 'classification', 'content_detection']:
                                     ordered_yaml[key] = value
                             
                             yaml_header = yaml.dump(dict(ordered_yaml), default_flow_style=False, sort_keys=False)
                             full_content = f"---\n{yaml_header}---\n\n{doc.markdown_content}"
                             
-                        self.logger.writer(f"Writing markdown with YAML: {md_filename}")
+                        set_current_phase('file_writing')
+                        # Get page count from document metadata
+                        doc_page_count = doc.yaml_frontmatter.get('page_count', 0)
+                        add_pages_processed(doc_page_count)
+                        self.phase_manager.log('file_writer', f"Writing markdown with YAML: {md_filename}")
                         with open(md_path, 'w', encoding='utf-8') as f:
                             f.write(full_content)
                         
@@ -926,19 +1050,22 @@ class ServiceProcessor:
                             json_filename = f"{doc.source_stem}.json"
                             json_path = output_dir / json_filename
                             
-                            self.logger.writer(f"Writing JSON knowledge: {json_filename}")
+                            set_current_phase('file_writing')
+                            self.phase_manager.log('file_writer', f"Writing JSON knowledge: {json_filename}")
                             import json
                             with open(json_path, 'w', encoding='utf-8') as f:
                                 json.dump(doc.semantic_json, f, indent=2)
                         else:
-                            self.logger.logger.debug(f"⚠️  No semantic JSON to write for {doc.source_filename}")
+                            set_current_phase('file_writing')
+                            self.phase_manager.log('file_writer', f"⚠️  No semantic JSON to write for {doc.source_filename}")
                         
                         successful_writes += 1
                         
                     except Exception as e:
                         self.logger.logger.error(f"❌ Failed to write {doc.source_filename}: {e}")
             
-            self.logger.writer(f"Saved {successful_writes} files to {output_dir}")
+            set_current_phase('file_writing')
+            self.phase_manager.log('file_writer', f"Saved {successful_writes} files to {output_dir}")
             
         finally:
             # Restore original thread name

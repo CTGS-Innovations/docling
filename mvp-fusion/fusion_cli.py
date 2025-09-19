@@ -24,6 +24,7 @@ import tempfile
 
 # Import our centralized logging configuration
 from utils.logging_config import setup_logging, get_fusion_logger
+from utils.phase_manager import get_phase_performance_report
 from utils.deployment_manager import DeploymentManager
 
 
@@ -1204,6 +1205,11 @@ Examples:
                 # True failures vs skips and warnings
                 true_failures = failed - skipped_large
                 warnings_count = sum(1 for doc in results if doc.success and doc.error_message)
+                
+                # Show phase-by-phase performance breakdown
+                phase_report = get_phase_performance_report()
+                if phase_report and "📊 PHASE PERFORMANCE:" in phase_report:
+                    logger.stage(phase_report)
                 
                 logger.stage(f"\n🚀 PROCESSING PERFORMANCE:")
                 logger.stage(f"   🚀 PAGES/SEC: {pages_per_sec:.0f} (overall pipeline)")

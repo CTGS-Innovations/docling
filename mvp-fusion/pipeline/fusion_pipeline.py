@@ -42,6 +42,13 @@ except ImportError:
     AHOCORASICK_AVAILABLE = False
     logging.warning("⚠️  Aho-Corasick engine not available, falling back to regex patterns")
 
+# Import entity normalizer for structured data enhancement
+try:
+    from knowledge.extractors.entity_normalizer import EntityNormalizer
+    ENTITY_NORMALIZER_AVAILABLE = True
+except ImportError:
+    ENTITY_NORMALIZER_AVAILABLE = False
+
 
 class FusionPipeline:
     """
@@ -92,6 +99,17 @@ class FusionPipeline:
             except Exception as e:
                 self.logger.logger.warning(f"⚠️  Aho-Corasick initialization failed: {e}, using regex fallback")
                 self.ac_classifier = None
+        
+        # Initialize entity normalizer for structured data enhancement
+        if ENTITY_NORMALIZER_AVAILABLE:
+            try:
+                self.entity_normalizer = EntityNormalizer()
+                self.logger.entity("✅ Entity normalizer initialized for structured data enhancement")
+            except Exception as e:
+                self.logger.logger.warning(f"⚠️  EntityNormalizer initialization failed: {e}")
+                self.entity_normalizer = None
+        else:
+            self.entity_normalizer = None
         
     def process_files(self, extractor, file_paths: List[Path], output_dir: Path, 
                      max_workers: int = 2) -> tuple[List[InMemoryDocument], float, Dict[str, Any]]:
@@ -519,6 +537,31 @@ class FusionPipeline:
             # LAYER 4: ENTITY EXTRACTION (<20ms target)
             layer4_start = time.perf_counter()
             entity_data = self._layer4_entity_extraction(content)
+            
+            # Normalize entities for structured data enhancement
+            if hasattr(self, 'entity_normalizer') and self.entity_normalizer:
+                normalized_entities = {}
+                normalization_count = 0
+                
+                for entity_type, entity_list in entity_data['universal_entities'].items():
+                    normalized_list = []
+                    for entity in entity_list:
+                        # Normalize entity while preserving original structure
+                        normalized_entity = self.entity_normalizer.normalize_entity(entity)
+                        normalized_list.append(normalized_entity)
+                        
+                        # Count successful normalizations
+                        if 'normalized' in normalized_entity and 'error' not in normalized_entity['normalized']:
+                            normalization_count += 1
+                    
+                    normalized_entities[entity_type] = normalized_list
+                
+                # Use normalized entities
+                entity_data['universal_entities'] = normalized_entities
+                
+                # Log normalization success
+                if normalization_count > 0:
+                    self.logger.entity(f"🔧 Normalized {normalization_count} entities with structured data")
             
             # Clean entity structure
             classification_data['entities'] = entity_data['universal_entities']

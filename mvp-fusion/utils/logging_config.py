@@ -39,8 +39,9 @@ class FusionLogLevel:
     QUEUE = 23           # Work queue operations with metrics
     CLASSIFICATION = 22  # Document type detection
     ENRICHMENT = 21      # Entity enhancement
-    SEMANTICS = 20       # Entity extraction and semantic analysis
-    WRITER = 19          # Disk persistence operations
+    SEMANTICS = 20       # Semantic analysis and fact extraction
+    CONFIG = 19          # Configuration and deployment setup
+    WRITER = 18          # Disk persistence operations
     ENTITY = 15          # Legacy entity level (for compatibility)
     
 
@@ -71,6 +72,7 @@ def setup_logging(
     logging.addLevelName(FusionLogLevel.CLASSIFICATION, "CLASSIFICATION")
     logging.addLevelName(FusionLogLevel.ENRICHMENT, "ENRICHMENT")
     logging.addLevelName(FusionLogLevel.SEMANTICS, "SEMANTICS")
+    logging.addLevelName(FusionLogLevel.CONFIG, "CONFIG")
     logging.addLevelName(FusionLogLevel.WRITER, "WRITER")
     logging.addLevelName(FusionLogLevel.ENTITY, "ENTITY")
     
@@ -154,6 +156,7 @@ class ColoredFormatter(logging.Formatter):
         'CLASSIFICATION': '\033[93m', # Light Yellow - Classification
         'ENRICHMENT': '\033[95m',    # Light Magenta - Enrichment
         'SEMANTICS': '\033[97m',     # White - Semantic processing
+        'CONFIG': '\033[37m',        # Light Gray - Configuration
         'WRITER': '\033[92m',        # Light Green - Writing operations
         'PERF': '\033[33m',          # Yellow
         'WARNING': '\033[33m',       # Yellow
@@ -352,6 +355,10 @@ class LoggerAdapter:
     def semantics(self, message: str, **kwargs) -> None:
         """Log a semantic processing message."""
         self.logger.log(FusionLogLevel.SEMANTICS, message, **kwargs)
+        
+    def config(self, message: str, **kwargs) -> None:
+        """Log a configuration message."""
+        self.logger.log(FusionLogLevel.CONFIG, message, **kwargs)
         
     def writer(self, message: str, **kwargs) -> None:
         """Log a writer operation message."""

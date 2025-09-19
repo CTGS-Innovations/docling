@@ -27,7 +27,7 @@ class DeploymentManager:
         
         self.logger.stage(f"🚀 Deployment Profile: {self.active_profile['name']}")
         if self.active_profile.get('description'):
-            self.logger.logger.info(f"   {self.active_profile['description']}")
+            self.logger.config(f"   {self.active_profile['description']}")
     
     def _get_active_profile_name(self) -> str:
         """Get the active profile name from config"""
@@ -74,7 +74,7 @@ class DeploymentManager:
             return cli_override
         
         workers = self.active_profile.get('max_workers', 8)
-        self.logger.logger.info(f"   Workers: {workers}")
+        self.logger.config(f"   Workers: {workers}")
         return workers
     
     def get_memory_limit_mb(self) -> Optional[int]:
@@ -83,19 +83,19 @@ class DeploymentManager:
         if memory_mb:
             threshold = self.active_profile.get('memory_threshold', 0.8)
             usable_memory = int(memory_mb * threshold)
-            self.logger.logger.info(f"   Memory: {usable_memory}MB usable ({memory_mb}MB * {threshold})")
+            self.logger.config(f"   Memory: {usable_memory}MB usable ({memory_mb}MB * {threshold})")
             return usable_memory
         else:
-            self.logger.logger.info(f"   Memory: Unlimited")
+            self.logger.config(f"   Memory: Unlimited")
             return None
     
     def get_queue_size(self) -> Optional[int]:
         """Get queue size limit (None if unlimited)"""
         queue_size = self.active_profile.get('queue_size')
         if queue_size:
-            self.logger.logger.info(f"   Queue Size: {queue_size}")
+            self.logger.config(f"   Queue Size: {queue_size}")
         else:
-            self.logger.logger.info(f"   Queue Size: Unlimited")
+            self.logger.config(f"   Queue Size: Unlimited")
         return queue_size
     
     def is_memory_management_enabled(self) -> bool:
