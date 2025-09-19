@@ -681,7 +681,7 @@ class FusionPipeline:
                     self.logger.entity(f"🔧 Normalized {normalization_count} entities with structured data")
             
             # Clean entity structure
-            classification_data['entities'] = entity_data['universal_entities']
+            classification_data['raw_entities'] = entity_data['universal_entities']
             classification_data['entity_insights'] = {
                 'has_financial_data': entity_data['has_financial_data'],
                 'has_regulations': entity_data['has_regulations'],
@@ -864,7 +864,7 @@ class FusionPipeline:
         """
         try:
             # Extract global entities from classification data
-            entities_section = classification_data.get('entities', {})
+            entities_section = classification_data.get('raw_entities', {})
             global_entities_data = entities_section.get('global_entities', {})
             
             # Count global entities for reporting
@@ -1227,6 +1227,13 @@ class FusionPipeline:
             flpc = FastRegexEngine()
             
             # Core 8 entities using FLPC with conservative validation
+            # Extract percent separately then merge with measurements
+            percent_entities = self._extract_core8_percent_flpc(content, flpc)
+            measurement_entities = self._extract_core8_measurement_flpc(content, flpc)
+            
+            # Combine percent and measurement entities
+            all_measurements = measurement_entities + percent_entities
+            
             global_entities = {
                 'person': self._extract_core8_person_flpc(content, flpc),  # Re-enabled with conservative corpus validation
                 'org': self._extract_core8_org_flpc(content, flpc),
@@ -1235,15 +1242,27 @@ class FusionPipeline:
                 'date': self._extract_core8_date_flpc(content, flpc),
                 'time': self._extract_core8_time_flpc(content, flpc),
                 'money': self._extract_core8_money_flpc(content, flpc),
-                'percent': self._extract_core8_percent_flpc(content, flpc),
                 # Additional reliable patterns with FLPC
                 'phone': self._extract_core8_phone_flpc(content, flpc),
                 'regulation': self._extract_core8_regulation_flpc(content, flpc),
                 'url': self._extract_core8_url_flpc(content, flpc),
-                'measurement': self._extract_core8_measurement_flpc(content, flpc)
+                'measurement': all_measurements  # Combined measurements including percent
             }
         except Exception as e:
+            # Debug logging to identify why FLPC failed and fallback triggered
+            self.logger.logger.warning(f"🧪 TESTING: FLPC extraction failed, falling back to legacy method: {e}")
+            import traceback
+            self.logger.logger.warning(f"🧪 TESTING: FLPC failure traceback: {traceback.format_exc()}")
+            
             # Fallback to Python regex if FLPC fails
+            # Extract percent separately then merge with measurements
+            percent_entities = self._extract_percent(content)
+            measurement_entities = self._extract_measurements(content)
+            
+            # Convert percent strings to entity format with clean structure
+            percent_as_entities = [{'text': p, 'value': p, 'type': 'MEASUREMENT'} for p in percent_entities]
+            all_measurements = measurement_entities + percent_as_entities
+            
             global_entities = {
                 'person': self._extract_people_conservative(content),  # Conservative fallback person extraction
                 'org': self._extract_org(content),
@@ -1252,11 +1271,10 @@ class FusionPipeline:
                 'date': self._extract_dates(content),
                 'time': self._extract_time(content),
                 'money': self._extract_money(content),
-                'percent': self._extract_percent(content),
                 'phone': self._extract_phone(content), 
                 'regulation': self._extract_regulation(content),
                 'url': self._extract_urls(content),
-                'measurement': self._extract_measurements(content)
+                'measurement': all_measurements  # Combined measurements including percent
             }
         
         # Domain entity extraction using FLPC
@@ -1642,12 +1660,15 @@ class FusionPipeline:
         return self._extract_entities_with_spans(patterns, content, flpc, "MONEY")
     
     def _extract_core8_percent_flpc(self, content: str, flpc) -> List[Dict]:
-        """Extract percentages with spans using FLPC (Core 8)"""
+        """Extract percentages with spans using FLPC (Core 8) - categorized as MEASUREMENT"""
         patterns = [
             r'\d+(?:\.\d+)?%',
             r'\d+(?:\.\d+)?\s*percent',
         ]
-        return self._extract_entities_with_spans(patterns, content, flpc, "PERCENT")
+        # Extract as MEASUREMENT type with clean structure
+        entities = self._extract_entities_with_spans(patterns, content, flpc, "MEASUREMENT")
+        # Keep clean structure - no extra metadata fields
+        return entities
     
     def _extract_core8_phone_flpc(self, content: str, flpc) -> List[Dict]:
         """Extract phone numbers with spans using FLPC"""
@@ -1665,6 +1686,61 @@ class FusionPipeline:
         return self._extract_entities_with_spans(patterns, content, flpc, "URL")[:5]
     
     def _extract_core8_measurement_flpc(self, content: str, flpc) -> List[Dict]:
-        """Extract measurements with spans using FLPC"""
-        patterns = [r'\d+(?:\.\d+)?\s*(?:inches?|feet?|meters?|cm|mm|kg|lbs?|pounds?)\b']
-        return self._extract_entities_with_spans(patterns, content, flpc, "MEASUREMENT")
+        """
+        Extract measurements with spans using FLPC and industry-standard normalization.
+        
+        Uses the comprehensive normalization module with canonical unit conversions
+        for all 10 measurement categories following MVP-FUSION-NER.md PRD standards.
+        """
+        try:
+            # Use the new industry-standard measurement normalizer
+            from normalization import MeasurementNormalizer
+            
+            # Add debug logging
+            self.logger.logger.info("🧪 TESTING: Attempting industry-standard measurement normalization")
+            
+            normalizer = MeasurementNormalizer()
+            measurements = normalizer.extract_measurements(content)
+            
+            self.logger.logger.info(f"🧪 TESTING: Found {len(measurements)} normalized measurements")
+            
+            # Convert to MVP-Fusion entity format with clean, consistent structure
+            entities = []
+            for measurement in measurements:
+                entity_dict = {
+                    'value': measurement.text,  # Use original text as value for consistency
+                    'text': measurement.text,
+                    'type': 'MEASUREMENT',
+                    'span': measurement.span
+                }
+                entities.append(entity_dict)
+                
+                # Debug log first few measurements
+                if len(entities) <= 3:
+                    self.logger.logger.info(f"🧪 TESTING: Measurement {len(entities)}: {measurement.text} -> {measurement.normalized['value']} {measurement.normalized['unit']}")
+            
+            self.logger.logger.info(f"🧪 TESTING: Successfully created {len(entities)} measurement entities")
+            return entities[:20]  # Limit to 20 measurements for performance
+            
+        except Exception as e:
+            # Fallback to legacy FLPC patterns if normalization fails
+            self.logger.logger.warning(f"🧪 TESTING: Measurement normalization failed, using fallback: {e}")
+            import traceback
+            self.logger.logger.warning(f"🧪 TESTING: Traceback: {traceback.format_exc()}")
+            return self._extract_core8_measurement_flpc_fallback(content, flpc)
+    
+    def _extract_core8_measurement_flpc_fallback(self, content: str, flpc) -> List[Dict]:
+        """Fallback measurement extraction using legacy FLPC patterns"""
+        patterns = [
+            r'\d+(?:\.\d+)?\s*(?:inches?|feet?|ft|meters?|m|cm|mm|km|miles?|mi)\b',  # Length/distance
+            r'\d+(?:\.\d+)?\s*(?:kg|kilograms?|g|grams?|lbs?|pounds?|oz|ounces?)\b',  # Weight/mass
+            r'\d+(?:\.\d+)?\s*(?:degrees?|°C|°F|celsius|fahrenheit)\b',  # Temperature
+            r'\d+(?:\.\d+)?\s*(?:liters?|l|ml|gallons?|gal|fl\s*oz)\b',  # Volume
+            r'\d+(?:\.\d+)?\s*(?:mph|kph|km/h|m/s)\b',  # Speed
+        ]
+        entities = self._extract_entities_with_spans(patterns, content, flpc, "MEASUREMENT")
+        
+        # Keep clean structure - remove measurement_type metadata for consistent YAML
+        # The fallback entities already have the correct structure: value, text, type, span
+        
+        return entities

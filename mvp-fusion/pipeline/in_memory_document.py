@@ -8,9 +8,67 @@ Zero I/O between processing stages - everything stays in memory.
 
 import time
 import sys
+import re
 from pathlib import Path
 from typing import Dict, Any, Optional
 import yaml
+
+
+class NoAliasDumper(yaml.SafeDumper):
+    """Custom YAML dumper that disables anchors/aliases completely"""
+    def ignore_aliases(self, data):
+        # Never create anchors/aliases - always return True
+        return True
+
+# Force inline flow for dicts (so spans look like {start: 8067, end: 8072})
+def dict_representer(dumper, data):
+    # Check if this is a span-like dict (has 'start' and 'end' keys)
+    if 'start' in data and 'end' in data and len(data) == 2:
+        # Force flow style for span dictionaries
+        return dumper.represent_mapping('tag:yaml.org,2002:map', data.items(), flow_style=True)
+    elif len(data) <= 3 and all(isinstance(v, (int, float, str, type(None))) for v in data.values()):
+        # Also use flow style for other small, simple dicts
+        return dumper.represent_mapping('tag:yaml.org,2002:map', data.items(), flow_style=True)
+    else:
+        # Keep block style for larger, nested structures
+        return dumper.represent_mapping('tag:yaml.org,2002:map', data.items(), flow_style=False)
+
+# Optional: force inline flow for lists too (for compact output)
+def list_representer(dumper, data):
+    # Check if all items are simple values (not nested structures)
+    if all(isinstance(item, (int, float, str, type(None))) for item in data):
+        return dumper.represent_sequence('tag:yaml.org,2002:seq', data, flow_style=True)
+    else:
+        # Keep block style for lists with complex items
+        return dumper.represent_sequence('tag:yaml.org,2002:seq', data, flow_style=False)
+
+# Register the custom representers
+NoAliasDumper.add_representer(dict, dict_representer)
+NoAliasDumper.add_representer(list, list_representer)
+
+# Backwards compatibility aliases
+NoAnchorsDumper = NoAliasDumper
+NoAliasFlowDumper = NoAliasDumper
+
+
+def force_flow_style_spans(yaml_content: str) -> str:
+    """
+    ULTIMATE FALLBACK: Convert any remaining block-style spans to flow style.
+    Regex post-processing to guarantee {start: X, end: Y} format.
+    """
+    # Pattern to match block-style spans:
+    # span:
+    #   start: 123
+    #   end: 456
+    pattern = r'(\s+)span:\s*\n\s+start:\s*(\d+)\s*\n\s+end:\s*(\d+)'
+    
+    def replace_span(match):
+        indent = match.group(1)
+        start = match.group(2)
+        end = match.group(3)
+        return f'{indent}span: {{start: {start}, end: {end}}}'
+    
+    return re.sub(pattern, replace_span, yaml_content)
 
 
 class MemoryOverflowError(Exception):
@@ -126,14 +184,18 @@ class InMemoryDocument:
             else:
                 clean_yaml[key] = value
             
-        # Serialize clean YAML frontmatter with no line wrapping
+        # Serialize clean YAML frontmatter without anchors/aliases and with flow style
         yaml_content = yaml.dump(
             clean_yaml, 
-            default_flow_style=False, 
+            Dumper=NoAliasDumper,
+            default_flow_style=None,  # Let custom representers decide
             sort_keys=False,
-            width=float('inf'),  # Prevent line wrapping
+            width=200,  # Reasonable line width
             allow_unicode=True   # Properly handle unicode characters
         )
+        
+        # ULTIMATE FALLBACK: Apply regex post-processing to guarantee flow style spans
+        yaml_content = force_flow_style_spans(yaml_content)
         
         # Combine YAML frontmatter with markdown content
         if self.markdown_content.startswith('---'):
@@ -166,7 +228,7 @@ class InMemoryDocument:
             return {}
         
         # Calculate entity counts from classification data
-        entities_section = classification.get('entities', {})
+        entities_section = classification.get('raw_entities', {})
         global_entities = entities_section.get('global_entities', {})
         domain_entities = entities_section.get('domain_entities', {})
         

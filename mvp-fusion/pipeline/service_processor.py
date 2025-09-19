@@ -11,6 +11,7 @@ Architecture:
 """
 
 import time
+import yaml
 try:
     from knowledge.extractors.fast_regex import FastRegexEngine
     import knowledge.extractors.fast_regex as regex_module
@@ -36,7 +37,7 @@ from dataclasses import dataclass
 
 from utils.logging_config import get_fusion_logger
 from utils.phase_manager import get_phase_manager, set_current_phase, add_files_processed, add_pages_processed, get_phase_performance_report
-from pipeline.in_memory_document import InMemoryDocument
+from pipeline.in_memory_document import InMemoryDocument, NoAliasDumper, force_flow_style_spans
 from metadata.yaml_metadata_engine import YAMLMetadataEngine
 
 # Import real extraction functions
@@ -231,7 +232,7 @@ class ServiceProcessor:
                 
                 entities['person'] = []
                 for person in conservative_persons:
-                    # Standard NER format with validation confidence (from Aho-Corasick corpus matching)
+                    # Standard NER format with clean, consistent structure
                     entity = {
                         'value': person.get('text', person.get('name', '')),
                         'text': person.get('text', person.get('name', '')),
@@ -239,8 +240,7 @@ class ServiceProcessor:
                         'span': {
                             'start': person.get('position', 0),
                             'end': person.get('position', 0) + len(person.get('text', person.get('name', '')))
-                        },
-                        'confidence': person.get('confidence', 0.0)  # Validation confidence from corpus matching
+                        }
                     }
                     entities['person'].append(entity)
                 
@@ -337,9 +337,10 @@ class ServiceProcessor:
         money_pattern = r'\$[\d,]+(?:\.\d+)?(?:[MKB]|(?:\s*(?:billion|million|thousand|hundred|USD|dollars?)))?\b'
         entities['money'] = self._extract_entities_with_spans(content, money_pattern, 'MONEY', re.IGNORECASE)[:20]
         
-        # PERCENT
+        # PERCENT - Extract as MEASUREMENT with clean structure
         percent_pattern = r'\b\d+(?:\.\d+)?%|\b\d+(?:\.\d+)?\s+percent\b'
-        entities['percent'] = self._extract_entities_with_spans(content, percent_pattern, 'PERCENT', re.IGNORECASE)[:20]
+        percent_entities = self._extract_entities_with_spans(content, percent_pattern, 'MEASUREMENT', re.IGNORECASE)[:20]
+        # Keep clean structure - no extra metadata fields
         
         # PHONE
         phone_pattern = r'\b(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b'
@@ -359,7 +360,10 @@ class ServiceProcessor:
         
         # MEASUREMENTS - Handle potential newlines between number and unit
         measurement_pattern = r'\b\d+(?:\.\d+)?(?:\s|\n)*(?:feet|ft|inches|in|meters|m|kilometers|km|miles|mi|pounds|lbs|kilograms|kg|gallons|gal|liters|L|degrees|°|FLOPS|flops|parameters|params|MHz|GHz|KB|MB|GB|TB)\b'
-        entities['measurement'] = self._extract_entities_with_spans(content, measurement_pattern, 'MEASUREMENT', re.IGNORECASE | re.MULTILINE)[:20]
+        measurement_entities = self._extract_entities_with_spans(content, measurement_pattern, 'MEASUREMENT', re.IGNORECASE | re.MULTILINE)[:20]
+        
+        # Combine measurements and percent entities under single 'measurement' key
+        entities['measurement'] = measurement_entities + percent_entities
         
         return entities
     
@@ -776,7 +780,7 @@ class ServiceProcessor:
                             # NOTE: Individual entity normalization removed - now handled by normalization phase below
                             
                             # Add entity extraction to YAML
-                            doc.yaml_frontmatter['entities'] = entities
+                            doc.yaml_frontmatter['raw_entities'] = entities
                             doc.yaml_frontmatter['entity_insights'] = {
                                 'has_financial_data': len(entities.get('money', [])) > 0,
                                 'has_contact_info': len(entities.get('phone', [])) > 0 or len(entities.get('email', [])) > 0,
@@ -787,7 +791,7 @@ class ServiceProcessor:
                             
                             # Log Core 8 entities using Rule #11 structured format
                             core8_counts = []
-                            for entity_type in ['person', 'org', 'location', 'gpe', 'date', 'time', 'money', 'percent']:
+                            for entity_type in ['person', 'org', 'location', 'gpe', 'date', 'time', 'money', 'measurement']:
                                 count = len(entities.get(entity_type, []))
                                 if count > 0:
                                     core8_counts.append(f"{entity_type}:{count}")
@@ -1071,7 +1075,16 @@ class ServiceProcessor:
                                 if key not in ordered_yaml and key not in ['processing_info', 'classification', 'content_detection']:
                                     ordered_yaml[key] = value
                             
-                            yaml_header = yaml.dump(dict(ordered_yaml), default_flow_style=False, sort_keys=False)
+                            yaml_header = yaml.dump(
+                                dict(ordered_yaml), 
+                                Dumper=NoAliasDumper,
+                                default_flow_style=None,  # Let custom representers decide
+                                sort_keys=False,
+                                width=200,
+                                allow_unicode=True
+                            )
+                            # Apply regex post-processing to guarantee flow style spans
+                            yaml_header = force_flow_style_spans(yaml_header)
                             full_content = f"---\n{yaml_header}---\n\n{doc.markdown_content}"
                             
                         set_current_phase('file_writing')

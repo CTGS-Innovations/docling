@@ -1,0 +1,32 @@
+# Canonical Map for Geo-Political Entities (GPE)
+# Rules for normalization and identification
+# Uses Acorisc dictionaries for country/state/city lookup
+#
+# FLPC Performance Guidelines:
+# - Avoid lookaheads/lookbehinds
+# - Use explicit alternations and simple character classes
+
+gpe:
+  canonical_unit: "ISO_3166-1_alpha-2"
+  conversions:
+    # Country synonyms to ISO A2 codes (sample subset; extend via dictionary at runtime)
+    "United States": "US"
+    "USA": "US"
+    "U.S.": "US"
+    "U.S.A.": "US"
+    "United Kingdom": "GB"
+    "UK": "GB"
+    "Great Britain": "GB"
+    "England": "GB"
+    "South Korea": "KR"
+    "Republic of Korea": "KR"
+    "Korea": "KR"
+    "Russia": "RU"
+    "Russian Federation": "RU"
+  dictionary_hint: "gpe_locations.dict"
+  regex_hint: "[A-Z][a-z]+(?:\\s+[A-Z][a-z]+){0,3}"
+  notes:
+    - Prefer dictionary to disambiguate common words from GPE names
+    - Canonical form uses ISO 3166-1 alpha-2 codes for countries; subnational codes may use ISO 3166-2
+    - Preserve full surface text for display; store canonical code in structured YAML
+

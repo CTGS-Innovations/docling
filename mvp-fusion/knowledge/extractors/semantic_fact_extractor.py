@@ -1367,7 +1367,7 @@ class SemanticFactExtractor:
         self.logger.entity("🧠 Starting semantic fact extraction from classification data...")
         
         # Step 1: Get ALL entities from classification structure (both global and domain)
-        entities_section = classification_data.get('entities', {})
+        entities_section = classification_data.get('raw_entities', {})
         global_entities = entities_section.get('global_entities', {})
         domain_entities = entities_section.get('domain_entities', {})
         

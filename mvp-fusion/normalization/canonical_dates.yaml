@@ -1,0 +1,41 @@
+# Canonical Map for DATE entities
+# Rules for normalization and identification
+# Normalize to ISO 8601 (YYYY-MM-DD) when day precision is available
+#
+# FLPC Performance Guidelines:
+# - Avoid lookaheads/lookbehinds
+# - Use explicit alternations; keep patterns simple and anchored to date tokens
+
+date:
+  canonical_unit: "ISO_8601"
+  conversions:
+    # Month name to month number (1-12)
+    "January": "01"
+    "February": "02"
+    "March": "03"
+    "April": "04"
+    "May": "05"
+    "June": "06"
+    "July": "07"
+    "August": "08"
+    "September": "09"
+    "October": "10"
+    "November": "11"
+    "December": "12"
+    "Jan": "01"
+    "Feb": "02"
+    "Mar": "03"
+    "Apr": "04"
+    "Jun": "06"
+    "Jul": "07"
+    "Aug": "08"
+    "Sep": "09"
+    "Oct": "10"
+    "Nov": "11"
+    "Dec": "12"
+  regex_hint: "([0-9]{4}[-/][0-9]{2}[-/][0-9]{2})|((January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\s+[0-9]{1,2},?\\s+[0-9]{4})|(\\b[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}\\b)"
+  notes:
+    - Prefer YYYY-MM-DD; infer leading zeros where missing on month/day
+    - Ambiguous M/D vs D/M defaults to US-style unless region signal present
+    - Preserve original text; store normalized ISO in YAML
+

@@ -1,0 +1,257 @@
+# Canonical Unit Conversion Map for Normalized Measurement Extraction
+# Follows industry standards from MVP-FUSION-NER.md PRD
+# All conversions normalize to SI base units or internationally accepted standards
+
+# LENGTH → normalize to meters (m)
+length:
+  canonical_unit: "m"
+  conversions:
+    # Imperial/US units
+    "inch": 0.0254
+    "inches": 0.0254
+    "in": 0.0254
+    "foot": 0.3048
+    "feet": 0.3048
+    "ft": 0.3048
+    "yard": 0.9144
+    "yards": 0.9144
+    "yd": 0.9144
+    "mile": 1609.344
+    "miles": 1609.344
+    "mi": 1609.344
+    # Metric units
+    "meter": 1.0
+    "meters": 1.0
+    "m": 1.0
+    "centimeter": 0.01
+    "centimeters": 0.01
+    "cm": 0.01
+    "millimeter": 0.001
+    "millimeters": 0.001
+    "mm": 0.001
+    "kilometer": 1000.0
+    "kilometers": 1000.0
+    "km": 1000.0
+
+# WEIGHT → normalize to kilograms (kg)
+weight:
+  canonical_unit: "kg"
+  conversions:
+    # Imperial/US units
+    "pound": 0.453592
+    "pounds": 0.453592
+    "lb": 0.453592
+    "lbs": 0.453592
+    "ounce": 0.0283495
+    "ounces": 0.0283495
+    "oz": 0.0283495
+    "ton": 907.185  # US ton
+    "tons": 907.185
+    # Metric units
+    "kilogram": 1.0
+    "kilograms": 1.0
+    "kg": 1.0
+    "gram": 0.001
+    "grams": 0.001
+    "g": 0.001
+    "tonne": 1000.0  # Metric tonne
+    "tonnes": 1000.0
+
+# VOLUME → normalize to liters (L)
+volume:
+  canonical_unit: "L"
+  conversions:
+    # Imperial/US units
+    "gallon": 3.78541
+    "gallons": 3.78541
+    "gal": 3.78541
+    "quart": 0.946353
+    "quarts": 0.946353
+    "qt": 0.946353
+    "pint": 0.473176
+    "pints": 0.473176
+    "pt": 0.473176
+    "cup": 0.236588
+    "cups": 0.236588
+    "fluid ounce": 0.0295735
+    "fluid ounces": 0.0295735
+    "fl oz": 0.0295735
+    # Metric units
+    "liter": 1.0
+    "liters": 1.0
+    "L": 1.0
+    "milliliter": 0.001
+    "milliliters": 0.001
+    "ml": 0.001
+    "cubic meter": 1000.0
+    "cubic meters": 1000.0
+    "m³": 1000.0
+
+# TEMPERATURE → normalize to Celsius (°C)
+temperature:
+  canonical_unit: "°C"
+  conversions:
+    # Note: Temperature requires formula-based conversion, not simple multiplication
+    # °C = (°F - 32) × 5/9
+    # °C = K - 273.15
+    "°C": 1.0
+    "celsius": 1.0
+    "°F": "formula_fahrenheit"  # Special handling required
+    "fahrenheit": "formula_fahrenheit"
+    "K": "formula_kelvin"  # Special handling required
+    "kelvin": "formula_kelvin"
+
+# ANGLE → normalize to degrees (°) or radians (rad)
+angle:
+  canonical_unit: "rad"  # Using radians as SI standard
+  conversions:
+    "degree": 0.0174533  # π/180
+    "degrees": 0.0174533
+    "°": 0.0174533
+    "deg": 0.0174533
+    "radian": 1.0
+    "radians": 1.0
+    "rad": 1.0
+
+# PERCENTAGE → normalize to ratio (0-1)
+percentage:
+  canonical_unit: "ratio"
+  conversions:
+    "percent": 0.01
+    "%": 0.01
+    "percentage": 0.01
+    "ratio": 1.0
+
+# TIME → normalize to seconds (s)
+time:
+  canonical_unit: "s"
+  conversions:
+    # Basic time units
+    "second": 1.0
+    "seconds": 1.0
+    "s": 1.0
+    "minute": 60.0
+    "minutes": 60.0
+    "min": 60.0
+    "hour": 3600.0
+    "hours": 3600.0
+    "hr": 3600.0
+    "h": 3600.0
+    "day": 86400.0
+    "days": 86400.0
+    "week": 604800.0
+    "weeks": 604800.0
+    "month": 2629746.0  # Average month (30.44 days)
+    "months": 2629746.0
+    "year": 31556952.0  # Average year (365.25 days)
+    "years": 31556952.0
+
+# SPEED → normalize to meters per second (m/s)
+speed:
+  canonical_unit: "m/s"
+  conversions:
+    "m/s": 1.0
+    "mph": 0.44704  # miles per hour
+    "km/h": 0.277778  # kilometers per hour
+    "kph": 0.277778
+    "ft/s": 0.3048  # feet per second
+    "knot": 0.514444  # nautical miles per hour
+    "knots": 0.514444
+
+# AREA → normalize to square meters (m²)
+area:
+  canonical_unit: "m²"
+  conversions:
+    # Imperial/US units
+    "square foot": 0.092903
+    "square feet": 0.092903
+    "sq ft": 0.092903
+    "ft²": 0.092903
+    "square inch": 0.00064516
+    "square inches": 0.00064516
+    "sq in": 0.00064516
+    "in²": 0.00064516
+    "square yard": 0.836127
+    "square yards": 0.836127
+    "sq yd": 0.836127
+    "yd²": 0.836127
+    "acre": 4046.86
+    "acres": 4046.86
+    # Metric units
+    "square meter": 1.0
+    "square meters": 1.0
+    "m²": 1.0
+    "square centimeter": 0.0001
+    "square centimeters": 0.0001
+    "cm²": 0.0001
+    "square kilometer": 1000000.0
+    "square kilometers": 1000000.0
+    "km²": 1000000.0
+    "hectare": 10000.0
+    "hectares": 10000.0
+
+# CURRENCY → normalize to ISO 4217 codes
+currency:
+  canonical_unit: "currency_code"  # Special handling - preserve original currency
+  conversions:
+    # Note: Currency conversion requires real-time exchange rates
+    # This map only handles symbol → ISO code mapping
+    "$": "USD"
+    "USD": "USD"
+    "€": "EUR"
+    "EUR": "EUR"
+    "£": "GBP"
+    "GBP": "GBP"
+    "¥": "JPY"  # Could be JPY or CNY, requires context
+    "JPY": "JPY"
+    "CNY": "CNY"
+    "CAD": "CAD"
+    "AUD": "AUD"
+
+# Regex patterns for each measurement type
+# NOTE: These patterns are designed for FLPC (Fast Literal Pattern Compiler) compatibility
+# FLPC Performance Guidelines:
+# - Avoid complex lookaheads/lookbehinds (not supported)
+# - Use literal alternations where possible: (feet|ft|inches|in)
+# - Prefer character classes over complex patterns: [0-9] over \d
+# - Keep patterns simple for maximum performance (2000+ pages/sec target)
+# - These serve as guidance for high-performance FLPC implementations
+regex_patterns:
+  # FLPC-optimized patterns: mutually exclusive, no overlapping matches
+  # Each pattern is designed to capture specific units without conflicts
+  
+  # Area patterns - most specific compound units first
+  area: '[0-9]+(?:\.[0-9]+)?(?:\s|\n)*(sq ft|sq in|sq yd|sq m|sq cm|sq km|ft²|in²|yd²|m²|cm²|km²|hectares|hectare|acres|acre)'
+  
+  # Speed patterns - compound units with slash or abbreviations  
+  speed: '[0-9]+(?:\.[0-9]+)?(?:\s|\n)*(km/h|m/s|ft/s|mph|kph|knots|knot)'
+  
+  # Temperature patterns - degree symbols and specific terms
+  temperature: '[0-9]+(?:\.[0-9]+)?(?:\s|\n)*(°C|°F|fahrenheit|celsius|kelvin|K)'
+  
+  # Percentage patterns - percent symbols and words
+  percentage: '[0-9]+(?:\.[0-9]+)?(?:\s|\n)*(percentage|percent|%)'
+  
+  # Volume patterns - liquid measurements, avoid single letters
+  volume: '[0-9]+(?:\.[0-9]+)?(?:\s|\n)*(milliliters|milliliter|gallons|gallon|quarts|quart|pints|pint|liters|liter|cups|cup|gal|qt|pt|ml|L)'
+  
+  # Weight patterns - mass measurements, avoid single letters that conflict
+  weight: '[0-9]+(?:\.[0-9]+)?(?:\s|\n)*(kilograms|kilogram|pounds|pound|ounces|ounce|tonnes|tonne|grams|gram|tons|ton|lbs|lb|oz|kg)'
+  
+  # Length patterns - distance measurements, avoid single 'm' to prevent conflicts
+  length: '[0-9]+(?:\.[0-9]+)?(?:\s|\n)*(kilometers|kilometer|millimeters|millimeter|centimeters|centimeter|miles|mile|yards|yard|inches|inch|meters|meter|feet|km|mm|cm|mi|yd|ft|in)'
+  
+  # Time patterns - temporal measurements, avoid single 's' and 'h'  
+  time: '[0-9]+(?:\.[0-9]+)?(?:\s|\n)*(seconds|second|minutes|minute|months|month|hours|hour|years|year|weeks|week|days|day|min|hr)'
+  
+  # Angle patterns - angular measurements
+  angle: '[0-9]+(?:\.[0-9]+)?(?:\s|\n)*(degrees|degree|radians|radian|deg|rad|°)'
+  
+  # Currency patterns - monetary amounts
+  currency: '(\$[0-9,]+(?:\.[0-9]+)?|[0-9,]+(?:\.[0-9]+)?\s*(dollars|dollar|euros|euro|yuan|yen|USD|EUR|GBP|JPY|CNY|CAD|AUD))'
+  
+  # Single letter units - only match when isolated to avoid conflicts
+  # These should be processed last and only when no other pattern matches
+  single_letter_weight: '[0-9]+(?:\.[0-9]+)?(?:\s|\n)+g(?![a-z])'  # 'g' only when followed by space/end
+  single_letter_length: '[0-9]+(?:\.[0-9]+)?(?:\s|\n)+m(?![a-z])'  # 'm' only when followed by space/end  
+  single_letter_time: '[0-9]+(?:\.[0-9]+)?(?:\s|\n)+[sh](?![a-z])' # 's' or 'h' only when isolated

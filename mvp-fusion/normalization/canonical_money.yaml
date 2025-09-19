@@ -1,0 +1,21 @@
+# Canonical Map for MONEY entities
+# Rules for normalization and identification
+# Normalize to (amount, ISO_4217 currency) without applying FX rates
+
+money:
+  canonical_unit: "amount_currency"
+  conversions:
+    # Symbol to ISO 4217 mappings (non-exhaustive; extend via runtime tables)
+    "$": "USD"
+    "€": "EUR"
+    "£": "GBP"
+    "¥": "JPY"
+    "₹": "INR"
+    "₩": "KRW"
+    "₽": "RUB"
+  regex_hint: "(\$|€|£|¥|₹|₩|₽)?[0-9,]+(?:\.[0-9]+)?(?:\\s*(USD|EUR|GBP|JPY|CNY|CAD|AUD|INR|KRW|RUB))?"
+  notes:
+    - Preserve original currency if both symbol and code present (symbol wins for locale-specific sums)
+    - Do not apply exchange rates; store canonical as {amount: float, currency: ISO}
+    - Strip thousands separators, keep decimal precision; validate non-negative amounts
+

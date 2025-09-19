@@ -1,0 +1,13 @@
+# Canonical Map for QUANTITY entities
+# Rules for normalization and identification
+# Generic quantities (counts, percentages without symbol, ratios) to canonical numeric form
+
+quantity:
+  canonical_unit: "number"
+  conversions: {}
+  regex_hint: "\\b[0-9]+(?:\\.[0-9]+)?\\b"
+  notes:
+    - Plain numeric quantities without explicit units (handled in measurement maps otherwise)
+    - Preserve significant digits; store as float or int depending on presence of decimal
+    - Exclude monetary and percentage forms when symbol/keywords detected (handled elsewhere)
+

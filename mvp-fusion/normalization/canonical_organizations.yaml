@@ -1,0 +1,34 @@
+# Canonical Map for ORGANIZATION entities
+# Rules for normalization and identification
+# Uses Acorisc dictionaries for fast org lookup
+#
+# FLPC Performance Guidelines:
+# - Avoid lookaheads/lookbehinds
+# - Use explicit alternations and simple character classes
+# - Prefer literal suffix alternations (Inc|LLC|Ltd) over wildcards
+
+organization:
+  canonical_unit: "legal_name"
+  conversions:
+    # Normalize common legal suffix variants to a standard short form
+    "Incorporated": "Inc"
+    "Inc.": "Inc"
+    "Corporation": "Corp"
+    "Corp.": "Corp"
+    "Company": "Co"
+    "Co.": "Co"
+    "Limited": "Ltd"
+    "Ltd.": "Ltd"
+    "LLC": "LLC"
+    "PLC": "PLC"
+    "GmbH": "GmbH"
+    "S.A.": "SA"
+    "S.A": "SA"
+  dictionary_hint: "organization_names.dict"
+  regex_hint: "[A-Z][A-Za-z]*(?:\\s+[A-Z][A-Za-z]*)*\\s+(Inc|Incorporated|Corp|Corporation|LLC|Ltd|Limited|Company|Co|PLC|GmbH|SA)\\.?"
+  notes:
+    - Preserve original casing; normalize legal suffix to a standard short form in canonical output
+    - Remove trailing punctuation from suffix (e.g., Inc., Ltd.)
+    - Merge consecutive capitalized tokens as the organization name prior to suffix
+    - Prefer dictionary matches to boost precision for short names and acronyms
+

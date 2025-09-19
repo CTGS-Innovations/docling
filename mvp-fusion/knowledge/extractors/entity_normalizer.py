@@ -611,20 +611,54 @@ class EntityNormalizer:
         ) for group in canonical_groups]
     
     def _canonicalize_money_entities(self, money_entities: List[Dict]) -> List[NormalizedEntity]:
-        """Canonicalize money entities with currency normalization."""
+        """Canonicalize money entities with currency normalization following MVP-FUSION-NER strategy."""
         if not money_entities:
             return []
+        
+        # Currency symbol to ISO 4217 mapping
+        currency_map = {
+            '$': 'USD', '€': 'EUR', '£': 'GBP', '¥': 'JPY', '₹': 'INR',
+            'USD': 'USD', 'EUR': 'EUR', 'GBP': 'GBP', 'JPY': 'JPY'
+        }
         
         canonical_groups = []
         for money in money_entities:
             text = money.get('text', '').strip()
             if not text:
                 continue
+            
+            # Parse money: extract value and currency
+            import re
+            money_pattern = r'([€£¥₹$]?)([0-9,]+\.?[0-9]*)\s*([A-Z]{3})?'
+            match = re.search(money_pattern, text)
+            
+            if match:
+                symbol, amount, currency_code = match.groups()
+                
+                # Clean amount
+                try:
+                    value = float(amount.replace(',', ''))
+                except ValueError:
+                    value = 0.0
+                
+                # Determine currency
+                if currency_code:
+                    currency = currency_code
+                elif symbol:
+                    currency = currency_map.get(symbol, 'USD')
+                else:
+                    currency = 'USD'  # Default
+                
+                # Create normalized form: "amount currency_code"
+                canonical = f"{value} {currency}"
+            else:
+                # Fallback: use original text
+                canonical = text
                 
             self.entity_counters['MONEY'] += 1
             canonical_groups.append({
                 'id': f"mon{self.entity_counters['MONEY']:03d}",
-                'canonical': text,
+                'canonical': canonical,
                 'aliases': [],
                 'mentions': [{'text': text, 'span': money.get('span', {})}],
                 'count': 1
@@ -636,20 +670,91 @@ class EntityNormalizer:
         ) for group in canonical_groups]
     
     def _canonicalize_measurements(self, measurements: List[Dict]) -> List[NormalizedEntity]:
-        """Canonicalize measurement entities with unit conversion."""
+        """Canonicalize measurement entities with unit conversion following MVP-FUSION-NER strategy."""
         if not measurements:
             return []
+        
+        # Unit conversion to canonical base units (meters, kg, liters, etc.)
+        unit_conversions = {
+            # Length -> meters
+            'in': 0.0254, 'inch': 0.0254, 'inches': 0.0254, 'ft': 0.3048, 'feet': 0.3048, 'foot': 0.3048,
+            'yd': 0.9144, 'yard': 0.9144, 'yards': 0.9144, 'mi': 1609.34, 'mile': 1609.34, 'miles': 1609.34,
+            'mm': 0.001, 'cm': 0.01, 'm': 1.0, 'km': 1000.0,
+            # Weight -> kg  
+            'lb': 0.453592, 'lbs': 0.453592, 'pound': 0.453592, 'pounds': 0.453592,
+            'oz': 0.0283495, 'ounce': 0.0283495, 'ounces': 0.0283495,
+            'g': 0.001, 'gram': 0.001, 'grams': 0.001, 'kg': 1.0, 'kilogram': 1.0, 'kilograms': 1.0,
+            # Volume -> liters
+            'gal': 3.78541, 'gallon': 3.78541, 'gallons': 3.78541, 'qt': 0.946353, 'quart': 0.946353,
+            'pt': 0.473176, 'pint': 0.473176, 'fl oz': 0.0295735, 'ml': 0.001, 'l': 1.0, 'liter': 1.0, 'liters': 1.0,
+            # Percentage -> ratio
+            '%': 0.01, 'percent': 0.01, 'percentage': 0.01,
+            # Time -> seconds
+            'sec': 1.0, 'second': 1.0, 'seconds': 1.0, 'min': 60.0, 'minute': 60.0, 'minutes': 60.0,
+            'hr': 3600.0, 'hour': 3600.0, 'hours': 3600.0, 'day': 86400.0, 'days': 86400.0
+        }
+        
+        canonical_units = {
+            # Base units for each category
+            'length': 'm', 'weight': 'kg', 'volume': 'L', 'percentage': 'ratio', 'time': 's'
+        }
         
         canonical_groups = []
         for measurement in measurements:
             text = measurement.get('text', '').strip()
             if not text:
                 continue
+            
+            # Parse measurement: extract value and unit
+            import re
+            measurement_pattern = r'([0-9,]+\.?[0-9]*)\s*([a-zA-Z%]+)'
+            match = re.search(measurement_pattern, text)
+            
+            if match:
+                amount_str, unit = match.groups()
+                
+                # Clean amount
+                try:
+                    value = float(amount_str.replace(',', ''))
+                except ValueError:
+                    value = 0.0
+                
+                # Convert to canonical unit
+                unit_lower = unit.lower()
+                if unit_lower in unit_conversions:
+                    conversion_factor = unit_conversions[unit_lower]
+                    canonical_value = value * conversion_factor
+                    
+                    # Determine canonical unit type
+                    if unit_lower in ['in', 'inch', 'inches', 'ft', 'feet', 'foot', 'yd', 'yard', 'yards', 'mi', 'mile', 'miles', 'mm', 'cm', 'm', 'km']:
+                        canonical_unit = 'm'
+                    elif unit_lower in ['lb', 'lbs', 'pound', 'pounds', 'oz', 'ounce', 'ounces', 'g', 'gram', 'grams', 'kg', 'kilogram', 'kilograms']:
+                        canonical_unit = 'kg'
+                    elif unit_lower in ['gal', 'gallon', 'gallons', 'qt', 'quart', 'pt', 'pint', 'fl oz', 'ml', 'l', 'liter', 'liters']:
+                        canonical_unit = 'L'
+                    elif unit_lower in ['%', 'percent', 'percentage']:
+                        canonical_unit = 'ratio'
+                    elif unit_lower in ['sec', 'second', 'seconds', 'min', 'minute', 'minutes', 'hr', 'hour', 'hours', 'day', 'days']:
+                        canonical_unit = 's'
+                    else:
+                        canonical_unit = unit
+                    
+                    # Format canonical value (round to reasonable precision)
+                    if canonical_value >= 1:
+                        canonical = f"{canonical_value:.2f} {canonical_unit}"
+                    else:
+                        canonical = f"{canonical_value:.4f} {canonical_unit}"
+                else:
+                    # No conversion available, use original
+                    canonical = text
+            else:
+                # No numeric pattern found, use original
+                canonical = text
                 
             self.entity_counters['MEASUREMENT'] += 1
             canonical_groups.append({
                 'id': f"meas{self.entity_counters['MEASUREMENT']:03d}",
-                'canonical': text,
+                'canonical': canonical,
                 'aliases': [],
                 'mentions': [{'text': text, 'span': measurement.get('span', {})}],
                 'count': 1
@@ -825,8 +930,48 @@ class EntityNormalizer:
             'digits_only': digits
         }
     
-    def _normalize_measurement(self, value: str) -> Dict[str, Any]:
-        """Normalize measurements with unit conversion and categorization."""
+    def _normalize_measurement(self, value: str, span: Dict[str, int] = None) -> Dict[str, Any]:
+        """
+        Normalize measurements following industry standards from MVP-FUSION-NER.md PRD.
+        
+        Returns structured schema: value, unit, text, type, span, normalized
+        Uses canonical unit conversion map for all 10 measurement categories.
+        """
+        try:
+            # Use the new MeasurementNormalizer for industry-standard normalization
+            from normalization import MeasurementNormalizer
+            
+            normalizer = MeasurementNormalizer()
+            measurements = normalizer.extract_measurements(value)
+            
+            if measurements:
+                # Return the first measurement found, converted to dict
+                measurement = measurements[0]
+                result = normalizer.to_dict(measurement)
+                
+                # Override span if provided (for integration with existing pipeline)
+                if span:
+                    result['span'] = span
+                
+                # Add legacy compatibility fields
+                result.update({
+                    'category': result['type'],  # Legacy field name
+                    'metric_value': result['normalized']['value'],
+                    'metric_unit': result['normalized']['unit'],
+                    'formatted_metric': f"{result['normalized']['value']:.1f} {result['normalized']['unit']}"
+                })
+                
+                return result
+            else:
+                # Fallback to legacy method if new normalizer fails
+                return self._normalize_measurement_legacy(value)
+                
+        except Exception as e:
+            # Fallback to legacy method on any error
+            return self._normalize_measurement_legacy(value)
+    
+    def _normalize_measurement_legacy(self, value: str) -> Dict[str, Any]:
+        """Legacy measurement normalization (kept for fallback compatibility)."""
         # Extract numeric value and unit
         match = re.match(r'([\d.,]+)\s*([a-zA-Z°]+)', value.strip())
         if not match:
