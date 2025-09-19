@@ -26,6 +26,31 @@
 - Use proven patterns (like MVP-Hyper's approach)
 - Eliminate overhead at every level
 
+### **Rule #12: FLPC Pattern Matching - MANDATORY**
+**CRITICAL**: NEVER use regular expressions (re module) - use FLPC (Fast Lexical Pattern Compiler) instead:
+
+**FORBIDDEN:**
+```python
+import re
+pattern = re.compile(r'(\d+)\s*(feet|ft)')
+match = pattern.search(text)
+```
+
+**REQUIRED:**
+```python
+from utils.flpc import FLPCPattern
+pattern = FLPCPattern('(\d+)\s*(feet|ft)')
+match = pattern.search(text)
+```
+
+**Why FLPC:**
+- 10-50x faster than Python regex
+- Compiled patterns for maximum performance
+- Critical for high-throughput entity processing
+- Part of our performance-first architecture
+
+**Applies to:** All pattern matching in entity extraction, normalization, text processing
+
 ### **Rule #5: File Organization**
 ```
 mvp-fusion/
@@ -176,6 +201,70 @@ For entity processing across all layers (Global, Domain, Future layers):
 🧠 Semantic entities: facts:45, rules:12, relationships:8
 🔗 Linked entities: canonical:156, resolved:23
 ```
+
+### **Rule #13: Status Indicators - MANDATORY**
+Use color-coded indicators for all status updates and task reporting:
+
+**REQUIRED INDICATORS:**
+```
+🟢 **SUCCESS** - Task completed successfully
+🟡 **WAITING** - Task in progress or waiting for input  
+🔴 **BLOCKED** - Task blocked or failed, needs attention
+```
+
+**Usage Examples:**
+```
+🟢 **SUCCESS**: Entity normalization completed (126 entities processed)
+🟡 **WAITING**: Processing document batch 3 of 5...
+🔴 **BLOCKED**: FLPC pattern compilation failed - missing dependency
+```
+
+**Requirements:**
+- Use at start of status messages for immediate visual scanning
+- Include brief context after the indicator
+- Apply consistently across all logging and user communication
+- Essential for debugging and progress tracking
+
+**Why This Matters:**
+- Instant visual status recognition
+- Quick problem identification in logs
+- Consistent user experience across all tools
+- Critical for high-throughput processing monitoring
+
+### **Rule #14: Blocked Status Resolution - MANDATORY**
+When encountering 🔴 **BLOCKED** status, automatically search Context7 for solutions:
+
+**PROCESS:**
+1. **Identify the blocking issue** (dependency, API, pattern, etc.)
+2. **Search Context7** for relevant documentation/solutions
+3. **Apply solution** if found in documentation
+4. **Report outcome** with updated status indicator
+
+**Example Workflow:**
+```
+🔴 **BLOCKED**: FLPC pattern compilation failed - missing dependency
+🟡 **WAITING**: Searching Context7 for FLPC installation docs...
+🟢 **SUCCESS**: Found solution in Context7 - installing flpc package
+```
+
+**When to Use Context7:**
+- Missing dependencies or packages
+- API usage errors or configuration issues  
+- Pattern matching or regex problems
+- Library-specific implementation questions
+- Performance optimization techniques
+
+**Requirements:**
+- Always try Context7 before asking user for help
+- Include Context7 search results in status updates
+- Document the solution found for future reference
+- Only escalate to user if Context7 has no solution
+
+**Why This Matters:**
+- Reduces interruptions and speeds up development
+- Leverages up-to-date documentation automatically
+- Creates self-healing development workflow
+- Essential for autonomous problem resolution
 
 ---
 **These rules prevent codebase clutter and maintain focus on performance and clarity.**

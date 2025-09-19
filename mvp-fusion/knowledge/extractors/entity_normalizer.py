@@ -611,14 +611,22 @@ class EntityNormalizer:
         ) for group in canonical_groups]
     
     def _canonicalize_money_entities(self, money_entities: List[Dict]) -> List[NormalizedEntity]:
-        """Canonicalize money entities with currency normalization following MVP-FUSION-NER strategy."""
+        """Canonicalize money entities to industry standard: base numeric value with metadata."""
         if not money_entities:
             return []
         
         # Currency symbol to ISO 4217 mapping
         currency_map = {
-            '$': 'USD', '€': 'EUR', '£': 'GBP', '¥': 'JPY', '₹': 'INR',
-            'USD': 'USD', 'EUR': 'EUR', 'GBP': 'GBP', 'JPY': 'JPY'
+            '$': 'USD', '€': 'EUR', '£': 'GBP', '¥': 'JPY', '₹': 'INR', '₽': 'RUB',
+            'USD': 'USD', 'EUR': 'EUR', 'GBP': 'GBP', 'JPY': 'JPY', 'CAD': 'CAD', 'AUD': 'AUD'
+        }
+        
+        # Magnitude multipliers for parsing
+        magnitude_map = {
+            'thousand': 1000, 'k': 1000,
+            'million': 1000000, 'm': 1000000, 'mil': 1000000,
+            'billion': 1000000000, 'b': 1000000000, 'bil': 1000000000,
+            'trillion': 1000000000000, 't': 1000000000000
         }
         
         canonical_groups = []
@@ -627,33 +635,57 @@ class EntityNormalizer:
             if not text:
                 continue
             
-            # Parse money: extract value and currency
+            # Enhanced money parsing pattern to handle "$2.5 million" format
             import re
-            money_pattern = r'([€£¥₹$]?)([0-9,]+\.?[0-9]*)\s*([A-Z]{3})?'
-            match = re.search(money_pattern, text)
+            # Pattern: optional currency, amount, optional magnitude, optional currency word
+            money_pattern = r'([€£¥₹$]?)\s*([0-9,]+\.?[0-9]*)\s*(thousand|million|billion|trillion|k|m|b|t)?\s*([A-Z]{3}|dollars?|euros?|pounds?)?'
+            match = re.search(money_pattern, text, re.IGNORECASE)
             
             if match:
-                symbol, amount, currency_code = match.groups()
+                symbol, amount_str, magnitude, currency_word = match.groups()
                 
-                # Clean amount
+                # Parse base amount
                 try:
-                    value = float(amount.replace(',', ''))
+                    base_value = float(amount_str.replace(',', ''))
                 except ValueError:
-                    value = 0.0
+                    base_value = 0.0
+                
+                # Apply magnitude multiplier
+                multiplier = 1
+                if magnitude:
+                    multiplier = magnitude_map.get(magnitude.lower(), 1)
+                
+                # Calculate actual value (e.g., 2.5 * 1000000 = 2500000)
+                actual_value = base_value * multiplier
                 
                 # Determine currency
-                if currency_code:
-                    currency = currency_code
+                if currency_word and currency_word.upper() in currency_map:
+                    currency = currency_word.upper()
                 elif symbol:
                     currency = currency_map.get(symbol, 'USD')
+                elif currency_word:
+                    # Map currency words to codes
+                    word_map = {'dollar': 'USD', 'dollars': 'USD', 'euro': 'EUR', 'euros': 'EUR', 
+                               'pound': 'GBP', 'pounds': 'GBP'}
+                    currency = word_map.get(currency_word.lower(), 'USD')
                 else:
                     currency = 'USD'  # Default
                 
-                # Create normalized form: "amount currency_code"
-                canonical = f"{value} {currency}"
+                # Industry standard: normalized is the actual numeric value
+                canonical = str(actual_value)
+                
+                # Create metadata with all the parsed information
+                metadata = {
+                    'currency': currency,
+                    'original_value': base_value,
+                    'magnitude': magnitude or '',
+                    'multiplier': multiplier,
+                    'formatted': f"{currency} {actual_value:,.2f}"
+                }
             else:
-                # Fallback: use original text
+                # Fallback: use original text as canonical
                 canonical = text
+                metadata = {'currency': 'USD', 'parse_error': True}
                 
             self.entity_counters['MONEY'] += 1
             canonical_groups.append({
@@ -661,42 +693,66 @@ class EntityNormalizer:
                 'canonical': canonical,
                 'aliases': [],
                 'mentions': [{'text': text, 'span': money.get('span', {})}],
-                'count': 1
+                'count': 1,
+                'metadata': metadata
             })
         
         return [NormalizedEntity(
             id=group['id'], type='MONEY', normalized=group['canonical'],
-            aliases=group['aliases'], count=group['count'], mentions=group['mentions']
+            aliases=group['aliases'], count=group['count'], mentions=group['mentions'],
+            metadata=group.get('metadata')
         ) for group in canonical_groups]
     
     def _canonicalize_measurements(self, measurements: List[Dict]) -> List[NormalizedEntity]:
-        """Canonicalize measurement entities with unit conversion following MVP-FUSION-NER strategy."""
+        """Canonicalize measurements to industry standard with clear bidirectional metadata."""
         if not measurements:
             return []
         
-        # Unit conversion to canonical base units (meters, kg, liters, etc.)
+        # Comprehensive unit conversions to SI/metric base units
         unit_conversions = {
             # Length -> meters
-            'in': 0.0254, 'inch': 0.0254, 'inches': 0.0254, 'ft': 0.3048, 'feet': 0.3048, 'foot': 0.3048,
-            'yd': 0.9144, 'yard': 0.9144, 'yards': 0.9144, 'mi': 1609.34, 'mile': 1609.34, 'miles': 1609.34,
-            'mm': 0.001, 'cm': 0.01, 'm': 1.0, 'km': 1000.0,
-            # Weight -> kg  
+            'in': 0.0254, 'inch': 0.0254, 'inches': 0.0254, '"': 0.0254,
+            'ft': 0.3048, 'feet': 0.3048, 'foot': 0.3048, "'": 0.3048,
+            'yd': 0.9144, 'yard': 0.9144, 'yards': 0.9144,
+            'mi': 1609.34, 'mile': 1609.34, 'miles': 1609.34,
+            'mm': 0.001, 'cm': 0.01, 'm': 1.0, 'meter': 1.0, 'meters': 1.0, 'km': 1000.0,
+            # Weight -> kilograms
             'lb': 0.453592, 'lbs': 0.453592, 'pound': 0.453592, 'pounds': 0.453592,
             'oz': 0.0283495, 'ounce': 0.0283495, 'ounces': 0.0283495,
-            'g': 0.001, 'gram': 0.001, 'grams': 0.001, 'kg': 1.0, 'kilogram': 1.0, 'kilograms': 1.0,
+            'g': 0.001, 'gram': 0.001, 'grams': 0.001,
+            'kg': 1.0, 'kilogram': 1.0, 'kilograms': 1.0,
+            'ton': 1000.0, 'tons': 1000.0, 'metric ton': 1000.0,
             # Volume -> liters
-            'gal': 3.78541, 'gallon': 3.78541, 'gallons': 3.78541, 'qt': 0.946353, 'quart': 0.946353,
-            'pt': 0.473176, 'pint': 0.473176, 'fl oz': 0.0295735, 'ml': 0.001, 'l': 1.0, 'liter': 1.0, 'liters': 1.0,
-            # Percentage -> ratio
-            '%': 0.01, 'percent': 0.01, 'percentage': 0.01,
+            'gal': 3.78541, 'gallon': 3.78541, 'gallons': 3.78541,
+            'qt': 0.946353, 'quart': 0.946353, 'quarts': 0.946353,
+            'pt': 0.473176, 'pint': 0.473176, 'pints': 0.473176,
+            'cup': 0.236588, 'cups': 0.236588,
+            'fl oz': 0.0295735, 'fluid ounce': 0.0295735,
+            'ml': 0.001, 'milliliter': 0.001, 'milliliters': 0.001,
+            'l': 1.0, 'liter': 1.0, 'liters': 1.0,
+            # Temperature - special handling needed
+            '°f': 'fahrenheit', 'f': 'fahrenheit', 'fahrenheit': 'fahrenheit',
+            '°c': 'celsius', 'c': 'celsius', 'celsius': 'celsius',
+            'k': 'kelvin', 'kelvin': 'kelvin',
             # Time -> seconds
-            'sec': 1.0, 'second': 1.0, 'seconds': 1.0, 'min': 60.0, 'minute': 60.0, 'minutes': 60.0,
-            'hr': 3600.0, 'hour': 3600.0, 'hours': 3600.0, 'day': 86400.0, 'days': 86400.0
+            'ms': 0.001, 'millisecond': 0.001, 'milliseconds': 0.001,
+            's': 1.0, 'sec': 1.0, 'second': 1.0, 'seconds': 1.0,
+            'min': 60.0, 'minute': 60.0, 'minutes': 60.0,
+            'hr': 3600.0, 'hour': 3600.0, 'hours': 3600.0,
+            'day': 86400.0, 'days': 86400.0,
+            'week': 604800.0, 'weeks': 604800.0,
+            'month': 2592000.0, 'months': 2592000.0,  # Approximate: 30 days
+            'year': 31536000.0, 'years': 31536000.0,  # 365 days
         }
         
-        canonical_units = {
-            # Base units for each category
-            'length': 'm', 'weight': 'kg', 'volume': 'L', 'percentage': 'ratio', 'time': 's'
+        # Map units to their measurement types and SI units
+        measurement_types = {
+            'length': {'si_unit': 'meters', 'units': ['in', 'inch', 'inches', 'ft', 'feet', 'foot', 'yd', 'yard', 'yards', 'mi', 'mile', 'miles', 'mm', 'cm', 'm', 'meter', 'meters', 'km']},
+            'weight': {'si_unit': 'kilograms', 'units': ['lb', 'lbs', 'pound', 'pounds', 'oz', 'ounce', 'ounces', 'g', 'gram', 'grams', 'kg', 'kilogram', 'kilograms', 'ton', 'tons']},
+            'volume': {'si_unit': 'liters', 'units': ['gal', 'gallon', 'gallons', 'qt', 'quart', 'quarts', 'pt', 'pint', 'pints', 'cup', 'cups', 'fl oz', 'fluid ounce', 'ml', 'milliliter', 'milliliters', 'l', 'liter', 'liters']},
+            'temperature': {'si_unit': 'celsius', 'units': ['°f', 'f', 'fahrenheit', '°c', 'c', 'celsius', 'k', 'kelvin']},
+            'time': {'si_unit': 'seconds', 'units': ['ms', 'millisecond', 'milliseconds', 's', 'sec', 'second', 'seconds', 'min', 'minute', 'minutes', 'hr', 'hour', 'hours', 'day', 'days', 'week', 'weeks', 'month', 'months', 'year', 'years']},
+            'percentage': {'si_unit': 'percent', 'units': ['%', 'percent', 'percentage']},
         }
         
         canonical_groups = []
@@ -707,62 +763,95 @@ class EntityNormalizer:
             
             # Parse measurement: extract value and unit
             import re
-            measurement_pattern = r'([0-9,]+\.?[0-9]*)\s*([a-zA-Z%]+)'
+            # Enhanced pattern to handle decimals, percentages, and temperature symbols
+            measurement_pattern = r'([0-9,]+\.?[0-9]*)\s*([°]?)\s*([a-zA-Z%\'"]+)'
             match = re.search(measurement_pattern, text)
             
             if match:
-                amount_str, unit = match.groups()
+                amount_str, degree_symbol, unit_str = match.groups()
                 
-                # Clean amount
+                # Clean up unit string
+                if degree_symbol:
+                    unit_str = degree_symbol + unit_str  # Reconstruct °F or °C
+                
+                # Parse numeric value
                 try:
-                    value = float(amount_str.replace(',', ''))
+                    original_value = float(amount_str.replace(',', ''))
                 except ValueError:
-                    value = 0.0
+                    original_value = 0.0
                 
-                # Convert to canonical unit
-                unit_lower = unit.lower()
-                if unit_lower in unit_conversions:
+                # Determine measurement type
+                unit_lower = unit_str.lower()
+                measurement_type = 'unknown'
+                for mtype, minfo in measurement_types.items():
+                    if unit_lower in minfo['units']:
+                        measurement_type = mtype
+                        break
+                
+                # Special handling for percentages (keep as percentage, not ratio)
+                if unit_lower in ['%', 'percent', 'percentage']:
+                    si_value = original_value  # Keep as percentage
+                    si_unit = 'percent'
+                    canonical = str(si_value)
+                # Special handling for temperature
+                elif measurement_type == 'temperature':
+                    if unit_lower in ['°f', 'f', 'fahrenheit']:
+                        si_value = (original_value - 32) * 5/9  # Convert to Celsius
+                        si_unit = 'celsius'
+                    elif unit_lower in ['k', 'kelvin']:
+                        si_value = original_value - 273.15  # Convert to Celsius
+                        si_unit = 'celsius'
+                    else:
+                        si_value = original_value
+                        si_unit = 'celsius'
+                    canonical = str(round(si_value, 2))
+                # Standard unit conversion
+                elif unit_lower in unit_conversions and isinstance(unit_conversions[unit_lower], (int, float)):
                     conversion_factor = unit_conversions[unit_lower]
-                    canonical_value = value * conversion_factor
+                    si_value = original_value * conversion_factor
                     
-                    # Determine canonical unit type
-                    if unit_lower in ['in', 'inch', 'inches', 'ft', 'feet', 'foot', 'yd', 'yard', 'yards', 'mi', 'mile', 'miles', 'mm', 'cm', 'm', 'km']:
-                        canonical_unit = 'm'
-                    elif unit_lower in ['lb', 'lbs', 'pound', 'pounds', 'oz', 'ounce', 'ounces', 'g', 'gram', 'grams', 'kg', 'kilogram', 'kilograms']:
-                        canonical_unit = 'kg'
-                    elif unit_lower in ['gal', 'gallon', 'gallons', 'qt', 'quart', 'pt', 'pint', 'fl oz', 'ml', 'l', 'liter', 'liters']:
-                        canonical_unit = 'L'
-                    elif unit_lower in ['%', 'percent', 'percentage']:
-                        canonical_unit = 'ratio'
-                    elif unit_lower in ['sec', 'second', 'seconds', 'min', 'minute', 'minutes', 'hr', 'hour', 'hours', 'day', 'days']:
-                        canonical_unit = 's'
-                    else:
-                        canonical_unit = unit
+                    # Determine SI unit based on measurement type
+                    si_unit = measurement_types.get(measurement_type, {}).get('si_unit', unit_str)
                     
-                    # Format canonical value (round to reasonable precision)
-                    if canonical_value >= 1:
-                        canonical = f"{canonical_value:.2f} {canonical_unit}"
+                    # Round appropriately based on magnitude
+                    if si_value >= 1:
+                        canonical = str(round(si_value, 4))
                     else:
-                        canonical = f"{canonical_value:.4f} {canonical_unit}"
+                        canonical = str(round(si_value, 6))
                 else:
-                    # No conversion available, use original
-                    canonical = text
+                    # No conversion available, keep original
+                    si_value = original_value
+                    si_unit = unit_str
+                    canonical = str(original_value)
+                
+                # Create comprehensive metadata
+                metadata = {
+                    'value': original_value,           # Original numeric value
+                    'unit': unit_str,                  # Original unit
+                    'si_value': si_value,              # Converted SI value
+                    'si_unit': si_unit,                # SI unit
+                    'measurement_type': measurement_type,  # Category of measurement
+                    'display_value': f"{original_value} {unit_str} ({si_value:.2f} {si_unit})" if unit_str != si_unit else f"{original_value} {unit_str}"
+                }
             else:
-                # No numeric pattern found, use original
+                # Fallback for unparseable measurements
                 canonical = text
+                metadata = {'parse_error': True, 'original_text': text}
                 
             self.entity_counters['MEASUREMENT'] += 1
             canonical_groups.append({
                 'id': f"meas{self.entity_counters['MEASUREMENT']:03d}",
-                'canonical': canonical,
+                'canonical': canonical,  # The normalized numeric value
                 'aliases': [],
                 'mentions': [{'text': text, 'span': measurement.get('span', {})}],
-                'count': 1
+                'count': 1,
+                'metadata': metadata
             })
         
         return [NormalizedEntity(
             id=group['id'], type='MEASUREMENT', normalized=group['canonical'],
-            aliases=group['aliases'], count=group['count'], mentions=group['mentions']
+            aliases=group['aliases'], count=group['count'], mentions=group['mentions'],
+            metadata=group.get('metadata')
         ) for group in canonical_groups]
     
     def _generate_statistics(self, original_entities: Dict, normalized_entities: List[NormalizedEntity], processing_time: float) -> Dict[str, Any]:
