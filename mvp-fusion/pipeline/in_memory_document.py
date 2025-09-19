@@ -76,6 +76,11 @@ class InMemoryDocument:
         self.yaml_frontmatter['enrichment'] = enrichment_data
         self._check_memory_limit("after enrichment")
         
+    def add_normalization_data(self, normalization_data: Dict[str, Any]):
+        """Add normalization section to YAML frontmatter"""
+        self.yaml_frontmatter['normalization'] = normalization_data
+        self._check_memory_limit("after normalization")
+        
     def set_semantic_data(self, semantic_json: Dict[str, Any]):
         """Set the semantic extraction JSON"""
         self.semantic_json = semantic_json

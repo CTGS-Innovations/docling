@@ -30,10 +30,11 @@ class PhaseManager:
         self.phase_to_level = {
             'initialization': FusionLogLevel.CONFIG,        # 19 - Hidden in normal mode
             'memory_management': FusionLogLevel.CONFIG,     # 19 - Hidden in normal mode  
-            'pdf_conversion': FusionLogLevel.CONVERSION,    # 24 - Hidden in normal mode
+            'pdf_conversion': FusionLogLevel.CONVERSION,    # 25 - Hidden in normal mode
             'document_processing': FusionLogLevel.SEMANTICS, # 20 - Hidden in normal mode
-            'classification': FusionLogLevel.CLASSIFICATION, # 22 - Hidden in normal mode
+            'classification': FusionLogLevel.CLASSIFICATION, # 23 - Hidden in normal mode
             'entity_extraction': FusionLogLevel.ENRICHMENT, # 21 - Hidden in normal mode
+            'normalization': FusionLogLevel.NORMALIZATION, # 22 - Hidden in normal mode (NEW)
             'semantic_analysis': FusionLogLevel.SEMANTICS,  # 20 - Hidden in normal mode
             'file_writing': FusionLogLevel.WRITER,          # 18 - Hidden in normal mode
             'service_coordination': FusionLogLevel.SEMANTICS, # 20 - Hidden in normal mode
@@ -141,6 +142,7 @@ class PhaseManager:
             'document_processing': '📄 Document Processing', 
             'classification': '🏷️  Classification',
             'entity_extraction': '🔍 Entity Extraction',
+            'normalization': '🔄 Normalization',
             'semantic_analysis': '🧠 Semantic Analysis',
             'file_writing': '💾 File Writing'
         }

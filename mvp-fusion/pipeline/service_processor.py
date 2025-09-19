@@ -93,6 +93,7 @@ class ServiceProcessor:
         self.document_classifier = get_fusion_logger("document_classifier") 
         self.core8_extractor = get_fusion_logger("core8_extractor")
         self.entity_extraction = get_fusion_logger("entity_extraction")
+        self.entity_normalizer_logger = get_fusion_logger("entity_normalizer")
         self.semantic_analyzer = get_fusion_logger("semantic_analyzer")
         
         # Service coordination loggers
@@ -162,9 +163,9 @@ class ServiceProcessor:
                 
                 # Initialize entity normalizer for structured data enhancement
                 if ENTITY_NORMALIZER_AVAILABLE:
-                    self.entity_normalizer = EntityNormalizer()
+                    self.entity_normalizer = EntityNormalizer(self.config)
                     set_current_phase('initialization')
-                    self.phase_manager.log('core8_extractor', "✅ Entity normalizer initialized for structured data enhancement")
+                    self.phase_manager.log('core8_extractor', "✅ Entity normalizer initialized for structured data enhancement and normalization phase")
                 else:
                     self.entity_normalizer = None
                 
@@ -772,30 +773,7 @@ class ServiceProcessor:
                             self.core8_extractor.enrichment(f"Extracting entities: {doc.source_filename}")
                             entities = self._extract_universal_entities(doc.markdown_content)
                             
-                            # Normalize entities for structured data enhancement
-                            if self.entity_normalizer:
-                                normalized_entities = {}
-                                normalization_count = 0
-                                
-                                for entity_type, entity_list in entities.items():
-                                    normalized_list = []
-                                    for entity in entity_list:
-                                        # Normalize entity while preserving original structure
-                                        normalized_entity = self.entity_normalizer.normalize_entity(entity)
-                                        normalized_list.append(normalized_entity)
-                                        
-                                        # Count successful normalizations
-                                        if 'normalized' in normalized_entity and 'error' not in normalized_entity['normalized']:
-                                            normalization_count += 1
-                                    
-                                    normalized_entities[entity_type] = normalized_list
-                                
-                                # Use normalized entities
-                                entities = normalized_entities
-                                
-                                # Log normalization success
-                                if normalization_count > 0:
-                                    self.core8_extractor.enrichment(f"🔧 Normalized {normalization_count} entities with structured data")
+                            # NOTE: Individual entity normalization removed - now handled by normalization phase below
                             
                             # Add entity extraction to YAML
                             doc.yaml_frontmatter['entities'] = entities
@@ -822,6 +800,65 @@ class ServiceProcessor:
                             doc_page_count = doc.yaml_frontmatter.get('page_count', 0)
                             add_pages_processed(doc_page_count)
                             self.phase_manager.log('entity_extraction', f"🔍 Extracted {doc.yaml_frontmatter['entity_insights']['total_entities_found']} total entities")
+                            
+                            # NEW: Entity Normalization Phase
+                            if self.entity_normalizer:
+                                normalization_start = time.perf_counter()
+                                set_current_phase('normalization')
+                                self.entity_normalizer_logger.normalization(f"🔄 Normalization Phase: Processing entities for canonicalization: {doc.source_filename}")
+                                
+                                # Perform entity canonicalization and global text replacement
+                                normalization_result = self.entity_normalizer.normalize_entities_phase(
+                                    entities, doc.markdown_content
+                                )
+                                
+                                # Log normalized entity counts using structured format
+                                normalized_counts = []
+                                original_count = sum(len(entity_list) for entity_list in entities.values())
+                                canonical_count = len(normalization_result.normalized_entities)
+                                
+                                for entity_type in ['person', 'org', 'location', 'gpe', 'date', 'time', 'money', 'measurement']:
+                                    type_entities = [e for e in normalization_result.normalized_entities if e.type.lower() == entity_type.lower()]
+                                    if type_entities:
+                                        normalized_counts.append(f"{entity_type}:{len(type_entities)}")
+                                
+                                if normalized_counts:
+                                    reduction_percent = ((original_count - canonical_count) / original_count * 100) if original_count > 0 else 0
+                                    self.entity_normalizer_logger.normalization(f"📊 Normalized entities: {', '.join(normalized_counts)} ({original_count}→{canonical_count} entities, {reduction_percent:.0f}% reduction): {doc.source_filename}")
+                                
+                                # Apply global text replacement
+                                self.entity_normalizer_logger.normalization(f"🔄 Global text replacement: Applying ||canonical||id|| format to document: {doc.source_filename}")
+                                doc.markdown_content = normalization_result.normalized_text
+                                
+                                # Add normalization data to YAML
+                                doc.yaml_frontmatter['normalization'] = {
+                                    'normalization_method': 'mvp-fusion-canonicalization',
+                                    'processing_time_ms': normalization_result.processing_time_ms,
+                                    'statistics': normalization_result.statistics,
+                                    'canonical_entities': [
+                                        {
+                                            'id': entity.id,
+                                            'type': entity.type,
+                                            'normalized': entity.normalized,
+                                            'aliases': entity.aliases,
+                                            'count': entity.count,
+                                            'mentions': entity.mentions,
+                                            'metadata': entity.metadata
+                                        }
+                                        for entity in normalization_result.normalized_entities
+                                    ],
+                                    'entity_reduction_percent': normalization_result.statistics.get('entity_reduction_percent', 0),
+                                    'performance': {
+                                        'entities_per_ms': normalization_result.statistics.get('performance_metrics', {}).get('entities_per_ms', 0),
+                                        'edge_compatible': normalization_result.statistics.get('performance_metrics', {}).get('edge_compatible', False)
+                                    }
+                                }
+                                
+                                normalization_time = (time.perf_counter() - normalization_start) * 1000
+                                # Track pages processed for phase performance reporting
+                                add_pages_processed(doc_page_count)
+                                self.phase_manager.log('normalization', f"🔄 Normalized {canonical_count} canonical entities from {original_count} raw entities")
+                                self.entity_normalizer_logger.normalization(f"✅ Normalization complete: {normalization_time:.1f}ms (enhanced text ready for semantic analysis): {doc.source_filename}")
                             
                             # Real semantic extraction
                             self.semantic_analyzer.semantics(f"Extracting semantic facts: {doc.source_filename}")

@@ -34,10 +34,11 @@ def get_system_metrics() -> str:
 class FusionLogLevel:
     """Custom log levels for fusion-specific messages."""
     PERFORMANCE = 35     # Between INFO (20) and WARNING (30)
-    STAGING = 25         # Service coordination and pipeline phases
-    CONVERSION = 24      # File operations and PDF conversion
-    QUEUE = 23           # Work queue operations with metrics
-    CLASSIFICATION = 22  # Document type detection
+    STAGING = 26         # Service coordination and pipeline phases
+    CONVERSION = 25      # File operations and PDF conversion
+    QUEUE = 24           # Work queue operations with metrics
+    CLASSIFICATION = 23  # Document type detection  
+    NORMALIZATION = 22   # Entity canonicalization and global text replacement
     ENRICHMENT = 21      # Entity enhancement
     SEMANTICS = 20       # Semantic analysis and fact extraction
     CONFIG = 19          # Configuration and deployment setup
@@ -70,6 +71,7 @@ def setup_logging(
     logging.addLevelName(FusionLogLevel.CONVERSION, "CONVERSION")
     logging.addLevelName(FusionLogLevel.QUEUE, "QUEUE")
     logging.addLevelName(FusionLogLevel.CLASSIFICATION, "CLASSIFICATION")
+    logging.addLevelName(FusionLogLevel.NORMALIZATION, "NORMALIZATION")
     logging.addLevelName(FusionLogLevel.ENRICHMENT, "ENRICHMENT")
     logging.addLevelName(FusionLogLevel.SEMANTICS, "SEMANTICS")
     logging.addLevelName(FusionLogLevel.CONFIG, "CONFIG")
@@ -154,6 +156,7 @@ class ColoredFormatter(logging.Formatter):
         'CONVERSION': '\033[94m',    # Light Blue - File operations
         'QUEUE': '\033[96m',         # Light Cyan - Queue operations
         'CLASSIFICATION': '\033[93m', # Light Yellow - Classification
+        'NORMALIZATION': '\033[91m', # Light Red - Entity normalization
         'ENRICHMENT': '\033[95m',    # Light Magenta - Enrichment
         'SEMANTICS': '\033[97m',     # White - Semantic processing
         'CONFIG': '\033[37m',        # Light Gray - Configuration
@@ -347,6 +350,10 @@ class LoggerAdapter:
     def classification(self, message: str, **kwargs) -> None:
         """Log a classification message."""
         self.logger.log(FusionLogLevel.CLASSIFICATION, message, **kwargs)
+        
+    def normalization(self, message: str, **kwargs) -> None:
+        """Log a normalization message."""
+        self.logger.log(FusionLogLevel.NORMALIZATION, message, **kwargs)
         
     def enrichment(self, message: str, **kwargs) -> None:
         """Log an enrichment message."""

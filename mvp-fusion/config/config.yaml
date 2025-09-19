@@ -182,7 +182,8 @@ pipeline:
     convert: true      # Stage 1: PDF/Doc -> Markdown conversion
     classify: true     # Stage 2: Document classification & type detection
     enrich: true       # Stage 3: Entity extraction & enrichment
-    extract: true      # Stage 4: Semantic extraction & JSON generation
+    normalize: true    # Stage 4: Entity canonicalization & text normalization
+    extract: true      # Stage 5: Semantic extraction & JSON generation
   
   # Stage-specific settings
   convert:
@@ -204,6 +205,48 @@ pipeline:
     max_entities_per_type: 100
     confidence_threshold: 0.8
     
+  normalize:
+    # Entity normalization settings
+    enabled: true
+    output_format: "canonical_with_id"     # Format: ||canonical||id||
+    include_raw_entities: false            # Debug flag - output raw entities to markdown
+    fuzzy_matching_threshold: 0.85         # Person name similarity threshold
+    canonical_preference: "longest"        # Choose longest variant as canonical form
+    
+    # Entity type-specific settings
+    entity_types:
+      person:
+        enable_fuzzy_matching: true
+        title_removal: true                # Remove Dr., Mr., etc.
+        suffix_removal: true               # Remove Jr., PhD, etc.
+      organization:
+        expand_acronyms: true              # EPA -> Environmental Protection Agency
+        normalize_legal_suffixes: true     # Inc, Corp, LLC handling
+      location:
+        use_usps_standards: true           # USPS address standardization
+        expand_abbreviations: true         # NYC -> New York City, NY
+      gpe:
+        use_iso_codes: true                # ISO 3166 country codes
+        canonical_names: true              # Official government names
+      date:
+        iso_format: true                   # ISO 8601 YYYY-MM-DD format
+        resolve_relative: true             # "today", "next week" -> actual dates
+      time:
+        hour_24_format: true               # 24-hour HH:MM:SS format
+        timezone_handling: true            # Timezone inference from context
+      money:
+        iso_currency_codes: true           # ISO 4217 currency codes (USD, EUR)
+        numeric_storage: true              # Store as numbers, not strings
+      measurement:
+        si_units: true                     # Convert to SI metric units
+        categorize_types: true             # Length, weight, temperature, etc.
+    
+    # Performance settings
+    performance:
+      target_processing_time_ms: 50       # Target: <50ms per document
+      memory_efficient: true              # CloudFlare Workers compatible
+      aho_corasick_enabled: true          # Use Aho-Corasick for global replacement
+      
   extract:
     # Semantic extraction settings
     extract_facts: true

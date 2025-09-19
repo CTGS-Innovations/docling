@@ -72,7 +72,7 @@ class FusionPipeline:
         
         # Build list of stages to run based on boolean flags
         self.stages_to_run = []
-        stage_order = ['convert', 'classify', 'enrich', 'extract']
+        stage_order = ['convert', 'classify', 'enrich', 'normalize', 'extract']
         for stage in stage_order:
             if stages_config.get(stage, False):  # Default to False if not specified
                 self.stages_to_run.append(stage)
@@ -100,11 +100,11 @@ class FusionPipeline:
                 self.logger.logger.warning(f"⚠️  Aho-Corasick initialization failed: {e}, using regex fallback")
                 self.ac_classifier = None
         
-        # Initialize entity normalizer for structured data enhancement
+        # Initialize entity normalizer for structured data enhancement and normalization phase
         if ENTITY_NORMALIZER_AVAILABLE:
             try:
-                self.entity_normalizer = EntityNormalizer()
-                self.logger.entity("✅ Entity normalizer initialized for structured data enhancement")
+                self.entity_normalizer = EntityNormalizer(config)
+                self.logger.entity("✅ Entity normalizer initialized for structured data enhancement and normalization phase")
             except Exception as e:
                 self.logger.logger.warning(f"⚠️  EntityNormalizer initialization failed: {e}")
                 self.entity_normalizer = None
@@ -346,9 +346,126 @@ class FusionPipeline:
             stage_time = (time.perf_counter() - stage_start) * 1000
             self.logger.success(f"Enrichment complete: {stage_time:.0f}ms ({successful_enrichments}/{len(in_memory_docs)} successful)")
         
-        # Stage 4: EXTRACT (if requested)  
+        # Stage 4: NORMALIZE (if requested)
+        if 'normalize' in self.stages_to_run:
+            self.logger.stage(f"🔄 Stage 4: Normalizing entities in memory...")
+            stage_start = time.perf_counter()
+            
+            successful_normalizations = 0
+            total_entities_normalized = 0
+            total_canonical_forms = 0
+            
+            for doc in in_memory_docs:
+                # Check if this document should proceed to normalization
+                classification_data = doc.yaml_frontmatter.get('classification', {})
+                proceed_to_normalization = classification_data.get('proceed_to_extraction', True)  # Use extraction flag as normalization feeds extraction
+                
+                if doc.success and proceed_to_normalization and self.entity_normalizer:
+                    try:
+                        # Get enriched entities from the document
+                        enrichment_data = doc.yaml_frontmatter.get('enrichment', {})
+                        global_entities = enrichment_data.get('global_entities', {})
+                        domain_entities = enrichment_data.get('domain_entities', {})
+                        
+                        # Combine all entities for normalization
+                        all_entities = {}
+                        all_entities.update(global_entities)
+                        all_entities.update(domain_entities)
+                        
+                        if all_entities:
+                            # Perform entity normalization phase
+                            normalization_result = self.entity_normalizer.normalize_entities_phase(
+                                all_entities, doc.markdown_content
+                            )
+                            
+                            # Add normalization data to document
+                            normalization_data = {
+                                'normalization_method': 'mvp-fusion-canonicalization',
+                                'processing_time_ms': normalization_result.processing_time_ms,
+                                'statistics': normalization_result.statistics,
+                                'canonical_entities': [
+                                    {
+                                        'id': entity.id,
+                                        'type': entity.type,
+                                        'normalized': entity.normalized,
+                                        'aliases': entity.aliases,
+                                        'count': entity.count,
+                                        'mentions': entity.mentions,
+                                        'metadata': entity.metadata
+                                    }
+                                    for entity in normalization_result.normalized_entities
+                                ],
+                                'entity_reduction_percent': normalization_result.statistics.get('entity_reduction_percent', 0),
+                                'performance': {
+                                    'entities_per_ms': normalization_result.statistics.get('performance_metrics', {}).get('entities_per_ms', 0),
+                                    'edge_compatible': normalization_result.statistics.get('performance_metrics', {}).get('edge_compatible', False)
+                                }
+                            }
+                            
+                            doc.add_normalization_data(normalization_data)
+                            
+                            # Update markdown content with normalized text (contains ||canonical||id|| format)
+                            doc.markdown_content = normalization_result.normalized_text
+                            
+                            # Track statistics
+                            total_entities_normalized += normalization_result.statistics.get('original_entity_count', 0)
+                            total_canonical_forms += normalization_result.statistics.get('normalized_entity_count', 0)
+                            
+                            # Log progress using structured format
+                            entity_counts = []
+                            for entity_type in ['PERSON', 'ORG', 'LOCATION', 'GPE', 'DATE', 'TIME', 'MONEY', 'MEASUREMENT']:
+                                type_entities = [e for e in normalization_result.normalized_entities if e.type == entity_type]
+                                if type_entities:
+                                    entity_counts.append(f"{entity_type.lower()}:{len(type_entities)}")
+                            
+                            if entity_counts:
+                                self.logger.entity(f"📊 Normalized entities: {', '.join(entity_counts)}")
+                        else:
+                            # No entities to normalize - add empty normalization data
+                            normalization_data = {
+                                'normalization_method': 'mvp-fusion-no-entities',
+                                'processing_time_ms': 0,
+                                'statistics': {'original_entity_count': 0, 'normalized_entity_count': 0},
+                                'canonical_entities': [],
+                                'entity_reduction_percent': 0,
+                                'performance': {'entities_per_ms': 0, 'edge_compatible': True}
+                            }
+                            doc.add_normalization_data(normalization_data)
+                        
+                        doc.record_stage_timing('normalize', (time.perf_counter() - stage_start) * 1000)
+                        successful_normalizations += 1
+                        
+                    except MemoryOverflowError as e:
+                        doc.mark_failed(str(e))
+                    except Exception as e:
+                        doc.mark_failed(f"Normalization failed: {e}")
+                elif not self.entity_normalizer:
+                    # Entity normalizer not available - skip normalization
+                    normalization_data = {
+                        'normalization_method': 'mvp-fusion-normalizer-unavailable',
+                        'processing_time_ms': 0,
+                        'statistics': {'error': 'EntityNormalizer not available'},
+                        'canonical_entities': [],
+                        'entity_reduction_percent': 0,
+                        'performance': {'entities_per_ms': 0, 'edge_compatible': True}
+                    }
+                    doc.add_normalization_data(normalization_data)
+                    doc.record_stage_timing('normalize', 0)
+                    successful_normalizations += 1  # Count as successful skip
+            
+            stage_time = (time.perf_counter() - stage_start) * 1000
+            
+            # Summary with entity reduction statistics
+            if total_entities_normalized > 0:
+                reduction_percent = ((total_entities_normalized - total_canonical_forms) / total_entities_normalized) * 100
+                self.logger.success(f"Normalization complete: {stage_time:.0f}ms ({successful_normalizations}/{len(in_memory_docs)} successful)")
+                self.logger.entity(f"📊 Entity canonicalization: {total_entities_normalized} → {total_canonical_forms} ({reduction_percent:.1f}% reduction)")
+            else:
+                self.logger.success(f"Normalization complete: {stage_time:.0f}ms ({successful_normalizations}/{len(in_memory_docs)} successful, no entities to normalize)")
+        
+        # Stage 5: EXTRACT (if requested)  
         if 'extract' in self.stages_to_run:
-            self.logger.stage(f"📄 Stage 4: Extracting semantic rules in memory...")
+            self.logger.stage(f"📄 Stage 5: Extracting semantic rules in memory...")
             stage_start = time.perf_counter()
             
             successful_extractions = 0

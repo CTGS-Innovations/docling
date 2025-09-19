@@ -859,7 +859,7 @@ Examples:
     
     # Pipeline stage options
     parser.add_argument('--stages', nargs='+', 
-                       choices=['convert', 'classify', 'enrich', 'extract', 'all'],
+                       choices=['convert', 'classify', 'enrich', 'normalize', 'extract', 'all'],
                        default=['all'],
                        help='Pipeline stages to run (default: all)')
     parser.add_argument('--convert-only', action='store_true',
@@ -868,6 +868,8 @@ Examples:
                        help='Run only classification stage')
     parser.add_argument('--enrich-only', action='store_true',
                        help='Run only enrichment stage')
+    parser.add_argument('--normalize-only', action='store_true',
+                       help='Run only entity normalization stage')
     parser.add_argument('--extract-only', action='store_true',
                        help='Run only semantic extraction stage')
     
@@ -1349,15 +1351,17 @@ def _load_and_override_config(args) -> dict:
         stages_to_run = ['classify']
     elif args.enrich_only:
         stages_to_run = ['enrich']
+    elif args.normalize_only:
+        stages_to_run = ['normalize']
     elif args.extract_only:
         stages_to_run = ['extract']
     elif 'all' in args.stages:
-        stages_to_run = ['convert', 'classify', 'enrich', 'extract']
+        stages_to_run = ['convert', 'classify', 'enrich', 'normalize', 'extract']
     else:
         stages_to_run = args.stages
     
     # Set stage flags in config
-    for stage in ['convert', 'classify', 'enrich', 'extract']:
+    for stage in ['convert', 'classify', 'enrich', 'normalize', 'extract']:
         config['pipeline']['stages'][stage] = stage in stages_to_run
     
     # Store stages list for reference
