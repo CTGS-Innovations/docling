@@ -64,7 +64,7 @@ class ReferenceData:
             return {line.strip() for line in f if line.strip()}
     
     def _load_government_enrichment(self):
-        """Load government entity enrichment data from CSV"""
+        """Load government entity enrichment data from CSV with proper subtier handling"""
         if not self._csv_path.exists():
             print(f"Warning: Government enrichment CSV not found at {self._csv_path}")
             return
@@ -76,9 +76,13 @@ class ReferenceData:
                     agency_name = row.get('AGENCY NAME', '').strip()
                     agency_abbrev = row.get('AGENCY ABBREVIATION', '').strip()
                     subtier_name = row.get('SUBTIER NAME', '').strip()
+                    subtier_abbrev = row.get('SUBTIER ABBREVIATION', '').strip()
                     website = row.get('WEBSITE', '').strip()
                     mission = row.get('MISSION', '').strip()
                     
+                    # FIXED: Create separate entries for agency and subtier entities
+                    
+                    # 1. Index main agency if it has a name
                     if agency_name:
                         enrichment_data = {
                             'formal_name': agency_name,
@@ -86,10 +90,9 @@ class ReferenceData:
                             'website': website,
                             'mission': mission,
                             'entity_type': 'government_entity',
-                            'subtier': subtier_name if subtier_name != agency_name else None
+                            'subtier': None  # This is the main agency
                         }
                         
-                        # Index by formal name and abbreviation for lookup
                         key_name = agency_name.lower()
                         self.government_agencies.add(key_name)
                         self.government_enrichment[key_name] = enrichment_data
@@ -98,12 +101,49 @@ class ReferenceData:
                             key_abbrev = agency_abbrev.lower()
                             self.government_abbreviations.add(key_abbrev)
                             self.government_enrichment[key_abbrev] = enrichment_data
+                    
+                    # 2. FIXED: Index subtier as separate entity with its own formal name
+                    if subtier_name and subtier_name != agency_name:
+                        # Create proper enrichment data for subtier agency
+                        subtier_enrichment = {
+                            'formal_name': subtier_name,  # Use subtier name as formal name
+                            'abbreviation': subtier_abbrev,  # Use subtier abbreviation if available
+                            'website': website,
+                            'mission': mission,
+                            'entity_type': 'government_entity',
+                            'parent_agency': agency_name,  # Track parent department
+                            'subtier': subtier_name
+                        }
                         
-                        # Also index subtier if different
-                        if subtier_name and subtier_name != agency_name:
-                            key_subtier = subtier_name.lower()
-                            self.government_agencies.add(key_subtier)
-                            self.government_enrichment[key_subtier] = enrichment_data
+                        # Index subtier by its full name
+                        key_subtier = subtier_name.lower()
+                        self.government_agencies.add(key_subtier)
+                        self.government_enrichment[key_subtier] = subtier_enrichment
+                        
+                        # Index subtier by its abbreviation if available
+                        if subtier_abbrev:
+                            key_subtier_abbrev = subtier_abbrev.lower()
+                            self.government_abbreviations.add(key_subtier_abbrev)
+                            self.government_enrichment[key_subtier_abbrev] = subtier_enrichment
+                        
+                        # FIXED: Infer common abbreviations for well-known agencies
+                        subtier_lower = subtier_name.lower()
+                        inferred_abbrev = None
+                        
+                        if 'centers for disease control' in subtier_lower:
+                            inferred_abbrev = 'cdc'
+                        elif 'occupational safety and health administration' in subtier_lower:
+                            inferred_abbrev = 'osha'
+                        elif 'food and drug administration' in subtier_lower:
+                            inferred_abbrev = 'fda'
+                        elif 'environmental protection agency' in subtier_lower:
+                            inferred_abbrev = 'epa'
+                        
+                        if inferred_abbrev:
+                            self.government_abbreviations.add(inferred_abbrev)
+                            self.government_enrichment[inferred_abbrev] = subtier_enrichment
+                            # Update the abbreviation in the enrichment data
+                            subtier_enrichment['abbreviation'] = inferred_abbrev.upper()
                             
         except Exception as e:
             print(f"Warning: Error loading government enrichment data: {e}")

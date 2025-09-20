@@ -491,9 +491,21 @@ class EntityNormalizer:
         return -1
     
     def _canonicalize_organizations(self, orgs: List[Dict]) -> List[NormalizedEntity]:
-        """Canonicalize organization entities with acronym expansion."""
+        """
+        STAGE 4 ENHANCEMENT: Canonicalize organizations with government entity linking.
+        
+        Applies Named Entity Linking (NEL) for government entities using Aho-Corasick lookup.
+        Following NER/NEL standards within our existing normalization pipeline.
+        """
         if not orgs:
             return []
+        
+        # Load government reference data for entity linking
+        try:
+            from knowledge.corpus.geographic_data import get_reference_data
+            reference_data = get_reference_data()
+        except Exception:
+            reference_data = None
         
         canonical_groups = []
         for org in orgs:
@@ -502,17 +514,47 @@ class EntityNormalizer:
                 continue
                 
             self.entity_counters['ORG'] += 1
-            canonical_groups.append({
-                'id': f"org{self.entity_counters['ORG']:03d}",
-                'canonical': text,
-                'aliases': [],
-                'mentions': [{'text': text, 'span': org.get('span', {})}],
-                'count': 1
-            })
+            
+            # GOVERNMENT ENTITY LINKING: Apply NEL if government entity detected in Stage 3
+            if org.get('is_government_entity') and reference_data:
+                # Use formal name as canonical form (Named Entity Linking)
+                gov_data = org.get('government_enrichment', {})
+                canonical_name = gov_data.get('formal_name', text)
+                abbreviation = gov_data.get('abbreviation', '')
+                
+                # Build aliases list with abbreviation and original text
+                aliases = []
+                if abbreviation and abbreviation.lower() != canonical_name.lower():
+                    aliases.append(abbreviation)
+                if text.lower() != canonical_name.lower():
+                    aliases.append(text)
+                
+                canonical_groups.append({
+                    'id': f"gov{self.entity_counters['ORG']:03d}",  # Special gov prefix
+                    'canonical': canonical_name,
+                    'aliases': aliases,
+                    'mentions': [{'text': text, 'span': org.get('span', {})}],
+                    'count': 1,
+                    'entity_type': 'government_entity',
+                    'government_enrichment': gov_data,  # Preserve enrichment data
+                    'website_url': gov_data.get('website', ''),
+                    'mission_statement': gov_data.get('mission', ''),
+                    'enrichment_source': 'government_csv_kb'
+                })
+            else:
+                # Standard organization canonicalization
+                canonical_groups.append({
+                    'id': f"org{self.entity_counters['ORG']:03d}",
+                    'canonical': text,
+                    'aliases': [],
+                    'mentions': [{'text': text, 'span': org.get('span', {})}],
+                    'count': 1
+                })
         
         return [NormalizedEntity(
-            id=group['id'], type='ORG', normalized=group['canonical'],
-            aliases=group['aliases'], count=group['count'], mentions=group['mentions']
+            id=group['id'], type=group.get('entity_type', 'ORG'), normalized=group['canonical'],
+            aliases=group['aliases'], count=group['count'], mentions=group['mentions'],
+            metadata=group  # Include all enrichment data in metadata
         ) for group in canonical_groups]
     
     def _canonicalize_locations(self, locations: List[Dict]) -> List[NormalizedEntity]:
@@ -966,17 +1008,52 @@ class EntityNormalizer:
         ) for group in canonical_groups]
     
     def _parse_date_to_iso(self, date_text: str) -> Dict[str, Any]:
-        """Parse date text to ISO 8601 format with comprehensive metadata."""
+        """Parse date text to ISO 8601 format with comprehensive metadata, including date ranges."""
         try:
+            # First, check if this is a date range (e.g., "August 15-20, 2024", "October 10-12, 2024")
+            range_match = re.match(r'(\w+)\s+(\d{1,2})-(\d{1,2}),?\s+(\d{4})', date_text.strip())
+            if range_match:
+                month_name, start_day, end_day, year = range_match.groups()
+                
+                # Parse the start date properly
+                start_date_str = f"{month_name} {start_day}, {year}"
+                try:
+                    start_dt = datetime.strptime(start_date_str, '%B %d, %Y')
+                    end_date_str = f"{month_name} {end_day}, {year}"
+                    end_dt = datetime.strptime(end_date_str, '%B %d, %Y')
+                    
+                    # Return range information with the full range preserved
+                    today = datetime.now()
+                    relative_ref = 'future' if start_dt.date() > today.date() else ('past' if end_dt.date() < today.date() else 'present')
+                    
+                    return {
+                        'iso_date': f"{start_dt.strftime('%Y-%m-%d')} to {end_dt.strftime('%Y-%m-%d')}",  # Preserve the full range
+                        'start_date': start_dt.strftime('%Y-%m-%d'),
+                        'end_date': end_dt.strftime('%Y-%m-%d'),
+                        'date_type': 'range',
+                        'duration_days': (end_dt - start_dt).days + 1,
+                        'year': int(year),
+                        'month': start_dt.month,
+                        'month_name': month_name,
+                        'start_day': int(start_day),
+                        'end_day': int(end_day),
+                        'relative_reference': relative_ref,
+                        'formatted': date_text,  # Keep original format
+                        'quarter': (start_dt.month - 1) // 3 + 1
+                    }
+                except ValueError:
+                    pass  # Fall through to single date parsing
+            
+            # Original single date parsing logic
+            dt = None
+            
             # Use dateutil for flexible date parsing if available
             if HAS_DATEUTIL:
                 try:
                     dt = dateutil_parser.parse(date_text)
                 except Exception:
                     dt = None
-            else:
-                dt = None
-                
+            
             # Fallback to manual parsing
             if not dt:
                 # Try common formats

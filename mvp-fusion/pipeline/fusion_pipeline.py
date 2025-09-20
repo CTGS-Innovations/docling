@@ -1032,6 +1032,84 @@ class FusionPipeline:
                 'error': str(e)
             }
     
+    def _enrich_government_entities(self, domain_entities: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        STAGE 3 ENHANCEMENT: Government Entity Detection using Aho-Corasick
+        
+        Detect government entities in organizations list and flag them with enrichment data.
+        Following NER/NEL standards within our existing pipeline.
+        
+        Performance: O(n) using Aho-Corasick automaton for government entity lookup
+        """
+        try:
+            # Load government reference data with Aho-Corasick optimization
+            from knowledge.corpus.geographic_data import get_reference_data
+            reference_data = get_reference_data()
+            
+            # Process organizations list to detect government entities
+            organizations = domain_entities.get('organizations', [])
+            if not organizations:
+                return domain_entities
+                
+            enhanced_orgs = []
+            government_entities_found = 0
+            
+            for org in organizations:
+                if not isinstance(org, dict):
+                    enhanced_orgs.append(org)
+                    continue
+                    
+                org_text = org.get('text', '') or org.get('organization_name', '') or org.get('name', '')
+                if not org_text:
+                    enhanced_orgs.append(org)
+                    continue
+                
+                # Government entity detection using O(1) lookup
+                if reference_data.is_government_entity(org_text):
+                    # Get enrichment data from government CSV
+                    gov_data = reference_data.get_government_enrichment(org_text)
+                    
+                    if gov_data:
+                        # Flag as government entity and add enrichment data
+                        enhanced_org = org.copy()
+                        enhanced_org['is_government_entity'] = True
+                        enhanced_org['government_enrichment'] = gov_data
+                        enhanced_org['entity_type'] = 'government_entity'
+                        
+                        # Add structured government metadata
+                        enhanced_org.update({
+                            'formal_name': gov_data.get('formal_name', org_text),
+                            'abbreviation': gov_data.get('abbreviation', ''),
+                            'website_url': gov_data.get('website', ''),
+                            'mission_statement': gov_data.get('mission', ''),
+                            'subtier_agency': gov_data.get('subtier', ''),
+                            'enrichment_source': 'government_csv_kb'
+                        })
+                        
+                        enhanced_orgs.append(enhanced_org)
+                        government_entities_found += 1
+                        
+                        # Debug logging for government entities found
+                        self.logger.logger.debug(f"🏛️ Government entity detected: '{org_text}' → '{gov_data.get('formal_name', org_text)}'")
+                    else:
+                        enhanced_orgs.append(org)
+                else:
+                    enhanced_orgs.append(org)
+            
+            # Update domain entities with enhanced organizations
+            enhanced_domain_entities = domain_entities.copy()
+            enhanced_domain_entities['organizations'] = enhanced_orgs
+            
+            # Log government entity enrichment summary
+            if government_entities_found > 0:
+                self.logger.logger.debug(f"🏛️ Government enrichment: {government_entities_found} entities detected and enriched")
+            
+            return enhanced_domain_entities
+            
+        except Exception as e:
+            self.logger.logger.warning(f"⚠️ Government entity enrichment failed: {e}")
+            return domain_entities  # Return original data on error
+    
     # Core 8 Entity Extraction Methods
     def _extract_person(self, content: str) -> List[str]:
         """Extract person names (Core 8)"""
@@ -1852,22 +1930,53 @@ class FusionPipeline:
             "Temporal": []
         }
         
-        # Extract organizations from knowledge facts
+        # STAGE 5 ENHANCEMENT: Extract organizations with government entity metadata
         org_facts = knowledge_facts.get('global_org', [])
+        
+        # Also check normalization data for government entities
+        normalized_entities = normalization.get('entities', [])
+        government_entities = [entity for entity in normalized_entities 
+                             if hasattr(entity, 'type') and entity.type == 'government_entity']
+        
         for i, org_fact in enumerate(org_facts):
             if isinstance(org_fact, dict):
                 canonical_name = org_fact.get('canonical_name', org_fact.get('raw_text', ''))
                 raw_text = org_fact.get('raw_text', '')
                 
-                # Determine organization type
-                org_type = 'regulatory_agency' if 'OSHA' in canonical_name else 'company'
+                # Check if this is a government entity from normalization stage
+                gov_metadata = None
+                for gov_entity in government_entities:
+                    if (hasattr(gov_entity, 'normalized') and 
+                        (gov_entity.normalized.lower() == canonical_name.lower() or
+                         raw_text.lower() in [alias.lower() for alias in gov_entity.aliases])):
+                        gov_metadata = getattr(gov_entity, 'metadata', {})
+                        break
                 
-                structured["Organizations"].append({
-                    "id": f"org_{i+1}",
-                    "canonical_name": canonical_name,
-                    "aliases": [raw_text] if raw_text != canonical_name else [],
-                    "type": org_type
-                })
+                if gov_metadata and gov_metadata.get('government_enrichment'):
+                    # Government entity with enrichment data
+                    gov_data = gov_metadata['government_enrichment']
+                    structured["Organizations"].append({
+                        "id": f"gov_{i+1}",
+                        "canonical_name": gov_data.get('formal_name', canonical_name),
+                        "aliases": [
+                            gov_data.get('abbreviation', ''),
+                            raw_text
+                        ] if gov_data.get('abbreviation') else [raw_text],
+                        "type": "government_entity",
+                        "website_url": gov_data.get('website', ''),
+                        "mission_statement": gov_data.get('mission', ''),
+                        "subtier_agency": gov_data.get('subtier', ''),
+                        "enrichment_source": "government_csv_kb"
+                    })
+                else:
+                    # Standard organization
+                    org_type = 'regulatory_agency' if 'OSHA' in canonical_name else 'company'
+                    structured["Organizations"].append({
+                        "id": f"org_{i+1}",
+                        "canonical_name": canonical_name,
+                        "aliases": [raw_text] if raw_text != canonical_name else [],
+                        "type": org_type
+                    })
         
         # Extract standards/regulations
         regulation_facts = knowledge_facts.get('global_regulation', [])
