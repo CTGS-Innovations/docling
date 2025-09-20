@@ -104,7 +104,8 @@ class EntityNormalizer:
         # Entity counters for unique ID generation
         self.entity_counters = {
             'PERSON': 0, 'ORG': 0, 'LOCATION': 0, 'GPE': 0,
-            'DATE': 0, 'TIME': 0, 'MONEY': 0, 'MEASUREMENT': 0
+            'DATE': 0, 'TIME': 0, 'MONEY': 0, 'MEASUREMENT': 0,
+            'PHONE': 0, 'REGULATION': 0
         }
         
         # Initialize patterns for canonicalization
@@ -245,6 +246,10 @@ class EntityNormalizer:
             return self._canonicalize_money_entities(entity_list)
         elif entity_type == 'MEASUREMENT':
             return self._canonicalize_measurements(entity_list)
+        elif entity_type == 'PHONE':
+            return self._canonicalize_phones(entity_list)
+        elif entity_type == 'REGULATION':
+            return self._canonicalize_regulations(entity_list)
         else:
             return []
     
@@ -561,7 +566,7 @@ class EntityNormalizer:
         ) for group in canonical_groups]
     
     def _canonicalize_dates(self, dates: List[Dict]) -> List[NormalizedEntity]:
-        """Canonicalize date entities to ISO 8601 format."""
+        """Canonicalize date entities to ISO 8601 format with temporal metadata."""
         if not dates:
             return []
         
@@ -571,22 +576,36 @@ class EntityNormalizer:
             if not text:
                 continue
                 
+            # Parse date to ISO 8601 format
+            parsed_date = self._parse_date_to_iso(text)
+            
+            if parsed_date:
+                # Use ISO format as canonical
+                canonical = parsed_date['iso_date']
+                metadata = parsed_date
+            else:
+                # Fallback to original text if parsing fails
+                canonical = text
+                metadata = {'parse_error': True, 'original_text': text}
+                
             self.entity_counters['DATE'] += 1
             canonical_groups.append({
                 'id': f"d{self.entity_counters['DATE']:03d}",
-                'canonical': text,
+                'canonical': canonical,
                 'aliases': [],
                 'mentions': [{'text': text, 'span': date.get('span', {})}],
-                'count': 1
+                'count': 1,
+                'metadata': metadata
             })
         
         return [NormalizedEntity(
             id=group['id'], type='DATE', normalized=group['canonical'],
-            aliases=group['aliases'], count=group['count'], mentions=group['mentions']
+            aliases=group['aliases'], count=group['count'], mentions=group['mentions'],
+            metadata=group.get('metadata')
         ) for group in canonical_groups]
     
     def _canonicalize_times(self, times: List[Dict]) -> List[NormalizedEntity]:
-        """Canonicalize time entities to 24-hour format."""
+        """Canonicalize time entities to 24-hour format with temporal metadata."""
         if not times:
             return []
         
@@ -596,18 +615,32 @@ class EntityNormalizer:
             if not text:
                 continue
                 
+            # Parse time to 24-hour format
+            parsed_time = self._parse_time_to_24h(text)
+            
+            if parsed_time:
+                # Use 24-hour format as canonical
+                canonical = parsed_time['time_24h']
+                metadata = parsed_time
+            else:
+                # Fallback to original text if parsing fails
+                canonical = text
+                metadata = {'parse_error': True, 'original_text': text}
+                
             self.entity_counters['TIME'] += 1
             canonical_groups.append({
                 'id': f"t{self.entity_counters['TIME']:03d}",
-                'canonical': text,
+                'canonical': canonical,
                 'aliases': [],
                 'mentions': [{'text': text, 'span': time_entity.get('span', {})}],
-                'count': 1
+                'count': 1,
+                'metadata': metadata
             })
         
         return [NormalizedEntity(
             id=group['id'], type='TIME', normalized=group['canonical'],
-            aliases=group['aliases'], count=group['count'], mentions=group['mentions']
+            aliases=group['aliases'], count=group['count'], mentions=group['mentions'],
+            metadata=group.get('metadata')
         ) for group in canonical_groups]
     
     def _canonicalize_money_entities(self, money_entities: List[Dict]) -> List[NormalizedEntity]:
@@ -853,6 +886,393 @@ class EntityNormalizer:
             aliases=group['aliases'], count=group['count'], mentions=group['mentions'],
             metadata=group.get('metadata')
         ) for group in canonical_groups]
+    
+    def _canonicalize_phones(self, phones: List[Dict]) -> List[NormalizedEntity]:
+        """Canonicalize phone entities to E.164 international format with regional metadata."""
+        if not phones:
+            return []
+        
+        canonical_groups = []
+        for phone in phones:
+            text = phone.get('text', '').strip()
+            if not text:
+                continue
+                
+            # Parse phone to E.164 format
+            parsed_phone = self._parse_phone_to_e164(text)
+            
+            if parsed_phone:
+                # Use E.164 format as canonical
+                canonical = parsed_phone['e164_format']
+                metadata = parsed_phone
+            else:
+                # Fallback to original text if parsing fails
+                canonical = text
+                metadata = {'parse_error': True, 'original_text': text}
+                
+            self.entity_counters['PHONE'] = self.entity_counters.get('PHONE', 0) + 1
+            canonical_groups.append({
+                'id': f"ph{self.entity_counters['PHONE']:03d}",
+                'canonical': canonical,
+                'aliases': [],
+                'mentions': [{'text': text, 'span': phone.get('span', {})}],
+                'count': 1,
+                'metadata': metadata
+            })
+        
+        return [NormalizedEntity(
+            id=group['id'], type='PHONE', normalized=group['canonical'],
+            aliases=group['aliases'], count=group['count'], mentions=group['mentions'],
+            metadata=group.get('metadata')
+        ) for group in canonical_groups]
+    
+    def _canonicalize_regulations(self, regulations: List[Dict]) -> List[NormalizedEntity]:
+        """Canonicalize regulation entities with structured regulatory reference."""
+        if not regulations:
+            return []
+        
+        canonical_groups = []
+        for regulation in regulations:
+            text = regulation.get('text', '').strip()
+            if not text:
+                continue
+                
+            # Parse regulation to structured format
+            parsed_regulation = self._parse_regulation_structure(text)
+            
+            if parsed_regulation:
+                # Use structured format as canonical
+                canonical = parsed_regulation['canonical_format']
+                metadata = parsed_regulation
+            else:
+                # Fallback to original text if parsing fails
+                canonical = text
+                metadata = {'parse_error': True, 'original_text': text}
+                
+            self.entity_counters['REGULATION'] = self.entity_counters.get('REGULATION', 0) + 1
+            canonical_groups.append({
+                'id': f"reg{self.entity_counters['REGULATION']:03d}",
+                'canonical': canonical,
+                'aliases': [],
+                'mentions': [{'text': text, 'span': regulation.get('span', {})}],
+                'count': 1,
+                'metadata': metadata
+            })
+        
+        return [NormalizedEntity(
+            id=group['id'], type='REGULATION', normalized=group['canonical'],
+            aliases=group['aliases'], count=group['count'], mentions=group['mentions'],
+            metadata=group.get('metadata')
+        ) for group in canonical_groups]
+    
+    def _parse_date_to_iso(self, date_text: str) -> Dict[str, Any]:
+        """Parse date text to ISO 8601 format with comprehensive metadata."""
+        try:
+            # Use dateutil for flexible date parsing if available
+            if HAS_DATEUTIL:
+                try:
+                    dt = dateutil_parser.parse(date_text)
+                except Exception:
+                    dt = None
+            else:
+                dt = None
+                
+            # Fallback to manual parsing
+            if not dt:
+                # Try common formats
+                formats = [
+                    '%B %d, %Y',    # January 15, 2024
+                    '%b %d, %Y',    # Jan 15, 2024
+                    '%m/%d/%Y',     # 01/15/2024
+                    '%m-%d-%Y',     # 01-15-2024
+                    '%Y-%m-%d',     # 2024-01-15
+                    '%d/%m/%Y',     # 15/01/2024
+                    '%d-%m-%Y',     # 15-01-2024
+                ]
+                
+                for fmt in formats:
+                    try:
+                        dt = datetime.strptime(date_text, fmt)
+                        break
+                    except ValueError:
+                        continue
+                        
+            if dt:
+                # Calculate relative reference (past/present/future)
+                today = datetime.now()
+                if dt.date() < today.date():
+                    relative_ref = 'past'
+                elif dt.date() == today.date():
+                    relative_ref = 'present'
+                else:
+                    relative_ref = 'future'
+                
+                # Calculate quarter
+                quarter = f"Q{(dt.month - 1) // 3 + 1}"
+                
+                # Calculate fiscal year (assuming Oct-Sep fiscal year)
+                if dt.month >= 10:
+                    fiscal_year = f"FY{dt.year + 1}"
+                else:
+                    fiscal_year = f"FY{dt.year}"
+                
+                return {
+                    'original_format': date_text,
+                    'iso_date': dt.strftime('%Y-%m-%d'),
+                    'epoch_timestamp': int(dt.timestamp()),
+                    'day_of_week': dt.strftime('%A'),
+                    'quarter': quarter,
+                    'fiscal_year': fiscal_year,
+                    'relative_reference': relative_ref,
+                    'year': dt.year,
+                    'month': dt.month,
+                    'day': dt.day
+                }
+        except Exception:
+            pass
+            
+        return None
+    
+    def _parse_time_to_24h(self, time_text: str) -> Dict[str, Any]:
+        """Parse time text to 24-hour format with temporal metadata."""
+        try:
+            # Enhanced time pattern to handle various formats
+            import re
+            time_pattern = r'(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM|am|pm)?'
+            match = re.search(time_pattern, time_text)
+            
+            if match:
+                hour = int(match.group(1))
+                minute = int(match.group(2))
+                second = int(match.group(3) or 0)
+                period = match.group(4)
+                
+                # Convert to 24-hour format
+                hour_24 = hour
+                if period:
+                    period_upper = period.upper()
+                    if period_upper == 'PM' and hour != 12:
+                        hour_24 += 12
+                    elif period_upper == 'AM' and hour == 12:
+                        hour_24 = 0
+                
+                # Calculate minutes from midnight
+                minutes_from_midnight = hour_24 * 60 + minute
+                
+                # Determine if business hours (9 AM - 5 PM)
+                business_hours = 9 <= hour_24 < 17
+                
+                # Detect timezone hint (basic)
+                timezone = 'local'  # Could be enhanced to detect timezone from context
+                
+                return {
+                    'original_format': time_text,
+                    'time_24h': f"{hour_24:02d}:{minute:02d}:{second:02d}",
+                    'time_12h': f"{hour}:{minute:02d}:{second:02d} {period}" if period else f"{hour}:{minute:02d}:{second:02d}",
+                    'timezone': timezone,
+                    'minutes_from_midnight': minutes_from_midnight,
+                    'business_hours': business_hours,
+                    'hour': hour_24,
+                    'minute': minute,
+                    'second': second
+                }
+        except Exception:
+            pass
+            
+        return None
+    
+    def _parse_phone_to_e164(self, phone_text: str) -> Dict[str, Any]:
+        """Parse phone text to E.164 international format with regional metadata."""
+        try:
+            # Extract digits only
+            import re
+            digits = re.sub(r'[^\d]', '', phone_text)
+            
+            if not digits:
+                return None
+                
+            # Determine format and parse components
+            country_code = None
+            area_code = None
+            local_number = None
+            phone_type = 'unknown'
+            
+            # Handle various length patterns
+            if len(digits) == 10:
+                # US/Canada format without country code
+                country_code = '1'
+                area_code = digits[:3]
+                local_number = digits[3:]
+            elif len(digits) == 11 and digits[0] == '1':
+                # US/Canada format with country code
+                country_code = '1'
+                area_code = digits[1:4]
+                local_number = digits[4:]
+            elif len(digits) >= 10:
+                # International format (basic detection)
+                if digits.startswith('1'):
+                    country_code = '1'
+                    if len(digits) == 11:
+                        area_code = digits[1:4]
+                        local_number = digits[4:]
+                    else:
+                        area_code = digits[1:4] if len(digits) > 10 else None
+                        local_number = digits[4:] if area_code else digits[1:]
+                else:
+                    # Assume first 1-3 digits are country code
+                    country_code = digits[:2] if len(digits) > 10 else digits[:1]
+                    remaining = digits[len(country_code):]
+                    area_code = remaining[:3] if len(remaining) >= 6 else None
+                    local_number = remaining[3:] if area_code else remaining
+            
+            # Determine phone type
+            if area_code:
+                toll_free_codes = ['800', '888', '877', '866', '855', '844', '833', '822']
+                if area_code in toll_free_codes:
+                    phone_type = 'toll_free'
+                elif area_code.startswith('8'):
+                    phone_type = 'toll_free'
+                else:
+                    phone_type = 'landline'  # Could be enhanced to detect mobile vs landline
+            
+            # Format E.164
+            e164_format = f"+{country_code}{area_code or ''}{local_number or ''}"
+            
+            # Format national
+            if country_code == '1' and area_code and local_number and len(local_number) == 7:
+                national_format = f"({area_code}) {local_number[:3]}-{local_number[3:]}"
+            else:
+                national_format = phone_text
+            
+            # Validate basic format
+            is_valid = len(digits) >= 10 and len(digits) <= 15
+            
+            return {
+                'original_format': phone_text,
+                'e164_format': e164_format,
+                'national_format': national_format,
+                'country_code': country_code or 'US',  # Default to US
+                'area_code': area_code,
+                'local_number': local_number,
+                'phone_type': phone_type,
+                'is_valid': is_valid,
+                'digits_only': digits
+            }
+        except Exception:
+            pass
+            
+        return None
+    
+    def _parse_regulation_structure(self, regulation_text: str) -> Dict[str, Any]:
+        """Parse regulation text to structured regulatory reference with authority metadata."""
+        try:
+            import re
+            
+            # CFR Pattern: 29 CFR 1910.132
+            cfr_match = re.match(r'(\d+)\s+CFR\s+(\d+)(?:\.(\d+))?', regulation_text, re.IGNORECASE)
+            if cfr_match:
+                title = cfr_match.group(1)
+                part = cfr_match.group(2)
+                section = cfr_match.group(3)
+                
+                # Map title to authority
+                authority_map = {
+                    '29': 'Department of Labor',
+                    '40': 'Environmental Protection Agency',
+                    '49': 'Department of Transportation',
+                    '21': 'Food and Drug Administration'
+                }
+                authority = authority_map.get(title, 'Federal Government')
+                
+                # Subject area mapping
+                subject_map = {
+                    '29': 'Occupational Safety',
+                    '40': 'Environmental Protection',
+                    '49': 'Transportation',
+                    '21': 'Food and Drug Safety'
+                }
+                subject_area = subject_map.get(title, 'Federal Regulation')
+                
+                canonical_format = f"CFR-{title}-{part}-{section}" if section else f"CFR-{title}-{part}"
+                full_citation = f"{title} CFR § {part}.{section}" if section else f"{title} CFR § {part}"
+                url = f"https://www.ecfr.gov/current/title-{title}/subtitle-B/chapter-XVII/part-{part}/section-{part}.{section}" if section else f"https://www.ecfr.gov/current/title-{title}/part-{part}"
+                
+                return {
+                    'original_text': regulation_text,
+                    'canonical_format': canonical_format,
+                    'regulation_type': 'CFR',
+                    'title': title,
+                    'part': part,
+                    'section': section,
+                    'authority': authority,
+                    'subject_area': subject_area,
+                    'full_citation': full_citation,
+                    'url': url
+                }
+            
+            # ISO Pattern: ISO 9001:2015
+            iso_match = re.match(r'ISO\s+(\d+)(?::(\d{4}))?', regulation_text, re.IGNORECASE)
+            if iso_match:
+                standard = iso_match.group(1)
+                year = iso_match.group(2)
+                
+                canonical_format = f"ISO-{standard}-{year}" if year else f"ISO-{standard}"
+                full_citation = f"ISO {standard}:{year}" if year else f"ISO {standard}"
+                
+                return {
+                    'original_text': regulation_text,
+                    'canonical_format': canonical_format,
+                    'regulation_type': 'ISO',
+                    'standard': standard,
+                    'year': year,
+                    'authority': 'International Organization for Standardization',
+                    'subject_area': 'International Standards',
+                    'full_citation': full_citation,
+                    'url': f"https://www.iso.org/standard/{standard}.html"
+                }
+            
+            # ANSI Pattern: ANSI Z359.11
+            ansi_match = re.match(r'ANSI\s+([A-Z]?\d+(?:\.\d+)*)', regulation_text, re.IGNORECASE)
+            if ansi_match:
+                standard = ansi_match.group(1)
+                
+                canonical_format = f"ANSI-{standard}"
+                full_citation = f"ANSI {standard}"
+                
+                return {
+                    'original_text': regulation_text,
+                    'canonical_format': canonical_format,
+                    'regulation_type': 'ANSI',
+                    'standard': standard,
+                    'authority': 'American National Standards Institute',
+                    'subject_area': 'American National Standards',
+                    'full_citation': full_citation,
+                    'url': f"https://www.ansi.org/"
+                }
+            
+            # NFPA Pattern: NFPA 70E
+            nfpa_match = re.match(r'NFPA\s+(\d+[A-Z]?)', regulation_text, re.IGNORECASE)
+            if nfpa_match:
+                standard = nfpa_match.group(1)
+                
+                canonical_format = f"NFPA-{standard}"
+                full_citation = f"NFPA {standard}"
+                
+                return {
+                    'original_text': regulation_text,
+                    'canonical_format': canonical_format,
+                    'regulation_type': 'NFPA',
+                    'standard': standard,
+                    'authority': 'National Fire Protection Association',
+                    'subject_area': 'Fire Protection Standards',
+                    'full_citation': full_citation,
+                    'url': f"https://www.nfpa.org/"
+                }
+                
+        except Exception:
+            pass
+            
+        return None
     
     def _generate_statistics(self, original_entities: Dict, normalized_entities: List[NormalizedEntity], processing_time: float) -> Dict[str, Any]:
         """Generate normalization statistics."""
