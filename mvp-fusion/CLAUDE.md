@@ -232,18 +232,24 @@ Use color-coded indicators for all status updates and task reporting:
 - Critical for high-throughput processing monitoring
 
 ### **Rule #14: Blocked Status Resolution - MANDATORY**
-When encountering 🔴 **BLOCKED** status, automatically search Context7 for solutions:
+When encountering 🔴 **BLOCKED** status, search Context7 for solutions after 3 attempts:
 
 **PROCESS:**
 1. **Identify the blocking issue** (dependency, API, pattern, etc.)
-2. **Search Context7** for relevant documentation/solutions
-3. **Apply solution** if found in documentation
-4. **Report outcome** with updated status indicator
+2. **Attempt to resolve** using existing knowledge (up to 3 attempts)
+3. **After 3 failed attempts**: Search Context7 for relevant documentation/solutions
+4. **Apply solution** if found in documentation
+5. **Report outcome** with updated status indicator
 
 **Example Workflow:**
 ```
 🔴 **BLOCKED**: FLPC pattern compilation failed - missing dependency
-🟡 **WAITING**: Searching Context7 for FLPC installation docs...
+🟡 **WAITING**: Attempt 1 - trying manual installation...
+🔴 **BLOCKED**: Still failing - missing library path
+🟡 **WAITING**: Attempt 2 - checking environment variables...
+🔴 **BLOCKED**: Still failing - wrong package version
+🟡 **WAITING**: Attempt 3 - trying different installation method...
+🔴 **BLOCKED**: 3 attempts failed - searching Context7 for FLPC installation docs...
 🟢 **SUCCESS**: Found solution in Context7 - installing flpc package
 ```
 
@@ -255,7 +261,8 @@ When encountering 🔴 **BLOCKED** status, automatically search Context7 for sol
 - Performance optimization techniques
 
 **Requirements:**
-- Always try Context7 before asking user for help
+- Try to resolve using existing knowledge first (3 attempts)
+- Search Context7 only after 3 failed attempts
 - Include Context7 search results in status updates
 - Document the solution found for future reference
 - Only escalate to user if Context7 has no solution

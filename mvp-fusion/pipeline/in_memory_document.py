@@ -248,23 +248,42 @@ class InMemoryDocument:
         source_reference = self.source_url if self.source_url else self.source_file_path
         source_type = 'url' if self.source_url else 'file'
         
-        knowledge_data = {
-            'source_info': {
-                'source_file': source_reference,
-                'source_type': source_type,
-                'extraction_timestamp': semantic_summary.get('timestamp', ''),
-                'extraction_engine': semantic_summary.get('extraction_engine', ''),
-                'processing_method': 'mvp-fusion-pipeline'
-            },
-            'entity_summary': {
-                'global_entities_count': global_count,
-                'domain_entities_count': domain_count,
-                'total_entities': global_count + domain_count
-            },
-            'semantic_facts': semantic_facts,
-            'normalized_entities': classification.get('normalized_entities', {}),
-            'semantic_summary': semantic_summary
-        }
+        # Check if we have the new structured format in semantic_json
+        if self.semantic_json and 'entities' in self.semantic_json:
+            # Use new structured format matching MVP-FUSION-SYMANTICS.md
+            knowledge_data = {
+                'source_info': {
+                    'source_file': source_reference,
+                    'source_type': source_type,
+                    'extraction_timestamp': self.semantic_json.get('extraction_date', ''),
+                    'extraction_engine': 'MVP-Fusion Structured Semantics',
+                    'processing_method': 'mvp-fusion-structured-semantics'
+                },
+                'entities': self.semantic_json.get('entities', {}),
+                'relationships': self.semantic_json.get('relationships', []),
+                'facts': self.semantic_json.get('facts', []),
+                'semantic_summary': self.semantic_json.get('semantic_summary', {}),
+                'legacy_semantic_facts': semantic_facts  # Keep for backward compatibility
+            }
+        else:
+            # Fallback to legacy format
+            knowledge_data = {
+                'source_info': {
+                    'source_file': source_reference,
+                    'source_type': source_type,
+                    'extraction_timestamp': semantic_summary.get('timestamp', ''),
+                    'extraction_engine': semantic_summary.get('extraction_engine', ''),
+                    'processing_method': 'mvp-fusion-pipeline'
+                },
+                'entity_summary': {
+                    'global_entities_count': global_count,
+                    'domain_entities_count': domain_count,
+                    'total_entities': global_count + domain_count
+                },
+                'semantic_facts': semantic_facts,
+                'normalized_entities': classification.get('normalized_entities', {}),
+                'semantic_summary': semantic_summary
+            }
         
         return knowledge_data
     

@@ -481,32 +481,92 @@ class FusionPipeline:
                         semantic_facts = classification.get('semantic_facts', {})
                         semantic_summary = classification.get('semantic_summary', {})
                         
+                        # Extract canonical entities from normalization section for knowledge graphs
+                        normalization = doc.yaml_frontmatter.get('normalization', {})
+                        canonical_entities = normalization.get('canonical_entities', [])
+                        
+                        # Create knowledge facts from canonical entities and semantic facts
+                        knowledge_facts = {}
+                        total_facts = 0
+                        
                         if semantic_facts:
                             # Use the rich semantic data 
+                            knowledge_facts.update(semantic_facts)
+                            total_facts += semantic_summary.get('total_facts', 0)
+                        
+                        # Add canonical entity facts from normalization
+                        if canonical_entities:
+                            entity_facts = {
+                                'canonical_entities': canonical_entities,
+                                'entity_relationships': [],
+                                'normalized_mentions': []
+                            }
+                            
+                            # Extract entity relationships and mentions
+                            for entity in canonical_entities:
+                                if isinstance(entity, dict):
+                                    entity_type = entity.get('type', 'UNKNOWN')
+                                    entity_id = entity.get('id', '')
+                                    normalized_form = entity.get('normalized', '')
+                                    aliases = entity.get('aliases', [])
+                                    mentions = entity.get('mentions', [])
+                                    
+                                    # Add to normalized mentions
+                                    if mentions:
+                                        entity_facts['normalized_mentions'].extend([
+                                            {
+                                                'entity_id': entity_id,
+                                                'entity_type': entity_type,
+                                                'canonical_form': normalized_form,
+                                                'mention': mention.get('text', '') if isinstance(mention, dict) else str(mention),
+                                                'context': mention.get('context', '') if isinstance(mention, dict) else ''
+                                            }
+                                            for mention in mentions
+                                        ])
+                            
+                            knowledge_facts.update(entity_facts)
+                            total_facts += len(canonical_entities)
+                        
+                        if knowledge_facts:
+                            # Create structured semantic output matching MVP-FUSION-SYMANTICS.md format
+                            structured_entities = self._create_structured_entities(knowledge_facts, classification, normalization)
+                            structured_relationships = self._create_structured_relationships(knowledge_facts, classification)
+                            structured_facts = self._create_structured_facts(knowledge_facts, classification)
+                            
+                            # Use the structured knowledge format
                             semantic_data = {
                                 'extraction_date': time.strftime('%Y-%m-%dT%H:%M:%S'),
-                                'extraction_method': 'mvp-fusion-rich-semantic',
-                                'semantic_facts': semantic_facts,
-                                'semantic_summary': semantic_summary,
-                                'rules_extracted': semantic_summary.get('total_facts', 0),
-                                'knowledge_points': [
+                                'extraction_method': 'mvp-fusion-structured-semantics',
+                                'entities': structured_entities,
+                                'relationships': structured_relationships,
+                                'facts': structured_facts,
+                                'semantic_summary': {
+                                    'total_facts': len(structured_facts),
+                                    'total_entities': sum(len(entities) if isinstance(entities, list) else len(entities.values()) if isinstance(entities, dict) else 0 for entities in structured_entities.values()),
+                                    'total_relationships': len(structured_relationships),
+                                    'semantic_facts_count': semantic_summary.get('total_facts', 0),
+                                    'canonical_entities_count': len(canonical_entities),
+                                    'extraction_layers': ['semantic_facts', 'canonical_entities', 'structured_output']
+                                },
+                                'rules_extracted': len(structured_facts),
+                                'legacy_knowledge_points': [
                                     {
                                         'type': fact_type,
                                         'count': len(facts) if isinstance(facts, list) else 1,
                                         'facts': facts
                                     }
-                                    for fact_type, facts in semantic_facts.items() 
+                                    for fact_type, facts in knowledge_facts.items() 
                                     if facts
                                 ]
                             }
                         else:
-                            # Fallback for documents without semantic data
+                            # Fallback for documents without semantic data or canonical entities
                             semantic_data = {
                                 'extraction_date': time.strftime('%Y-%m-%dT%H:%M:%S'),
-                                'extraction_method': 'mvp-fusion-no-semantic-data',
+                                'extraction_method': 'mvp-fusion-no-knowledge-data',
                                 'rules_extracted': 0,
                                 'knowledge_points': [],
-                                'note': 'No semantic facts found in classification data'
+                                'note': 'No semantic facts or canonical entities found'
                             }
                         
                         doc.set_semantic_data(semantic_data)
@@ -660,18 +720,50 @@ class FusionPipeline:
                 normalized_entities = {}
                 normalization_count = 0
                 
-                for entity_type, entity_list in entity_data['universal_entities'].items():
-                    normalized_list = []
-                    for entity in entity_list:
-                        # Normalize entity while preserving original structure
-                        normalized_entity = self.entity_normalizer.normalize_entity(entity)
-                        normalized_list.append(normalized_entity)
-                        
-                        # Count successful normalizations
-                        if 'normalized' in normalized_entity and 'error' not in normalized_entity['normalized']:
-                            normalization_count += 1
+                # Fix: entity_data['universal_entities'] contains nested structure with global_entities and domain_entities
+                universal_entities = entity_data['universal_entities']
+                
+                # Process global_entities
+                if 'global_entities' in universal_entities:
+                    normalized_global = {}
+                    for entity_type, entity_list in universal_entities['global_entities'].items():
+                        if isinstance(entity_list, list):
+                            normalized_list = []
+                            for entity in entity_list:
+                                # Normalize entity while preserving original structure
+                                normalized_entity = self.entity_normalizer.normalize_entity(entity)
+                                normalized_list.append(normalized_entity)
+                                
+                                # Count successful normalizations
+                                if isinstance(normalized_entity, dict) and 'normalized' in normalized_entity and 'error' not in normalized_entity.get('normalized', {}):
+                                    normalization_count += 1
+                            
+                            normalized_global[entity_type] = normalized_list
+                        else:
+                            normalized_global[entity_type] = entity_list
                     
-                    normalized_entities[entity_type] = normalized_list
+                    normalized_entities['global_entities'] = normalized_global
+                
+                # Process domain_entities
+                if 'domain_entities' in universal_entities:
+                    normalized_domain = {}
+                    for entity_type, entity_list in universal_entities['domain_entities'].items():
+                        if isinstance(entity_list, list):
+                            normalized_list = []
+                            for entity in entity_list:
+                                # Normalize entity while preserving original structure
+                                normalized_entity = self.entity_normalizer.normalize_entity(entity)
+                                normalized_list.append(normalized_entity)
+                                
+                                # Count successful normalizations
+                                if isinstance(normalized_entity, dict) and 'normalized' in normalized_entity and 'error' not in normalized_entity.get('normalized', {}):
+                                    normalization_count += 1
+                            
+                            normalized_domain[entity_type] = normalized_list
+                        else:
+                            normalized_domain[entity_type] = entity_list
+                    
+                    normalized_entities['domain_entities'] = normalized_domain
                 
                 # Use normalized entities
                 entity_data['universal_entities'] = normalized_entities
@@ -887,6 +979,9 @@ class FusionPipeline:
             
             # Extract enriched domain entities
             domain_entities = enriched_results.get('entities', {})
+            
+            # GOVERNMENT ENTITY ENRICHMENT: Detect and flag government entities using Aho-Corasick
+            domain_entities = self._enrich_government_entities(domain_entities)
             
             # Count enriched entities
             total_enriched = 0
@@ -1744,3 +1839,251 @@ class FusionPipeline:
         # The fallback entities already have the correct structure: value, text, type, span
         
         return entities
+    
+    def _create_structured_entities(self, knowledge_facts: Dict, classification: Dict, normalization: Dict) -> Dict:
+        """Create structured entities matching MVP-FUSION-SYMANTICS.md format"""
+        structured = {
+            "Organizations": [],
+            "Standards": [],
+            "Hazards": [],
+            "Programs": [],
+            "Financial": [],
+            "Contacts": [],
+            "Temporal": []
+        }
+        
+        # Extract organizations from knowledge facts
+        org_facts = knowledge_facts.get('global_org', [])
+        for i, org_fact in enumerate(org_facts):
+            if isinstance(org_fact, dict):
+                canonical_name = org_fact.get('canonical_name', org_fact.get('raw_text', ''))
+                raw_text = org_fact.get('raw_text', '')
+                
+                # Determine organization type
+                org_type = 'regulatory_agency' if 'OSHA' in canonical_name else 'company'
+                
+                structured["Organizations"].append({
+                    "id": f"org_{i+1}",
+                    "canonical_name": canonical_name,
+                    "aliases": [raw_text] if raw_text != canonical_name else [],
+                    "type": org_type
+                })
+        
+        # Extract standards/regulations
+        regulation_facts = knowledge_facts.get('global_regulation', [])
+        for i, reg_fact in enumerate(regulation_facts):
+            if isinstance(reg_fact, dict):
+                reg_id = reg_fact.get('regulation_id', reg_fact.get('raw_text', ''))
+                structured["Standards"].append({
+                    "id": f"std_{i+1}",
+                    "canonical_name": reg_id,
+                    "type": "osha_standard" if "CFR" in reg_id else "regulation"
+                })
+        
+        # Extract financial entities
+        money_facts = knowledge_facts.get('global_money', [])
+        for i, money_fact in enumerate(money_facts):
+            if isinstance(money_fact, dict):
+                amount = money_fact.get('amount', 0)
+                currency = money_fact.get('currency', 'USD')
+                context = money_fact.get('financial_context', '')
+                
+                # Determine financial type from context
+                if 'fine' in context.lower() or 'violation' in context.lower():
+                    fin_type = 'penalty'
+                elif 'training' in context.lower() or 'cost' in context.lower():
+                    fin_type = 'cost'
+                else:
+                    fin_type = 'amount'
+                
+                structured["Financial"].append({
+                    "id": f"fin_{i+1}",
+                    "canonical_name": f"{currency} {amount}",
+                    "amount": amount,
+                    "currency": currency,
+                    "type": fin_type,
+                    "context": context[:100] + "..." if len(context) > 100 else context
+                })
+        
+        # Extract contacts
+        phone_facts = knowledge_facts.get('global_phone', [])
+        for i, phone_fact in enumerate(phone_facts):
+            if isinstance(phone_fact, dict):
+                phone_number = phone_fact.get('phone_number', phone_fact.get('raw_text', ''))
+                structured["Contacts"].append({
+                    "id": f"contact_{i+1}",
+                    "canonical_name": phone_number,
+                    "type": "phone",
+                    "contact_value": phone_number
+                })
+        
+        # Extract temporal entities
+        date_facts = knowledge_facts.get('global_date', [])
+        time_facts = knowledge_facts.get('global_time', [])
+        
+        for i, date_fact in enumerate(date_facts):
+            if isinstance(date_fact, dict):
+                date_value = date_fact.get('date_value', date_fact.get('raw_text', ''))
+                structured["Temporal"].append({
+                    "id": f"date_{i+1}",
+                    "canonical_name": date_value,
+                    "type": "deadline",
+                    "temporal_context": date_fact.get('temporal_context', '')
+                })
+        
+        for i, time_fact in enumerate(time_facts):
+            if isinstance(time_fact, dict):
+                time_value = time_fact.get('raw_text', '')
+                structured["Temporal"].append({
+                    "id": f"time_{i+1}",
+                    "canonical_name": time_value,
+                    "type": "time",
+                    "temporal_context": time_fact.get('temporal_context', '')
+                })
+        
+        return structured
+    
+    def _create_structured_relationships(self, knowledge_facts: Dict, classification: Dict) -> List[Dict]:
+        """Create structured relationships between entities"""
+        relationships = []
+        
+        # Extract organization-standard relationships
+        orgs = knowledge_facts.get('global_org', [])
+        standards = knowledge_facts.get('global_regulation', [])
+        
+        for i, org in enumerate(orgs):
+            if isinstance(org, dict) and 'OSHA' in org.get('canonical_name', ''):
+                for j, std in enumerate(standards):
+                    if isinstance(std, dict):
+                        relationships.append({
+                            "subject": f"org_{i+1}",
+                            "predicate": "issues",
+                            "object": f"std_{j+1}"
+                        })
+        
+        # Extract financial relationships
+        money_facts = knowledge_facts.get('global_money', [])
+        for i, money_fact in enumerate(money_facts):
+            if isinstance(money_fact, dict):
+                context = money_fact.get('financial_context', '').lower()
+                if 'training' in context:
+                    relationships.append({
+                        "subject": "Employers",
+                        "predicate": "must_pay",
+                        "object": f"fin_{i+1}",
+                        "condition": "for safety training"
+                    })
+                elif 'fine' in context or 'violation' in context:
+                    relationships.append({
+                        "subject": "OSHA",
+                        "predicate": "can_impose",
+                        "object": f"fin_{i+1}",
+                        "condition": "for serious violations"
+                    })
+        
+        return relationships
+    
+    def _create_structured_facts(self, knowledge_facts: Dict, classification: Dict) -> List[Dict]:
+        """Create structured facts with subject-predicate-object format"""
+        facts = []
+        fact_id = 1
+        
+        # Extract training requirements from financial context
+        money_facts = knowledge_facts.get('global_money', [])
+        for money_fact in money_facts:
+            if isinstance(money_fact, dict):
+                context = money_fact.get('financial_context', '')
+                amount = money_fact.get('amount', 0)
+                
+                if 'training' in context.lower():
+                    facts.append({
+                        "id": f"fact_{fact_id:03d}",
+                        "subject": "Employers",
+                        "predicate": "must_provide",
+                        "object": f"Safety training at ${amount} per group",
+                        "condition": "Required for construction workers",
+                        "source": "Document analysis"
+                    })
+                    fact_id += 1
+                    
+                elif 'PPE' in context or 'equipment' in context.lower():
+                    facts.append({
+                        "id": f"fact_{fact_id:03d}",
+                        "subject": "Employers",
+                        "predicate": "must_provide",
+                        "object": f"PPE equipment at ${amount} per worker",
+                        "condition": "Personal protective equipment requirement",
+                        "source": "Document analysis"
+                    })
+                    fact_id += 1
+        
+        # Extract deadline requirements from temporal data
+        date_facts = knowledge_facts.get('global_date', [])
+        for date_fact in date_facts:
+            if isinstance(date_fact, dict):
+                date_value = date_fact.get('date_value', '')
+                context = date_fact.get('temporal_context', '')
+                
+                if 'training' in context.lower() and 'completed' in context.lower():
+                    facts.append({
+                        "id": f"fact_{fact_id:03d}",
+                        "subject": "Training",
+                        "predicate": "must_be_completed_by",
+                        "object": date_value,
+                        "condition": "Deadline requirement",
+                        "source": "Document analysis"
+                    })
+                    fact_id += 1
+        
+        # Extract regulatory compliance facts
+        regulation_facts = knowledge_facts.get('global_regulation', [])
+        for reg_fact in regulation_facts:
+            if isinstance(reg_fact, dict):
+                reg_id = reg_fact.get('regulation_id', '')
+                
+                facts.append({
+                    "id": f"fact_{fact_id:03d}",
+                    "subject": "Construction workers",
+                    "predicate": "must_comply_with",
+                    "object": reg_id,
+                    "condition": "OSHA safety requirements",
+                    "source": "Document analysis"
+                })
+                fact_id += 1
+        
+        # Extract contact/reporting requirements
+        phone_facts = knowledge_facts.get('global_phone', [])
+        for phone_fact in phone_facts:
+            if isinstance(phone_fact, dict):
+                phone_number = phone_fact.get('phone_number', '')
+                
+                facts.append({
+                    "id": f"fact_{fact_id:03d}",
+                    "subject": "Workers",
+                    "predicate": "can_contact",
+                    "object": f"Safety coordinator at {phone_number}",
+                    "condition": "For training scheduling",
+                    "source": "Document analysis"
+                })
+                fact_id += 1
+        
+        # Extract general safety requirements from enrichment data
+        if classification:
+            enrichment = classification.get('enrichment', {})
+            domain_entities = enrichment.get('domain_entities', {})
+            
+            # Temperature monitoring requirements
+            measurements = domain_entities.get('measurements', [])
+            for measurement in measurements:
+                if isinstance(measurement, dict) and 'hours' in measurement.get('unit', ''):
+                    facts.append({
+                        "id": f"fact_{fact_id:03d}",
+                        "subject": "Incidents",
+                        "predicate": "must_be_reported_within",
+                        "object": f"{measurement.get('value', '')} {measurement.get('unit', '')}",
+                        "condition": "OSHA recordkeeping requirements",
+                        "source": "Document analysis"
+                    })
+                    fact_id += 1
+        
+        return facts

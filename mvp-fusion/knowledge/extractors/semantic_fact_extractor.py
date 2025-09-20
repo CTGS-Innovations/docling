@@ -888,7 +888,7 @@ class SemanticFactExtractor:
         return 'USD'  # Default
     
     def _extract_financial_context(self, entity: Dict, context: str) -> str:
-        """Extract financial context using sentence boundaries (industry best practice)"""
+        """Extract context using complete sentence boundaries"""
         span = entity.get('span', {})
         if not span or not context:
             return ""
@@ -896,32 +896,44 @@ class SemanticFactExtractor:
         entity_start = span.get('start', 0)
         entity_end = span.get('end', 0)
         
-        # Find sentence boundaries around the entity
-        # Look backwards for sentence start
-        sentence_start = max(0, entity_start - 200)
-        for i in range(entity_start - 1, sentence_start, -1):
-            if context[i] in '.!?':
-                sentence_start = i + 1
+        # Find the sentence containing the entity by walking character by character
+        # Find start of sentence containing entity
+        sentence_start = entity_start
+        while sentence_start > 0:
+            if context[sentence_start - 1] in '.!?':
+                # Found sentence boundary, skip whitespace to find actual start
+                while sentence_start < len(context) and context[sentence_start].isspace():
+                    sentence_start += 1
+                # If we hit a paragraph break (double newline), look for the start of current paragraph
+                if '\n\n' in context[sentence_start:entity_start]:
+                    # Find the start of the current paragraph
+                    para_start = context.rfind('\n\n', sentence_start, entity_start)
+                    if para_start != -1:
+                        sentence_start = para_start + 2
+                        while sentence_start < len(context) and context[sentence_start].isspace():
+                            sentence_start += 1
                 break
+            sentence_start -= 1
         
-        # Look forwards for sentence end  
-        sentence_end = min(len(context), entity_end + 200)
-        for i in range(entity_end, sentence_end):
-            if context[i] in '.!?':
-                sentence_end = i + 1
+        # Find end of sentence containing entity
+        sentence_end = entity_end
+        while sentence_end < len(context):
+            if context[sentence_end] in '.!?':
+                sentence_end += 1  # Include the punctuation
                 break
-                
-        # Extract complete sentences and clean up
-        context_text = context[sentence_start:sentence_end].strip()
+            sentence_end += 1
+            
+        # Extract the complete sentence
+        if sentence_start < sentence_end:
+            sentence = context[sentence_start:sentence_end].strip()
+            # Make sure we got a proper sentence (starts with capital letter)
+            if sentence and sentence[0].isupper():
+                return sentence
         
-        # Remove partial sentences at start/end
-        if not context_text.startswith(('.', '!', '?')):
-            # Find first complete sentence
-            first_sentence = context_text.find('. ')
-            if first_sentence != -1:
-                context_text = context_text[first_sentence + 2:]
-        
-        return context_text
+        # Fallback: return a reasonable window around the entity
+        window_start = max(0, entity_start - 50)
+        window_end = min(len(context), entity_end + 50)
+        return context[window_start:window_end].strip()
     
     def _classify_regulation_domain(self, regulation_text: str) -> str:
         """Classify the domain of a regulation"""
