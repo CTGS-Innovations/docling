@@ -204,8 +204,10 @@ class EntityNormalizer:
         replacement_map = {}  # Maps original text -> (canonical, id)
         
         for entity_type, entity_list in entities.items():
-            if entity_type.upper() in self.entity_counters:
-                type_entities = self._canonicalize_entity_type(entity_type.upper(), entity_list)
+            # Normalize entity type to uppercase for consistency
+            normalized_type = entity_type.upper()
+            if normalized_type in self.entity_counters:
+                type_entities = self._canonicalize_entity_type(normalized_type, entity_list)
                 normalized_entities.extend(type_entities)
                 
                 # Build replacement map for this type

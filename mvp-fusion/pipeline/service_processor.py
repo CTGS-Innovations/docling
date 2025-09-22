@@ -276,14 +276,43 @@ class ServiceProcessor:
         # Deduplicate by value while preserving span info
         entities['org'] = self._deduplicate_entities(org_entities)[:20]
         
-        # LOCATION
-        loc_pattern = r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*,\s*[A-Z]{2}\b|\b\d+\s+[A-Z][a-z]+\s+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Drive|Dr|Lane|Ln|Way|Court|Ct|Plaza|Place|Pl)\b'
-        entities['location'] = self._extract_entities_with_spans(content, loc_pattern, 'LOCATION')[:20]
+        # LOCATION - Non-GPE locations (streets, landmarks, natural features)
+        loc_patterns = [
+            # Street addresses
+            r'\b\d+\s+[A-Z][a-z]+\s+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Drive|Dr|Lane|Ln|Way|Court|Ct|Plaza|Place|Pl)\b',
+            # Natural features and landmarks
+            r'\b(?:Mountain|Mt|Mount|River|Lake|Ocean|Sea|Beach|Valley|Canyon|Desert|Forest|Park|Island|Peninsula|Bay|Gulf|Strait|Channel)\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b',
+            # Generic location terms
+            r'\b(?:Silicon Valley|Wall Street|Times Square|Central Park|Golden Gate Bridge|Statue of Liberty|Eiffel Tower|Big Ben|Great Wall|Taj Mahal)\b'
+        ]
+        loc_entities = []
+        for pattern in loc_patterns:
+            loc_entities.extend(self._extract_entities_with_spans(content, pattern, 'LOCATION', re.IGNORECASE))
+        entities['location'] = self._deduplicate_entities(loc_entities)[:20]
         
-        # GPE (Geo-political entities) - Use comprehensive corpus
+        # GPE (Geo-political entities) - Cities, States, Countries with governing bodies
+        gpe_patterns = [
+            # US States
+            r'\b(?:Alabama|Alaska|Arizona|Arkansas|California|Colorado|Connecticut|Delaware|Florida|Georgia|Hawaii|Idaho|Illinois|Indiana|Iowa|Kansas|Kentucky|Louisiana|Maine|Maryland|Massachusetts|Michigan|Minnesota|Mississippi|Missouri|Montana|Nebraska|Nevada|New Hampshire|New Jersey|New Mexico|New York|North Carolina|North Dakota|Ohio|Oklahoma|Oregon|Pennsylvania|Rhode Island|South Carolina|South Dakota|Tennessee|Texas|Utah|Vermont|Virginia|Washington|West Virginia|Wisconsin|Wyoming)\b',
+            # Major US cities (top 50)
+            r'\b(?:New York City|Los Angeles|Chicago|Houston|Phoenix|Philadelphia|San Antonio|San Diego|Dallas|San Jose|Austin|Jacksonville|Fort Worth|Columbus|San Francisco|Charlotte|Indianapolis|Seattle|Denver|Washington DC|Boston|El Paso|Detroit|Nashville|Portland|Memphis|Oklahoma City|Las Vegas|Louisville|Baltimore|Milwaukee|Albuquerque|Tucson|Fresno|Mesa|Sacramento|Atlanta|Kansas City|Colorado Springs|Miami|Raleigh|Omaha|Long Beach|Virginia Beach|Oakland|Minneapolis|Tulsa|Arlington|Tampa|New Orleans)\b',
+            # Countries
+            r'\b(?:United States|USA|US|Canada|Mexico|Brazil|Argentina|Chile|Peru|Colombia|Venezuela|United Kingdom|UK|England|Scotland|Wales|Northern Ireland|Ireland|France|Germany|Spain|Portugal|Italy|Netherlands|Belgium|Switzerland|Austria|Poland|Russia|Ukraine|Belarus|China|Japan|South Korea|North Korea|India|Pakistan|Bangladesh|Thailand|Vietnam|Indonesia|Malaysia|Singapore|Philippines|Australia|New Zealand|Egypt|South Africa|Nigeria|Kenya|Morocco|Israel|Saudi Arabia|UAE|Turkey|Iran|Iraq)\b',
+            # International cities
+            r'\b(?:London|Paris|Tokyo|Beijing|Shanghai|Mumbai|Delhi|Moscow|Cairo|Bangkok|Dubai|Singapore|Hong Kong|Sydney|Melbourne|Toronto|Montreal|Vancouver|Mexico City|São Paulo|Rio de Janeiro|Buenos Aires|Berlin|Munich|Rome|Milan|Madrid|Barcelona|Amsterdam|Brussels|Vienna|Prague|Budapest|Warsaw|Stockholm|Oslo|Copenhagen|Helsinki|Dublin|Zurich|Geneva|Istanbul|Tel Aviv|Jerusalem|Seoul|Taipei|Jakarta|Manila|Kuala Lumpur|Johannesburg|Cape Town|Lagos|Nairobi)\b',
+            # European Union as GPE
+            r'\b(?:European Union|EU)\b'
+        ]
+        
         gpe_entities = []
+        
+        # First extract from patterns
+        for pattern in gpe_patterns:
+            gpe_entities.extend(self._extract_entities_with_spans(content, pattern, 'GPE', re.IGNORECASE))
+        
+        # Then supplement with corpus if available
         if hasattr(self, 'gpe_corpus') and self.gpe_corpus:
-            # Use corpus-based matching for high accuracy
+            # Use corpus-based matching for additional GPEs
             for gpe_name in self.gpe_corpus:
                 if len(gpe_name) > 2:  # Skip very short entries
                     # Use word boundary matching for precise detection
@@ -310,19 +339,15 @@ class ServiceProcessor:
                                 }
                             }
                             gpe_entities.append(entity)
-        else:
-            # Fallback to basic patterns
-            gpe_pattern = r'\b(?:United States|USA|US|Canada|Mexico|China|Japan|Germany|France|UK|United Kingdom)\b'
-            gpe_entities = self._extract_entities_with_spans(content, gpe_pattern, 'GPE', re.IGNORECASE)
         
         entities['gpe'] = self._deduplicate_entities(gpe_entities)[:20]
         
-        # DATE - Multiple patterns
+        # DATE - Multiple patterns including date ranges
         date_patterns = [
             r'\b\d{1,2}/\d{1,2}/\d{2,4}\b',
             r'\b\d{4}-\d{2}-\d{2}\b',
-            r'\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s*\d{4}\b',
-            r'\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2},?\s*\d{4}\b'
+            r'\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(?:-\d{1,2})?,?\s+\d{4}\b',
+            r'\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}(?:-\d{1,2})?,?\s+\d{4}\b'
         ]
         date_entities = []
         for pattern in date_patterns:
@@ -466,15 +491,37 @@ class ServiceProcessor:
         return True
     
     def _deduplicate_entities(self, entities: List[Dict]) -> List[Dict]:
-        """Remove duplicate entities while preserving the first occurrence."""
-        seen = set()
-        deduplicated = []
+        """Remove duplicate and overlapping entities, preferring longer matches."""
+        if not entities:
+            return []
         
-        for entity in entities:
+        # Sort by span start, then by length (longer first)
+        sorted_entities = sorted(entities, key=lambda e: (
+            e.get('span', {}).get('start', 0),
+            -(e.get('span', {}).get('end', 0) - e.get('span', {}).get('start', 0))
+        ))
+        
+        deduplicated = []
+        seen_values = set()
+        last_end = -1
+        
+        for entity in sorted_entities:
             value = entity.get('value', '')
-            if value not in seen:
-                seen.add(value)
-                deduplicated.append(entity)
+            span = entity.get('span', {})
+            start = span.get('start', 0)
+            end = span.get('end', 0)
+            
+            # Skip if we've seen this exact value
+            if value in seen_values:
+                continue
+                
+            # Skip if this entity overlaps with a previously accepted entity
+            if start < last_end:
+                continue
+            
+            seen_values.add(value)
+            deduplicated.append(entity)
+            last_end = end
         
         return deduplicated
     
