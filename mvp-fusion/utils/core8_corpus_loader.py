@@ -74,6 +74,7 @@ class Core8CorpusLoader:
         self.verbose = verbose
         self.automatons: Dict[str, ahocorasick.Automaton] = {}
         self.corpus_data: Dict[str, Set[str]] = {}
+        self.subcategory_data: Dict[str, Dict[str, Set[str]]] = {}  # Track subcategories
         self.load_stats: Dict[str, Dict] = {}
         
         # Initialize all Core-8 automatons
@@ -94,20 +95,32 @@ class Core8CorpusLoader:
         
         return data
     
-    def _load_subfolder(self, subfolder: str) -> Set[str]:
-        """Load all .txt files from a subfolder"""
-        data = set()
+    def _load_subfolder(self, subfolder: str) -> Dict[str, Set[str]]:
+        """Load all .txt files from a subfolder with subcategory tracking"""
+        data_by_subcategory = {}
         subfolder_path = self.corpus_dir / subfolder
         
         if subfolder_path.exists() and subfolder_path.is_dir():
             for txt_file in subfolder_path.glob("*.txt"):
                 if txt_file.name != "README.md":
                     file_data = self._load_corpus_file(txt_file)
-                    data.update(file_data)
-                    if len(file_data) > 0 and self.verbose:
-                        print(f"      📄 {txt_file.name:<40} {len(file_data):>7,} patterns")
+                    if len(file_data) > 0:
+                        # Extract subcategory from filename (remove date suffix and .txt)
+                        subcategory = txt_file.stem.split('_2025_')[0]  
+                        data_by_subcategory[subcategory] = file_data
+                        if self.verbose:
+                            print(f"      📄 {txt_file.name:<40} {len(file_data):>7,} patterns")
         
-        return data
+        return data_by_subcategory
+    
+    def get_subcategory(self, entity_type: str, entity_text: str) -> Optional[str]:
+        """Get the subcategory for a specific entity"""
+        if entity_type in self.subcategory_data:
+            entity_lower = entity_text.lower()
+            for subcategory, entities in self.subcategory_data[entity_type].items():
+                if entity_lower in entities:
+                    return subcategory
+        return None
     
     def _initialize_core8_automatons(self):
         """Initialize all Core-8 entity automatons"""
@@ -139,17 +152,27 @@ class Core8CorpusLoader:
                     if self.verbose:
                         print(f"   📄 {filename:<40} {len(file_data):>7,} patterns")
             
-            # Load subfolders
+            # Load subfolders with subcategory tracking
             for subfolder in mapping['subfolders']:
                 subfolder_path = self.corpus_dir / subfolder
                 if subfolder_path.exists():
                     if self.verbose:
                         print(f"   📂 Loading {subfolder}/ subfolder:")
-                    subfolder_data = self._load_subfolder(subfolder)
-                    entity_data.update(subfolder_data)
+                    subfolder_data_by_category = self._load_subfolder(subfolder)
+                    
+                    # Store subcategory data for metadata
+                    if entity_type not in self.subcategory_data:
+                        self.subcategory_data[entity_type] = {}
+                    self.subcategory_data[entity_type].update(subfolder_data_by_category)
+                    
+                    # Combine all subcategory data for the main automaton
+                    for subcategory, subcat_data in subfolder_data_by_category.items():
+                        entity_data.update(subcat_data)
+                    
                     entity_files += len(list(subfolder_path.glob("*.txt")))
+                    total_subfolder_patterns = sum(len(data) for data in subfolder_data_by_category.values())
                     if self.verbose:
-                        print(f"      └─ Total from {subfolder}/: {len(subfolder_data):,} patterns")
+                        print(f"      └─ Total from {subfolder}/: {total_subfolder_patterns:,} patterns")
             
             # Build automaton if we have data
             if len(entity_data) > 0:

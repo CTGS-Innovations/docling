@@ -166,6 +166,7 @@ class ServiceProcessor:
                     # Store the automatons for use in entity extraction
                     self.core8_automatons = corpus_loader.automatons
                     self.core8_corpus_data = corpus_loader.corpus_data
+                    self.core8_corpus_loader = corpus_loader  # Store for subcategory lookup
                 except Exception as e:
                     self.logger.logger.warning(f"⚠️ Core-8 corpus loader failed: {e}")
                     self.core8_automatons = {}
@@ -385,17 +386,46 @@ class ServiceProcessor:
         
         timing_breakdown['person'] = (time.perf_counter() - person_start) * 1000
         
-        # ORGANIZATION - Multiple patterns
+        # ORGANIZATION - Using Core-8 Aho-Corasick automaton
         org_start = time.perf_counter()
-        org_patterns = [
-            r'\b[A-Z][A-Za-z]*(?:\s+[A-Z][A-Za-z]*)*\s+(?:Inc|Corp|LLC|Ltd|Company|Organization|Institute|University|College|Department|Agency|Administration|Commission|Bureau|Office)\b',
-            r'\b(?:OSHA|FDA|EPA|NASA|FBI|CIA|DOD|DOJ|USDA|CDC|NIH|NSF|NIST|NOAA|FAA|FCC|SEC|IRS|ATF|DEA|DHS|TSA|FEMA)\b'
-        ]
-        org_entities = []
-        for pattern in org_patterns:
-            org_entities.extend(self._extract_entities_with_spans(content, pattern, 'ORG'))
-        # Deduplicate by value while preserving span info
-        entities['org'] = self._deduplicate_entities(org_entities)[:20]
+        entities['org'] = []
+        if hasattr(self, 'core8_automatons') and 'ORG' in self.core8_automatons:
+            try:
+                org_automaton = self.core8_automatons['ORG']
+                for end_pos, (entity_type, canonical) in org_automaton.iter(content.lower()):
+                    start_pos = end_pos - len(canonical) + 1
+                    # Get original text from content
+                    original_text = content[start_pos:end_pos + 1]
+                    
+                    # Only add if it's a reasonable match (not single letters, etc.)
+                    if len(original_text) > 2:
+                        entity = {
+                            'value': original_text,
+                            'text': original_text,
+                            'type': 'ORG',
+                            'span': {
+                                'start': start_pos,
+                                'end': end_pos + 1
+                            }
+                        }
+                        entities['org'].append(entity)
+                
+                # Deduplicate and limit
+                entities['org'] = self._deduplicate_entities(entities['org'])[:20]
+                self.logger.logger.info(f"🏢 ORG extraction: {len(entities['org'])} entities found")
+            except Exception as e:
+                self.logger.logger.warning(f"ORG extraction error: {e}")
+                entities['org'] = []
+        else:
+            # Fallback to pattern-based extraction if automaton not available
+            org_patterns = [
+                r'\b[A-Z][A-Za-z]*(?:\s+[A-Z][A-Za-z]*)*\s+(?:Inc|Corp|LLC|Ltd|Company|Organization|Institute|University|College|Department|Agency|Administration|Commission|Bureau|Office)\b',
+                r'\b(?:OSHA|FDA|EPA|NASA|FBI|CIA|DOD|DOJ|USDA|CDC|NIH|NSF|NIST|NOAA|FAA|FCC|SEC|IRS|ATF|DEA|DHS|TSA|FEMA)\b'
+            ]
+            org_entities = []
+            for pattern in org_patterns:
+                org_entities.extend(self._extract_entities_with_spans(content, pattern, 'ORG'))
+            entities['org'] = self._deduplicate_entities(org_entities)[:20]
         timing_breakdown['org'] = (time.perf_counter() - org_start) * 1000
         
         # ENHANCED LOCATION & GPE EXTRACTION with subcategory metadata - TEMPORARILY DISABLED FOR PERFORMANCE TESTING
@@ -429,10 +459,93 @@ class ServiceProcessor:
         #     entities['location'] = []
         #     entities['gpe'] = []
         
-        # TEMPORARY: Use basic fallback for LOC/GPE during performance testing
+        # GPE & LOCATION - Using Core-8 Aho-Corasick automatons
         loc_gpe_start = time.perf_counter()
-        entities['location'] = []
+        
+        # Extract GPE entities using Core-8 automaton
         entities['gpe'] = []
+        if hasattr(self, 'core8_automatons') and 'GPE' in self.core8_automatons:
+            try:
+                gpe_automaton = self.core8_automatons['GPE']
+                for end_pos, (entity_type, canonical) in gpe_automaton.iter(content.lower()):
+                    start_pos = end_pos - len(canonical) + 1
+                    # Get original text from content
+                    original_text = content[start_pos:end_pos + 1]
+                    
+                    # Only add if it's a reasonable match (not single letters, etc.)
+                    if len(original_text) > 2:
+                        # Get subcategory metadata
+                        subcategory = None
+                        if hasattr(self, 'core8_corpus_loader'):
+                            subcategory = self.core8_corpus_loader.get_subcategory('GPE', original_text)
+                        
+                        entity = {
+                            'value': original_text,
+                            'text': original_text,
+                            'type': 'GPE',
+                            'span': {
+                                'start': start_pos,
+                                'end': end_pos + 1
+                            }
+                        }
+                        
+                        # Add subcategory metadata if available
+                        if subcategory:
+                            entity['metadata'] = {'subcategory': subcategory}
+                        
+                        entities['gpe'].append(entity)
+                
+                # Deduplicate and limit
+                entities['gpe'] = self._deduplicate_entities(entities['gpe'])[:20]
+                self.logger.logger.info(f"🌍 GPE extraction: {len(entities['gpe'])} entities found")
+            except Exception as e:
+                self.logger.logger.warning(f"GPE extraction error: {e}")
+                entities['gpe'] = []
+        else:
+            entities['gpe'] = []
+        
+        # Extract LOC entities using Core-8 automaton
+        entities['location'] = []
+        if hasattr(self, 'core8_automatons') and 'LOC' in self.core8_automatons:
+            try:
+                loc_automaton = self.core8_automatons['LOC']
+                for end_pos, (entity_type, canonical) in loc_automaton.iter(content.lower()):
+                    start_pos = end_pos - len(canonical) + 1
+                    # Get original text from content
+                    original_text = content[start_pos:end_pos + 1]
+                    
+                    # Only add if it's a reasonable match (not single letters, etc.)
+                    if len(original_text) > 2:
+                        # Get subcategory metadata
+                        subcategory = None
+                        if hasattr(self, 'core8_corpus_loader'):
+                            subcategory = self.core8_corpus_loader.get_subcategory('LOC', original_text)
+                        
+                        entity = {
+                            'value': original_text,
+                            'text': original_text,
+                            'type': 'LOC',
+                            'span': {
+                                'start': start_pos,
+                                'end': end_pos + 1
+                            }
+                        }
+                        
+                        # Add subcategory metadata if available
+                        if subcategory:
+                            entity['metadata'] = {'subcategory': subcategory}
+                        
+                        entities['location'].append(entity)
+                
+                # Deduplicate and limit
+                entities['location'] = self._deduplicate_entities(entities['location'])[:20]
+                self.logger.logger.info(f"📍 LOC extraction: {len(entities['location'])} entities found")
+            except Exception as e:
+                self.logger.logger.warning(f"LOC extraction error: {e}")
+                entities['location'] = []
+        else:
+            entities['location'] = []
+        
         timing_breakdown['loc_gpe'] = (time.perf_counter() - loc_gpe_start) * 1000
         
         # PERFORMANCE FIX: Replace Python regex violations with FLPC (14.9x faster)

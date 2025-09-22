@@ -560,54 +560,159 @@ class EntityNormalizer:
         ) for group in canonical_groups]
     
     def _canonicalize_locations(self, locations: List[Dict]) -> List[NormalizedEntity]:
-        """Canonicalize location entities.""" 
+        """Canonicalize location entities with metadata-enriched normalization."""
         if not locations:
             return []
         
-        canonical_groups = []
+        # Group locations by canonical form using metadata-informed logic
+        canonical_groups = {}
+        
         for loc in locations:
             text = loc.get('text', '').strip()
             if not text:
                 continue
+            
+            # Extract subcategory metadata for enhanced canonicalization
+            metadata = loc.get('metadata', {})
+            subcategory = metadata.get('subcategory', '')
+            
+            # Apply subcategory-specific canonicalization rules
+            canonical_form = self._get_canonical_location_form(text, subcategory)
+            
+            # Create enhanced metadata with normalization context
+            enhanced_metadata = {
+                'subcategory': subcategory,
+                'location_type': self._classify_location_type(subcategory),
+                'normalization_confidence': self._calculate_location_confidence(text, subcategory),
+                'standardization_applied': canonical_form != text
+            }
+            
+            # Add geographic hierarchy if available
+            if subcategory:
+                enhanced_metadata['geographic_level'] = self._get_geographic_level(subcategory)
+            
+            # Group by canonical form (merge variants)
+            if canonical_form in canonical_groups:
+                # Add to existing group
+                canonical_groups[canonical_form]['mentions'].append({
+                    'text': text,
+                    'span': loc.get('span', {}),
+                    'subcategory': subcategory
+                })
+                canonical_groups[canonical_form]['aliases'].add(text)
+                canonical_groups[canonical_form]['count'] += 1
                 
-            self.entity_counters['LOCATION'] += 1
-            canonical_groups.append({
-                'id': f"loc{self.entity_counters['LOCATION']:03d}",
-                'canonical': text,
-                'aliases': [],
-                'mentions': [{'text': text, 'span': loc.get('span', {})}],
-                'count': 1
-            })
+                # Update confidence if this variant is more confident
+                current_confidence = canonical_groups[canonical_form]['metadata']['normalization_confidence']
+                if enhanced_metadata['normalization_confidence'] > current_confidence:
+                    canonical_groups[canonical_form]['metadata'] = enhanced_metadata
+            else:
+                # Create new canonical group
+                self.entity_counters['LOCATION'] += 1
+                canonical_groups[canonical_form] = {
+                    'id': f"loc{self.entity_counters['LOCATION']:03d}",
+                    'canonical': canonical_form,
+                    'aliases': {text} if text != canonical_form else set(),
+                    'mentions': [{'text': text, 'span': loc.get('span', {}), 'subcategory': subcategory}],
+                    'count': 1,
+                    'metadata': enhanced_metadata
+                }
         
-        return [NormalizedEntity(
-            id=group['id'], type='LOCATION', normalized=group['canonical'],
-            aliases=group['aliases'], count=group['count'], mentions=group['mentions']
-        ) for group in canonical_groups]
+        # Convert to NormalizedEntity objects
+        result = []
+        for group in canonical_groups.values():
+            # Convert aliases set to list
+            aliases = list(group['aliases'])
+            
+            result.append(NormalizedEntity(
+                id=group['id'],
+                type='LOCATION',
+                normalized=group['canonical'],
+                aliases=aliases,
+                count=group['count'],
+                mentions=group['mentions'],
+                metadata=group['metadata']
+            ))
+        
+        return result
     
     def _canonicalize_gpes(self, gpes: List[Dict]) -> List[NormalizedEntity]:
-        """Canonicalize geopolitical entities (countries, states)."""
+        """Canonicalize geopolitical entities with metadata-enriched normalization."""
         if not gpes:
             return []
         
-        canonical_groups = []
+        # Group GPEs by canonical form using metadata-informed logic
+        canonical_groups = {}
+        
         for gpe in gpes:
             text = gpe.get('text', '').strip()
             if not text:
                 continue
+            
+            # Extract subcategory metadata for enhanced canonicalization
+            metadata = gpe.get('metadata', {})
+            subcategory = metadata.get('subcategory', '')
+            
+            # Apply subcategory-specific canonicalization rules
+            canonical_form = self._get_canonical_gpe_form(text, subcategory)
+            
+            # Create enhanced metadata with normalization context
+            enhanced_metadata = {
+                'subcategory': subcategory,
+                'gpe_type': self._classify_gpe_type(subcategory),
+                'political_level': self._get_political_level(subcategory),
+                'normalization_confidence': self._calculate_gpe_confidence(text, subcategory),
+                'standardization_applied': canonical_form != text
+            }
+            
+            # Add ISO codes and formal names if available for high-confidence entities
+            if subcategory in ['countries', 'us_states'] and enhanced_metadata['normalization_confidence'] > 0.8:
+                enhanced_metadata.update(self._get_iso_standards(canonical_form, subcategory))
+            
+            # Group by canonical form (merge variants)
+            if canonical_form in canonical_groups:
+                # Add to existing group
+                canonical_groups[canonical_form]['mentions'].append({
+                    'text': text,
+                    'span': gpe.get('span', {}),
+                    'subcategory': subcategory
+                })
+                canonical_groups[canonical_form]['aliases'].add(text)
+                canonical_groups[canonical_form]['count'] += 1
                 
-            self.entity_counters['GPE'] += 1
-            canonical_groups.append({
-                'id': f"gpe{self.entity_counters['GPE']:03d}",
-                'canonical': text,
-                'aliases': [],
-                'mentions': [{'text': text, 'span': gpe.get('span', {})}],
-                'count': 1
-            })
+                # Update confidence if this variant is more confident
+                current_confidence = canonical_groups[canonical_form]['metadata']['normalization_confidence']
+                if enhanced_metadata['normalization_confidence'] > current_confidence:
+                    canonical_groups[canonical_form]['metadata'] = enhanced_metadata
+            else:
+                # Create new canonical group
+                self.entity_counters['GPE'] += 1
+                canonical_groups[canonical_form] = {
+                    'id': f"gpe{self.entity_counters['GPE']:03d}",
+                    'canonical': canonical_form,
+                    'aliases': {text} if text != canonical_form else set(),
+                    'mentions': [{'text': text, 'span': gpe.get('span', {}), 'subcategory': subcategory}],
+                    'count': 1,
+                    'metadata': enhanced_metadata
+                }
         
-        return [NormalizedEntity(
-            id=group['id'], type='GPE', normalized=group['canonical'],
-            aliases=group['aliases'], count=group['count'], mentions=group['mentions']
-        ) for group in canonical_groups]
+        # Convert to NormalizedEntity objects
+        result = []
+        for group in canonical_groups.values():
+            # Convert aliases set to list
+            aliases = list(group['aliases'])
+            
+            result.append(NormalizedEntity(
+                id=group['id'],
+                type='GPE',
+                normalized=group['canonical'],
+                aliases=aliases,
+                count=group['count'],
+                mentions=group['mentions'],
+                metadata=group['metadata']
+            ))
+        
+        return result
     
     def _canonicalize_dates(self, dates: List[Dict]) -> List[NormalizedEntity]:
         """Canonicalize date entities to ISO 8601 format with temporal metadata."""
@@ -1241,6 +1346,197 @@ class EntityNormalizer:
             pass
             
         return None
+    
+    # =============================================================================
+    # METADATA-ENRICHED NORMALIZATION HELPERS FOR GPE AND LOC ENTITIES
+    # =============================================================================
+    
+    def _get_canonical_gpe_form(self, text: str, subcategory: str) -> str:
+        """Get canonical form for GPE entity based on subcategory metadata."""
+        text_clean = text.strip()
+        
+        # US States: standardize to full names
+        if subcategory == 'us_states':
+            state_abbreviations = {
+                'CA': 'California', 'NY': 'New York', 'TX': 'Texas', 'FL': 'Florida',
+                'IL': 'Illinois', 'PA': 'Pennsylvania', 'OH': 'Ohio', 'GA': 'Georgia',
+                'NC': 'North Carolina', 'MI': 'Michigan', 'NJ': 'New Jersey', 'VA': 'Virginia',
+                'WA': 'Washington', 'AZ': 'Arizona', 'MA': 'Massachusetts', 'TN': 'Tennessee',
+                'IN': 'Indiana', 'MO': 'Missouri', 'MD': 'Maryland', 'WI': 'Wisconsin',
+                'CO': 'Colorado', 'MN': 'Minnesota', 'SC': 'South Carolina', 'AL': 'Alabama',
+                'LA': 'Louisiana', 'KY': 'Kentucky', 'OR': 'Oregon', 'OK': 'Oklahoma',
+                'CT': 'Connecticut', 'IA': 'Iowa', 'MS': 'Mississippi', 'AR': 'Arkansas',
+                'UT': 'Utah', 'KS': 'Kansas', 'NV': 'Nevada', 'NM': 'New Mexico',
+                'WV': 'West Virginia', 'NE': 'Nebraska', 'ID': 'Idaho', 'HI': 'Hawaii',
+                'NH': 'New Hampshire', 'ME': 'Maine', 'MT': 'Montana', 'RI': 'Rhode Island',
+                'DE': 'Delaware', 'SD': 'South Dakota', 'ND': 'North Dakota', 'AK': 'Alaska',
+                'VT': 'Vermont', 'WY': 'Wyoming'
+            }
+            return state_abbreviations.get(text_clean.upper(), text_clean)
+        
+        # Countries: standardize to formal names 
+        elif subcategory == 'countries':
+            country_standardizations = {
+                'US': 'United States', 'USA': 'United States', 'America': 'United States',
+                'UK': 'United Kingdom', 'Britain': 'United Kingdom', 'England': 'United Kingdom',
+                'UAE': 'United Arab Emirates', 'USSR': 'Soviet Union', 'USSR': 'Russia',
+                'PRC': 'China', 'ROC': 'Taiwan'
+            }
+            return country_standardizations.get(text_clean, text_clean)
+        
+        # US Cities: keep as-is but could be enhanced with city standardization
+        elif subcategory in ['major_cities', 'urban_settlements']:
+            return text_clean  # Keep original form for cities
+        
+        # Default: use original text
+        return text_clean
+    
+    def _get_canonical_location_form(self, text: str, subcategory: str) -> str:
+        """Get canonical form for location entity based on subcategory metadata."""
+        text_clean = text.strip()
+        
+        # Physical features: standardize common abbreviations
+        if subcategory in ['mountains', 'rivers', 'lakes']:
+            # Standardize directional abbreviations
+            text_clean = text_clean.replace(' Mt.', ' Mountain')
+            text_clean = text_clean.replace(' Mt ', ' Mountain ')
+            text_clean = text_clean.replace(' R.', ' River')
+            text_clean = text_clean.replace(' L.', ' Lake')
+            
+        # Buildings and landmarks: keep formal names
+        elif subcategory in ['landmarks', 'buildings']:
+            return text_clean  # Usually already in formal form
+        
+        return text_clean
+    
+    def _classify_gpe_type(self, subcategory: str) -> str:
+        """Classify GPE type based on subcategory."""
+        if subcategory == 'countries':
+            return 'country'
+        elif subcategory == 'us_states':
+            return 'state' 
+        elif subcategory in ['major_cities', 'urban_settlements']:
+            return 'city'
+        elif subcategory in ['provinces', 'territories']:
+            return 'administrative_division'
+        else:
+            return 'geopolitical_entity'
+    
+    def _classify_location_type(self, subcategory: str) -> str:
+        """Classify location type based on subcategory."""
+        if subcategory in ['mountains', 'rivers', 'lakes']:
+            return 'natural_feature'
+        elif subcategory in ['landmarks', 'buildings']:
+            return 'human_made_structure'
+        elif subcategory in ['parks', 'forests']:
+            return 'protected_area'
+        else:
+            return 'location'
+    
+    def _get_political_level(self, subcategory: str) -> str:
+        """Get political/administrative level based on subcategory."""
+        level_map = {
+            'countries': 'national',
+            'us_states': 'state',
+            'provinces': 'provincial', 
+            'territories': 'territorial',
+            'major_cities': 'municipal',
+            'urban_settlements': 'municipal'
+        }
+        return level_map.get(subcategory, 'unknown')
+    
+    def _get_geographic_level(self, subcategory: str) -> str:
+        """Get geographic classification level based on subcategory."""
+        level_map = {
+            'mountains': 'physical_feature',
+            'rivers': 'hydrographic_feature',
+            'lakes': 'hydrographic_feature',
+            'landmarks': 'cultural_feature',
+            'buildings': 'structural_feature',
+            'parks': 'conservation_area',
+            'forests': 'conservation_area'
+        }
+        return level_map.get(subcategory, 'geographic_feature')
+    
+    def _calculate_gpe_confidence(self, text: str, subcategory: str) -> float:
+        """Calculate normalization confidence for GPE entities based on metadata."""
+        base_confidence = 0.7  # Default confidence
+        
+        # Higher confidence for well-known subcategories
+        if subcategory in ['countries', 'us_states']:
+            base_confidence = 0.9
+        elif subcategory in ['major_cities']:
+            base_confidence = 0.8
+        elif subcategory in ['urban_settlements', 'provinces']:
+            base_confidence = 0.75
+        
+        # Text-based confidence adjustments
+        text_lower = text.lower()
+        
+        # Boost confidence for formal names (capital letters, proper formatting)
+        if text.istitle() or text.isupper():
+            base_confidence += 0.05
+        
+        # Reduce confidence for ambiguous short names
+        if len(text) <= 2:
+            base_confidence -= 0.1
+        
+        # Boost confidence for known patterns
+        if subcategory == 'us_states' and len(text) == 2 and text.isupper():
+            base_confidence += 0.1  # State abbreviations
+        
+        return min(1.0, max(0.1, base_confidence))
+    
+    def _calculate_location_confidence(self, text: str, subcategory: str) -> float:
+        """Calculate normalization confidence for location entities based on metadata."""
+        base_confidence = 0.7  # Default confidence
+        
+        # Higher confidence for physical features with clear subcategories
+        if subcategory in ['mountains', 'rivers', 'lakes']:
+            base_confidence = 0.85
+        elif subcategory in ['landmarks', 'parks']:
+            base_confidence = 0.8
+        elif subcategory in ['buildings']:
+            base_confidence = 0.75
+        
+        # Text-based confidence adjustments
+        if 'Mountain' in text or 'River' in text or 'Lake' in text:
+            base_confidence += 0.05  # Clear geographic indicators
+        
+        if len(text.split()) >= 2:
+            base_confidence += 0.05  # Multi-word names typically more specific
+        
+        return min(1.0, max(0.1, base_confidence))
+    
+    def _get_iso_standards(self, canonical_form: str, subcategory: str) -> Dict[str, str]:
+        """Get ISO codes and formal names for high-confidence GPE entities."""
+        iso_data = {}
+        
+        if subcategory == 'countries':
+            # Common country ISO codes (could be expanded)
+            country_codes = {
+                'United States': {'iso_alpha2': 'US', 'iso_alpha3': 'USA', 'iso_numeric': '840'},
+                'United Kingdom': {'iso_alpha2': 'GB', 'iso_alpha3': 'GBR', 'iso_numeric': '826'},
+                'Canada': {'iso_alpha2': 'CA', 'iso_alpha3': 'CAN', 'iso_numeric': '124'},
+                'Germany': {'iso_alpha2': 'DE', 'iso_alpha3': 'DEU', 'iso_numeric': '276'},
+                'France': {'iso_alpha2': 'FR', 'iso_alpha3': 'FRA', 'iso_numeric': '250'},
+                'China': {'iso_alpha2': 'CN', 'iso_alpha3': 'CHN', 'iso_numeric': '156'},
+                'Japan': {'iso_alpha2': 'JP', 'iso_alpha3': 'JPN', 'iso_numeric': '392'},
+                'Australia': {'iso_alpha2': 'AU', 'iso_alpha3': 'AUS', 'iso_numeric': '036'}
+            }
+            iso_data.update(country_codes.get(canonical_form, {}))
+        
+        elif subcategory == 'us_states':
+            # USPS state codes (subset - could be expanded)
+            state_codes = {
+                'California': {'usps_code': 'CA', 'fips_code': '06'},
+                'New York': {'usps_code': 'NY', 'fips_code': '36'},
+                'Texas': {'usps_code': 'TX', 'fips_code': '48'},
+                'Florida': {'usps_code': 'FL', 'fips_code': '12'}
+            }
+            iso_data.update(state_codes.get(canonical_form, {}))
+        
+        return iso_data
     
     def _parse_regulation_structure(self, regulation_text: str) -> Dict[str, Any]:
         """Parse regulation text to structured regulatory reference with authority metadata."""
