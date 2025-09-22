@@ -22,6 +22,7 @@ class Core8CorpusLoader:
                 'first_names_2025_09_18.txt',
                 'last_names_2025_09_18.txt'
             ],
+            'tentative_files': ['pos_discovered_people.txt'],
             'subfolders': []
         },
         'ORG': {
@@ -30,16 +31,19 @@ class Core8CorpusLoader:
                 'unicorn_companies_2025_09_18.txt',
                 'investors_2025_09_18.txt'
             ],
+            'tentative_files': ['pos_discovered_organizations.txt'],
             'subfolders': []
         },
         'GPE': {
             'files': [
                 'geopolitical_entities_2025_09_18.txt'
             ],
+            'tentative_files': ['pos_discovered_gpes.txt'],
             'subfolders': ['gpe']  # Load all files from gpe subfolder
         },
         'LOC': {
             'files': [],
+            'tentative_files': ['pos_discovered_locations.txt'],
             'subfolders': ['loc']  # Load all files from loc subfolder
         },
         'DATE': {
@@ -151,6 +155,16 @@ class Core8CorpusLoader:
                     entity_files += 1
                     if self.verbose:
                         print(f"   📄 {filename:<40} {len(file_data):>7,} patterns")
+            
+            # Load tentative files (POS discoveries)
+            for tentative_filename in mapping.get('tentative_files', []):
+                tentative_path = self.corpus_dir / tentative_filename
+                if tentative_path.exists():
+                    tentative_data = self._load_corpus_file(tentative_path)
+                    entity_data.update(tentative_data)
+                    entity_files += 1
+                    if self.verbose:
+                        print(f"   🧠 {tentative_filename:<40} {len(tentative_data):>7,} patterns (tentative)")
             
             # Load subfolders with subcategory tracking
             for subfolder in mapping['subfolders']:

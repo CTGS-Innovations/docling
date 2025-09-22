@@ -254,6 +254,29 @@ pipeline:
     extract_relationships: true
     max_facts: 50
     max_rules: 20
+    
+  # POS Gap Discovery - Smart entity discovery for unknown entities
+  pos_gap_discovery:
+    enabled: true                     # FEATURE TOGGLE: Enable/disable POS gap discovery
+    discover_organizations: true      # Discover unknown companies, agencies, institutions
+    discover_people: true             # Discover unknown person names
+    discover_locations: false         # Discover unknown locations (conservative default)
+    
+    # Performance settings
+    max_sentence_length: 200          # Skip very long sentences for performance
+    min_confidence_threshold: 0.7     # Minimum confidence for discoveries
+    max_discoveries_per_sentence: 3   # Limit discoveries per sentence
+    
+    # Auto-learning pipeline
+    auto_learn_enabled: true          # Feed discoveries back to AC corpus
+    learning_confidence_threshold: 0.8 # High-confidence threshold for learning
+    
+  # Tentative Corpus Auto-Learning - Safe learning with human validation
+  tentative_learning:
+    enabled: true                     # Enable tentative corpus auto-learning
+    auto_append_enabled: true         # Auto-append discoveries to tentative corpus
+    confidence_threshold: 0.8         # Minimum confidence for auto-learning
+    max_discoveries_per_session: 100  # Limit discoveries per processing session
 
 # Output Configuration
 output:

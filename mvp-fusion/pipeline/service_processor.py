@@ -136,6 +136,7 @@ class ServiceProcessor:
         self.aho_corasick_engine = None
         self.semantic_extractor = None
         self.person_extractor = None
+        self.pos_gap_discovery = None
         self._initialize_extractors()
         
         self.service_coordinator.staging(f"Service Processor initialized: 1 I/O + {self.cpu_workers} CPU workers")
@@ -227,6 +228,33 @@ class ServiceProcessor:
                     self.phase_manager.log('core8_extractor', "✅ Entity normalizer initialized for structured data enhancement and normalization phase")
                 else:
                     self.entity_normalizer = None
+                
+                # Initialize POS gap discovery (optional feature)
+                try:
+                    from knowledge.extractors.pos_gap_discovery import POSGapDiscovery
+                    self.pos_gap_discovery = POSGapDiscovery(self.config)
+                    if self.pos_gap_discovery.is_enabled():
+                        self.phase_manager.log('core8_extractor', "✅ POS Gap Discovery initialized and enabled")
+                    else:
+                        self.phase_manager.log('core8_extractor', "ℹ️  POS Gap Discovery disabled in configuration")
+                except Exception as e:
+                    self.logger.logger.warning(f"⚠️ POS Gap Discovery initialization failed: {e}")
+                    self.pos_gap_discovery = None
+                
+                # Initialize tentative corpus manager for auto-learning
+                try:
+                    from knowledge.corpus.tentative_corpus_manager import TentativeCorpusManager
+                    self.tentative_corpus_manager = TentativeCorpusManager(
+                        corpus_dir=Path("knowledge/corpus/foundation_data"),
+                        config=self.config
+                    )
+                    if self.tentative_corpus_manager.is_enabled():
+                        self.phase_manager.log('core8_extractor', "✅ Tentative corpus auto-learning initialized")
+                    else:
+                        self.phase_manager.log('core8_extractor', "ℹ️  Tentative corpus auto-learning disabled")
+                except Exception as e:
+                    self.logger.logger.warning(f"⚠️ Tentative corpus manager initialization failed: {e}")
+                    self.tentative_corpus_manager = None
                 
                 set_current_phase('initialization')
                 self.phase_manager.log('core8_extractor', "✅ Real extractors initialized")
@@ -386,33 +414,13 @@ class ServiceProcessor:
         
         timing_breakdown['person'] = (time.perf_counter() - person_start) * 1000
         
-        # ORGANIZATION - Using Core-8 Aho-Corasick automaton
+        # ORGANIZATION - Using sentence-based processing with Core-8 Aho-Corasick automaton
         org_start = time.perf_counter()
         entities['org'] = []
         if hasattr(self, 'core8_automatons') and 'ORG' in self.core8_automatons:
             try:
-                org_automaton = self.core8_automatons['ORG']
-                for end_pos, (entity_type, canonical) in org_automaton.iter(content.lower()):
-                    start_pos = end_pos - len(canonical) + 1
-                    # Get original text from content
-                    original_text = content[start_pos:end_pos + 1]
-                    
-                    # Only add if it's a reasonable match (not single letters, etc.)
-                    if len(original_text) > 2:
-                        entity = {
-                            'value': original_text,
-                            'text': original_text,
-                            'type': 'ORG',
-                            'span': {
-                                'start': start_pos,
-                                'end': end_pos + 1
-                            }
-                        }
-                        entities['org'].append(entity)
-                
-                # Deduplicate and limit
-                entities['org'] = self._deduplicate_entities(entities['org'])[:20]
-                self.logger.logger.info(f"🏢 ORG extraction: {len(entities['org'])} entities found")
+                entities['org'] = self._extract_entities_sentence_based(content, 'ORG')
+                self.logger.logger.info(f"🏢 ORG extraction (sentence-based): {len(entities['org'])} entities found")
             except Exception as e:
                 self.logger.logger.warning(f"ORG extraction error: {e}")
                 entities['org'] = []
@@ -608,6 +616,89 @@ class ServiceProcessor:
         entities['measurement'] = measurement_entities + percent_entities
         timing_breakdown['flpc'] = (time.perf_counter() - flpc_start) * 1000
         
+        # POS GAP DISCOVERY: Smart discovery for sentences with no entity hits
+        pos_start = time.perf_counter()
+        pos_discoveries = 0
+        pos_learning_candidates = 0
+        
+        if self.pos_gap_discovery and self.pos_gap_discovery.is_enabled():
+            try:
+                # Collect all existing entities for gap analysis
+                all_existing_entities = []
+                for entity_type, entity_list in entities.items():
+                    all_existing_entities.extend(entity_list)
+                
+                # Discover entities in coverage gaps
+                discoveries = self.pos_gap_discovery.discover_entities_in_gaps(content, all_existing_entities)
+                pos_discoveries = len(discoveries)
+                
+                # Convert POS discoveries to standard entity format and add to results
+                for discovery in discoveries:
+                    entity = {
+                        'value': discovery.text,
+                        'text': discovery.text,
+                        'type': discovery.entity_type,
+                        'span': {
+                            'start': discovery.start,
+                            'end': discovery.end
+                        },
+                        'metadata': {
+                            'source': 'pos_gap_discovery',
+                            'confidence': discovery.confidence,
+                            'pos_pattern': discovery.pos_pattern
+                        }
+                    }
+                    
+                    # Add to appropriate entity type list
+                    entity_key = discovery.entity_type.lower()
+                    if entity_key == 'org':
+                        entity_key = 'org'
+                    elif entity_key == 'person':
+                        entity_key = 'person'
+                    elif entity_key == 'location':
+                        entity_key = 'location'
+                    
+                    if entity_key in entities:
+                        entities[entity_key].append(entity)
+                    else:
+                        entities[entity_key] = [entity]
+                
+                # Get learning candidates for AC corpus enhancement
+                learning_candidates = self.pos_gap_discovery.get_learning_candidates(discoveries)
+                pos_learning_candidates = len(learning_candidates)
+                
+                # TENTATIVE CORPUS AUTO-LEARNING: Feed high-confidence discoveries to tentative corpus
+                if self.tentative_corpus_manager and self.tentative_corpus_manager.is_enabled():
+                    from knowledge.corpus.tentative_corpus_manager import create_learning_candidate_from_pos_discovery
+                    
+                    learned_count = 0
+                    for pos_discovery in learning_candidates:
+                        # Convert POS discovery to learning candidate
+                        learning_candidate = create_learning_candidate_from_pos_discovery(
+                            pos_discovery, 
+                            context=f"Document processing - gap discovery"
+                        )
+                        
+                        # Add to tentative corpus (live automaton updates disabled to prevent breaking AC)
+                        success = self.tentative_corpus_manager.add_learning_candidate(
+                            learning_candidate,
+                            live_automatons=None  # Disabled: requires corpus reload for AC updates
+                        )
+                        
+                        if success:
+                            learned_count += 1
+                    
+                    if learned_count > 0:
+                        self.logger.logger.info(f"🧠 Tentative Learning: Added {learned_count}/{pos_learning_candidates} discoveries to tentative corpus")
+                
+                if pos_discoveries > 0:
+                    self.logger.logger.info(f"🔍 POS Gap Discovery: Found {pos_discoveries} new entities ({pos_learning_candidates} learning candidates)")
+                
+            except Exception as e:
+                self.logger.logger.warning(f"⚠️ POS Gap Discovery failed: {e}")
+        
+        timing_breakdown['pos_gap_discovery'] = (time.perf_counter() - pos_start) * 1000
+        
         # Log detailed timing breakdown
         total_timing = sum(timing_breakdown.values())
         self.logger.logger.info(f"🕐 Core 8 Entity Timing Breakdown ({total_timing:.1f}ms total):")
@@ -720,15 +811,15 @@ class ServiceProcessor:
         if not entities:
             return []
         
-        # Sort by span start, then by length (longer first)
+        # Sort by length FIRST (longer first), then by position for ties
         sorted_entities = sorted(entities, key=lambda e: (
-            e.get('span', {}).get('start', 0),
-            -(e.get('span', {}).get('end', 0) - e.get('span', {}).get('start', 0))
+            -(e.get('span', {}).get('end', 0) - e.get('span', {}).get('start', 0)),  # Length FIRST (longer first)
+            e.get('span', {}).get('start', 0)  # Position SECOND (earlier first for ties)
         ))
         
         deduplicated = []
         seen_values = set()
-        last_end = -1
+        accepted_spans = []  # Track all accepted spans for overlap checking
         
         for entity in sorted_entities:
             value = entity.get('value', '')
@@ -740,15 +831,108 @@ class ServiceProcessor:
             if value in seen_values:
                 continue
                 
-            # Skip if this entity overlaps with a previously accepted entity
-            if start < last_end:
+            # Check if this entity overlaps with ANY previously accepted entity
+            overlaps = False
+            for accepted_start, accepted_end in accepted_spans:
+                # True overlap: ranges intersect
+                if start < accepted_end and end > accepted_start:
+                    overlaps = True
+                    break
+            
+            if overlaps:
                 continue
             
             seen_values.add(value)
             deduplicated.append(entity)
-            last_end = end
+            accepted_spans.append((start, end))
         
         return deduplicated
+    
+    def _extract_entities_sentence_based(self, content: str, entity_type: str) -> List[Dict]:
+        """
+        Extract entities using sentence-based processing (OpenNLP best practice).
+        
+        This follows the standard NLP approach:
+        1. Detect sentence boundaries first
+        2. Process each sentence independently 
+        3. Apply longest-match-first within each sentence
+        4. No cross-sentence overlaps possible
+        
+        Args:
+            content: Full document text
+            entity_type: Type to extract ('ORG', 'GPE', 'LOC', etc.)
+            
+        Returns:
+            List of entities with proper span information
+        """
+        all_entities = []
+        
+        try:
+            # Step 1: Sentence detection using spaCy sentencizer
+            import spacy
+            nlp = spacy.blank("en")
+            nlp.add_pipe("sentencizer")
+            doc = nlp(content)
+            
+            # Step 2: Process each sentence independently 
+            automaton = self.core8_automatons[entity_type]
+            
+            for sent in doc.sents:
+                sentence_text = sent.text
+                sentence_start = sent.start_char
+                sentence_entities = []
+                
+                # Extract entities from this sentence
+                for end_pos, (ent_type, canonical) in automaton.iter(sentence_text.lower()):
+                    start_pos = end_pos - len(canonical) + 1
+                    original_text = sentence_text[start_pos:end_pos + 1]
+                    
+                    # Only add reasonable matches
+                    if len(original_text) > 2:
+                        entity = {
+                            'value': original_text,
+                            'text': original_text,
+                            'type': entity_type,
+                            'span': {
+                                'start': sentence_start + start_pos,  # Adjust to document coordinates
+                                'end': sentence_start + end_pos + 1
+                            }
+                        }
+                        sentence_entities.append(entity)
+                
+                # Step 3: Apply longest-match-first deduplication within sentence
+                # This works perfectly because no cross-sentence overlaps are possible
+                sentence_entities = self._deduplicate_entities(sentence_entities)
+                all_entities.extend(sentence_entities)
+            
+            return all_entities
+            
+        except ImportError:
+            # Fallback to document-level processing if spaCy not available
+            return self._extract_entities_document_level(content, entity_type)
+    
+    def _extract_entities_document_level(self, content: str, entity_type: str) -> List[Dict]:
+        """Fallback document-level extraction (legacy approach)."""
+        entities = []
+        automaton = self.core8_automatons[entity_type]
+        
+        for end_pos, (ent_type, canonical) in automaton.iter(content.lower()):
+            start_pos = end_pos - len(canonical) + 1
+            original_text = content[start_pos:end_pos + 1]
+            
+            if len(original_text) > 2:
+                entity = {
+                    'value': original_text,
+                    'text': original_text,
+                    'type': entity_type,
+                    'span': {
+                        'start': start_pos,
+                        'end': end_pos + 1
+                    }
+                }
+                entities.append(entity)
+        
+        return self._deduplicate_entities(entities)[:200]
     
     def _extract_role_from_context(self, context: str) -> Optional[str]:
         """Extract person's role from context (from original comprehensive extractor)"""

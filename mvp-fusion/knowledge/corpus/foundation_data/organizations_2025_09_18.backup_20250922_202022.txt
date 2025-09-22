@@ -139901,32 +139901,3 @@ zèle nola
 ōliv tucson
 ​silent stay meditation & retreat center
 ​​transformational abdominal massage by jada delaney
-
-# POS-discovered entities added on 2025-09-22T20:20:22.448430
-Tesla, Inc.
-CyberTech Solutions, Inc.
-StartupCorp LLC
-The OSHA Training Institute
-OSHA Training Institute
-Computing Machinery
-Global Dynamics Corp
-Tech Corp.
-National Institute
-Department of Transportation
-Boeing Corp
-Walmart Inc.
-Apple Inc.
-Google LLC
-Facebook Technologies, LLC
-FedEx Corp
-Lockheed Martin Corp
-Raytheon Technologies
-Massachusetts Institute
-Harvard Business School
-Department of Labor
-Neural Information Processing Systems
-Information Processing Systems
-Neural Information
-Processing Systems
-NewTech Innovations, Inc.
-FutureCorp LLC
