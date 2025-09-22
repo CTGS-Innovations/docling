@@ -31,10 +31,10 @@ class ReferenceData:
         self._base_path = Path(__file__).parent / "foundation_data"
         self._csv_path = Path(__file__).parent / "temp_data" / "agency_codes.csv"
         
-        # Geographic data
-        self.us_states: Set[str] = self._load_set("us_states.txt")
-        self.countries: Set[str] = self._load_set("countries.txt")  
-        self.major_cities: Set[str] = self._load_set("major_cities.txt")
+        # Geographic data - updated for new GPE/LOC structure
+        self.us_states: Set[str] = self._load_gpe_set("us_states")
+        self.countries: Set[str] = self._load_gpe_set("countries")  
+        self.major_cities: Set[str] = self._load_gpe_set("major_cities")
         
         # Organization data
         self.unicorn_companies: Set[str] = self._load_set("unicorn_companies.txt")
@@ -62,6 +62,24 @@ class ReferenceData:
         
         with open(file_path, 'r', encoding='utf-8') as f:
             return {line.strip() for line in f if line.strip()}
+    
+    def _load_gpe_set(self, subcategory: str) -> Set[str]:
+        """Load GPE subcategory file from new gpe/ directory structure"""
+        # Try multiple date patterns
+        date_patterns = ["2025_09_22", "2025_09_18"]
+        
+        for date_pattern in date_patterns:
+            file_path = self._base_path / "gpe" / f"{subcategory}_{date_pattern}.txt"
+            if file_path.exists():
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        return {line.strip() for line in f if line.strip()}
+                except Exception as e:
+                    print(f"Warning: Error loading {file_path}: {e}")
+        
+        # File not found
+        print(f"Warning: GPE subcategory {subcategory} not found in {self._base_path / 'gpe'}")
+        return set()
     
     def _load_government_enrichment(self):
         """Load government entity enrichment data from CSV with proper subtier handling"""

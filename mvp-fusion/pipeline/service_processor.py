@@ -214,6 +214,46 @@ class ServiceProcessor:
         
         self.service_coordinator.staging("Service stopped")
     
+    def _extract_enhanced_gpe_loc(self, content: str) -> Dict[str, List]:
+        """Enhanced GPE/LOC extraction with subcategory metadata - DIRECT IMPLEMENTATION"""
+        try:
+            # DIRECT IMPORT - no external dependencies
+            from hybrid_entity_metadata_system import HybridEntityMetadataSystem
+            
+            hybrid_system = HybridEntityMetadataSystem()
+            hybrid_result = hybrid_system.extract_hybrid_metadata(content)
+            
+            # Convert to service processor format
+            enhanced_entities = {'gpe': [], 'location': []}
+            
+            # Convert GPE entities with subcategory metadata
+            for raw_entity in hybrid_result["raw_entities"]["gpe"]:
+                entity = {
+                    'value': raw_entity.value,
+                    'text': raw_entity.text,
+                    'type': raw_entity.entity_type,
+                    'subcategory': raw_entity.subcategory,  # ENHANCED: Add subcategory
+                    'span': raw_entity.span
+                }
+                enhanced_entities['gpe'].append(entity)
+            
+            # Convert LOC entities with subcategory metadata
+            for raw_entity in hybrid_result["raw_entities"]["loc"]:
+                entity = {
+                    'value': raw_entity.value,
+                    'text': raw_entity.text,
+                    'type': 'LOCATION',
+                    'subcategory': raw_entity.subcategory,  # ENHANCED: Add subcategory
+                    'span': raw_entity.span
+                }
+                enhanced_entities['location'].append(entity)
+            
+            return enhanced_entities
+            
+        except Exception as e:
+            self.logger.logger.warning(f"Direct enhanced extraction failed: {e}")
+            raise e
+    
     def _extract_universal_entities(self, content: str) -> Dict[str, List]:
         """
         Extract Core 8 Universal Entities with span information and clean text.
@@ -276,71 +316,52 @@ class ServiceProcessor:
         # Deduplicate by value while preserving span info
         entities['org'] = self._deduplicate_entities(org_entities)[:20]
         
-        # LOCATION - Non-GPE locations (streets, landmarks, natural features)
-        loc_patterns = [
-            # Street addresses
-            r'\b\d+\s+[A-Z][a-z]+\s+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Drive|Dr|Lane|Ln|Way|Court|Ct|Plaza|Place|Pl)\b',
-            # Natural features and landmarks
-            r'\b(?:Mountain|Mt|Mount|River|Lake|Ocean|Sea|Beach|Valley|Canyon|Desert|Forest|Park|Island|Peninsula|Bay|Gulf|Strait|Channel)\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b',
-            # Generic location terms
-            r'\b(?:Silicon Valley|Wall Street|Times Square|Central Park|Golden Gate Bridge|Statue of Liberty|Eiffel Tower|Big Ben|Great Wall|Taj Mahal)\b'
-        ]
-        loc_entities = []
-        for pattern in loc_patterns:
-            loc_entities.extend(self._extract_entities_with_spans(content, pattern, 'LOCATION', re.IGNORECASE))
-        entities['location'] = self._deduplicate_entities(loc_entities)[:20]
-        
-        # GPE (Geo-political entities) - Cities, States, Countries with governing bodies
-        gpe_patterns = [
-            # US States
-            r'\b(?:Alabama|Alaska|Arizona|Arkansas|California|Colorado|Connecticut|Delaware|Florida|Georgia|Hawaii|Idaho|Illinois|Indiana|Iowa|Kansas|Kentucky|Louisiana|Maine|Maryland|Massachusetts|Michigan|Minnesota|Mississippi|Missouri|Montana|Nebraska|Nevada|New Hampshire|New Jersey|New Mexico|New York|North Carolina|North Dakota|Ohio|Oklahoma|Oregon|Pennsylvania|Rhode Island|South Carolina|South Dakota|Tennessee|Texas|Utah|Vermont|Virginia|Washington|West Virginia|Wisconsin|Wyoming)\b',
-            # Major US cities (top 50)
-            r'\b(?:New York City|Los Angeles|Chicago|Houston|Phoenix|Philadelphia|San Antonio|San Diego|Dallas|San Jose|Austin|Jacksonville|Fort Worth|Columbus|San Francisco|Charlotte|Indianapolis|Seattle|Denver|Washington DC|Boston|El Paso|Detroit|Nashville|Portland|Memphis|Oklahoma City|Las Vegas|Louisville|Baltimore|Milwaukee|Albuquerque|Tucson|Fresno|Mesa|Sacramento|Atlanta|Kansas City|Colorado Springs|Miami|Raleigh|Omaha|Long Beach|Virginia Beach|Oakland|Minneapolis|Tulsa|Arlington|Tampa|New Orleans)\b',
-            # Countries
-            r'\b(?:United States|USA|US|Canada|Mexico|Brazil|Argentina|Chile|Peru|Colombia|Venezuela|United Kingdom|UK|England|Scotland|Wales|Northern Ireland|Ireland|France|Germany|Spain|Portugal|Italy|Netherlands|Belgium|Switzerland|Austria|Poland|Russia|Ukraine|Belarus|China|Japan|South Korea|North Korea|India|Pakistan|Bangladesh|Thailand|Vietnam|Indonesia|Malaysia|Singapore|Philippines|Australia|New Zealand|Egypt|South Africa|Nigeria|Kenya|Morocco|Israel|Saudi Arabia|UAE|Turkey|Iran|Iraq)\b',
-            # International cities
-            r'\b(?:London|Paris|Tokyo|Beijing|Shanghai|Mumbai|Delhi|Moscow|Cairo|Bangkok|Dubai|Singapore|Hong Kong|Sydney|Melbourne|Toronto|Montreal|Vancouver|Mexico City|São Paulo|Rio de Janeiro|Buenos Aires|Berlin|Munich|Rome|Milan|Madrid|Barcelona|Amsterdam|Brussels|Vienna|Prague|Budapest|Warsaw|Stockholm|Oslo|Copenhagen|Helsinki|Dublin|Zurich|Geneva|Istanbul|Tel Aviv|Jerusalem|Seoul|Taipei|Jakarta|Manila|Kuala Lumpur|Johannesburg|Cape Town|Lagos|Nairobi)\b',
-            # European Union as GPE
-            r'\b(?:European Union|EU)\b'
-        ]
-        
-        gpe_entities = []
-        
-        # First extract from patterns
-        for pattern in gpe_patterns:
-            gpe_entities.extend(self._extract_entities_with_spans(content, pattern, 'GPE', re.IGNORECASE))
-        
-        # Then supplement with corpus if available
-        if hasattr(self, 'gpe_corpus') and self.gpe_corpus:
-            # Use corpus-based matching for additional GPEs
-            for gpe_name in self.gpe_corpus:
-                if len(gpe_name) > 2:  # Skip very short entries
-                    # Use word boundary matching for precise detection
-                    gpe_pattern = r'\b' + re.escape(gpe_name) + r'\b'
-                    matches = list(re.finditer(gpe_pattern, content, re.IGNORECASE))
-                    for match in matches:
-                        clean_text = self._clean_entity_text(match.group(0))
-                        if self._is_valid_entity_text(clean_text):
-                            # Handle FLPC vs Python re API differences
-                            try:
-                                start = match.start(0)
-                                end = match.end(0)
-                            except TypeError:
-                                start = match.start()
-                                end = match.end()
-                                
-                            entity = {
-                                'value': clean_text,
-                                'text': clean_text,
-                                'type': 'GPE',
-                                'span': {
-                                    'start': start,
-                                    'end': end
-                                }
-                            }
-                            gpe_entities.append(entity)
-        
-        entities['gpe'] = self._deduplicate_entities(gpe_entities)[:20]
+        # ENHANCED LOCATION & GPE EXTRACTION with subcategory metadata
+        try:
+            self.logger.logger.info("🔧 Attempting enhanced GPE/LOC extraction...")
+            enhanced_entities = self._extract_enhanced_gpe_loc(content)
+            entities['location'] = enhanced_entities.get('location', [])
+            entities['gpe'] = enhanced_entities.get('gpe', [])
+            
+            # Log enhancement success
+            loc_count = len(entities['location'])
+            gpe_count = len(entities['gpe'])
+            self.logger.logger.info(f"🟢 Enhanced extraction SUCCESS: GPE={gpe_count}, LOC={loc_count}")
+            
+            # Debug: Show first few entities with subcategories
+            if entities['gpe']:
+                sample_gpe = entities['gpe'][0]
+                subcategory = sample_gpe.get('subcategory', 'NO_SUBCATEGORY')
+                self.logger.logger.info(f"🔍 GPE sample: {sample_gpe['value']} [{subcategory}]")
+            
+        except Exception as e:
+            self.logger.logger.warning(f"❌ Enhanced extraction failed, using fallback: {e}")
+            import traceback
+            self.logger.logger.warning(f"❌ Traceback: {traceback.format_exc()}")
+            
+            # FALLBACK: Original LOCATION extraction
+            loc_patterns = [
+                # Street addresses
+                r'\b\d+\s+[A-Z][a-z]+\s+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Drive|Dr|Lane|Ln|Way|Court|Ct|Plaza|Place|Pl)\b',
+                # Natural features and landmarks
+                r'\b(?:Mountain|Mt|Mount|River|Lake|Ocean|Sea|Beach|Valley|Canyon|Desert|Forest|Park|Island|Peninsula|Bay|Gulf|Strait|Channel)\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b',
+                # Generic location terms
+                r'\b(?:Silicon Valley|Wall Street|Times Square|Central Park|Golden Gate Bridge|Statue of Liberty|Eiffel Tower|Big Ben|Great Wall|Taj Mahal)\b'
+            ]
+            loc_entities = []
+            for pattern in loc_patterns:
+                loc_entities.extend(self._extract_entities_with_spans(content, pattern, 'LOCATION', re.IGNORECASE))
+            entities['location'] = self._deduplicate_entities(loc_entities)[:20]
+            # If enhanced extraction failed, fall back to original GPE extraction
+            gpe_patterns = [
+                r'\b(?:Alabama|Alaska|Arizona|Arkansas|California|Colorado|Connecticut|Delaware|Florida|Georgia|Hawaii|Idaho|Illinois|Indiana|Iowa|Kansas|Kentucky|Louisiana|Maine|Maryland|Massachusetts|Michigan|Minnesota|Mississippi|Missouri|Montana|Nebraska|Nevada|New Hampshire|New Jersey|New Mexico|New York|North Carolina|North Dakota|Ohio|Oklahoma|Oregon|Pennsylvania|Rhode Island|South Carolina|South Dakota|Tennessee|Texas|Utah|Vermont|Virginia|Washington|West Virginia|Wisconsin|Wyoming)\b',
+                r'\b(?:New York City|Los Angeles|Chicago|Houston|Phoenix|Philadelphia|San Antonio|San Diego|Dallas|San Jose)\b',
+                r'\b(?:United States|USA|US|Canada|Mexico|Brazil|China|Japan|India|France|Germany|United Kingdom|EU)\b'
+            ]
+            gpe_entities = []
+            for pattern in gpe_patterns:
+                gpe_entities.extend(self._extract_entities_with_spans(content, pattern, 'GPE', re.IGNORECASE))
+            entities['gpe'] = self._deduplicate_entities(gpe_entities)[:20]
         
         # DATE - Multiple patterns including date ranges
         date_patterns = [
