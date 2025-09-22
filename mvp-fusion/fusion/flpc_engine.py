@@ -254,12 +254,9 @@ class FLPCEngine:
                 # FLPC API
                 match_results = compiled_pattern.find_matches(text)
                 matches = [text[match.start:match.end] for match in match_results]
-            elif hasattr(compiled_pattern, 'findall'):
-                # Standard Python re API
-                matches = compiled_pattern.findall(text)
             else:
-                # Fallback - assume it's a standard Python pattern object
-                matches = compiled_pattern.findall(text)
+                # FLPC compiled patterns - use module-level functions
+                matches = flpc.findall(compiled_pattern, text)
             
             # Remove duplicates while preserving order
             unique_matches = list(dict.fromkeys(matches)) if matches else []

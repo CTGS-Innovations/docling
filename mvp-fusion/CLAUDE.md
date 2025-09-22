@@ -29,27 +29,42 @@
 ### **Rule #12: FLPC Pattern Matching - MANDATORY**
 **CRITICAL**: NEVER use regular expressions (re module) - use FLPC (Fast Lexical Pattern Compiler) instead:
 
-**FORBIDDEN:**
+**🚨 ABSOLUTELY FORBIDDEN - ZERO TOLERANCE:**
 ```python
 import re
 pattern = re.compile(r'(\d+)\s*(feet|ft)')
 match = pattern.search(text)
+for match in re.finditer(pattern, text, re.IGNORECASE):  # NEVER!
 ```
 
-**REQUIRED:**
+**✅ REQUIRED - ALWAYS USE FLPC:**
 ```python
-from utils.flpc import FLPCPattern
-pattern = FLPCPattern('(\d+)\s*(feet|ft)')
-match = pattern.search(text)
+from fusion.flpc_engine import FLPCEngine
+flpc_engine = FLPCEngine(config)
+results = flpc_engine.extract_entities(text)
 ```
 
-**Why FLPC:**
-- 10-50x faster than Python regex
-- Compiled patterns for maximum performance
-- Critical for high-throughput entity processing
-- Part of our performance-first architecture
+**🚀 Why FLPC is MANDATORY:**
+- **14.9x faster** than Python regex (69M+ chars/sec proven performance)
+- **Rust-backed** compiled patterns for maximum performance  
+- **Non-linear cost** - complex and simple patterns have same performance
+- **Single-pass processing** instead of multiple regex iterations
+- **Critical for high-throughput** entity processing at 10,000+ pages/sec
+- **Part of performance-first architecture** - violating this destroys pipeline speed
 
-**Applies to:** All pattern matching in entity extraction, normalization, text processing
+**📊 PERFORMANCE IMPACT:**
+- Python regex: ~155ms per document (366 pages/sec)
+- FLPC: ~1ms per document (10,000+ pages/sec) 
+- **Performance degradation: 40x slower** when using Python regex
+
+**🔧 APPLIES TO:**
+- All entity extraction (dates, money, measurements, etc.)
+- All pattern matching in text processing
+- All content analysis and validation
+- All normalization and cleanup operations
+
+**⚠️ ENFORCEMENT:**
+This rule violation causes **massive performance degradation** and is **non-negotiable**. Any Python regex usage must be immediately replaced with FLPC.
 
 ### **Rule #5: File Organization**
 ```

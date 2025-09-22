@@ -1,6 +1,6 @@
-Nile
-Amazon
-Yangtze
+Nile River
+Amazon River
+Yangtze River
 Mississippi River
 Yenisei
 Yellow River
