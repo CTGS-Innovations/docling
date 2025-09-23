@@ -257,7 +257,7 @@ pipeline:
     
   # POS Gap Discovery - Smart entity discovery for unknown entities
   pos_gap_discovery:
-    enabled: true                     # FEATURE TOGGLE: Enable/disable POS gap discovery
+    enabled: false                    # FEATURE TOGGLE: Enable/disable POS gap discovery (DISABLED - causing 20x slowdown)
     discover_organizations: true      # Discover unknown companies, agencies, institutions
     discover_people: true             # Discover unknown person names
     discover_locations: false         # Discover unknown locations (conservative default)
