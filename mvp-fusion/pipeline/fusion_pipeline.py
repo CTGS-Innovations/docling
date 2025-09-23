@@ -87,42 +87,30 @@ class FusionPipeline:
         # Get logger for this module
         self.logger = get_fusion_logger(__name__)
         
-        # Initialize Aho-Corasick engine for high-performance classification
-        self.ac_classifier = None
-        if AHOCORASICK_AVAILABLE:
-            try:
-                self.ac_classifier = AhoCorasickLayeredClassifier()
-                self.semantic_extractor = SemanticFactExtractor()
-                self.logger.entity("✅ Aho-Corasick engine initialized for government/regulatory + AI domains")
-            except ImportError:
-                self.semantic_extractor = None
-            except Exception as e:
-                self.logger.logger.warning(f"⚠️  Aho-Corasick initialization failed: {e}, using regex fallback")
-                self.ac_classifier = None
+        # Use global component managers to eliminate per-pipeline initialization overhead
+        # Performance: Heavy components load once globally, 0ms thereafter
+        from utils.global_spacy_manager import get_global_ac_classifier, get_global_semantic_extractor, get_global_entity_normalizer
         
-        # Initialize entity normalizer for structured data enhancement and normalization phase
-        if ENTITY_NORMALIZER_AVAILABLE:
-            try:
-                self.entity_normalizer = EntityNormalizer(config)
-                self.logger.entity("✅ Entity normalizer initialized for structured data enhancement and normalization phase")
-            except Exception as e:
-                self.logger.logger.warning(f"⚠️  EntityNormalizer initialization failed: {e}")
-                self.entity_normalizer = None
+        self.ac_classifier = get_global_ac_classifier() if AHOCORASICK_AVAILABLE else None
+        self.semantic_extractor = get_global_semantic_extractor() if self.ac_classifier else None
+        self.entity_normalizer = get_global_entity_normalizer(config) if ENTITY_NORMALIZER_AVAILABLE else None
         
-        # Initialize spaCy model for person entity extraction during startup (performance optimization)
-        self.spacy_nlp = None
-        try:
-            import spacy
-            self.spacy_nlp = spacy.load("en_core_web_sm")
-            self.logger.entity("✅ spaCy NER model initialized for international person name detection")
-        except ImportError:
-            self.logger.logger.warning("⚠️  spaCy not available, falling back to conservative person extraction")
-        except OSError:
-            self.logger.logger.warning("⚠️  spaCy model 'en_core_web_sm' not found, falling back to conservative person extraction")
-        except Exception as e:
-            self.logger.logger.warning(f"⚠️  spaCy initialization failed: {e}, falling back to conservative person extraction")
+        if self.ac_classifier:
+            self.logger.entity("✅ Global Aho-Corasick engine available for government/regulatory + AI domains")
+        if self.semantic_extractor:
+            self.logger.entity("✅ Global semantic fact extractor available")
+        if self.entity_normalizer:
+            self.logger.entity("✅ Global entity normalizer available for structured data enhancement")
+        
+        # Use global spaCy manager to eliminate per-pipeline initialization overhead
+        # Performance: 0ms after first global initialization vs 400ms+ per pipeline
+        from utils.global_spacy_manager import get_global_spacy_model
+        self.spacy_nlp = get_global_spacy_model()
+        
+        if self.spacy_nlp:
+            self.logger.entity("✅ Global spaCy NER model available for international person name detection")
         else:
-            self.entity_normalizer = None
+            self.logger.logger.warning("⚠️  spaCy not available, using AC/FLPC-only person extraction")
         
     def process_files(self, extractor, file_paths: List[Path], output_dir: Path, 
                      max_workers: int = 2) -> tuple[List[InMemoryDocument], float, Dict[str, Any]]:
