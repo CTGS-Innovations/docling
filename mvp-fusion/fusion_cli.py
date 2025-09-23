@@ -28,6 +28,209 @@ from utils.phase_manager import get_phase_performance_report
 from utils.deployment_manager import DeploymentManager
 
 
+class PipelinePhase:
+    """Represents a single phase in the processing pipeline."""
+    
+    def __init__(self, name: str, processor, config: Dict[str, Any] = None):
+        self.name = name
+        self.processor = processor
+        self.config = config or {}
+        self.timing_ms = 0.0
+        self.success = True
+        self.error_message = None
+    
+    def execute(self, input_data: Any, metadata: Dict[str, Any] = None) -> Any:
+        """Execute this phase of the pipeline."""
+        logger = get_fusion_logger(__name__)
+        metadata = metadata or {}
+        
+        start_time = time.perf_counter()
+        try:
+            # Log phase start
+            logger.stage(f"🔄 Starting phase: {self.name}")
+            
+            # Execute the processor
+            if hasattr(self.processor, 'process_files_service'):
+                # ServiceProcessor interface
+                result = self.processor.process_files_service(input_data, metadata.get('output_dir', Path.cwd()))
+            elif hasattr(self.processor, 'process'):
+                # Generic processor interface
+                result = self.processor.process(input_data, metadata)
+            else:
+                # Direct callable
+                result = self.processor(input_data, metadata)
+            
+            self.success = True
+            return result
+            
+        except Exception as e:
+            self.success = False
+            self.error_message = str(e)
+            logger.logger.error(f"❌ Phase '{self.name}' failed: {e}")
+            raise
+        finally:
+            self.timing_ms = (time.perf_counter() - start_time) * 1000
+            logger.stage(f"✅ Phase '{self.name}' completed in {self.timing_ms:.2f}ms")
+
+
+class CleanFusionPipeline:
+    """Clean pipeline architecture for MVP-Fusion with configurable phases and A/B testing."""
+    
+    def __init__(self, config: Dict[str, Any]):
+        self.config = config
+        self.phases = []
+        self.sidecar_tests = {}
+        self.logger = get_fusion_logger(__name__)
+        self.logger.stage("🏗️ Initializing Clean Pipeline Architecture")
+        self._initialize_pipeline()
+    
+    def _initialize_pipeline(self):
+        """Initialize the pipeline phases based on configuration."""
+        pipeline_config = self.config.get('pipeline', {})
+        
+        # Phase 1: PDF Conversion (handled by extractors - minimal overhead)
+        # Phase 2: Document Processing (configurable processor)
+        document_config = pipeline_config.get('document_processing', {})
+        processor_type = document_config.get('processor', 'service_processor')
+        
+        # Load the configured processor (temporarily using sys.path for import)
+        if processor_type == 'service_processor':
+            import sys
+            from pathlib import Path
+            sys.path.insert(0, str(Path(__file__).parent / 'pipeline' / 'legacy'))
+            from service_processor import ServiceProcessor
+            max_workers = self.config.get('max_workers', 8)
+            processor = ServiceProcessor(self.config, max_workers)
+        elif processor_type == 'fusion_pipeline':
+            from pipeline.legacy.fusion_pipeline import FusionPipeline as LegacyFusionPipeline
+            processor = LegacyFusionPipeline(self.config)
+        else:
+            raise ValueError(f"Unknown processor type: {processor_type}")
+        
+        # Add document processing phase
+        self.phases.append(PipelinePhase("document_processing", processor, document_config))
+        
+        # Phase 3-6: Classification, Entity Extraction, Normalization, Semantic Analysis
+        # These are currently handled within the document processor
+        # Future enhancement: separate these into individual configurable phases
+        
+        # Setup sidecar A/B testing if configured
+        sidecar_config = document_config.get('sidecar_test')
+        if sidecar_config:
+            self._setup_sidecar_test(sidecar_config)
+    
+    def _setup_sidecar_test(self, sidecar_config: str):
+        """Setup sidecar A/B testing for performance comparison."""
+        self.logger.stage(f"🧪 Setting up sidecar test: {sidecar_config}")
+        
+        if sidecar_config == 'fusion_pipeline':
+            from pipeline.legacy.fusion_pipeline import FusionPipeline as LegacyFusionPipeline
+            sidecar_processor = LegacyFusionPipeline(self.config)
+            self.sidecar_tests['fusion_pipeline'] = sidecar_processor
+    
+    def process(self, input_data: Any, metadata: Dict[str, Any] = None) -> tuple[Any, Dict[str, Any]]:
+        """Process input through all pipeline phases."""
+        metadata = metadata or {}
+        current_data = input_data
+        
+        # Track overall pipeline timing
+        pipeline_start = time.perf_counter()
+        results = []
+        
+        # Execute each phase
+        for phase in self.phases:
+            try:
+                phase_result = phase.execute(current_data, metadata)
+                
+                # Handle different result formats
+                if isinstance(phase_result, tuple) and len(phase_result) == 2:
+                    current_data, phase_timing = phase_result
+                else:
+                    current_data = phase_result
+                
+                # Store phase results for reporting
+                results.append({
+                    'phase': phase.name,
+                    'timing_ms': phase.timing_ms,
+                    'success': phase.success,
+                    'error': phase.error_message
+                })
+                
+            except Exception as e:
+                self.logger.logger.error(f"❌ Pipeline failed at phase '{phase.name}': {e}")
+                raise
+        
+        # Run sidecar tests if configured
+        sidecar_results = {}
+        if self.sidecar_tests and not metadata.get('skip_sidecar', False):
+            sidecar_results = self._run_sidecar_tests(input_data, metadata)
+        
+        total_time_ms = (time.perf_counter() - pipeline_start) * 1000
+        
+        # Prepare metadata for response
+        pipeline_metadata = {
+            'pipeline_timing_ms': total_time_ms,
+            'phase_results': results,
+            'sidecar_results': sidecar_results,
+            'processor_type': self.config.get('pipeline', {}).get('document_processing', {}).get('processor', 'service_processor')
+        }
+        
+        return current_data, pipeline_metadata
+    
+    def _run_sidecar_tests(self, input_data: Any, metadata: Dict[str, Any]) -> Dict[str, Any]:
+        """Run sidecar A/B tests for performance comparison."""
+        sidecar_results = {}
+        
+        for test_name, test_processor in self.sidecar_tests.items():
+            try:
+                self.logger.stage(f"🧪 Running sidecar test: {test_name}")
+                
+                start_time = time.perf_counter()
+                if hasattr(test_processor, 'process_files_service'):
+                    sidecar_result = test_processor.process_files_service(input_data, metadata.get('output_dir', Path.cwd()))
+                else:
+                    sidecar_result = test_processor.process(input_data, metadata)
+                
+                timing_ms = (time.perf_counter() - start_time) * 1000
+                
+                sidecar_results[test_name] = {
+                    'timing_ms': timing_ms,
+                    'success': True,
+                    'processor': test_name
+                }
+                
+                self.logger.stage(f"✅ Sidecar test '{test_name}' completed in {timing_ms:.2f}ms")
+                
+            except Exception as e:
+                sidecar_results[test_name] = {
+                    'timing_ms': 0,
+                    'success': False,
+                    'error': str(e),
+                    'processor': test_name
+                }
+                self.logger.stage(f"❌ Sidecar test '{test_name}' failed: {e}")
+        
+        return sidecar_results
+    
+    def get_performance_summary(self) -> Dict[str, Any]:
+        """Get performance summary of the pipeline."""
+        total_timing = sum(phase.timing_ms for phase in self.phases)
+        
+        return {
+            'total_pipeline_ms': total_timing,
+            'phases': [
+                {
+                    'name': phase.name,
+                    'timing_ms': phase.timing_ms,
+                    'percentage': (phase.timing_ms / total_timing * 100) if total_timing > 0 else 0,
+                    'success': phase.success
+                }
+                for phase in self.phases
+            ],
+            'sidecar_tests': len(self.sidecar_tests)
+        }
+
+
 class ConversionSuccess:
     """Defines success criteria for different input types before classification stage"""
     
@@ -986,18 +1189,19 @@ Examples:
                 logger.logger.error(f"❌ File not found: {file_path}")
                 sys.exit(1)
             
-            # Use full pipeline to support all stages (classify, enrich, extract)
-            from pipeline.fusion_pipeline import FusionPipeline
-            pipeline = FusionPipeline(config)
+            # Use new clean pipeline architecture for single file processing
+            pipeline = CleanFusionPipeline(config)
             
-            # Process single file through complete pipeline (use configured workers even for single files)
-            batch_result = pipeline.process_files(extractor, [file_path], output_dir or Path.cwd(), max_workers=max_workers)
-            if len(batch_result) == 3:
-                results, extraction_time, resource_summary = batch_result
-            else:
-                results, extraction_time = batch_result
+            # Process single file through clean pipeline with configurable processors
+            pipeline_metadata = {'output_dir': output_dir or Path.cwd(), 'max_workers': max_workers}
+            file_results, pipeline_info = pipeline.process([file_path], pipeline_metadata)
+            
+            # Extract timing information
+            extraction_time = pipeline_info.get('pipeline_timing_ms', 0) / 1000  # Convert to seconds
+            resource_summary = pipeline_info  # Pipeline provides detailed performance metrics
             
             # Get the result (should be single item)
+            results = file_results
             result = results[0] if results else None
             
         elif args.url:
@@ -1127,17 +1331,18 @@ Examples:
                 
                 # Process files in batch if any
                 if all_files:
-                    logger.staging(f"Starting file batch processing...")
+                    logger.staging(f"Starting file batch processing with clean pipeline architecture...")
                 
-                    # Use new I/O + CPU service architecture
-                    from pipeline.service_processor import ServiceProcessor
-                    processor = ServiceProcessor(config, max_workers)
+                    # Use new clean pipeline architecture
+                    pipeline = CleanFusionPipeline(config)
                     
-                    # Process files through I/O + CPU service
-                    file_results, extraction_time = processor.process_files_service(all_files, output_dir or Path.cwd())
+                    # Process files through clean pipeline with configurable processors
+                    pipeline_metadata = {'output_dir': output_dir or Path.cwd(), 'max_workers': max_workers}
+                    file_results, pipeline_info = pipeline.process(all_files, pipeline_metadata)
+                    extraction_time = pipeline_info.get('pipeline_timing_ms', 0) / 1000  # Convert to seconds
                     
                     all_results.extend(file_results)
-                    resource_summary = None  # TODO: Add resource summary to ServiceProcessor
+                    resource_summary = pipeline_info  # Pipeline provides detailed performance metrics
                 
                 # Process URLs sequentially if any
                 if all_urls:
@@ -1223,9 +1428,45 @@ Examples:
                 logger.stage(f"   🚀 PAGES/SEC: {pages_per_sec:.0f} (overall pipeline)")
                 logger.stage(f"   ⚡ THROUGHPUT: {throughput_mb_sec:.1f} MB/sec raw document processing")
                 
-                # Add per-stage performance breakdown if available
-                if resource_summary and 'stage_timings' in resource_summary:
-                    logger.stage(f"\n📊 STAGE-BY-STAGE PERFORMANCE:")
+                # Add pipeline performance breakdown if available
+                if resource_summary and 'phase_results' in resource_summary:
+                    logger.stage(f"\n🔧 CLEAN PIPELINE PERFORMANCE:")
+                    phase_results = resource_summary['phase_results']
+                    total_pipeline_ms = resource_summary.get('pipeline_timing_ms', 0)
+                    processor_type = resource_summary.get('processor_type', 'unknown')
+                    
+                    logger.stage(f"   🏗️  Pipeline Architecture: Clean Phase Separation")
+                    logger.stage(f"   🔧 Primary Processor: {processor_type}")
+                    logger.stage(f"   ⚡ Total Pipeline Time: {total_pipeline_ms:.2f}ms")
+                    
+                    for phase in phase_results:
+                        phase_name = phase['phase']
+                        timing_ms = phase['timing_ms']
+                        success_status = '✅' if phase['success'] else '❌'
+                        percentage = (timing_ms / total_pipeline_ms * 100) if total_pipeline_ms > 0 else 0
+                        
+                        if timing_ms > 0:
+                            pages_sec = total_pages / (timing_ms / 1000) if timing_ms > 0 else 0
+                            logger.stage(f"   • {success_status} {phase_name}: {timing_ms:.2f}ms ({percentage:.1f}%) - {pages_sec:.0f} pages/sec")
+                        else:
+                            logger.stage(f"   • {success_status} {phase_name}: <1ms ({percentage:.1f}%)")
+                    
+                    # Show sidecar test results if available
+                    sidecar_results = resource_summary.get('sidecar_results', {})
+                    if sidecar_results:
+                        logger.stage(f"\n🧪 SIDECAR A/B TEST RESULTS:")
+                        for test_name, test_result in sidecar_results.items():
+                            if test_result['success']:
+                                timing_ms = test_result['timing_ms']
+                                comparison = "faster" if timing_ms < total_pipeline_ms else "slower"
+                                diff_ms = abs(timing_ms - total_pipeline_ms)
+                                logger.stage(f"   • {test_name}: {timing_ms:.2f}ms ({diff_ms:.2f}ms {comparison})")
+                            else:
+                                logger.stage(f"   • {test_name}: ❌ Failed - {test_result.get('error', 'Unknown error')}")
+                
+                # Legacy stage timing support (fallback)
+                elif resource_summary and 'stage_timings' in resource_summary:
+                    logger.stage(f"\n📊 LEGACY STAGE-BY-STAGE PERFORMANCE:")
                     stage_timings = resource_summary['stage_timings']
                     total_pages_for_stages = resource_summary.get('total_pages', total_pages)
                     

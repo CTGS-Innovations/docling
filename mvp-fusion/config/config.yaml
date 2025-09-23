@@ -171,13 +171,43 @@ extractor:
   name: "highspeed_markdown_general"    # Default: high-speed markdown extraction
   description: "Default high-performance extractor for general documents"
 
-# Pipeline Stages Configuration
+# Clean Pipeline Architecture Configuration (NEW)
 pipeline:
   # Memory limits for edge deployment (CloudFlare Workers ready)
   memory_limit_mb: 100           # Per document memory limit
   service_memory_limit_mb: 1024  # Total service memory limit (1GB)
   
-  # Stage control - enable/disable individual stages
+  # Clean Pipeline Phase Configuration
+  document_processing:
+    processor: "service_processor"    # Primary processor: "service_processor" or "fusion_pipeline"
+    sidecar_test: null               # Optional A/B test processor: "fusion_pipeline" for comparison
+    
+    # Performance targets
+    target_time_ms: 30               # Target: <30ms per document (vs 425ms current)
+    enable_performance_monitoring: true
+    
+  # Future configurable phases (currently handled within document processor)
+  pdf_conversion:
+    enabled: true
+    processor: "docling_extractor"   # Built into extractors
+    
+  classification:
+    enabled: true                    # Handled within document processor
+    processor: "embedded"
+    
+  entity_extraction:
+    enabled: true                    # Handled within document processor  
+    processor: "embedded"
+    
+  normalization:
+    enabled: true                    # Handled within document processor
+    processor: "embedded"
+    
+  semantic_analysis:
+    enabled: true                    # Handled within document processor
+    processor: "embedded"
+  
+  # Legacy Stage control - enable/disable individual stages (DEPRECATED)
   stages:
     convert: true      # Stage 1: PDF/Doc -> Markdown conversion
     classify: true     # Stage 2: Document classification & type detection

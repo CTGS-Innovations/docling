@@ -1,0 +1,96 @@
+# Processor Configuration for A/B Testing
+# ==========================================
+# Easy configuration-based processor selection without code changes
+
+# Default processor to use (can be overridden via CLI)
+default_processor: "service_processor"
+
+# Available processors with their configurations
+processors:
+  
+  # Current production processor (wrapped for testing)
+  service_processor:
+    module: "processors.service_processor"
+    class: "LegacyServiceProcessor"
+    settings:
+      # Use existing ServiceProcessor configuration
+      inherit_from: "main_config"
+    description: "Current ServiceProcessor (425ms baseline)"
+    expected_performance: "254 pages/sec"
+  
+  # High-performance FLPC processor (target: 14x faster)
+  flpc_optimized:
+    module: "processors.flpc_processor" 
+    class: "FLPCDocumentProcessor"
+    settings:
+      # FLPC-specific settings
+      use_global_components: true
+      enable_entity_normalization: true
+      max_entities_per_type:
+        person: 30
+        organization: 50
+        location: 50
+        gpe: 50
+        date: 15
+        time: 8
+        money: 20
+        measurement: 20
+    description: "FLPC optimized processor (target: <30ms)"
+    expected_performance: "3600+ pages/sec"
+  
+  # Minimal processor for baseline performance measurement
+  minimal_baseline:
+    module: "processors.flpc_processor"
+    class: "MinimalProcessor" 
+    settings: {}
+    description: "Minimal processor for speed baseline"
+    expected_performance: "10000+ pages/sec"
+  
+  # Person-focused processor for targeted testing
+  person_focused:
+    module: "processors.flpc_processor"
+    class: "FastPersonProcessor"
+    settings:
+      min_confidence: 0.5
+    description: "Person extraction only (targeted test)"
+    expected_performance: "5000+ pages/sec"
+
+# A/B Testing Configurations
+testing:
+  
+  # Standard performance comparison
+  performance_test:
+    processors: ["service_processor", "flpc_optimized"]
+    iterations: 3
+    description: "Current vs FLPC performance comparison"
+  
+  # Comprehensive processor comparison
+  full_comparison:
+    processors: ["service_processor", "flpc_optimized", "minimal_baseline", "person_focused"]
+    iterations: 5
+    description: "Full processor performance analysis"
+  
+  # Targeted bottleneck test
+  bottleneck_test:
+    processors: ["service_processor", "flpc_optimized"]
+    focus_phase: "document_processing"
+    target_improvement: "14x"
+    description: "Focus on document processing phase bottleneck"
+
+# CLI Integration
+cli:
+  # Easy CLI switches for testing
+  # Usage: ./fusion_cli.py --processor=flpc_optimized
+  # Usage: ./fusion_cli.py --compare=performance_test
+  # Usage: ./fusion_cli.py --benchmark=flpc_optimized
+  
+  processor_aliases:
+    current: "service_processor"
+    fast: "flpc_optimized" 
+    baseline: "minimal_baseline"
+    persons: "person_focused"
+  
+  comparison_presets:
+    speed: "performance_test"
+    full: "full_comparison"
+    bottleneck: "bottleneck_test"
