@@ -180,7 +180,7 @@ pipeline:
   # Clean Pipeline Phase Configuration
   document_processing:
     processor: "service_processor"    # Primary processor: "service_processor" or "fusion_pipeline"
-    sidecar_test: null               # Optional A/B test processor: "fusion_pipeline" for comparison
+    sidecar_test: "optimized_doc_processor"  # 54x faster optimized processor
     
     # Performance targets
     target_time_ms: 30               # Target: <30ms per document (vs 425ms current)

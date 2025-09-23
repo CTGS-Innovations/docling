@@ -167,6 +167,9 @@ class ProcessorFactory:
     _processors = {
         'service_processor': ServiceProcessorWrapper,
         'fusion_pipeline': FusionProcessorWrapper,
+        'fast_doc_processor': None,  # Lazy loaded
+        'simple_fast_processor': None,  # Lazy loaded
+        'optimized_doc_processor': None,  # Lazy loaded
     }
     
     @classmethod
@@ -175,6 +178,17 @@ class ProcessorFactory:
         if processor_name not in cls._processors:
             available = list(cls._processors.keys())
             raise ValueError(f"Unknown processor '{processor_name}'. Available: {available}")
+        
+        # Lazy load processors to avoid circular imports
+        if processor_name == 'fast_doc_processor' and cls._processors[processor_name] is None:
+            from pipeline.fast_doc_processor import FastDocProcessor
+            cls._processors[processor_name] = FastDocProcessor
+        elif processor_name == 'simple_fast_processor' and cls._processors[processor_name] is None:
+            from pipeline.simple_fast_processor import SimpleFastProcessor
+            cls._processors[processor_name] = SimpleFastProcessor
+        elif processor_name == 'optimized_doc_processor' and cls._processors[processor_name] is None:
+            from pipeline.optimized_doc_processor import OptimizedDocProcessorWrapper
+            cls._processors[processor_name] = OptimizedDocProcessorWrapper
         
         processor_class = cls._processors[processor_name]
         return processor_class(config)

@@ -288,5 +288,54 @@ When encountering 🔴 **BLOCKED** status, search Context7 for solutions after 3
 - Creates self-healing development workflow
 - Essential for autonomous problem resolution
 
+### **Rule #15: Throwaway Tests Directory - MANDATORY**
+**CRITICAL**: NEVER create temporary test files in the root directory - use throwaway_tests/ folder instead:
+
+**🚨 ABSOLUTELY FORBIDDEN - ZERO TOLERANCE:**
+```bash
+# Creating temp files in root directory
+touch test_performance_TMP.py
+touch validation_script_TMP.py
+touch experimental_code_TMP.py
+```
+
+**✅ REQUIRED - ALWAYS USE throwaway_tests/ FOLDER:**
+```bash
+# All temporary files go in throwaway_tests/
+mkdir -p throwaway_tests
+touch throwaway_tests/test_performance.py
+touch throwaway_tests/validation_script.py
+touch throwaway_tests/experimental_code.py
+```
+
+**🚀 Why throwaway_tests/ is MANDATORY:**
+- **Prevents root directory clutter** - keeps workspace clean and organized
+- **Clear deletion policy** - anything in throwaway_tests/ can always be deleted safely
+- **No questioning required** - eliminates uncertainty about file importance
+- **Easier cleanup** - single directory to clean when needed
+- **Better organization** - separates temporary from production code
+
+**📁 APPLIES TO:**
+- All temporary test files and scripts
+- Performance benchmarking code
+- Validation and debugging utilities
+- Experimental implementations
+- Any file with `_TMP` suffix or temporary nature
+
+**⚠️ ENFORCEMENT:**
+This rule prevents workspace pollution and is **non-negotiable**. Any temporary files in root directory violate clean architecture principles.
+
+**🔧 DIRECTORY STRUCTURE:**
+```
+mvp-fusion/
+├── throwaway_tests/          # ALL temporary files go here
+│   ├── test_performance.py
+│   ├── validation_script.py
+│   └── experimental_code.py
+├── pipeline/                 # Production code only
+├── utils/                    # Production code only
+└── fusion_cli.py            # Production code only
+```
+
 ---
 **These rules prevent codebase clutter and maintain focus on performance and clarity.**
