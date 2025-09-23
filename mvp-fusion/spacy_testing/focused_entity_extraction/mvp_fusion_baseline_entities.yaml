@@ -1,0 +1,7602 @@
+all_entities:
+- &id740
+  confidence: 0.7
+  source: world_scale_person_extractor
+  span:
+    end: 354
+    start: 340
+  text: Standard Names
+  type: PERSON
+  value: Standard Names
+- &id741
+  confidence: 0.8
+  source: world_scale_person_extractor
+  span:
+    end: 642
+    start: 633
+  text: yesterday
+  type: PERSON
+  value: yesterday
+- &id742
+  confidence: 1.0
+  source: world_scale_person_extractor
+  span:
+    end: 742
+    start: 735
+  text: Michael
+  type: PERSON
+  value: Michael
+- &id743
+  confidence: 0.7
+  source: world_scale_person_extractor
+  span:
+    end: 1451
+    start: 1440
+  text: Priya Patel
+  type: PERSON
+  value: Priya Patel
+- &id744
+  confidence: 0.7
+  source: world_scale_person_extractor
+  span:
+    end: 1605
+    start: 1594
+  text: Yuki Tanaka
+  type: PERSON
+  value: Yuki Tanaka
+- &id745
+  confidence: 0.7
+  source: world_scale_person_extractor
+  span:
+    end: 1937
+    start: 1925
+  text: Van Der Berg
+  type: PERSON
+  value: Van Der Berg
+- &id746
+  confidence: 0.8
+  source: world_scale_person_extractor
+  span:
+    end: 2039
+    start: 2034
+  text: short
+  type: PERSON
+  value: short
+- &id747
+  confidence: 0.8
+  source: world_scale_person_extractor
+  span:
+    end: 2069
+    start: 2057
+  text: breakthrough
+  type: PERSON
+  value: breakthrough
+- &id748
+  confidence: 1.0
+  source: world_scale_person_extractor
+  span:
+    end: 2389
+    start: 2367
+  text: Sir Charles Winchester
+  type: PERSON
+  value: Sir Charles Winchester
+- &id749
+  confidence: 1.0
+  source: world_scale_person_extractor
+  span:
+    end: 2414
+    start: 2406
+  text: Emeritus
+  type: PERSON
+  value: Emeritus
+- &id750
+  confidence: 0.7
+  source: world_scale_person_extractor
+  span:
+    end: 5078
+    start: 5067
+  text: San Antonio
+  type: PERSON
+  value: San Antonio
+- &id751
+  confidence: 0.7
+  source: world_scale_person_extractor
+  span:
+    end: 5093
+    start: 5084
+  text: San Diego
+  type: PERSON
+  value: San Diego
+- &id752
+  confidence: 0.7
+  source: world_scale_person_extractor
+  span:
+    end: 5123
+    start: 5115
+  text: San Jose
+  type: PERSON
+  value: San Jose
+- &id753
+  confidence: 0.7
+  source: world_scale_person_extractor
+  span:
+    end: 7068
+    start: 7059
+  text: OSHA fine
+  type: PERSON
+  value: OSHA fine
+- &id754
+  confidence: 0.7
+  source: world_scale_person_extractor
+  span:
+    end: 7373
+    start: 7362
+  text: single fine
+  type: PERSON
+  value: single fine
+- &id755
+  confidence: 0.7
+  source: world_scale_person_extractor
+  span:
+    end: 7895
+    start: 7883
+  text: half percent
+  type: PERSON
+  value: half percent
+- &id756
+  confidence: 0.7
+  source: world_scale_person_extractor
+  span:
+    end: 9333
+    start: 9321
+  text: Riser height
+  type: PERSON
+  value: Riser height
+- &id757
+  confidence: 0.7
+  source: world_scale_person_extractor
+  span:
+    end: 10234
+    start: 10217
+  text: Jennifer Martinez
+  type: PERSON
+  value: Jennifer Martinez
+- &id758
+  confidence: 0.7
+  source: world_scale_person_extractor
+  span:
+    end: 12741
+    start: 12723
+  text: accurate character
+  type: PERSON
+  value: accurate character
+- &id361
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 45
+    start: 42
+  text: ume
+  type: ORG
+  value: ume
+- &id362
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 64
+    start: 59
+  text: Frame
+  type: ORG
+  value: Frame
+- &id363
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 77
+    start: 73
+  text: Core
+  type: ORG
+  value: Core
+- &id364
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 108
+    start: 105
+  text: ume
+  type: ORG
+  value: ume
+- &id365
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 133
+    start: 130
+  text: ume
+  type: ORG
+  value: ume
+- &id366
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 193
+    start: 190
+  text: the
+  type: ORG
+  value: the
+- &id367
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 204
+    start: 198
+  text: Fusion
+  type: ORG
+  value: Fusion
+- &id368
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 219
+    start: 216
+  text: pip
+  type: ORG
+  value: pip
+- &id369
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 220
+    start: 216
+  text: pipe
+  type: ORG
+  value: pipe
+- &id370
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 287
+    start: 284
+  text: SEC
+  type: ORG
+  value: SEC
+- &id371
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 348
+    start: 340
+  text: Standard
+  type: ORG
+  value: Standard
+- &id372
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 382
+    start: 379
+  text: mit
+  type: ORG
+  value: mit
+- &id373
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 390
+    start: 387
+  text: Chi
+  type: ORG
+  value: Chi
+- &id374
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 392
+    start: 387
+  text: Chief
+  type: ORG
+  value: Chief
+- &id375
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 422
+    start: 419
+  text: l D
+  type: ORG
+  value: l D
+- &id376
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 434
+    start: 414
+  text: Global Dynamics Corp
+  type: ORG
+  value: Global Dynamics Corp
+- &id377
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 456
+    start: 454
+  text: ro
+  type: ORG
+  value: ro
+- &id378
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 534
+    start: 531
+  text: the
+  type: ORG
+  value: the
+- &id379
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 545
+    start: 537
+  text: nference
+  type: ORG
+  value: nference
+- &id380
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 572
+    start: 570
+  text: Ro
+  type: ORG
+  value: Ro
+- &id381
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 614
+    start: 611
+  text: the
+  type: ORG
+  value: the
+- &id382
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 631
+    start: 628
+  text: vie
+  type: ORG
+  value: vie
+- &id383
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 662
+    start: 655
+  text: William
+  type: ORG
+  value: William
+- &id384
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 667
+    start: 665
+  text: ro
+  type: ORG
+  value: ro
+- &id385
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 669
+    start: 664
+  text: Brown
+  type: ORG
+  value: Brown
+- &id386
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 685
+    start: 681
+  text: side
+  type: ORG
+  value: side
+- &id387
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 696
+    start: 693
+  text: era
+  type: ORG
+  value: era
+- &id388
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 757
+    start: 754
+  text: Chi
+  type: ORG
+  value: Chi
+- &id389
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 759
+    start: 754
+  text: Chief
+  type: ORG
+  value: Chief
+- &id390
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 807
+    start: 798
+  text: guideline
+  type: ORG
+  value: guideline
+- &id391
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 869
+    start: 866
+  text: vie
+  type: ORG
+  value: vie
+- &id392
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 965
+    start: 962
+  text: the
+  type: ORG
+  value: the
+- &id393
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1037
+    start: 1035
+  text: ro
+  type: ORG
+  value: ro
+- &id394
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1075
+    start: 1070
+  text: James
+  type: ORG
+  value: James
+- &id395
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1096
+    start: 1093
+  text: l D
+  type: ORG
+  value: l D
+- &id396
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1112
+    start: 1109
+  text: see
+  type: ORG
+  value: see
+- &id397
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1119
+    start: 1116
+  text: era
+  type: ORG
+  value: era
+- &id398
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1167
+    start: 1164
+  text: cia
+  type: ORG
+  value: cia
+- &id399
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1204
+    start: 1201
+  text: cia
+  type: ORG
+  value: cia
+- &id400
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1214
+    start: 1211
+  text: chi
+  type: ORG
+  value: chi
+- &id401
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1329
+    start: 1326
+  text: the
+  type: ORG
+  value: the
+- &id402
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1386
+    start: 1384
+  text: ro
+  type: ORG
+  value: ro
+- &id403
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1387
+    start: 1380
+  text: Environ
+  type: ORG
+  value: Environ
+- &id404
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1402
+    start: 1398
+  text: ulta
+  type: ORG
+  value: ulta
+- &id405
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1412
+    start: 1409
+  text: ess
+  type: ORG
+  value: ess
+- &id406
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1549
+    start: 1541
+  text: national
+  type: ORG
+  value: national
+- &id407
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1612
+    start: 1610
+  text: ro
+  type: ORG
+  value: ro
+- &id408
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1683
+    start: 1680
+  text: Sec
+  type: ORG
+  value: Sec
+- &id409
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1695
+    start: 1692
+  text: cia
+  type: ORG
+  value: cia
+- &id410
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1713
+    start: 1711
+  text: ro
+  type: ORG
+  value: ro
+- &id411
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1785
+    start: 1777
+  text: Institut
+  type: ORG
+  value: Institut
+- &id412
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1830
+    start: 1825
+  text: Santo
+  type: ORG
+  value: Santo
+- &id413
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1850
+    start: 1847
+  text: era
+  type: ORG
+  value: era
+- &id414
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1869
+    start: 1865
+  text: expa
+  type: ORG
+  value: expa
+- &id415
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1949
+    start: 1945
+  text: ulta
+  type: ORG
+  value: ulta
+- &id416
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1987
+    start: 1983
+  text: vise
+  type: ORG
+  value: vise
+- &id417
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2005
+    start: 1999
+  text: turing
+  type: ORG
+  value: turing
+- &id418
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2066
+    start: 2064
+  text: ro
+  type: ORG
+  value: ro
+- &id419
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2180
+    start: 2177
+  text: eat
+  type: ORG
+  value: eat
+- &id420
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2211
+    start: 2201
+  text: Tech Corp.
+  type: ORG
+  value: Tech Corp.
+- &id421
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2250
+    start: 2247
+  text: nus
+  type: ORG
+  value: nus
+- &id422
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2286
+    start: 2276
+  text: ing Direct
+  type: ORG
+  value: ing Direct
+- &id423
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2304
+    start: 2301
+  text: The
+  type: ORG
+  value: The
+- &id424
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2427
+    start: 2424
+  text: the
+  type: ORG
+  value: the
+- &id425
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2454
+    start: 2451
+  text: SEC
+  type: ORG
+  value: SEC
+- &id426
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2638
+    start: 2629
+  text: guideline
+  type: ORG
+  value: guideline
+- &id427
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2647
+    start: 2644
+  text: The
+  type: ORG
+  value: The
+- &id428
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2654
+    start: 2651
+  text: epa
+  type: ORG
+  value: epa
+- &id429
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2667
+    start: 2664
+  text: Lab
+  type: ORG
+  value: Lab
+- &id430
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2669
+    start: 2650
+  text: Department of Labor
+  type: ORG
+  value: Department of Labor
+- &id431
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2734
+    start: 2731
+  text: EPA
+  type: ORG
+  value: EPA
+- &id432
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2744
+    start: 2742
+  text: ro
+  type: ORG
+  value: ro
+- &id433
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2745
+    start: 2738
+  text: Environ
+  type: ORG
+  value: Environ
+- &id434
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2755
+    start: 2753
+  text: ro
+  type: ORG
+  value: ro
+- &id435
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2769
+    start: 2738
+  text: Environmental Protection Agency
+  type: ORG
+  value: Environmental Protection Agency
+- &id436
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2817
+    start: 2814
+  text: The
+  type: ORG
+  value: The
+- &id437
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2839
+    start: 2835
+  text: ease
+  type: ORG
+  value: ease
+- &id438
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2846
+    start: 2844
+  text: ro
+  type: ORG
+  value: ro
+- &id439
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2862
+    start: 2820
+  text: Centers for Disease Control and Prevention
+  type: ORG
+  value: Centers for Disease Control and Prevention
+- &id440
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2869
+    start: 2866
+  text: CDC
+  type: ORG
+  value: CDC
+- &id441
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2878
+    start: 2874
+  text: ease
+  type: ORG
+  value: ease
+- &id442
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2912
+    start: 2904
+  text: National
+  type: ORG
+  value: National
+- &id443
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2921
+    start: 2913
+  text: Institut
+  type: ORG
+  value: Institut
+- &id444
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2922
+    start: 2904
+  text: National Institute
+  type: ORG
+  value: National Institute
+- &id445
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2957
+    start: 2904
+  text: National Institute for Occupational Safety and Health
+  type: ORG
+  value: National Institute for Occupational Safety and Health
+- &id446
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2993
+    start: 2990
+  text: The
+  type: ORG
+  value: The
+- &id447
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3002
+    start: 2999
+  text: era
+  type: ORG
+  value: era
+- &id448
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3008
+    start: 3005
+  text: via
+  type: ORG
+  value: via
+- &id449
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3027
+    start: 2996
+  text: Federal Aviation Administration
+  type: ORG
+  value: Federal Aviation Administration
+- &id450
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3041
+    start: 3037
+  text: ppro
+  type: ORG
+  value: ppro
+- &id451
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3041
+    start: 3039
+  text: ro
+  type: ORG
+  value: ro
+- &id452
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3075
+    start: 3072
+  text: epa
+  type: ORG
+  value: epa
+- &id453
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3095
+    start: 3090
+  text: porta
+  type: ORG
+  value: porta
+- &id454
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3099
+    start: 3071
+  text: Department of Transportation
+  type: ORG
+  value: Department of Transportation
+- &id455
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3149
+    start: 3146
+  text: The
+  type: ORG
+  value: The
+- &id456
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3180
+    start: 3152
+  text: Food and Drug Administration
+  type: ORG
+  value: Food and Drug Administration
+- &id457
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3187
+    start: 3184
+  text: FDA
+  type: ORG
+  value: FDA
+- &id458
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3204
+    start: 3202
+  text: ro
+  type: ORG
+  value: ro
+- &id459
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3223
+    start: 3220
+  text: ume
+  type: ORG
+  value: ume
+- &id460
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3228
+    start: 3226
+  text: ro
+  type: ORG
+  value: ro
+- &id461
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3284
+    start: 3281
+  text: The
+  type: ORG
+  value: The
+- &id462
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3294
+    start: 3289
+  text: clear
+  type: ORG
+  value: clear
+- &id463
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3399
+    start: 3397
+  text: ro
+  type: ORG
+  value: ro
+- &id464
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3403
+    start: 3394
+  text: Microsoft
+  type: ORG
+  value: Microsoft
+- &id465
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3408
+    start: 3394
+  text: Microsoft Corp
+  type: ORG
+  value: Microsoft Corp
+- &id466
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3415
+    start: 3394
+  text: Microsoft Corporation
+  type: ORG
+  value: Microsoft Corporation
+- &id467
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3471
+    start: 3468
+  text: Ama
+  type: ORG
+  value: Ama
+- &id468
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3474
+    start: 3468
+  text: Amazon
+  type: ORG
+  value: Amazon
+- &id469
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3487
+    start: 3468
+  text: Amazon Web Services
+  type: ORG
+  value: Amazon Web Services
+- &id470
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3493
+    start: 3468
+  text: Amazon Web Services, Inc.
+  type: ORG
+  value: Amazon Web Services, Inc.
+- &id471
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3500
+    start: 3496
+  text: expa
+  type: ORG
+  value: expa
+- &id472
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3531
+    start: 3528
+  text: oca
+  type: ORG
+  value: oca
+- &id473
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3550
+    start: 3547
+  text: era
+  type: ORG
+  value: era
+- &id474
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3560
+    start: 3544
+  text: General Electric
+  type: ORG
+  value: General Electric
+- &id475
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3560
+    start: 3552
+  text: Electric
+  type: ORG
+  value: Electric
+- &id476
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3568
+    start: 3544
+  text: General Electric Company
+  type: ORG
+  value: General Electric Company
+- &id477
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3594
+    start: 3592
+  text: ro
+  type: ORG
+  value: ro
+- &id478
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3643
+    start: 3626
+  text: Johnson & Johnson
+  type: ORG
+  value: Johnson & Johnson
+- &id479
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3663
+    start: 3661
+  text: ro
+  type: ORG
+  value: ro
+- &id480
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3745
+    start: 3741
+  text: care
+  type: ORG
+  value: care
+- &id481
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3770
+    start: 3764
+  text: Boeing
+  type: ORG
+  value: Boeing
+- &id482
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3775
+    start: 3764
+  text: Boeing Corp
+  type: ORG
+  value: Boeing Corp
+- &id483
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3817
+    start: 3810
+  text: systems
+  type: ORG
+  value: systems
+- &id484
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3830
+    start: 3825
+  text: Tesla
+  type: ORG
+  value: Tesla
+- &id485
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3836
+    start: 3825
+  text: Tesla, Inc.
+  type: ORG
+  value: Tesla, Inc.
+- &id486
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3843
+    start: 3840
+  text: chi
+  type: ORG
+  value: chi
+- &id487
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3852
+    start: 3850
+  text: ro
+  type: ORG
+  value: ro
+- &id488
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3862
+    start: 3857
+  text: place
+  type: ORG
+  value: place
+- &id489
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3897
+    start: 3893
+  text: alma
+  type: ORG
+  value: alma
+- &id490
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3899
+    start: 3892
+  text: Walmart
+  type: ORG
+  value: Walmart
+- &id491
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3903
+    start: 3892
+  text: Walmart Inc
+  type: ORG
+  value: Walmart Inc
+- &id492
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3904
+    start: 3892
+  text: Walmart Inc.
+  type: ORG
+  value: Walmart Inc.
+- &id493
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3949
+    start: 3947
+  text: ro
+  type: ORG
+  value: ro
+- &id494
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3968
+    start: 3963
+  text: Apple
+  type: ORG
+  value: Apple
+- &id495
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3972
+    start: 3963
+  text: Apple Inc
+  type: ORG
+  value: Apple Inc
+- &id496
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3973
+    start: 3963
+  text: Apple Inc.
+  type: ORG
+  value: Apple Inc.
+- &id497
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3993
+    start: 3988
+  text: place
+  type: ORG
+  value: place
+- &id498
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4024
+    start: 4018
+  text: Google
+  type: ORG
+  value: Google
+- &id499
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4028
+    start: 4018
+  text: Google LLC
+  type: ORG
+  value: Google LLC
+- &id500
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4049
+    start: 4046
+  text: pow
+  type: ORG
+  value: pow
+- &id501
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4083
+    start: 4079
+  text: Face
+  type: ORG
+  value: Face
+- &id502
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4087
+    start: 4079
+  text: Facebook
+  type: ORG
+  value: Facebook
+- &id503
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4105
+    start: 4079
+  text: Facebook Technologies, LLC
+  type: ORG
+  value: Facebook Technologies, LLC
+- &id504
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4113
+    start: 4109
+  text: Meta
+  type: ORG
+  value: Meta
+- &id505
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4121
+    start: 4115
+  text: upgrad
+  type: ORG
+  value: upgrad
+- &id506
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4121
+    start: 4118
+  text: rad
+  type: ORG
+  value: rad
+- &id507
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4122
+    start: 4115
+  text: upgrade
+  type: ORG
+  value: upgrade
+- &id508
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4143
+    start: 4136
+  text: systems
+  type: ORG
+  value: systems
+- &id509
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4155
+    start: 4151
+  text: Unit
+  type: ORG
+  value: Unit
+- &id510
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4162
+    start: 4158
+  text: Parc
+  type: ORG
+  value: Parc
+- &id511
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4172
+    start: 4151
+  text: United Parcel Service
+  type: ORG
+  value: United Parcel Service
+- &id512
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4179
+    start: 4176
+  text: UPS
+  type: ORG
+  value: UPS
+- &id513
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4227
+    start: 4222
+  text: FedEx
+  type: ORG
+  value: FedEx
+- &id514
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4232
+    start: 4222
+  text: FedEx Corp
+  type: ORG
+  value: FedEx Corp
+- &id515
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4239
+    start: 4222
+  text: FedEx Corporation
+  type: ORG
+  value: FedEx Corporation
+- &id516
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4245
+    start: 4242
+  text: mai
+  type: ORG
+  value: mai
+- &id517
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4299
+    start: 4284
+  text: Lockheed Martin
+  type: ORG
+  value: Lockheed Martin
+- &id518
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4304
+    start: 4284
+  text: Lockheed Martin Corp
+  type: ORG
+  value: Lockheed Martin Corp
+- &id519
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4311
+    start: 4284
+  text: Lockheed Martin Corporation
+  type: ORG
+  value: Lockheed Martin Corporation
+- &id520
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4339
+    start: 4333
+  text: ontrac
+  type: ORG
+  value: ontrac
+- &id521
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4373
+    start: 4370
+  text: the
+  type: ORG
+  value: the
+- &id522
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4388
+    start: 4367
+  text: Raytheon Technologies
+  type: ORG
+  value: Raytheon Technologies
+- &id523
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4455
+    start: 4447
+  text: Institut
+  type: ORG
+  value: Institut
+- &id524
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4489
+    start: 4484
+  text: Massa
+  type: ORG
+  value: Massa
+- &id525
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4506
+    start: 4498
+  text: Institut
+  type: ORG
+  value: Institut
+- &id526
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4507
+    start: 4484
+  text: Massachusetts Institute
+  type: ORG
+  value: Massachusetts Institute
+- &id527
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4521
+    start: 4484
+  text: Massachusetts Institute of Technology
+  type: ORG
+  value: Massachusetts Institute of Technology
+- &id528
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4528
+    start: 4525
+  text: MIT
+  type: ORG
+  value: MIT
+- &id529
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4570
+    start: 4562
+  text: Stanford
+  type: ORG
+  value: Stanford
+- &id530
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4570
+    start: 4566
+  text: ford
+  type: ORG
+  value: ford
+- &id531
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4581
+    start: 4562
+  text: Stanford University
+  type: ORG
+  value: Stanford University
+- &id532
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4607
+    start: 4599
+  text: industry
+  type: ORG
+  value: industry
+- &id533
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4644
+    start: 4637
+  text: Harvard
+  type: ORG
+  value: Harvard
+- &id534
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4653
+    start: 4650
+  text: ess
+  type: ORG
+  value: ess
+- &id535
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4660
+    start: 4637
+  text: Harvard Business School
+  type: ORG
+  value: Harvard Business School
+- &id536
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4698
+    start: 4693
+  text: place
+  type: ORG
+  value: place
+- &id537
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4714
+    start: 4711
+  text: The
+  type: ORG
+  value: The
+- &id538
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4730
+    start: 4717
+  text: University of
+  type: ORG
+  value: University of
+- &id539
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4751
+    start: 4743
+  text: Berkeley
+  type: ORG
+  value: Berkeley
+- &id540
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4776
+    start: 4774
+  text: ro
+  type: ORG
+  value: ro
+- &id541
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4780
+    start: 4777
+  text: ess
+  type: ORG
+  value: ess
+- &id542
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4806
+    start: 4803
+  text: kin
+  type: ORG
+  value: kin
+- &id543
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4818
+    start: 4794
+  text: Johns Hopkins University
+  type: ORG
+  value: Johns Hopkins University
+- &id544
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4849
+    start: 4847
+  text: ro
+  type: ORG
+  value: ro
+- &id545
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4869
+    start: 4866
+  text: SEC
+  type: ORG
+  value: SEC
+- &id546
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4881
+    start: 4878
+  text: OCA
+  type: ORG
+  value: OCA
+- &id547
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4910
+    start: 4907
+  text: oca
+  type: ORG
+  value: oca
+- &id548
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4941
+    start: 4938
+  text: oca
+  type: ORG
+  value: oca
+- &id549
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4953
+    start: 4950
+  text: era
+  type: ORG
+  value: era
+- &id550
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4963
+    start: 4959
+  text: expa
+  type: ORG
+  value: expa
+- &id551
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4987
+    start: 4983
+  text: City
+  type: ORG
+  value: City
+- &id552
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5002
+    start: 4997
+  text: Angel
+  type: ORG
+  value: Angel
+- &id553
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5013
+    start: 5010
+  text: Chi
+  type: ORG
+  value: Chi
+- &id554
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5039
+    start: 5036
+  text: Pho
+  type: ORG
+  value: Pho
+- &id555
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5060
+    start: 5054
+  text: delphi
+  type: ORG
+  value: delphi
+- &id556
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5061
+    start: 5049
+  text: Philadelphia
+  type: ORG
+  value: Philadelphia
+- &id557
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5141
+    start: 5136
+  text: State
+  type: ORG
+  value: State
+- &id558
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5165
+    start: 5162
+  text: oca
+  type: ORG
+  value: oca
+- &id559
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5185
+    start: 5177
+  text: national
+  type: ORG
+  value: national
+- &id560
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5245
+    start: 5241
+  text: Unit
+  type: ORG
+  value: Unit
+- &id561
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5253
+    start: 5248
+  text: State
+  type: ORG
+  value: State
+- &id562
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5254
+    start: 5241
+  text: United States
+  type: ORG
+  value: United States
+- &id563
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5266
+    start: 5262
+  text: nada
+  type: ORG
+  value: nada
+- &id564
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5276
+    start: 5272
+  text: Unit
+  type: ORG
+  value: Unit
+- &id565
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5282
+    start: 5279
+  text: Kin
+  type: ORG
+  value: Kin
+- &id566
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5357
+    start: 5354
+  text: SEC
+  type: ORG
+  value: SEC
+- &id567
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5421
+    start: 5418
+  text: The
+  type: ORG
+  value: The
+- &id568
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5428
+    start: 5424
+  text: Unit
+  type: ORG
+  value: Unit
+- &id569
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5436
+    start: 5431
+  text: State
+  type: ORG
+  value: State
+- &id570
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5437
+    start: 5424
+  text: United States
+  type: ORG
+  value: United States
+- &id571
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5458
+    start: 5453
+  text: orkin
+  type: ORG
+  value: orkin
+- &id572
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5458
+    start: 5455
+  text: kin
+  type: ORG
+  value: kin
+- &id573
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5470
+    start: 5467
+  text: Chi
+  type: ORG
+  value: Chi
+- &id574
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5472
+    start: 5467
+  text: China
+  type: ORG
+  value: China
+- &id575
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5502
+    start: 5499
+  text: the
+  type: ORG
+  value: the
+- &id576
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5509
+    start: 5507
+  text: ro
+  type: ORG
+  value: ro
+- &id577
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5519
+    start: 5505
+  text: European Union
+  type: ORG
+  value: European Union
+- &id578
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5542
+    start: 5537
+  text: South
+  type: ORG
+  value: South
+- &id579
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5563
+    start: 5560
+  text: rae
+  type: ORG
+  value: rae
+- &id580
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5583
+    start: 5575
+  text: national
+  type: ORG
+  value: national
+- &id581
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5592
+    start: 5584
+  text: standard
+  type: ORG
+  value: standard
+- &id582
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5607
+    start: 5604
+  text: SEC
+  type: ORG
+  value: SEC
+- &id583
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5703
+    start: 5700
+  text: irs
+  type: ORG
+  value: irs
+- &id584
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5710
+    start: 5707
+  text: vie
+  type: ORG
+  value: vie
+- &id585
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5733
+    start: 5730
+  text: bru
+  type: ORG
+  value: bru
+- &id586
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5854
+    start: 5851
+  text: ess
+  type: ORG
+  value: ess
+- &id587
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5903
+    start: 5901
+  text: ro
+  type: ORG
+  value: ro
+- &id588
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5953
+    start: 5947
+  text: August
+  type: ORG
+  value: August
+- &id589
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6028
+    start: 6020
+  text: nference
+  type: ORG
+  value: nference
+- &id590
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6076
+    start: 6073
+  text: vie
+  type: ORG
+  value: vie
+- &id591
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6159
+    start: 6154
+  text: stori
+  type: ORG
+  value: stori
+- &id592
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6217
+    start: 6209
+  text: Previous
+  type: ORG
+  value: Previous
+- &id593
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6349
+    start: 6346
+  text: SEC
+  type: ORG
+  value: SEC
+- &id594
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6361
+    start: 6357
+  text: TIME
+  type: ORG
+  value: TIME
+- &id595
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6385
+    start: 6381
+  text: time
+  type: ORG
+  value: time
+- &id596
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6542
+    start: 6539
+  text: SEC
+  type: ORG
+  value: SEC
+- &id597
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6548
+    start: 6545
+  text: N 7
+  type: ORG
+  value: N 7
+- &id598
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6554
+    start: 6551
+  text: ONE
+  type: ORG
+  value: ONE
+- &id599
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6580
+    start: 6577
+  text: one
+  type: ORG
+  value: one
+- &id600
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6588
+    start: 6582
+  text: amount
+  type: ORG
+  value: amount
+- &id601
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6606
+    start: 6600
+  text: Budget
+  type: ORG
+  value: Budget
+- &id602
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6623
+    start: 6617
+  text: amount
+  type: ORG
+  value: amount
+- &id603
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6652
+    start: 6646
+  text: budget
+  type: ORG
+  value: budget
+- &id604
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6685
+    start: 6682
+  text: oca
+  type: ORG
+  value: oca
+- &id605
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6795
+    start: 6791
+  text: remi
+  type: ORG
+  value: remi
+- &id606
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6835
+    start: 6829
+  text: upgrad
+  type: ORG
+  value: upgrad
+- &id607
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6835
+    start: 6832
+  text: rad
+  type: ORG
+  value: rad
+- &id608
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6836
+    start: 6829
+  text: upgrade
+  type: ORG
+  value: upgrade
+- &id609
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6864
+    start: 6858
+  text: Emerge
+  type: ORG
+  value: Emerge
+- &id610
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6940
+    start: 6933
+  text: reserve
+  type: ORG
+  value: reserve
+- &id611
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7044
+    start: 7038
+  text: amount
+  type: ORG
+  value: amount
+- &id612
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7199
+    start: 7196
+  text: eat
+  type: ORG
+  value: eat
+- &id613
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7243
+    start: 7239
+  text: lure
+  type: ORG
+  value: lure
+- &id614
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7330
+    start: 7327
+  text: era
+  type: ORG
+  value: era
+- &id615
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7413
+    start: 7407
+  text: amount
+  type: ORG
+  value: amount
+- &id616
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7435
+    start: 7432
+  text: Cos
+  type: ORG
+  value: Cos
+- &id617
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7449
+    start: 7446
+  text: chi
+  type: ORG
+  value: chi
+- &id618
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7484
+    start: 7481
+  text: SEC
+  type: ORG
+  value: SEC
+- &id619
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7549
+    start: 7547
+  text: ro
+  type: ORG
+  value: ro
+- &id620
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7684
+    start: 7681
+  text: Cos
+  type: ORG
+  value: Cos
+- &id621
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7754
+    start: 7752
+  text: ro
+  type: ORG
+  value: ro
+- &id622
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7755
+    start: 7752
+  text: roc
+  type: ORG
+  value: roc
+- &id623
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7758
+    start: 7755
+  text: ess
+  type: ORG
+  value: ess
+- &id624
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7766
+    start: 7762
+  text: time
+  type: ORG
+  value: time
+- &id625
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7782
+    start: 7777
+  text: share
+  type: ORG
+  value: share
+- &id626
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7805
+    start: 7797
+  text: industry
+  type: ORG
+  value: industry
+- &id627
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7865
+    start: 7863
+  text: ro
+  type: ORG
+  value: ro
+- &id628
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7903
+    start: 7901
+  text: ro
+  type: ORG
+  value: ro
+- &id629
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7910
+    start: 7908
+  text: ro
+  type: ORG
+  value: ro
+- &id630
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7943
+    start: 7941
+  text: ro
+  type: ORG
+  value: ro
+- &id631
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7961
+    start: 7957
+  text: ease
+  type: ORG
+  value: ease
+- &id632
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8070
+    start: 8067
+  text: ess
+  type: ORG
+  value: ess
+- &id633
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8144
+    start: 8141
+  text: SEC
+  type: ORG
+  value: SEC
+- &id634
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8158
+    start: 8155
+  text: CIA
+  type: ORG
+  value: CIA
+- &id635
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8181
+    start: 8178
+  text: Pho
+  type: ORG
+  value: Pho
+- &id636
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8183
+    start: 8180
+  text: one
+  type: ORG
+  value: one
+- &id637
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8199
+    start: 8196
+  text: pho
+  type: ORG
+  value: pho
+- &id638
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8201
+    start: 8198
+  text: one
+  type: ORG
+  value: one
+- &id639
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8620
+    start: 8617
+  text: EPA
+  type: ORG
+  value: EPA
+- &id640
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8660
+    start: 8657
+  text: FDA
+  type: ORG
+  value: FDA
+- &id641
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8711
+    start: 8708
+  text: ava
+  type: ORG
+  value: ava
+- &id642
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8715
+    start: 8712
+  text: lab
+  type: ORG
+  value: lab
+- &id643
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8717
+    start: 8713
+  text: able
+  type: ORG
+  value: able
+- &id644
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8764
+    start: 8761
+  text: cdc
+  type: ORG
+  value: cdc
+- &id645
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8795
+    start: 8792
+  text: epa
+  type: ORG
+  value: epa
+- &id646
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8844
+    start: 8836
+  text: standard
+  type: ORG
+  value: standard
+- &id647
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8924
+    start: 8922
+  text: ro
+  type: ORG
+  value: ro
+- &id648
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9142
+    start: 9138
+  text: side
+  type: ORG
+  value: side
+- &id649
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9155
+    start: 9149
+  text: extend
+  type: ORG
+  value: extend
+- &id650
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9428
+    start: 9423
+  text: clear
+  type: ORG
+  value: clear
+- &id651
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9509
+    start: 9504
+  text: Clear
+  type: ORG
+  value: Clear
+- &id652
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9517
+    start: 9515
+  text: ro
+  type: ORG
+  value: ro
+- &id653
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9522
+    start: 9519
+  text: pow
+  type: ORG
+  value: pow
+- &id654
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9562
+    start: 9558
+  text: cava
+  type: ORG
+  value: cava
+- &id655
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9562
+    start: 9559
+  text: ava
+  type: ORG
+  value: ava
+- &id656
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9586
+    start: 9584
+  text: ro
+  type: ORG
+  value: ro
+- &id657
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9623
+    start: 9620
+  text: Noi
+  type: ORG
+  value: Noi
+- &id658
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9630
+    start: 9626
+  text: expo
+  type: ORG
+  value: expo
+- &id659
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9640
+    start: 9637
+  text: mit
+  type: ORG
+  value: mit
+- &id660
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9686
+    start: 9682
+  text: city
+  type: ORG
+  value: city
+- &id661
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9731
+    start: 9728
+  text: era
+  type: ORG
+  value: era
+- &id662
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9840
+    start: 9836
+  text: time
+  type: ORG
+  value: time
+- &id663
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9886
+    start: 9883
+  text: mit
+  type: ORG
+  value: mit
+- &id664
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9924
+    start: 9921
+  text: SEC
+  type: ORG
+  value: SEC
+- &id665
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9937
+    start: 9934
+  text: ELA
+  type: ORG
+  value: ELA
+- &id666
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9986
+    start: 9983
+  text: ela
+  type: ORG
+  value: ela
+- &id667
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10009
+    start: 10006
+  text: mit
+  type: ORG
+  value: mit
+- &id668
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10054
+    start: 10051
+  text: l D
+  type: ORG
+  value: l D
+- &id669
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10066
+    start: 10046
+  text: Global Dynamics Corp
+  type: ORG
+  value: Global Dynamics Corp
+- &id670
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10094
+    start: 10091
+  text: see
+  type: ORG
+  value: see
+- &id671
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10115
+    start: 10112
+  text: Ama
+  type: ORG
+  value: Ama
+- &id672
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10118
+    start: 10112
+  text: Amazon
+  type: ORG
+  value: Amazon
+- &id673
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10131
+    start: 10112
+  text: Amazon Web Services
+  type: ORG
+  value: Amazon Web Services
+- &id674
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10137
+    start: 10112
+  text: Amazon Web Services, Inc.
+  type: ORG
+  value: Amazon Web Services, Inc.
+- &id675
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10172
+    start: 10169
+  text: lab
+  type: ORG
+  value: lab
+- &id676
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10198
+    start: 10195
+  text: kin
+  type: ORG
+  value: kin
+- &id677
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10210
+    start: 10186
+  text: Johns Hopkins University
+  type: ORG
+  value: Johns Hopkins University
+- &id678
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10275
+    start: 10272
+  text: EPA
+  type: ORG
+  value: EPA
+- &id679
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10287
+    start: 10285
+  text: ro
+  type: ORG
+  value: ro
+- &id680
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10291
+    start: 10282
+  text: Microsoft
+  type: ORG
+  value: Microsoft
+- &id681
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10296
+    start: 10282
+  text: Microsoft Corp
+  type: ORG
+  value: Microsoft Corp
+- &id682
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10303
+    start: 10282
+  text: Microsoft Corporation
+  type: ORG
+  value: Microsoft Corporation
+- &id683
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10325
+    start: 10322
+  text: MIT
+  type: ORG
+  value: MIT
+- &id684
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10418
+    start: 10412
+  text: square
+  type: ORG
+  value: square
+- &id685
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10525
+    start: 10522
+  text: era
+  type: ORG
+  value: era
+- &id686
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10534
+    start: 10528
+  text: ontrac
+  type: ORG
+  value: ontrac
+- &id687
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10553
+    start: 10545
+  text: addition
+  type: ORG
+  value: addition
+- &id688
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10631
+    start: 10628
+  text: vie
+  type: ORG
+  value: vie
+- &id689
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10642
+    start: 10639
+  text: epa
+  type: ORG
+  value: epa
+- &id690
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10655
+    start: 10652
+  text: Lab
+  type: ORG
+  value: Lab
+- &id691
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10657
+    start: 10638
+  text: Department of Labor
+  type: ORG
+  value: Department of Labor
+- &id692
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10676
+    start: 10668
+  text: national
+  type: ORG
+  value: national
+- &id693
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10682
+    start: 10679
+  text: era
+  type: ORG
+  value: era
+- &id694
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10697
+    start: 10695
+  text: ro
+  type: ORG
+  value: ro
+- &id695
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10707
+    start: 10693
+  text: European Union
+  type: ORG
+  value: European Union
+- &id696
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10761
+    start: 10753
+  text: standard
+  type: ORG
+  value: standard
+- &id697
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10871
+    start: 10868
+  text: cia
+  type: ORG
+  value: cia
+- &id698
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10895
+    start: 10891
+  text: ease
+  type: ORG
+  value: ease
+- &id699
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10922
+    start: 10919
+  text: eat
+  type: ORG
+  value: eat
+- &id700
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10957
+    start: 10953
+  text: ppro
+  type: ORG
+  value: ppro
+- &id701
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10957
+    start: 10955
+  text: ro
+  type: ORG
+  value: ro
+- &id702
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11026
+    start: 11022
+  text: remi
+  type: ORG
+  value: remi
+- &id703
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11136
+    start: 11132
+  text: cred
+  type: ORG
+  value: cred
+- &id704
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11373
+    start: 11370
+  text: OCA
+  type: ORG
+  value: OCA
+- &id705
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11386
+    start: 11383
+  text: oca
+  type: ORG
+  value: oca
+- &id706
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11412
+    start: 11407
+  text: state
+  type: ORG
+  value: state
+- &id707
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11488
+    start: 11484
+  text: TIME
+  type: ORG
+  value: TIME
+- &id708
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11505
+    start: 11501
+  text: time
+  type: ORG
+  value: time
+- &id709
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11513
+    start: 11510
+  text: ONE
+  type: ORG
+  value: ONE
+- &id710
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11523
+    start: 11520
+  text: one
+  type: ORG
+  value: one
+- &id711
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11534
+    start: 11528
+  text: amount
+  type: ORG
+  value: amount
+- &id712
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11573
+    start: 11565
+  text: Addition
+  type: ORG
+  value: Addition
+- &id713
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11593
+    start: 11590
+  text: PHO
+  type: ORG
+  value: PHO
+- &id714
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11595
+    start: 11592
+  text: ONE
+  type: ORG
+  value: ONE
+- &id715
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11603
+    start: 11600
+  text: pho
+  type: ORG
+  value: pho
+- &id716
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11605
+    start: 11602
+  text: one
+  type: ORG
+  value: one
+- &id717
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11673
+    start: 11670
+  text: ess
+  type: ORG
+  value: ess
+- &id718
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11716
+    start: 11712
+  text: unit
+  type: ORG
+  value: unit
+- &id719
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11731
+    start: 11727
+  text: Core
+  type: ORG
+  value: Core
+- &id720
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11766
+    start: 11758
+  text: Addition
+  type: ORG
+  value: Addition
+- &id721
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11952
+    start: 11950
+  text: Ro
+  type: ORG
+  value: Ro
+- &id722
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12013
+    start: 12011
+  text: ro
+  type: ORG
+  value: ro
+- &id723
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12050
+    start: 12047
+  text: kin
+  type: ORG
+  value: kin
+- &id724
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12091
+    start: 12088
+  text: the
+  type: ORG
+  value: the
+- &id725
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12102
+    start: 12099
+  text: one
+  type: ORG
+  value: one
+- &id726
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12127
+    start: 12124
+  text: one
+  type: ORG
+  value: one
+- &id727
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12159
+    start: 12156
+  text: one
+  type: ORG
+  value: one
+- &id728
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12167
+    start: 12161
+  text: amount
+  type: ORG
+  value: amount
+- &id729
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12197
+    start: 12194
+  text: ume
+  type: ORG
+  value: ume
+- &id730
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12239
+    start: 12236
+  text: l d
+  type: ORG
+  value: l d
+- &id731
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12305
+    start: 12295
+  text: Conversion
+  type: ORG
+  value: Conversion
+- &id732
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12341
+    start: 12337
+  text: unit
+  type: ORG
+  value: unit
+- &id733
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12463
+    start: 12460
+  text: ela
+  type: ORG
+  value: ela
+- &id734
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12513
+    start: 12510
+  text: see
+  type: ORG
+  value: see
+- &id735
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12537
+    start: 12534
+  text: ela
+  type: ORG
+  value: ela
+- &id736
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12620
+    start: 12615
+  text: state
+  type: ORG
+  value: state
+- &id737
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12782
+    start: 12779
+  text: ume
+  type: ORG
+  value: ume
+- &id738
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12812
+    start: 12809
+  text: ume
+  type: ORG
+  value: ume
+- &id739
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12830
+    start: 12828
+  text: ro
+  type: ORG
+  value: ro
+- &id001
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 31
+    start: 29
+  text: si
+  type: GPE
+  value: si
+- &id002
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 42
+    start: 39
+  text: Doc
+  type: GPE
+  value: Doc
+- &id003
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 105
+    start: 102
+  text: Doc
+  type: GPE
+  value: Doc
+- &id004
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 130
+    start: 127
+  text: doc
+  type: GPE
+  value: doc
+- &id005
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 159
+    start: 157
+  text: un
+  type: GPE
+  value: un
+- &id006
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 162
+    start: 160
+  text: ed
+  type: GPE
+  value: ed
+- &id007
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 178
+    start: 176
+  text: va
+  type: GPE
+  value: va
+- &id008
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 202
+    start: 200
+  text: si
+  type: GPE
+  value: si
+- &id009
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 265
+    start: 263
+  text: si
+  type: GPE
+  value: si
+- &id010
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 287
+    start: 284
+  text: SEC
+  type: GPE
+  value: SEC
+- &id011
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 408
+    start: 406
+  text: ic
+  type: GPE
+  value: ic
+- &id012
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 428
+    start: 426
+  text: ic
+  type: GPE
+  value: ic
+- &id013
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 451
+    start: 449
+  text: ed
+  type: GPE
+  value: ed
+- &id014
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 553
+    start: 550
+  text: arc
+  type: GPE
+  value: arc
+- &id015
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 610
+    start: 608
+  text: ed
+  type: GPE
+  value: ed
+- &id016
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 676
+    start: 674
+  text: ic
+  type: GPE
+  value: ic
+- &id017
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 683
+    start: 681
+  text: si
+  type: GPE
+  value: si
+- &id018
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 738
+    start: 736
+  text: ic
+  type: GPE
+  value: ic
+- &id019
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 763
+    start: 761
+  text: ed
+  type: GPE
+  value: ed
+- &id020
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 765
+    start: 763
+  text: ic
+  type: GPE
+  value: ic
+- &id021
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 773
+    start: 771
+  text: ic
+  type: GPE
+  value: ic
+- &id022
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 786
+    start: 784
+  text: ed
+  type: GPE
+  value: ed
+- &id023
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 872
+    start: 870
+  text: ed
+  type: GPE
+  value: ed
+- &id024
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 938
+    start: 936
+  text: ed
+  type: GPE
+  value: ed
+- &id025
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 945
+    start: 943
+  text: ic
+  type: GPE
+  value: ic
+- &id026
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1015
+    start: 1011
+  text: nato
+  type: GPE
+  value: nato
+- &id027
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1029
+    start: 1027
+  text: ed
+  type: GPE
+  value: ed
+- &id028
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1136
+    start: 1128
+  text: New York
+  type: GPE
+  value: New York
+- &id029
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1145
+    start: 1141
+  text: Cali
+  type: GPE
+  value: Cali
+- &id030
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1151
+    start: 1141
+  text: California
+  type: GPE
+  value: California
+- &id031
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1165
+    start: 1163
+  text: ic
+  type: GPE
+  value: ic
+- &id032
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1167
+    start: 1164
+  text: cia
+  type: GPE
+  value: cia
+- &id033
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1204
+    start: 1201
+  text: cia
+  type: GPE
+  value: cia
+- &id034
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1218
+    start: 1216
+  text: ed
+  type: GPE
+  value: ed
+- &id035
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1325
+    start: 1323
+  text: ed
+  type: GPE
+  value: ed
+- &id036
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1362
+    start: 1359
+  text: Jos
+  type: GPE
+  value: Jos
+- &id037
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1368
+    start: 1365
+  text: arc
+  type: GPE
+  value: arc
+- &id038
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1414
+    start: 1412
+  text: ed
+  type: GPE
+  value: ed
+- &id039
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1420
+    start: 1418
+  text: si
+  type: GPE
+  value: si
+- &id040
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1432
+    start: 1427
+  text: Texas
+  type: GPE
+  value: Texas
+- &id041
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1479
+    start: 1477
+  text: ed
+  type: GPE
+  value: ed
+- &id042
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1578
+    start: 1576
+  text: EU
+  type: GPE
+  value: EU
+- &id043
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1584
+    start: 1582
+  text: ic
+  type: GPE
+  value: ic
+- &id044
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1597
+    start: 1595
+  text: uk
+  type: GPE
+  value: uk
+- &id045
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1635
+    start: 1633
+  text: ed
+  type: GPE
+  value: ed
+- &id046
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1650
+    start: 1648
+  text: ed
+  type: GPE
+  value: ed
+- &id047
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1666
+    start: 1664
+  text: ed
+  type: GPE
+  value: ed
+- &id048
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1683
+    start: 1680
+  text: Sec
+  type: GPE
+  value: Sec
+- &id049
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1695
+    start: 1692
+  text: cia
+  type: GPE
+  value: cia
+- &id050
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1709
+    start: 1707
+  text: ed
+  type: GPE
+  value: ed
+- &id051
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1756
+    start: 1753
+  text: arc
+  type: GPE
+  value: arc
+- &id052
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1774
+    start: 1771
+  text: osc
+  type: GPE
+  value: osc
+- &id053
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1776
+    start: 1770
+  text: Moscow
+  type: GPE
+  value: Moscow
+- &id054
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1797
+    start: 1795
+  text: ed
+  type: GPE
+  value: ed
+- &id055
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1821
+    start: 1819
+  text: Si
+  type: GPE
+  value: Si
+- &id056
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1824
+    start: 1822
+  text: va
+  type: GPE
+  value: va
+- &id057
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1841
+    start: 1835
+  text: Brazil
+  type: GPE
+  value: Brazil
+- &id058
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1844
+    start: 1835
+  text: Brazilian
+  type: GPE
+  value: Brazilian
+- &id059
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1873
+    start: 1871
+  text: ed
+  type: GPE
+  value: ed
+- &id060
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1898
+    start: 1896
+  text: Ed
+  type: GPE
+  value: Ed
+- &id061
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1927
+    start: 1925
+  text: Va
+  type: GPE
+  value: Va
+- &id062
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1988
+    start: 1986
+  text: ed
+  type: GPE
+  value: ed
+- &id063
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2004
+    start: 1999
+  text: turin
+  type: GPE
+  value: turin
+- &id064
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2056
+    start: 2054
+  text: ed
+  type: GPE
+  value: ed
+- &id065
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2077
+    start: 2074
+  text: arc
+  type: GPE
+  value: arc
+- &id066
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2099
+    start: 2097
+  text: si
+  type: GPE
+  value: si
+- &id067
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2182
+    start: 2180
+  text: ed
+  type: GPE
+  value: ed
+- &id068
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2248
+    start: 2246
+  text: un
+  type: GPE
+  value: un
+- &id069
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2328
+    start: 2326
+  text: ic
+  type: GPE
+  value: ic
+- &id070
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2369
+    start: 2367
+  text: Si
+  type: GPE
+  value: Si
+- &id071
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2420
+    start: 2418
+  text: un
+  type: GPE
+  value: un
+- &id072
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2423
+    start: 2421
+  text: ed
+  type: GPE
+  value: ed
+- &id073
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2454
+    start: 2451
+  text: SEC
+  type: GPE
+  value: SEC
+- &id074
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2616
+    start: 2571
+  text: Occupational Safety and Health Administration
+  type: GPE
+  value: Occupational Safety and Health Administration
+- &id075
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2616
+    start: 2602
+  text: Administration
+  type: GPE
+  value: Administration
+- &id076
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2624
+    start: 2622
+  text: ed
+  type: GPE
+  value: ed
+- &id077
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2654
+    start: 2651
+  text: epa
+  type: GPE
+  value: epa
+- &id078
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2669
+    start: 2650
+  text: Department of Labor
+  type: GPE
+  value: Department of Labor
+- &id079
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2678
+    start: 2676
+  text: un
+  type: GPE
+  value: un
+- &id080
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2681
+    start: 2679
+  text: ed
+  type: GPE
+  value: ed
+- &id081
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2689
+    start: 2687
+  text: ed
+  type: GPE
+  value: ed
+- &id082
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2707
+    start: 2704
+  text: fec
+  type: GPE
+  value: fec
+- &id083
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2715
+    start: 2713
+  text: un
+  type: GPE
+  value: un
+- &id084
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2734
+    start: 2731
+  text: EPA
+  type: GPE
+  value: EPA
+- &id085
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2769
+    start: 2738
+  text: Environmental Protection Agency
+  type: GPE
+  value: Environmental Protection Agency
+- &id086
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2776
+    start: 2774
+  text: ed
+  type: GPE
+  value: ed
+- &id087
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2862
+    start: 2820
+  text: Centers for Disease Control and Prevention
+  type: GPE
+  value: Centers for Disease Control and Prevention
+- &id088
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2879
+    start: 2877
+  text: ed
+  type: GPE
+  value: ed
+- &id089
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2977
+    start: 2975
+  text: ed
+  type: GPE
+  value: ed
+- &id090
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2999
+    start: 2997
+  text: ed
+  type: GPE
+  value: ed
+- &id091
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3027
+    start: 2996
+  text: Federal Aviation Administration
+  type: GPE
+  value: Federal Aviation Administration
+- &id092
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3027
+    start: 3013
+  text: Administration
+  type: GPE
+  value: Administration
+- &id093
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3044
+    start: 3042
+  text: ed
+  type: GPE
+  value: ed
+- &id094
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3075
+    start: 3072
+  text: epa
+  type: GPE
+  value: epa
+- &id095
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3099
+    start: 3071
+  text: Department of Transportation
+  type: GPE
+  value: Department of Transportation
+- &id096
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3106
+    start: 3103
+  text: DOT
+  type: GPE
+  value: DOT
+- &id097
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3119
+    start: 3117
+  text: ed
+  type: GPE
+  value: ed
+- &id098
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3125
+    start: 3123
+  text: ic
+  type: GPE
+  value: ic
+- &id099
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3180
+    start: 3152
+  text: Food and Drug Administration
+  type: GPE
+  value: Food and Drug Administration
+- &id100
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3180
+    start: 3166
+  text: Administration
+  type: GPE
+  value: Administration
+- &id101
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3197
+    start: 3195
+  text: ed
+  type: GPE
+  value: ed
+- &id102
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3248
+    start: 3246
+  text: si
+  type: GPE
+  value: si
+- &id103
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3250
+    start: 3216
+  text: Consumer Product Safety Commission
+  type: GPE
+  value: Consumer Product Safety Commission
+- &id104
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3258
+    start: 3254
+  text: CPSC
+  type: GPE
+  value: CPSC
+- &id105
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3266
+    start: 3264
+  text: ed
+  type: GPE
+  value: ed
+- &id106
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3314
+    start: 3312
+  text: si
+  type: GPE
+  value: si
+- &id107
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3316
+    start: 3287
+  text: Nuclear Regulatory Commission
+  type: GPE
+  value: Nuclear Regulatory Commission
+- &id108
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3323
+    start: 3320
+  text: NRC
+  type: GPE
+  value: NRC
+- &id109
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3334
+    start: 3332
+  text: ed
+  type: GPE
+  value: ed
+- &id110
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3397
+    start: 3395
+  text: ic
+  type: GPE
+  value: ic
+- &id111
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3426
+    start: 3424
+  text: ed
+  type: GPE
+  value: ed
+- &id112
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3485
+    start: 3483
+  text: ic
+  type: GPE
+  value: ic
+- &id113
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3504
+    start: 3502
+  text: ed
+  type: GPE
+  value: ed
+- &id114
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3530
+    start: 3527
+  text: loc
+  type: GPE
+  value: loc
+- &id115
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3560
+    start: 3558
+  text: ic
+  type: GPE
+  value: ic
+- &id116
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3584
+    start: 3582
+  text: ed
+  type: GPE
+  value: ed
+- &id117
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3617
+    start: 3615
+  text: ic
+  type: GPE
+  value: ic
+- &id118
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3655
+    start: 3653
+  text: ed
+  type: GPE
+  value: ed
+- &id119
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3709
+    start: 3707
+  text: ed
+  type: GPE
+  value: ed
+- &id120
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3793
+    start: 3791
+  text: ed
+  type: GPE
+  value: ed
+- &id121
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3847
+    start: 3845
+  text: ed
+  type: GPE
+  value: ed
+- &id122
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3852
+    start: 3849
+  text: ero
+  type: GPE
+  value: ero
+- &id123
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3914
+    start: 3912
+  text: ed
+  type: GPE
+  value: ed
+- &id124
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3979
+    start: 3977
+  text: ed
+  type: GPE
+  value: ed
+- &id125
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 3983
+    start: 3981
+  text: ed
+  type: GPE
+  value: ed
+- &id126
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4042
+    start: 4040
+  text: ed
+  type: GPE
+  value: ed
+- &id127
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4053
+    start: 4051
+  text: ed
+  type: GPE
+  value: ed
+- &id128
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4123
+    start: 4121
+  text: ed
+  type: GPE
+  value: ed
+- &id129
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4153
+    start: 4151
+  text: Un
+  type: GPE
+  value: Un
+- &id130
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4157
+    start: 4155
+  text: ed
+  type: GPE
+  value: ed
+- &id131
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4162
+    start: 4159
+  text: arc
+  type: GPE
+  value: arc
+- &id132
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4171
+    start: 4169
+  text: ic
+  type: GPE
+  value: ic
+- &id133
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4190
+    start: 4188
+  text: ed
+  type: GPE
+  value: ed
+- &id134
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4202
+    start: 4200
+  text: un
+  type: GPE
+  value: un
+- &id135
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4225
+    start: 4223
+  text: ed
+  type: GPE
+  value: ed
+- &id136
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4252
+    start: 4250
+  text: ed
+  type: GPE
+  value: ed
+- &id137
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4287
+    start: 4284
+  text: Loc
+  type: GPE
+  value: Loc
+- &id138
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4292
+    start: 4290
+  text: ed
+  type: GPE
+  value: ed
+- &id139
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4323
+    start: 4321
+  text: ed
+  type: GPE
+  value: ed
+- &id140
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4400
+    start: 4398
+  text: ed
+  type: GPE
+  value: ed
+- &id141
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4405
+    start: 4403
+  text: va
+  type: GPE
+  value: va
+- &id142
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4409
+    start: 4407
+  text: ed
+  type: GPE
+  value: ed
+- &id143
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4437
+    start: 4435
+  text: Ed
+  type: GPE
+  value: Ed
+- &id144
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4489
+    start: 4486
+  text: ssa
+  type: GPE
+  value: ssa
+- &id145
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4497
+    start: 4484
+  text: Massachusetts
+  type: GPE
+  value: Massachusetts
+- &id146
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4537
+    start: 4534
+  text: arc
+  type: GPE
+  value: arc
+- &id147
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4540
+    start: 4538
+  text: ed
+  type: GPE
+  value: ed
+- &id148
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4573
+    start: 4571
+  text: Un
+  type: GPE
+  value: Un
+- &id149
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4579
+    start: 4577
+  text: si
+  type: GPE
+  value: si
+- &id150
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4593
+    start: 4591
+  text: ed
+  type: GPE
+  value: ed
+- &id151
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4624
+    start: 4622
+  text: va
+  type: GPE
+  value: va
+- &id152
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4642
+    start: 4640
+  text: va
+  type: GPE
+  value: va
+- &id153
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4649
+    start: 4647
+  text: si
+  type: GPE
+  value: si
+- &id154
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4672
+    start: 4670
+  text: ed
+  type: GPE
+  value: ed
+- &id155
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4719
+    start: 4717
+  text: Un
+  type: GPE
+  value: Un
+- &id156
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4725
+    start: 4723
+  text: si
+  type: GPE
+  value: si
+- &id157
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4735
+    start: 4731
+  text: Cali
+  type: GPE
+  value: Cali
+- &id158
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4741
+    start: 4731
+  text: California
+  type: GPE
+  value: California
+- &id159
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4761
+    start: 4759
+  text: ed
+  type: GPE
+  value: ed
+- &id160
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4779
+    start: 4776
+  text: fes
+  type: GPE
+  value: fes
+- &id161
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4781
+    start: 4779
+  text: si
+  type: GPE
+  value: si
+- &id162
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4810
+    start: 4808
+  text: Un
+  type: GPE
+  value: Un
+- &id163
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4816
+    start: 4814
+  text: si
+  type: GPE
+  value: si
+- &id164
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4830
+    start: 4828
+  text: ed
+  type: GPE
+  value: ed
+- &id165
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4834
+    start: 4832
+  text: ed
+  type: GPE
+  value: ed
+- &id166
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4836
+    start: 4834
+  text: ic
+  type: GPE
+  value: ic
+- &id167
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4869
+    start: 4866
+  text: SEC
+  type: GPE
+  value: SEC
+- &id168
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4880
+    start: 4877
+  text: LOC
+  type: GPE
+  value: LOC
+- &id169
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4909
+    start: 4906
+  text: loc
+  type: GPE
+  value: loc
+- &id170
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4940
+    start: 4937
+  text: loc
+  type: GPE
+  value: loc
+- &id171
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4967
+    start: 4965
+  text: ed
+  type: GPE
+  value: ed
+- &id172
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4982
+    start: 4974
+  text: New York
+  type: GPE
+  value: New York
+- &id173
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4987
+    start: 4974
+  text: New York City
+  type: GPE
+  value: New York City
+- &id174
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5004
+    start: 4993
+  text: Los Angeles
+  type: GPE
+  value: Los Angeles
+- &id175
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5014
+    start: 5012
+  text: ic
+  type: GPE
+  value: ic
+- &id176
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5017
+    start: 5010
+  text: Chicago
+  type: GPE
+  value: Chicago
+- &id177
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5030
+    start: 5023
+  text: Houston
+  type: GPE
+  value: Houston
+- &id178
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5043
+    start: 5036
+  text: Phoenix
+  type: GPE
+  value: Phoenix
+- &id179
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5061
+    start: 5049
+  text: Philadelphia
+  type: GPE
+  value: Philadelphia
+- &id180
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5078
+    start: 5067
+  text: San Antonio
+  type: GPE
+  value: San Antonio
+- &id181
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5093
+    start: 5084
+  text: San Diego
+  type: GPE
+  value: San Diego
+- &id182
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5105
+    start: 5099
+  text: Dallas
+  type: GPE
+  value: Dallas
+- &id183
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5122
+    start: 5119
+  text: Jos
+  type: GPE
+  value: Jos
+- &id184
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5123
+    start: 5115
+  text: San Jose
+  type: GPE
+  value: San Jose
+- &id185
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5151
+    start: 5149
+  text: un
+  type: GPE
+  value: un
+- &id186
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5164
+    start: 5161
+  text: loc
+  type: GPE
+  value: loc
+- &id187
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5205
+    start: 5201
+  text: Cali
+  type: GPE
+  value: Cali
+- &id188
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5211
+    start: 5201
+  text: California
+  type: GPE
+  value: California
+- &id189
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5222
+    start: 5217
+  text: Texas
+  type: GPE
+  value: Texas
+- &id190
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5235
+    start: 5228
+  text: Florida
+  type: GPE
+  value: Florida
+- &id191
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5243
+    start: 5241
+  text: Un
+  type: GPE
+  value: Un
+- &id192
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5247
+    start: 5245
+  text: ed
+  type: GPE
+  value: ed
+- &id193
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5254
+    start: 5241
+  text: United States
+  type: GPE
+  value: United States
+- &id194
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5266
+    start: 5260
+  text: Canada
+  type: GPE
+  value: Canada
+- &id195
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5274
+    start: 5272
+  text: Un
+  type: GPE
+  value: Un
+- &id196
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5278
+    start: 5276
+  text: ed
+  type: GPE
+  value: ed
+- &id197
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5286
+    start: 5272
+  text: United Kingdom
+  type: GPE
+  value: United Kingdom
+- &id198
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5298
+    start: 5292
+  text: German
+  type: GPE
+  value: German
+- &id199
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5299
+    start: 5292
+  text: Germany
+  type: GPE
+  value: Germany
+- &id200
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5310
+    start: 5305
+  text: Japan
+  type: GPE
+  value: Japan
+- &id201
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5318
+    start: 5316
+  text: Au
+  type: GPE
+  value: Au
+- &id202
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5325
+    start: 5316
+  text: Australia
+  type: GPE
+  value: Australia
+- &id203
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5341
+    start: 5335
+  text: Brazil
+  type: GPE
+  value: Brazil
+- &id204
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5357
+    start: 5354
+  text: SEC
+  type: GPE
+  value: SEC
+- &id205
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5383
+    start: 5380
+  text: eop
+  type: GPE
+  value: eop
+- &id206
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5389
+    start: 5387
+  text: ic
+  type: GPE
+  value: ic
+- &id207
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5426
+    start: 5424
+  text: Un
+  type: GPE
+  value: Un
+- &id208
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5430
+    start: 5428
+  text: ed
+  type: GPE
+  value: ed
+- &id209
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5437
+    start: 5424
+  text: United States
+  type: GPE
+  value: United States
+- &id210
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5472
+    start: 5467
+  text: China
+  type: GPE
+  value: China
+- &id211
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5483
+    start: 5481
+  text: si
+  type: GPE
+  value: si
+- &id212
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5484
+    start: 5478
+  text: Russia
+  type: GPE
+  value: Russia
+- &id213
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5495
+    start: 5490
+  text: India
+  type: GPE
+  value: India
+- &id214
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5507
+    start: 5505
+  text: Eu
+  type: GPE
+  value: Eu
+- &id215
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5511
+    start: 5505
+  text: Europe
+  type: GPE
+  value: Europe
+- &id216
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5513
+    start: 5505
+  text: European
+  type: GPE
+  value: European
+- &id217
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5516
+    start: 5514
+  text: Un
+  type: GPE
+  value: Un
+- &id218
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5519
+    start: 5505
+  text: European Union
+  type: GPE
+  value: European Union
+- &id219
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5530
+    start: 5528
+  text: ic
+  type: GPE
+  value: ic
+- &id220
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5531
+    start: 5525
+  text: Mexico
+  type: GPE
+  value: Mexico
+- &id221
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5548
+    start: 5537
+  text: South Korea
+  type: GPE
+  value: South Korea
+- &id222
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5564
+    start: 5558
+  text: Israel
+  type: GPE
+  value: Israel
+- &id223
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5607
+    start: 5604
+  text: SEC
+  type: GPE
+  value: SEC
+- &id224
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5717
+    start: 5715
+  text: ed
+  type: GPE
+  value: ed
+- &id225
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5721
+    start: 5719
+  text: ed
+  type: GPE
+  value: ed
+- &id226
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5778
+    start: 5775
+  text: arc
+  type: GPE
+  value: arc
+- &id227
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5867
+    start: 5865
+  text: un
+  type: GPE
+  value: un
+- &id228
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5888
+    start: 5886
+  text: ic
+  type: GPE
+  value: ic
+- &id229
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5895
+    start: 5892
+  text: fec
+  type: GPE
+  value: fec
+- &id230
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5927
+    start: 5925
+  text: Au
+  type: GPE
+  value: Au
+- &id231
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5936
+    start: 5934
+  text: ed
+  type: GPE
+  value: ed
+- &id232
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5940
+    start: 5938
+  text: ed
+  type: GPE
+  value: ed
+- &id233
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5949
+    start: 5947
+  text: Au
+  type: GPE
+  value: Au
+- &id234
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6160
+    start: 6158
+  text: ic
+  type: GPE
+  value: ic
+- &id235
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6180
+    start: 6177
+  text: arc
+  type: GPE
+  value: arc
+- &id236
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6231
+    start: 6229
+  text: un
+  type: GPE
+  value: un
+- &id237
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6349
+    start: 6346
+  text: SEC
+  type: GPE
+  value: SEC
+- &id238
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6403
+    start: 6401
+  text: ed
+  type: GPE
+  value: ed
+- &id239
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6407
+    start: 6405
+  text: ed
+  type: GPE
+  value: ed
+- &id240
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6542
+    start: 6539
+  text: SEC
+  type: GPE
+  value: SEC
+- &id241
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6587
+    start: 6585
+  text: un
+  type: GPE
+  value: un
+- &id242
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6622
+    start: 6620
+  text: un
+  type: GPE
+  value: un
+- &id243
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6684
+    start: 6681
+  text: loc
+  type: GPE
+  value: loc
+- &id244
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6871
+    start: 6869
+  text: un
+  type: GPE
+  value: un
+- &id245
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 6897
+    start: 6894
+  text: arc
+  type: GPE
+  value: arc
+- &id246
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7043
+    start: 7041
+  text: un
+  type: GPE
+  value: un
+- &id247
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7250
+    start: 7247
+  text: aba
+  type: GPE
+  value: aba
+- &id248
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7303
+    start: 7301
+  text: ed
+  type: GPE
+  value: ed
+- &id249
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7364
+    start: 7362
+  text: si
+  type: GPE
+  value: si
+- &id250
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7412
+    start: 7410
+  text: un
+  type: GPE
+  value: un
+- &id251
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7453
+    start: 7451
+  text: ed
+  type: GPE
+  value: ed
+- &id252
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7484
+    start: 7481
+  text: SEC
+  type: GPE
+  value: SEC
+- &id253
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7568
+    start: 7566
+  text: ed
+  type: GPE
+  value: ed
+- &id254
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7689
+    start: 7687
+  text: ed
+  type: GPE
+  value: ed
+- &id255
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7728
+    start: 7726
+  text: ic
+  type: GPE
+  value: ic
+- &id256
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7759
+    start: 7757
+  text: si
+  type: GPE
+  value: si
+- &id257
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7844
+    start: 7842
+  text: si
+  type: GPE
+  value: si
+- &id258
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7853
+    start: 7851
+  text: ed
+  type: GPE
+  value: ed
+- &id259
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7984
+    start: 7982
+  text: ed
+  type: GPE
+  value: ed
+- &id260
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8095
+    start: 8093
+  text: ic
+  type: GPE
+  value: ic
+- &id261
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8144
+    start: 8141
+  text: SEC
+  type: GPE
+  value: SEC
+- &id262
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8158
+    start: 8155
+  text: CIA
+  type: GPE
+  value: CIA
+- &id263
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8589
+    start: 8587
+  text: SI
+  type: GPE
+  value: SI
+- &id264
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8620
+    start: 8617
+  text: EPA
+  type: GPE
+  value: EPA
+- &id265
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8640
+    start: 8637
+  text: DOT
+  type: GPE
+  value: DOT
+- &id266
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8711
+    start: 8709
+  text: va
+  type: GPE
+  value: va
+- &id267
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8795
+    start: 8792
+  text: epa
+  type: GPE
+  value: epa
+- &id268
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8799
+    start: 8788
+  text: www.epa.gov
+  type: GPE
+  value: www.epa.gov
+- &id269
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8866
+    start: 8864
+  text: si
+  type: GPE
+  value: si
+- &id270
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8940
+    start: 8938
+  text: ed
+  type: GPE
+  value: ed
+- &id271
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 8996
+    start: 8993
+  text: dra
+  type: GPE
+  value: dra
+- &id272
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9140
+    start: 9138
+  text: si
+  type: GPE
+  value: si
+- &id273
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9235
+    start: 9232
+  text: dra
+  type: GPE
+  value: dra
+- &id274
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9562
+    start: 9560
+  text: va
+  type: GPE
+  value: va
+- &id275
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9697
+    start: 9695
+  text: un
+  type: GPE
+  value: un
+- &id276
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9783
+    start: 9781
+  text: si
+  type: GPE
+  value: si
+- &id277
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 9924
+    start: 9921
+  text: SEC
+  type: GPE
+  value: SEC
+- &id278
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10060
+    start: 10058
+  text: ic
+  type: GPE
+  value: ic
+- &id279
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10129
+    start: 10127
+  text: ic
+  type: GPE
+  value: ic
+- &id280
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10151
+    start: 10149
+  text: ic
+  type: GPE
+  value: ic
+- &id281
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10202
+    start: 10200
+  text: Un
+  type: GPE
+  value: Un
+- &id282
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10208
+    start: 10206
+  text: si
+  type: GPE
+  value: si
+- &id283
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10275
+    start: 10272
+  text: EPA
+  type: GPE
+  value: EPA
+- &id284
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10285
+    start: 10283
+  text: ic
+  type: GPE
+  value: ic
+- &id285
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10338
+    start: 10335
+  text: arc
+  type: GPE
+  value: arc
+- &id286
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10522
+    start: 10520
+  text: ed
+  type: GPE
+  value: ed
+- &id287
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10564
+    start: 10562
+  text: ic
+  type: GPE
+  value: ic
+- &id288
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10591
+    start: 10589
+  text: ed
+  type: GPE
+  value: ed
+- &id289
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10618
+    start: 10616
+  text: au
+  type: GPE
+  value: au
+- &id290
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10625
+    start: 10623
+  text: ic
+  type: GPE
+  value: ic
+- &id291
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10642
+    start: 10639
+  text: epa
+  type: GPE
+  value: epa
+- &id292
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10657
+    start: 10638
+  text: Department of Labor
+  type: GPE
+  value: Department of Labor
+- &id293
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10695
+    start: 10693
+  text: Eu
+  type: GPE
+  value: Eu
+- &id294
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10699
+    start: 10693
+  text: Europe
+  type: GPE
+  value: Europe
+- &id295
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10701
+    start: 10693
+  text: European
+  type: GPE
+  value: European
+- &id296
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10704
+    start: 10702
+  text: Un
+  type: GPE
+  value: Un
+- &id297
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10707
+    start: 10693
+  text: European Union
+  type: GPE
+  value: European Union
+- &id298
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10871
+    start: 10868
+  text: cia
+  type: GPE
+  value: cia
+- &id299
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10914
+    start: 10911
+  text: eac
+  type: GPE
+  value: eac
+- &id300
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10924
+    start: 10922
+  text: ed
+  type: GPE
+  value: ed
+- &id301
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10998
+    start: 10996
+  text: ed
+  type: GPE
+  value: ed
+- &id302
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11033
+    start: 11031
+  text: ed
+  type: GPE
+  value: ed
+- &id303
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11037
+    start: 11035
+  text: ed
+  type: GPE
+  value: ed
+- &id304
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11060
+    start: 11057
+  text: fec
+  type: GPE
+  value: fec
+- &id305
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11136
+    start: 11134
+  text: ed
+  type: GPE
+  value: ed
+- &id306
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11211
+    start: 11209
+  text: VA
+  type: GPE
+  value: VA
+- &id307
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11239
+    start: 11237
+  text: ed
+  type: GPE
+  value: ed
+- &id308
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11251
+    start: 11249
+  text: un
+  type: GPE
+  value: un
+- &id309
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11272
+    start: 11270
+  text: un
+  type: GPE
+  value: un
+- &id310
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11356
+    start: 11354
+  text: ed
+  type: GPE
+  value: ed
+- &id311
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11372
+    start: 11369
+  text: LOC
+  type: GPE
+  value: LOC
+- &id312
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11385
+    start: 11382
+  text: loc
+  type: GPE
+  value: loc
+- &id313
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11418
+    start: 11416
+  text: un
+  type: GPE
+  value: un
+- &id314
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11438
+    start: 11435
+  text: eop
+  type: GPE
+  value: eop
+- &id315
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11444
+    start: 11442
+  text: ic
+  type: GPE
+  value: ic
+- &id316
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11475
+    start: 11473
+  text: ic
+  type: GPE
+  value: ic
+- &id317
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11500
+    start: 11498
+  text: ic
+  type: GPE
+  value: ic
+- &id318
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11533
+    start: 11531
+  text: un
+  type: GPE
+  value: un
+- &id319
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11714
+    start: 11712
+  text: un
+  type: GPE
+  value: un
+- &id320
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11830
+    start: 11828
+  text: VA
+  type: GPE
+  value: VA
+- &id321
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 11977
+    start: 11974
+  text: Eac
+  type: GPE
+  value: Eac
+- &id322
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12025
+    start: 12023
+  text: ed
+  type: GPE
+  value: ed
+- &id323
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12084
+    start: 12082
+  text: ed
+  type: GPE
+  value: ed
+- &id324
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12103
+    start: 12101
+  text: ed
+  type: GPE
+  value: ed
+- &id325
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12136
+    start: 12132
+  text: mali
+  type: GPE
+  value: mali
+- &id326
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12166
+    start: 12164
+  text: un
+  type: GPE
+  value: un
+- &id327
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12186
+    start: 12182
+  text: mali
+  type: GPE
+  value: mali
+- &id328
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12189
+    start: 12187
+  text: ed
+  type: GPE
+  value: ed
+- &id329
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12200
+    start: 12198
+  text: ic
+  type: GPE
+  value: ic
+- &id330
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12203
+    start: 12201
+  text: va
+  type: GPE
+  value: va
+- &id331
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12223
+    start: 12221
+  text: si
+  type: GPE
+  value: si
+- &id332
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12277
+    start: 12275
+  text: ed
+  type: GPE
+  value: ed
+- &id333
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12303
+    start: 12301
+  text: si
+  type: GPE
+  value: si
+- &id334
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12339
+    start: 12337
+  text: un
+  type: GPE
+  value: un
+- &id335
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12362
+    start: 12360
+  text: va
+  type: GPE
+  value: va
+- &id336
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12392
+    start: 12390
+  text: ic
+  type: GPE
+  value: ic
+- &id337
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12453
+    start: 12451
+  text: ed
+  type: GPE
+  value: ed
+- &id338
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12567
+    start: 12565
+  text: ed
+  type: GPE
+  value: ed
+- &id339
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12661
+    start: 12659
+  text: ed
+  type: GPE
+  value: ed
+- &id340
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12702
+    start: 12699
+  text: Eac
+  type: GPE
+  value: Eac
+- &id341
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12746
+    start: 12744
+  text: si
+  type: GPE
+  value: si
+- &id342
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12779
+    start: 12776
+  text: Doc
+  type: GPE
+  value: Doc
+- &id343
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12792
+    start: 12790
+  text: si
+  type: GPE
+  value: si
+- &id344
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12809
+    start: 12806
+  text: doc
+  type: GPE
+  value: doc
+- &id345
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12834
+    start: 12832
+  text: ed
+  type: GPE
+  value: ed
+- &id346
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12846
+    start: 12844
+  text: un
+  type: GPE
+  value: un
+- &id347
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 12855
+    start: 12853
+  text: va
+  type: GPE
+  value: va
+- &id348
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1145
+    start: 1141
+  text: Cali
+  type: LOC
+  value: Cali
+- &id349
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1362
+    start: 1359
+  text: Jos
+  type: LOC
+  value: Jos
+- &id350
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 1776
+    start: 1770
+  text: Moscow
+  type: LOC
+  value: Moscow
+- &id351
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 2004
+    start: 1999
+  text: turin
+  type: LOC
+  value: turin
+- &id352
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4604
+    start: 4599
+  text: indus
+  type: LOC
+  value: indus
+- &id353
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4735
+    start: 4731
+  text: Cali
+  type: LOC
+  value: Cali
+- &id354
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 4779
+    start: 4776
+  text: fes
+  type: LOC
+  value: fes
+- &id355
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5122
+    start: 5119
+  text: Jos
+  type: LOC
+  value: Jos
+- &id356
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5205
+    start: 5201
+  text: Cali
+  type: LOC
+  value: Cali
+- &id357
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 5511
+    start: 5505
+  text: Europe
+  type: LOC
+  value: Europe
+- &id358
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7250
+    start: 7247
+  text: aba
+  type: LOC
+  value: aba
+- &id359
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 7802
+    start: 7797
+  text: indus
+  type: LOC
+  value: indus
+- &id360
+  confidence: 1.0
+  source: ac_automaton
+  span:
+    end: 10699
+    start: 10693
+  text: Europe
+  type: LOC
+  value: Europe
+distribution:
+  GPE: 347
+  LOC: 13
+  ORG: 379
+  PERSON: 19
+entities_by_type:
+  GPE:
+  - *id001
+  - *id002
+  - *id003
+  - *id004
+  - *id005
+  - *id006
+  - *id007
+  - *id008
+  - *id009
+  - *id010
+  - *id011
+  - *id012
+  - *id013
+  - *id014
+  - *id015
+  - *id016
+  - *id017
+  - *id018
+  - *id019
+  - *id020
+  - *id021
+  - *id022
+  - *id023
+  - *id024
+  - *id025
+  - *id026
+  - *id027
+  - *id028
+  - *id029
+  - *id030
+  - *id031
+  - *id032
+  - *id033
+  - *id034
+  - *id035
+  - *id036
+  - *id037
+  - *id038
+  - *id039
+  - *id040
+  - *id041
+  - *id042
+  - *id043
+  - *id044
+  - *id045
+  - *id046
+  - *id047
+  - *id048
+  - *id049
+  - *id050
+  - *id051
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  - *id080
+  - *id081
+  - *id082
+  - *id083
+  - *id084
+  - *id085
+  - *id086
+  - *id087
+  - *id088
+  - *id089
+  - *id090
+  - *id091
+  - *id092
+  - *id093
+  - *id094
+  - *id095
+  - *id096
+  - *id097
+  - *id098
+  - *id099
+  - *id100
+  - *id101
+  - *id102
+  - *id103
+  - *id104
+  - *id105
+  - *id106
+  - *id107
+  - *id108
+  - *id109
+  - *id110
+  - *id111
+  - *id112
+  - *id113
+  - *id114
+  - *id115
+  - *id116
+  - *id117
+  - *id118
+  - *id119
+  - *id120
+  - *id121
+  - *id122
+  - *id123
+  - *id124
+  - *id125
+  - *id126
+  - *id127
+  - *id128
+  - *id129
+  - *id130
+  - *id131
+  - *id132
+  - *id133
+  - *id134
+  - *id135
+  - *id136
+  - *id137
+  - *id138
+  - *id139
+  - *id140
+  - *id141
+  - *id142
+  - *id143
+  - *id144
+  - *id145
+  - *id146
+  - *id147
+  - *id148
+  - *id149
+  - *id150
+  - *id151
+  - *id152
+  - *id153
+  - *id154
+  - *id155
+  - *id156
+  - *id157
+  - *id158
+  - *id159
+  - *id160
+  - *id161
+  - *id162
+  - *id163
+  - *id164
+  - *id165
+  - *id166
+  - *id167
+  - *id168
+  - *id169
+  - *id170
+  - *id171
+  - *id172
+  - *id173
+  - *id174
+  - *id175
+  - *id176
+  - *id177
+  - *id178
+  - *id179
+  - *id180
+  - *id181
+  - *id182
+  - *id183
+  - *id184
+  - *id185
+  - *id186
+  - *id187
+  - *id188
+  - *id189
+  - *id190
+  - *id191
+  - *id192
+  - *id193
+  - *id194
+  - *id195
+  - *id196
+  - *id197
+  - *id198
+  - *id199
+  - *id200
+  - *id201
+  - *id202
+  - *id203
+  - *id204
+  - *id205
+  - *id206
+  - *id207
+  - *id208
+  - *id209
+  - *id210
+  - *id211
+  - *id212
+  - *id213
+  - *id214
+  - *id215
+  - *id216
+  - *id217
+  - *id218
+  - *id219
+  - *id220
+  - *id221
+  - *id222
+  - *id223
+  - *id224
+  - *id225
+  - *id226
+  - *id227
+  - *id228
+  - *id229
+  - *id230
+  - *id231
+  - *id232
+  - *id233
+  - *id234
+  - *id235
+  - *id236
+  - *id237
+  - *id238
+  - *id239
+  - *id240
+  - *id241
+  - *id242
+  - *id243
+  - *id244
+  - *id245
+  - *id246
+  - *id247
+  - *id248
+  - *id249
+  - *id250
+  - *id251
+  - *id252
+  - *id253
+  - *id254
+  - *id255
+  - *id256
+  - *id257
+  - *id258
+  - *id259
+  - *id260
+  - *id261
+  - *id262
+  - *id263
+  - *id264
+  - *id265
+  - *id266
+  - *id267
+  - *id268
+  - *id269
+  - *id270
+  - *id271
+  - *id272
+  - *id273
+  - *id274
+  - *id275
+  - *id276
+  - *id277
+  - *id278
+  - *id279
+  - *id280
+  - *id281
+  - *id282
+  - *id283
+  - *id284
+  - *id285
+  - *id286
+  - *id287
+  - *id288
+  - *id289
+  - *id290
+  - *id291
+  - *id292
+  - *id293
+  - *id294
+  - *id295
+  - *id296
+  - *id297
+  - *id298
+  - *id299
+  - *id300
+  - *id301
+  - *id302
+  - *id303
+  - *id304
+  - *id305
+  - *id306
+  - *id307
+  - *id308
+  - *id309
+  - *id310
+  - *id311
+  - *id312
+  - *id313
+  - *id314
+  - *id315
+  - *id316
+  - *id317
+  - *id318
+  - *id319
+  - *id320
+  - *id321
+  - *id322
+  - *id323
+  - *id324
+  - *id325
+  - *id326
+  - *id327
+  - *id328
+  - *id329
+  - *id330
+  - *id331
+  - *id332
+  - *id333
+  - *id334
+  - *id335
+  - *id336
+  - *id337
+  - *id338
+  - *id339
+  - *id340
+  - *id341
+  - *id342
+  - *id343
+  - *id344
+  - *id345
+  - *id346
+  - *id347
+  LOC:
+  - *id348
+  - *id349
+  - *id350
+  - *id351
+  - *id352
+  - *id353
+  - *id354
+  - *id355
+  - *id356
+  - *id357
+  - *id358
+  - *id359
+  - *id360
+  ORG:
+  - *id361
+  - *id362
+  - *id363
+  - *id364
+  - *id365
+  - *id366
+  - *id367
+  - *id368
+  - *id369
+  - *id370
+  - *id371
+  - *id372
+  - *id373
+  - *id374
+  - *id375
+  - *id376
+  - *id377
+  - *id378
+  - *id379
+  - *id380
+  - *id381
+  - *id382
+  - *id383
+  - *id384
+  - *id385
+  - *id386
+  - *id387
+  - *id388
+  - *id389
+  - *id390
+  - *id391
+  - *id392
+  - *id393
+  - *id394
+  - *id395
+  - *id396
+  - *id397
+  - *id398
+  - *id399
+  - *id400
+  - *id401
+  - *id402
+  - *id403
+  - *id404
+  - *id405
+  - *id406
+  - *id407
+  - *id408
+  - *id409
+  - *id410
+  - *id411
+  - *id412
+  - *id413
+  - *id414
+  - *id415
+  - *id416
+  - *id417
+  - *id418
+  - *id419
+  - *id420
+  - *id421
+  - *id422
+  - *id423
+  - *id424
+  - *id425
+  - *id426
+  - *id427
+  - *id428
+  - *id429
+  - *id430
+  - *id431
+  - *id432
+  - *id433
+  - *id434
+  - *id435
+  - *id436
+  - *id437
+  - *id438
+  - *id439
+  - *id440
+  - *id441
+  - *id442
+  - *id443
+  - *id444
+  - *id445
+  - *id446
+  - *id447
+  - *id448
+  - *id449
+  - *id450
+  - *id451
+  - *id452
+  - *id453
+  - *id454
+  - *id455
+  - *id456
+  - *id457
+  - *id458
+  - *id459
+  - *id460
+  - *id461
+  - *id462
+  - *id463
+  - *id464
+  - *id465
+  - *id466
+  - *id467
+  - *id468
+  - *id469
+  - *id470
+  - *id471
+  - *id472
+  - *id473
+  - *id474
+  - *id475
+  - *id476
+  - *id477
+  - *id478
+  - *id479
+  - *id480
+  - *id481
+  - *id482
+  - *id483
+  - *id484
+  - *id485
+  - *id486
+  - *id487
+  - *id488
+  - *id489
+  - *id490
+  - *id491
+  - *id492
+  - *id493
+  - *id494
+  - *id495
+  - *id496
+  - *id497
+  - *id498
+  - *id499
+  - *id500
+  - *id501
+  - *id502
+  - *id503
+  - *id504
+  - *id505
+  - *id506
+  - *id507
+  - *id508
+  - *id509
+  - *id510
+  - *id511
+  - *id512
+  - *id513
+  - *id514
+  - *id515
+  - *id516
+  - *id517
+  - *id518
+  - *id519
+  - *id520
+  - *id521
+  - *id522
+  - *id523
+  - *id524
+  - *id525
+  - *id526
+  - *id527
+  - *id528
+  - *id529
+  - *id530
+  - *id531
+  - *id532
+  - *id533
+  - *id534
+  - *id535
+  - *id536
+  - *id537
+  - *id538
+  - *id539
+  - *id540
+  - *id541
+  - *id542
+  - *id543
+  - *id544
+  - *id545
+  - *id546
+  - *id547
+  - *id548
+  - *id549
+  - *id550
+  - *id551
+  - *id552
+  - *id553
+  - *id554
+  - *id555
+  - *id556
+  - *id557
+  - *id558
+  - *id559
+  - *id560
+  - *id561
+  - *id562
+  - *id563
+  - *id564
+  - *id565
+  - *id566
+  - *id567
+  - *id568
+  - *id569
+  - *id570
+  - *id571
+  - *id572
+  - *id573
+  - *id574
+  - *id575
+  - *id576
+  - *id577
+  - *id578
+  - *id579
+  - *id580
+  - *id581
+  - *id582
+  - *id583
+  - *id584
+  - *id585
+  - *id586
+  - *id587
+  - *id588
+  - *id589
+  - *id590
+  - *id591
+  - *id592
+  - *id593
+  - *id594
+  - *id595
+  - *id596
+  - *id597
+  - *id598
+  - *id599
+  - *id600
+  - *id601
+  - *id602
+  - *id603
+  - *id604
+  - *id605
+  - *id606
+  - *id607
+  - *id608
+  - *id609
+  - *id610
+  - *id611
+  - *id612
+  - *id613
+  - *id614
+  - *id615
+  - *id616
+  - *id617
+  - *id618
+  - *id619
+  - *id620
+  - *id621
+  - *id622
+  - *id623
+  - *id624
+  - *id625
+  - *id626
+  - *id627
+  - *id628
+  - *id629
+  - *id630
+  - *id631
+  - *id632
+  - *id633
+  - *id634
+  - *id635
+  - *id636
+  - *id637
+  - *id638
+  - *id639
+  - *id640
+  - *id641
+  - *id642
+  - *id643
+  - *id644
+  - *id645
+  - *id646
+  - *id647
+  - *id648
+  - *id649
+  - *id650
+  - *id651
+  - *id652
+  - *id653
+  - *id654
+  - *id655
+  - *id656
+  - *id657
+  - *id658
+  - *id659
+  - *id660
+  - *id661
+  - *id662
+  - *id663
+  - *id664
+  - *id665
+  - *id666
+  - *id667
+  - *id668
+  - *id669
+  - *id670
+  - *id671
+  - *id672
+  - *id673
+  - *id674
+  - *id675
+  - *id676
+  - *id677
+  - *id678
+  - *id679
+  - *id680
+  - *id681
+  - *id682
+  - *id683
+  - *id684
+  - *id685
+  - *id686
+  - *id687
+  - *id688
+  - *id689
+  - *id690
+  - *id691
+  - *id692
+  - *id693
+  - *id694
+  - *id695
+  - *id696
+  - *id697
+  - *id698
+  - *id699
+  - *id700
+  - *id701
+  - *id702
+  - *id703
+  - *id704
+  - *id705
+  - *id706
+  - *id707
+  - *id708
+  - *id709
+  - *id710
+  - *id711
+  - *id712
+  - *id713
+  - *id714
+  - *id715
+  - *id716
+  - *id717
+  - *id718
+  - *id719
+  - *id720
+  - *id721
+  - *id722
+  - *id723
+  - *id724
+  - *id725
+  - *id726
+  - *id727
+  - *id728
+  - *id729
+  - *id730
+  - *id731
+  - *id732
+  - *id733
+  - *id734
+  - *id735
+  - *id736
+  - *id737
+  - *id738
+  - *id739
+  PERSON:
+  - *id740
+  - *id741
+  - *id742
+  - *id743
+  - *id744
+  - *id745
+  - *id746
+  - *id747
+  - *id748
+  - *id749
+  - *id750
+  - *id751
+  - *id752
+  - *id753
+  - *id754
+  - *id755
+  - *id756
+  - *id757
+  - *id758
+metadata:
+  entity_types: 4
+  extraction_time: '2025-09-23T03:19:02.966828'
+  individual_timings_ms:
+    GPE: 0.3980170004069805
+    LOC: 0.2522730501368642
+    ORG: 0.8882610127329826
+    PERSON: 6.529990932904184
+  model: mvp_fusion_production
+  processing_time_ms: 1658.9342689840123
+  total_entities: 758

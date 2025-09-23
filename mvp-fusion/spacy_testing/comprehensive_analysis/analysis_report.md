@@ -1,0 +1,136 @@
+# spaCy Complete Analysis Report
+
+Generated: 2025-09-23T02:41:42.936996
+
+## Executive Summary
+
+This report provides a comprehensive analysis of spaCy's capabilities applied to the entity extraction test document. All data has been exported to YAML and JSON formats for detailed examination.
+
+### Key Metrics
+- **Total Processing Time**: 1009.98ms
+- **Raw Entities Extracted**: 448
+- **Entity Types Identified**: 13
+- **Canonical Forms Created**: 282
+- **Semantic Rules Extracted**: 45
+- **Relationships Identified**: 4560
+
+### Processing Pipeline Performance
+
+| Component | Time (ms) | Percentage |
+|-----------|-----------|------------|
+| Document Processing | 285.11 | 28.2% |
+| Raw Entity Extraction | 20.11 | 2.0% |
+| Entity Normalization | 1.31 | 0.1% |
+| Semantic Rule Extraction | 31.96 | 3.2% |
+| Relationship Extraction | 593.85 | 58.8% |
+| Linguistic Analysis | 77.64 | 7.7% |
+
+### Entity Extraction Results
+
+#### Raw Entity Distribution
+- **ORG** (Companies, agencies, institutions, etc.): 42 entities
+- **DATE** (Absolute or relative dates or periods): 29 entities
+- **CARDINAL** (Numerals that do not fall under another type): 203 entities
+- **MONEY** (Monetary values, including unit): 50 entities
+- **PERSON** (People, including fictional): 31 entities
+- **GPE** (Countries, cities, states): 19 entities
+- **PERCENT** (Percentage, including "%"): 23 entities
+- **NORP** (Nationalities or religious or political groups): 1 entities
+- **WORK_OF_ART** (Titles of books, songs, etc.): 1 entities
+- **ORDINAL** ("first", "second", etc.): 1 entities
+- **TIME** (Times smaller than a day): 12 entities
+- **PRODUCT** (Objects, vehicles, foods, etc. (not services)): 1 entities
+- **QUANTITY** (Measurements, as of weight or distance): 35 entities
+
+#### Normalization Effectiveness
+- **ORG**: 42 → 38 (9.5% reduction)
+- **DATE**: 29 → 29 (0.0% reduction)
+- **CARDINAL**: 203 → 63 (69.0% reduction)
+- **MONEY**: 50 → 38 (24.0% reduction)
+- **PERSON**: 31 → 27 (12.9% reduction)
+- **GPE**: 19 → 18 (5.3% reduction)
+- **PERCENT**: 23 → 21 (8.7% reduction)
+- **NORP**: 1 → 1 (0.0% reduction)
+- **WORK_OF_ART**: 1 → 1 (0.0% reduction)
+- **ORDINAL**: 1 → 1 (0.0% reduction)
+- **TIME**: 12 → 11 (8.3% reduction)
+- **PRODUCT**: 1 → 1 (0.0% reduction)
+- **QUANTITY**: 35 → 33 (5.7% reduction)
+
+### Semantic Analysis Results
+
+#### Semantic Rules by Type
+- **Organization Person Relationship**: 16 rules
+- **Financial Transaction**: 17 rules
+- **Temporal Event**: 12 rules
+
+#### Relationship Analysis
+- **CARDINAL-QUANTITY**: 864 relationships
+- **CARDINAL-CARDINAL**: 690 relationships
+- **QUANTITY-QUANTITY**: 561 relationships
+- **CARDINAL-MONEY**: 187 relationships
+- **MONEY-CARDINAL**: 162 relationships
+- **CARDINAL-ORG**: 156 relationships
+- **QUANTITY-PERSON**: 136 relationships
+- **QUANTITY-CARDINAL**: 123 relationships
+- **CARDINAL-PERSON**: 117 relationships
+- **MONEY-QUANTITY**: 102 relationships
+
+### Linguistic Analysis
+
+#### Document Statistics
+- **Total Characters**: 12,873
+- **Total Sentences**: 161
+- **Average Sentence Length**: 21.1 tokens
+- **Unique Lemmas**: 725
+- **Complexity Score**: 2.15
+
+#### Top Part-of-Speech Tags
+- **PUNCT**: 1154 occurrences
+- **NOUN**: 656 occurrences
+- **PROPN**: 573 occurrences
+- **NUM**: 491 occurrences
+- **ADP**: 115 occurrences
+- **VERB**: 111 occurrences
+- **SYM**: 94 occurrences
+- **ADJ**: 93 occurrences
+- **X**: 32 occurrences
+- **DET**: 26 occurrences
+
+### File Outputs Generated
+
+All detailed data has been exported to the following files for examination:
+
+#### YAML Files
+- `raw_entities.yaml` - All extracted entities with full metadata
+- `normalized_entities.yaml` - Canonicalized entity forms and variants
+- `semantic_rules.yaml` - Extracted semantic patterns and rules
+- `relationships.yaml` - Entity relationships and co-occurrences
+- `linguistics.yaml` - Complete linguistic analysis
+- `performance.yaml` - Performance metrics and timing
+
+#### JSON Files
+- `raw_entities.json` - Raw entities in JSON format
+- `normalized_entities.json` - Normalized entities in JSON format
+- `semantic_rules.json` - Semantic rules in JSON format
+- `relationships.json` - Relationships in JSON format
+- `linguistics.json` - Linguistic analysis in JSON format
+- `performance.json` - Performance data in JSON format
+- `complete_results.json` - All results combined
+
+### Conclusions
+
+1. **Entity Extraction**: spaCy successfully identified 448 entities across 13 different types.
+
+2. **Normalization**: Entity normalization achieved an average reduction of 37.1% through lemmatization and variant grouping.
+
+3. **Semantic Analysis**: Extracted 45 semantic rules and 4560 entity relationships.
+
+4. **Performance**: Total processing time of 1009.98ms demonstrates good performance for comprehensive NLP analysis.
+
+5. **Data Availability**: All detailed results are available in both YAML and JSON formats for thorough examination and validation.
+
+---
+
+*Report generated by spaCy Complete Analysis Tool*
+*All data files available in: `/home/corey/projects/docling/mvp-fusion/spacy_test_outputs/`*

@@ -1,0 +1,706 @@
+{
+  "metadata": {
+    "extraction_time": "2025-09-23T03:19:01.299945",
+    "processing_time_ms": 291.9032779755071,
+    "total_entities": 31,
+    "entity_types": 1,
+    "model": "en_core_web_sm_person_only",
+    "target_types": [
+      "PERSON"
+    ],
+    "pipeline_components": [
+      "ner"
+    ]
+  },
+  "entities_by_type": {
+    "PERSON": [
+      {
+        "value": "John Smith",
+        "text": "John Smith",
+        "type": "PERSON",
+        "span": {
+          "start": 373,
+          "end": 383
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Mary Johnson",
+        "text": "Mary Johnson",
+        "type": "PERSON",
+        "span": {
+          "start": 474,
+          "end": 486
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Robert Chen",
+        "text": "Robert Chen",
+        "type": "PERSON",
+        "span": {
+          "start": 570,
+          "end": 581
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Sarah Williams-Brown",
+        "text": "Sarah Williams-Brown",
+        "type": "PERSON",
+        "span": {
+          "start": 649,
+          "end": 669
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Michael O'Brien",
+        "text": "Michael O'Brien",
+        "type": "PERSON",
+        "span": {
+          "start": 735,
+          "end": 750
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Jennifer Martinez",
+        "text": "Jennifer Martinez",
+        "type": "PERSON",
+        "span": {
+          "start": 815,
+          "end": 832
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "David Kim**",
+        "text": "David Kim**",
+        "type": "PERSON",
+        "span": {
+          "start": 899,
+          "end": 910
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Lisa Anderson**",
+        "text": "Lisa Anderson**",
+        "type": "PERSON",
+        "span": {
+          "start": 981,
+          "end": 996
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "James Wilson",
+        "text": "James Wilson",
+        "type": "PERSON",
+        "span": {
+          "start": 1070,
+          "end": 1082
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Patricia Thompson",
+        "text": "Patricia Thompson",
+        "type": "PERSON",
+        "span": {
+          "start": 1159,
+          "end": 1176
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Xi Zhang",
+        "text": "Xi Zhang",
+        "type": "PERSON",
+        "span": {
+          "start": 1285,
+          "end": 1293
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "José García-López",
+        "text": "José García-López",
+        "type": "PERSON",
+        "span": {
+          "start": 1359,
+          "end": 1376
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Patel",
+        "text": "Patel",
+        "type": "PERSON",
+        "span": {
+          "start": 1446,
+          "end": 1451
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "François Dubois**",
+        "text": "François Dubois**",
+        "type": "PERSON",
+        "span": {
+          "start": 1517,
+          "end": 1534
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "International Liaison",
+        "text": "International Liaison",
+        "type": "PERSON",
+        "span": {
+          "start": 1536,
+          "end": 1557
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Yuki Tanaka",
+        "text": "Yuki Tanaka",
+        "type": "PERSON",
+        "span": {
+          "start": 1594,
+          "end": 1605
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Ahmed Al-Rashid",
+        "text": "Ahmed Al-Rashid",
+        "type": "PERSON",
+        "span": {
+          "start": 1661,
+          "end": 1676
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "João Silva Santos",
+        "text": "João Silva Santos",
+        "type": "PERSON",
+        "span": {
+          "start": 1814,
+          "end": 1831
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Van Der Berg",
+        "text": "Van Der Berg",
+        "type": "PERSON",
+        "span": {
+          "start": 1925,
+          "end": 1937
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Li",
+        "text": "Li",
+        "type": "PERSON",
+        "span": {
+          "start": 2017,
+          "end": 2019
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Madonna",
+        "text": "Madonna",
+        "type": "PERSON",
+        "span": {
+          "start": 2086,
+          "end": 2093
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "John John*",
+        "text": "John John*",
+        "type": "PERSON",
+        "span": {
+          "start": 2161,
+          "end": 2171
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Mary Mary Quite Contrary*",
+        "text": "Mary Mary Quite Contrary*",
+        "type": "PERSON",
+        "span": {
+          "start": 2218,
+          "end": 2243
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Charles Winchester III*",
+        "text": "Charles Winchester III*",
+        "type": "PERSON",
+        "span": {
+          "start": 2371,
+          "end": 2394
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Emeritus",
+        "text": "Emeritus",
+        "type": "PERSON",
+        "span": {
+          "start": 2406,
+          "end": 2414
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Martin Corporation",
+        "text": "Martin Corporation",
+        "type": "PERSON",
+        "span": {
+          "start": 4293,
+          "end": 4311
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "John Smith",
+        "text": "John Smith",
+        "type": "PERSON",
+        "span": {
+          "start": 10000,
+          "end": 10010
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Mary Johnson",
+        "text": "Mary Johnson",
+        "type": "PERSON",
+        "span": {
+          "start": 10026,
+          "end": 10038
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Michael O'Brien",
+        "text": "Michael O'Brien",
+        "type": "PERSON",
+        "span": {
+          "start": 10148,
+          "end": 10163
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Jennifer Martinez",
+        "text": "Jennifer Martinez",
+        "type": "PERSON",
+        "span": {
+          "start": 10217,
+          "end": 10234
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      },
+      {
+        "value": "Accuracy Rule",
+        "text": "Accuracy Rule",
+        "type": "PERSON",
+        "span": {
+          "start": 12682,
+          "end": 12695
+        },
+        "confidence": 1.0,
+        "source": "spacy_ner_person_only"
+      }
+    ]
+  },
+  "all_entities": [
+    {
+      "value": "John Smith",
+      "text": "John Smith",
+      "type": "PERSON",
+      "span": {
+        "start": 373,
+        "end": 383
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Mary Johnson",
+      "text": "Mary Johnson",
+      "type": "PERSON",
+      "span": {
+        "start": 474,
+        "end": 486
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Robert Chen",
+      "text": "Robert Chen",
+      "type": "PERSON",
+      "span": {
+        "start": 570,
+        "end": 581
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Sarah Williams-Brown",
+      "text": "Sarah Williams-Brown",
+      "type": "PERSON",
+      "span": {
+        "start": 649,
+        "end": 669
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Michael O'Brien",
+      "text": "Michael O'Brien",
+      "type": "PERSON",
+      "span": {
+        "start": 735,
+        "end": 750
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Jennifer Martinez",
+      "text": "Jennifer Martinez",
+      "type": "PERSON",
+      "span": {
+        "start": 815,
+        "end": 832
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "David Kim**",
+      "text": "David Kim**",
+      "type": "PERSON",
+      "span": {
+        "start": 899,
+        "end": 910
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Lisa Anderson**",
+      "text": "Lisa Anderson**",
+      "type": "PERSON",
+      "span": {
+        "start": 981,
+        "end": 996
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "James Wilson",
+      "text": "James Wilson",
+      "type": "PERSON",
+      "span": {
+        "start": 1070,
+        "end": 1082
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Patricia Thompson",
+      "text": "Patricia Thompson",
+      "type": "PERSON",
+      "span": {
+        "start": 1159,
+        "end": 1176
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Xi Zhang",
+      "text": "Xi Zhang",
+      "type": "PERSON",
+      "span": {
+        "start": 1285,
+        "end": 1293
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "José García-López",
+      "text": "José García-López",
+      "type": "PERSON",
+      "span": {
+        "start": 1359,
+        "end": 1376
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Patel",
+      "text": "Patel",
+      "type": "PERSON",
+      "span": {
+        "start": 1446,
+        "end": 1451
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "François Dubois**",
+      "text": "François Dubois**",
+      "type": "PERSON",
+      "span": {
+        "start": 1517,
+        "end": 1534
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "International Liaison",
+      "text": "International Liaison",
+      "type": "PERSON",
+      "span": {
+        "start": 1536,
+        "end": 1557
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Yuki Tanaka",
+      "text": "Yuki Tanaka",
+      "type": "PERSON",
+      "span": {
+        "start": 1594,
+        "end": 1605
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Ahmed Al-Rashid",
+      "text": "Ahmed Al-Rashid",
+      "type": "PERSON",
+      "span": {
+        "start": 1661,
+        "end": 1676
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "João Silva Santos",
+      "text": "João Silva Santos",
+      "type": "PERSON",
+      "span": {
+        "start": 1814,
+        "end": 1831
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Van Der Berg",
+      "text": "Van Der Berg",
+      "type": "PERSON",
+      "span": {
+        "start": 1925,
+        "end": 1937
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Li",
+      "text": "Li",
+      "type": "PERSON",
+      "span": {
+        "start": 2017,
+        "end": 2019
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Madonna",
+      "text": "Madonna",
+      "type": "PERSON",
+      "span": {
+        "start": 2086,
+        "end": 2093
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "John John*",
+      "text": "John John*",
+      "type": "PERSON",
+      "span": {
+        "start": 2161,
+        "end": 2171
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Mary Mary Quite Contrary*",
+      "text": "Mary Mary Quite Contrary*",
+      "type": "PERSON",
+      "span": {
+        "start": 2218,
+        "end": 2243
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Charles Winchester III*",
+      "text": "Charles Winchester III*",
+      "type": "PERSON",
+      "span": {
+        "start": 2371,
+        "end": 2394
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Emeritus",
+      "text": "Emeritus",
+      "type": "PERSON",
+      "span": {
+        "start": 2406,
+        "end": 2414
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Martin Corporation",
+      "text": "Martin Corporation",
+      "type": "PERSON",
+      "span": {
+        "start": 4293,
+        "end": 4311
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "John Smith",
+      "text": "John Smith",
+      "type": "PERSON",
+      "span": {
+        "start": 10000,
+        "end": 10010
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Mary Johnson",
+      "text": "Mary Johnson",
+      "type": "PERSON",
+      "span": {
+        "start": 10026,
+        "end": 10038
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Michael O'Brien",
+      "text": "Michael O'Brien",
+      "type": "PERSON",
+      "span": {
+        "start": 10148,
+        "end": 10163
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Jennifer Martinez",
+      "text": "Jennifer Martinez",
+      "type": "PERSON",
+      "span": {
+        "start": 10217,
+        "end": 10234
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    },
+    {
+      "value": "Accuracy Rule",
+      "text": "Accuracy Rule",
+      "type": "PERSON",
+      "span": {
+        "start": 12682,
+        "end": 12695
+      },
+      "confidence": 1.0,
+      "source": "spacy_ner_person_only"
+    }
+  ],
+  "distribution": {
+    "PERSON": 31
+  }
+}

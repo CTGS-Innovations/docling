@@ -1153,7 +1153,13 @@ Examples:
                 
                 results = all_results
                     
-                total_time = time.time() - start_time
+                # TIMING FIX: Use actual processing time, not total elapsed time
+                if 'extraction_time' in locals():
+                    processing_time = extraction_time
+                    initialization_time = (time.time() - start_time) - extraction_time
+                else:
+                    processing_time = time.time() - start_time  # Fallback
+                    initialization_time = 0
                 
                 # Calculate comprehensive metrics (works with both InMemoryDocument and ExtractionResult objects)
                 successful = sum(1 for doc in results if hasattr(doc, 'success') and doc.success)
@@ -1200,9 +1206,9 @@ Examples:
                 # Calculate metrics
                 input_mb = total_input_bytes / 1024 / 1024
                 output_mb = total_output_bytes / 1024 / 1024
-                throughput_mb_sec = input_mb / total_time if total_time > 0 else 0
+                throughput_mb_sec = input_mb / processing_time if processing_time > 0 else 0
                 compression_ratio = input_mb / output_mb if output_mb > 0 else 0
-                pages_per_sec = total_pages / total_time if total_time > 0 else 0
+                pages_per_sec = total_pages / processing_time if processing_time > 0 else 0
                 
                 # True failures vs skips and warnings
                 true_failures = failed - skipped_large
@@ -1254,6 +1260,10 @@ Examples:
                     logger.logger.error(f"   ❌ FAILED: {true_failures} files (corrupted or unsupported)")
                 if warnings_count > 0:
                     logger.logger.warning(f"   ⚠️  WARNINGS: {warnings_count} files (minor PDF issues, but text extracted successfully)")
+                logger.stage(f"   ⚡ PROCESSING TIME: {processing_time:.2f}s")
+                if initialization_time > 0:
+                    logger.stage(f"   🔧 INITIALIZATION TIME: {initialization_time:.2f}s")
+                total_time = processing_time + initialization_time
                 logger.stage(f"   ⏱️  TOTAL TIME: {total_time:.2f}s")
                 
                 # Add system resource information if available

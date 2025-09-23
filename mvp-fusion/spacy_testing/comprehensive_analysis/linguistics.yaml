@@ -1,0 +1,8461 @@
+dependency_distribution:
+  ROOT: 161
+  acl: 12
+  acomp: 2
+  advcl: 3
+  advmod: 11
+  agent: 1
+  amod: 95
+  appos: 442
+  attr: 63
+  aux: 16
+  auxpass: 6
+  cc: 17
+  ccomp: 5
+  compound: 324
+  conj: 22
+  dep: 9
+  det: 26
+  dobj: 129
+  mark: 1
+  meta: 4
+  nmod: 96
+  npadvmod: 80
+  nsubj: 92
+  nsubjpass: 9
+  nummod: 259
+  parataxis: 2
+  pobj: 234
+  poss: 1
+  preconj: 1
+  prep: 129
+  punct: 1120
+  quantmod: 23
+  relcl: 1
+  xcomp: 2
+document_stats:
+  avg_sentence_length: 21.1055900621118
+  complexity_score: 2.1490683229813663
+  total_characters: 12873
+  unique_lemmas: 725
+metadata:
+  analysis_time: '2025-09-23T02:41:42.709720'
+  spacy_pipeline: !!python/object/new:spacy.util.SimpleFrozenList
+    listitems:
+    - tok2vec
+    - tagger
+    - parser
+    - attribute_ruler
+    - lemmatizer
+    - ner
+    state:
+      error: '[E926] It looks like you''re trying to modify `nlp.pipe_names` directly.
+        This doesn''t work because it''s an immutable computed property. If you need
+        to modify the pipeline, use the built-in methods like `nlp.add_pipe`, `nlp.remove_pipe`,
+        `nlp.disable_pipe` or `nlp.enable_pipe` instead.'
+  total_sentences: 161
+  total_tokens: 3398
+noun_chunks:
+- end: 50
+  length_tokens: 2
+  modifiers:
+  - '#'
+  root: '#'
+  root_pos: NOUN
+  start: 48
+  text: '##'
+- end: 98
+  length_tokens: 4
+  modifiers:
+  - Core
+  - '8'
+  - Entity
+  root: Recognition
+  root_pos: PROPN
+  start: 73
+  text: Core 8 Entity Recognition
+- end: 118
+  length_tokens: 2
+  modifiers:
+  - Document
+  root: Purpose
+  root_pos: PROPN
+  start: 102
+  text: Document Purpose
+- end: 135
+  length_tokens: 2
+  modifiers:
+  - This
+  root: document
+  root_pos: NOUN
+  start: 122
+  text: This document
+- end: 171
+  length_tokens: 3
+  modifiers:
+  - precisely
+  - counted
+  root: entities
+  root_pos: NOUN
+  start: 145
+  text: precisely counted entities
+- end: 186
+  length_tokens: 1
+  modifiers: []
+  root: validation
+  root_pos: NOUN
+  start: 176
+  text: validation
+- end: 224
+  length_tokens: 6
+  modifiers:
+  - the
+  - MVP
+  - '-'
+  - Fusion
+  - extraction
+  root: pipeline
+  root_pos: NOUN
+  start: 190
+  text: the MVP-Fusion extraction pipeline
+- end: 260
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 259
+  text: '*'
+- end: 267
+  length_tokens: 1
+  modifiers: []
+  root: Version
+  root_pos: PROPN
+  start: 260
+  text: Version
+- end: 291
+  length_tokens: 3
+  modifiers:
+  - '#'
+  - '#'
+  root: SECTION
+  root_pos: NOUN
+  start: 281
+  text: '## SECTION'
+- end: 310
+  length_tokens: 2
+  modifiers:
+  - PERSON
+  root: ENTITIES
+  root_pos: NOUN
+  start: 295
+  text: PERSON ENTITIES
+- end: 317
+  length_tokens: 1
+  modifiers: []
+  root: Total
+  root_pos: NOUN
+  start: 312
+  text: Total
+- end: 329
+  length_tokens: 2
+  modifiers:
+  - '25'
+  root: persons
+  root_pos: NOUN
+  start: 319
+  text: 25 persons
+- end: 354
+  length_tokens: 4
+  modifiers:
+  - '#'
+  - '1.1'
+  - Standard
+  root: Names
+  root_pos: PROPN
+  start: 334
+  text: '# 1.1 Standard Names'
+- end: 366
+  length_tokens: 2
+  modifiers:
+  - '10'
+  root: persons
+  root_pos: NOUN
+  start: 356
+  text: 10 persons
+- end: 383
+  length_tokens: 2
+  modifiers:
+  - John
+  root: Smith
+  root_pos: PROPN
+  start: 373
+  text: John Smith
+- end: 385
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 384
+  text: '*'
+- end: 410
+  length_tokens: 3
+  modifiers:
+  - Chief
+  - Executive
+  root: Officer
+  root_pos: PROPN
+  start: 387
+  text: Chief Executive Officer
+- end: 441
+  length_tokens: 3
+  modifiers:
+  - Global
+  - Dynamics
+  root: Corporation
+  root_pos: PROPN
+  start: 414
+  text: Global Dynamics Corporation
+- end: 467
+  length_tokens: 2
+  modifiers:
+  - strong
+  root: earnings
+  root_pos: NOUN
+  start: 452
+  text: strong earnings
+- end: 488
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 487
+  text: '*'
+- end: 498
+  length_tokens: 1
+  modifiers: []
+  root: Director
+  root_pos: PROPN
+  start: 490
+  text: Director
+- end: 513
+  length_tokens: 1
+  modifiers: []
+  root: Engineering
+  root_pos: PROPN
+  start: 502
+  text: Engineering
+- end: 545
+  length_tokens: 2
+  modifiers:
+  - the
+  root: conference
+  root_pos: NOUN
+  start: 531
+  text: the conference
+- end: 554
+  length_tokens: 1
+  modifiers: []
+  root: March
+  root_pos: PROPN
+  start: 549
+  text: March
+- end: 582
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 581
+  text: '*'
+- end: 583
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 582
+  text: '*'
+- end: 599
+  length_tokens: 2
+  modifiers:
+  - Senior
+  root: Analyst
+  root_pos: PROPN
+  start: 585
+  text: Senior Analyst
+- end: 632
+  length_tokens: 3
+  modifiers:
+  - the
+  - regulatory
+  root: review
+  root_pos: NOUN
+  start: 611
+  text: the regulatory review
+- end: 669
+  length_tokens: 6
+  modifiers:
+  - '*'
+  - '*'
+  - Sarah
+  - Williams
+  - '-'
+  root: Brown
+  root_pos: PROPN
+  start: 647
+  text: '**Sarah Williams-Brown'
+- end: 671
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 670
+  text: '*'
+- end: 687
+  length_tokens: 2
+  modifiers:
+  - Vice
+  root: President
+  root_pos: PROPN
+  start: 673
+  text: Vice President
+- end: 701
+  length_tokens: 1
+  modifiers: []
+  root: Operations
+  root_pos: PROPN
+  start: 691
+  text: Operations
+- end: 724
+  length_tokens: 2
+  modifiers:
+  - '500'
+  root: employees
+  root_pos: NOUN
+  start: 711
+  text: 500 employees
+- end: 750
+  length_tokens: 3
+  modifiers:
+  - Dr.
+  - Michael
+  root: O'Brien
+  root_pos: PROPN
+  start: 731
+  text: Dr. Michael O'Brien
+- end: 751
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 750
+  text: '*'
+- end: 752
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 751
+  text: '*'
+- end: 775
+  length_tokens: 3
+  modifiers:
+  - Chief
+  - Medical
+  root: Officer
+  root_pos: PROPN
+  start: 754
+  text: Chief Medical Officer
+- end: 808
+  length_tokens: 3
+  modifiers:
+  - new
+  - safety
+  root: guidelines
+  root_pos: NOUN
+  start: 787
+  text: new safety guidelines
+- end: 833
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 832
+  text: '*'
+- end: 834
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 833
+  text: '*'
+- end: 854
+  length_tokens: 2
+  modifiers:
+  - Compliance
+  root: Manager
+  root_pos: PROPN
+  start: 836
+  text: Compliance Manager
+- end: 862
+  length_tokens: 1
+  modifiers: []
+  root: OSHA
+  root_pos: PROPN
+  start: 858
+  text: OSHA
+- end: 881
+  length_tokens: 2
+  modifiers:
+  - '50'
+  root: cases
+  root_pos: NOUN
+  start: 873
+  text: 50 cases
+- end: 909
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 908
+  text: '*'
+- end: 910
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 909
+  text: '*'
+- end: 926
+  length_tokens: 2
+  modifiers:
+  - Lead
+  root: Inspector
+  root_pos: PROPN
+  start: 912
+  text: Lead Inspector
+- end: 958
+  length_tokens: 2
+  modifiers:
+  - critical
+  root: violations
+  root_pos: NOUN
+  start: 939
+  text: critical violations
+- end: 974
+  length_tokens: 2
+  modifiers:
+  - the
+  root: facility
+  root_pos: NOUN
+  start: 962
+  text: the facility
+- end: 994
+  length_tokens: 2
+  modifiers:
+  - Lisa
+  root: Anderson
+  root_pos: PROPN
+  start: 981
+  text: Lisa Anderson
+- end: 996
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 995
+  text: '*'
+- end: 1016
+  length_tokens: 2
+  modifiers:
+  - Safety
+  root: Coordinator
+  root_pos: PROPN
+  start: 998
+  text: Safety Coordinator
+- end: 1043
+  length_tokens: 2
+  modifiers:
+  - new
+  root: protocols
+  root_pos: NOUN
+  start: 1030
+  text: new protocols
+- end: 1082
+  length_tokens: 2
+  modifiers:
+  - James
+  root: Wilson
+  root_pos: PROPN
+  start: 1070
+  text: James Wilson
+- end: 1084
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 1083
+  text: '*'
+- end: 1103
+  length_tokens: 2
+  modifiers:
+  - Regional
+  root: Director
+  root_pos: PROPN
+  start: 1086
+  text: Regional Director
+- end: 1124
+  length_tokens: 1
+  modifiers: []
+  root: operations
+  root_pos: NOUN
+  start: 1114
+  text: operations
+- end: 1136
+  length_tokens: 2
+  modifiers:
+  - New
+  root: York
+  root_pos: PROPN
+  start: 1128
+  text: New York
+- end: 1151
+  length_tokens: 1
+  modifiers: []
+  root: California
+  root_pos: PROPN
+  start: 1141
+  text: California
+- end: 1176
+  length_tokens: 4
+  modifiers:
+  - '*'
+  - '*'
+  - Patricia
+  root: Thompson
+  root_pos: PROPN
+  start: 1157
+  text: '**Patricia Thompson'
+- end: 1208
+  length_tokens: 3
+  modifiers:
+  - Quality
+  - Assurance
+  root: Specialist
+  root_pos: PROPN
+  start: 1180
+  text: Quality Assurance Specialist
+- end: 1238
+  length_tokens: 4
+  modifiers:
+  - '99.5'
+  - '%'
+  - accuracy
+  root: rate
+  root_pos: NOUN
+  start: 1219
+  text: 99.5% accuracy rate
+- end: 1266
+  length_tokens: 6
+  modifiers:
+  - '#'
+  - '#'
+  - '#'
+  - '1.2'
+  - Challenging
+  root: Names
+  root_pos: PROPN
+  start: 1241
+  text: '### 1.2 Challenging Names'
+- end: 1277
+  length_tokens: 2
+  modifiers:
+  - '8'
+  root: persons
+  root_pos: NOUN
+  start: 1268
+  text: 8 persons
+- end: 1293
+  length_tokens: 4
+  modifiers:
+  - '*'
+  - '*'
+  - Xi
+  root: Zhang
+  root_pos: PROPN
+  start: 1283
+  text: '**Xi Zhang'
+- end: 1314
+  length_tokens: 2
+  modifiers:
+  - Software
+  root: Engineer
+  root_pos: PROPN
+  start: 1297
+  text: Software Engineer
+- end: 1351
+  length_tokens: 4
+  modifiers:
+  - the
+  - new
+  - monitoring
+  root: system
+  root_pos: NOUN
+  start: 1326
+  text: the new monitoring system
+- end: 1376
+  length_tokens: 4
+  modifiers:
+  - José
+  - García
+  - '-'
+  root: López
+  root_pos: PROPN
+  start: 1359
+  text: José García-López
+- end: 1377
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 1376
+  text: '*'
+- end: 1404
+  length_tokens: 2
+  modifiers:
+  - Environmental
+  root: Consultant
+  root_pos: PROPN
+  start: 1380
+  text: Environmental Consultant
+- end: 1423
+  length_tokens: 2
+  modifiers:
+  - '12'
+  root: sites
+  root_pos: NOUN
+  start: 1415
+  text: 12 sites
+- end: 1432
+  length_tokens: 1
+  modifiers: []
+  root: Texas
+  root_pos: PROPN
+  start: 1427
+  text: Texas
+- end: 1445
+  length_tokens: 3
+  modifiers:
+  - '*'
+  - '*'
+  root: Priya
+  root_pos: PROPN
+  start: 1438
+  text: '**Priya'
+- end: 1451
+  length_tokens: 1
+  modifiers: []
+  root: Patel
+  root_pos: PROPN
+  start: 1446
+  text: Patel
+- end: 1452
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 1451
+  text: '*'
+- end: 1453
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 1452
+  text: '*'
+- end: 1469
+  length_tokens: 2
+  modifiers:
+  - Data
+  root: Scientist
+  root_pos: PROPN
+  start: 1455
+  text: Data Scientist
+- end: 1494
+  length_tokens: 2
+  modifiers:
+  - 10,000
+  root: records
+  root_pos: NOUN
+  start: 1480
+  text: 10,000 records
+- end: 1509
+  length_tokens: 1
+  modifiers: []
+  root: compliance
+  root_pos: NOUN
+  start: 1499
+  text: compliance
+- end: 1532
+  length_tokens: 2
+  modifiers:
+  - François
+  root: Dubois
+  root_pos: PROPN
+  start: 1517
+  text: François Dubois
+- end: 1534
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 1533
+  text: '*'
+- end: 1557
+  length_tokens: 2
+  modifiers:
+  - International
+  root: Liaison
+  root_pos: PROPN
+  start: 1536
+  text: International Liaison
+- end: 1570
+  length_tokens: 1
+  modifiers: []
+  root: coordinates
+  root_pos: NOUN
+  start: 1559
+  text: coordinates
+- end: 1586
+  length_tokens: 2
+  modifiers:
+  - EU
+  root: offices
+  root_pos: NOUN
+  start: 1576
+  text: EU offices
+- end: 1605
+  length_tokens: 2
+  modifiers:
+  - Yuki
+  root: Tanaka
+  root_pos: PROPN
+  start: 1594
+  text: Yuki Tanaka
+- end: 1607
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 1606
+  text: '*'
+- end: 1624
+  length_tokens: 2
+  modifiers:
+  - Project
+  root: Manager
+  root_pos: PROPN
+  start: 1609
+  text: Project Manager
+- end: 1653
+  length_tokens: 1
+  modifiers: []
+  root: schedule
+  root_pos: NOUN
+  start: 1645
+  text: schedule
+- end: 1678
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 1677
+  text: '*'
+- end: 1699
+  length_tokens: 2
+  modifiers:
+  - Security
+  root: Specialist
+  root_pos: PROPN
+  start: 1680
+  text: Security Specialist
+- end: 1719
+  length_tokens: 2
+  modifiers:
+  - enhanced
+  root: protocols
+  root_pos: NOUN
+  start: 1701
+  text: enhanced protocols
+- end: 1726
+  length_tokens: 2
+  modifiers:
+  - '40'
+  root: '%'
+  root_pos: NOUN
+  start: 1723
+  text: 40%
+- end: 1745
+  length_tokens: 2
+  modifiers:
+  - Olga
+  root: Volkov
+  root_pos: PROPN
+  start: 1734
+  text: Olga Volkov
+- end: 1746
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 1745
+  text: '*'
+- end: 1747
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 1746
+  text: '*'
+- end: 1766
+  length_tokens: 2
+  modifiers:
+  - Research
+  root: Director
+  root_pos: PROPN
+  start: 1749
+  text: Research Director
+- end: 1786
+  length_tokens: 2
+  modifiers:
+  - Moscow
+  root: Institute
+  root_pos: PROPN
+  start: 1770
+  text: Moscow Institute
+- end: 1806
+  length_tokens: 1
+  modifiers: []
+  root: findings
+  root_pos: NOUN
+  start: 1798
+  text: findings
+- end: 1831
+  length_tokens: 5
+  modifiers:
+  - '*'
+  - '*'
+  - João
+  - Silva
+  root: Santos
+  root_pos: PROPN
+  start: 1812
+  text: '**João Silva Santos'
+- end: 1832
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 1831
+  text: '*'
+- end: 1863
+  length_tokens: 3
+  modifiers:
+  - Brazilian
+  - Operations
+  root: Manager
+  root_pos: PROPN
+  start: 1835
+  text: Brazilian Operations Manager
+- end: 1885
+  length_tokens: 2
+  modifiers:
+  - '5'
+  root: cities
+  root_pos: NOUN
+  start: 1877
+  text: 5 cities
+- end: 1906
+  length_tokens: 6
+  modifiers:
+  - '#'
+  - '#'
+  - '#'
+  - '1.3'
+  - Edge
+  root: Cases
+  root_pos: NOUN
+  start: 1888
+  text: '### 1.3 Edge Cases'
+- end: 1917
+  length_tokens: 2
+  modifiers:
+  - '7'
+  root: persons
+  root_pos: NOUN
+  start: 1908
+  text: 7 persons
+- end: 1937
+  length_tokens: 5
+  modifiers:
+  - '*'
+  - '*'
+  - Van
+  - Der
+  root: Berg
+  root_pos: PROPN
+  start: 1923
+  text: '**Van Der Berg'
+- end: 1939
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 1938
+  text: '*'
+- end: 1951
+  length_tokens: 1
+  modifiers: []
+  root: Consultant
+  root_pos: PROPN
+  start: 1941
+  text: Consultant
+- end: 1962
+  length_tokens: 2
+  modifiers:
+  - last
+  root: name
+  root_pos: NOUN
+  start: 1953
+  text: last name
+- end: 1978
+  length_tokens: 1
+  modifiers: []
+  root: title
+  root_pos: NOUN
+  start: 1973
+  text: title
+- end: 2005
+  length_tokens: 1
+  modifiers: []
+  root: restructuring
+  root_pos: NOUN
+  start: 1992
+  text: restructuring
+- end: 2019
+  length_tokens: 2
+  modifiers:
+  - Dr.
+  root: Li
+  root_pos: PROPN
+  start: 2013
+  text: Dr. Li
+- end: 2028
+  length_tokens: 2
+  modifiers:
+  - (
+  root: title
+  root_pos: NOUN
+  start: 2022
+  text: (title
+- end: 2044
+  length_tokens: 2
+  modifiers:
+  - short
+  root: name
+  root_pos: NOUN
+  start: 2034
+  text: short name
+- end: 2078
+  length_tokens: 2
+  modifiers:
+  - breakthrough
+  root: research
+  root_pos: NOUN
+  start: 2057
+  text: breakthrough research
+- end: 2093
+  length_tokens: 3
+  modifiers:
+  - '*'
+  - '*'
+  root: Madonna
+  root_pos: NOUN
+  start: 2084
+  text: '**Madonna'
+- end: 2095
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 2094
+  text: '*'
+- end: 2108
+  length_tokens: 3
+  modifiers:
+  - (
+  - single
+  root: name
+  root_pos: NOUN
+  start: 2096
+  text: (single name
+- end: 2133
+  length_tokens: 2
+  modifiers:
+  - celebrity
+  root: spokesperson
+  root_pos: NOUN
+  start: 2111
+  text: celebrity spokesperson
+- end: 2153
+  length_tokens: 2
+  modifiers:
+  - safety
+  root: campaign
+  root_pos: NOUN
+  start: 2138
+  text: safety campaign
+- end: 2187
+  length_tokens: 3
+  modifiers:
+  - (
+  - repeated
+  root: name
+  root_pos: NOUN
+  start: 2173
+  text: (repeated name
+- end: 2197
+  length_tokens: 1
+  modifiers: []
+  root: Analyst
+  root_pos: PROPN
+  start: 2190
+  text: Analyst
+- end: 2211
+  length_tokens: 2
+  modifiers:
+  - Tech
+  root: Corp.
+  root_pos: PROPN
+  start: 2201
+  text: Tech Corp.
+- end: 2242
+  length_tokens: 2
+  modifiers:
+  - Quite
+  root: Contrary
+  root_pos: PROPN
+  start: 2228
+  text: Quite Contrary
+- end: 2267
+  length_tokens: 5
+  modifiers:
+  - (
+  - unusual
+  - but
+  - real
+  root: name
+  root_pos: NOUN
+  start: 2245
+  text: (unusual but real name
+- end: 2288
+  length_tokens: 2
+  modifiers:
+  - Marketing
+  root: Director
+  root_pos: PROPN
+  start: 2270
+  text: Marketing Director
+- end: 2321
+  length_tokens: 8
+  modifiers:
+  - '*'
+  - '*'
+  - Bob
+  - '"'
+  - The
+  - Builder
+  - '"'
+  root: Johnson
+  root_pos: PROPN
+  start: 2294
+  text: '**Bob "The Builder" Johnson'
+- end: 2323
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 2322
+  text: '*'
+- end: 2333
+  length_tokens: 2
+  modifiers:
+  - (
+  root: nickname
+  root_pos: PROPN
+  start: 2324
+  text: (nickname
+- end: 2393
+  length_tokens: 4
+  modifiers:
+  - Sir
+  - Charles
+  - Winchester
+  root: III
+  root_pos: PROPN
+  start: 2367
+  text: Sir Charles Winchester III
+- end: 2394
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 2393
+  text: '*'
+- end: 2414
+  length_tokens: 2
+  modifiers:
+  - Chairman
+  root: Emeritus
+  root_pos: PROPN
+  start: 2397
+  text: Chairman Emeritus
+- end: 2440
+  length_tokens: 2
+  modifiers:
+  - the
+  root: organization
+  root_pos: NOUN
+  start: 2424
+  text: the organization
+- end: 2458
+  length_tokens: 5
+  modifiers:
+  - '---'
+  - '
+
+
+    '
+  - '#'
+  - '#'
+  root: SECTION
+  root_pos: NOUN
+  start: 2443
+  text: '---
+
+
+    ## SECTION'
+- end: 2483
+  length_tokens: 2
+  modifiers:
+  - ORGANIZATION
+  root: ENTITIES
+  root_pos: NOUN
+  start: 2462
+  text: ORGANIZATION ENTITIES
+- end: 2490
+  length_tokens: 1
+  modifiers: []
+  root: Total
+  root_pos: NOUN
+  start: 2485
+  text: Total
+- end: 2508
+  length_tokens: 2
+  modifiers:
+  - '30'
+  root: organizations
+  root_pos: NOUN
+  start: 2492
+  text: 30 organizations
+- end: 2538
+  length_tokens: 6
+  modifiers:
+  - '#'
+  - '#'
+  - '#'
+  - '2.1'
+  - Government
+  root: Agencies
+  root_pos: PROPN
+  start: 2511
+  text: '### 2.1 Government Agencies'
+- end: 2556
+  length_tokens: 2
+  modifiers:
+  - '10'
+  root: organizations
+  root_pos: NOUN
+  start: 2540
+  text: 10 organizations
+- end: 2568
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 2567
+  text: '*'
+- end: 2616
+  length_tokens: 6
+  modifiers:
+  - (
+  - Occupational
+  - Safety
+  - and
+  - Health
+  root: Administration
+  root_pos: PROPN
+  start: 2570
+  text: (Occupational Safety and Health Administration
+- end: 2639
+  length_tokens: 2
+  modifiers:
+  - new
+  root: guidelines
+  root_pos: NOUN
+  start: 2625
+  text: new guidelines
+- end: 2660
+  length_tokens: 4
+  modifiers:
+  - The
+  - '*'
+  - '*'
+  root: Department
+  root_pos: PROPN
+  start: 2644
+  text: The **Department
+- end: 2669
+  length_tokens: 1
+  modifiers: []
+  root: Labor
+  root_pos: PROPN
+  start: 2664
+  text: Labor
+- end: 2670
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 2669
+  text: '*'
+- end: 2671
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 2670
+  text: '*'
+- end: 2701
+  length_tokens: 2
+  modifiers:
+  - updated
+  root: regulations
+  root_pos: NOUN
+  start: 2682
+  text: updated regulations
+- end: 2734
+  length_tokens: 5
+  modifiers:
+  - '3'
+  - .
+  - '*'
+  - '*'
+  root: EPA
+  root_pos: PROPN
+  start: 2726
+  text: 3. **EPA
+- end: 2769
+  length_tokens: 4
+  modifiers:
+  - (
+  - Environmental
+  - Protection
+  root: Agency
+  root_pos: PROPN
+  start: 2737
+  text: (Environmental Protection Agency
+- end: 2792
+  length_tokens: 2
+  modifiers:
+  - three
+  root: companies
+  root_pos: NOUN
+  start: 2777
+  text: three companies
+- end: 2809
+  length_tokens: 4
+  modifiers:
+  - $
+  - '5'
+  - million
+  root: total
+  root_pos: NOUN
+  start: 2793
+  text: $5 million total
+- end: 2827
+  length_tokens: 4
+  modifiers:
+  - The
+  - '*'
+  - '*'
+  root: Centers
+  root_pos: NOUN
+  start: 2814
+  text: The **Centers
+- end: 2847
+  length_tokens: 2
+  modifiers:
+  - Disease
+  root: Control
+  root_pos: PROPN
+  start: 2832
+  text: Disease Control
+- end: 2862
+  length_tokens: 1
+  modifiers: []
+  root: Prevention
+  root_pos: PROPN
+  start: 2852
+  text: Prevention
+- end: 2869
+  length_tokens: 2
+  modifiers:
+  - (
+  root: CDC
+  root_pos: PROPN
+  start: 2865
+  text: (CDC
+- end: 2897
+  length_tokens: 2
+  modifiers:
+  - health
+  root: advisories
+  root_pos: NOUN
+  start: 2880
+  text: health advisories
+- end: 2946
+  length_tokens: 2
+  modifiers:
+  - Occupational
+  root: Safety
+  root_pos: PROPN
+  start: 2927
+  text: Occupational Safety
+- end: 2957
+  length_tokens: 1
+  modifiers: []
+  root: Health
+  root_pos: PROPN
+  start: 2951
+  text: Health
+- end: 2966
+  length_tokens: 2
+  modifiers:
+  - (
+  root: NIOSH
+  root_pos: PROPN
+  start: 2960
+  text: (NIOSH
+- end: 2985
+  length_tokens: 1
+  modifiers: []
+  root: studies
+  root_pos: NOUN
+  start: 2978
+  text: studies
+- end: 3027
+  length_tokens: 6
+  modifiers:
+  - The
+  - '*'
+  - '*'
+  - Federal
+  - Aviation
+  root: Administration
+  root_pos: PROPN
+  start: 2990
+  text: The **Federal Aviation Administration
+- end: 3034
+  length_tokens: 1
+  modifiers: []
+  root: FAA
+  root_pos: PROPN
+  start: 3031
+  text: FAA
+- end: 3064
+  length_tokens: 3
+  modifiers:
+  - new
+  - safety
+  root: measures
+  root_pos: NOUN
+  start: 3045
+  text: new safety measures
+- end: 3081
+  length_tokens: 5
+  modifiers:
+  - '7'
+  - .
+  - '*'
+  - '*'
+  root: Department
+  root_pos: PROPN
+  start: 3066
+  text: 7. **Department
+- end: 3099
+  length_tokens: 1
+  modifiers: []
+  root: Transportation
+  root_pos: PROPN
+  start: 3085
+  text: Transportation
+- end: 3106
+  length_tokens: 1
+  modifiers: []
+  root: DOT
+  root_pos: PROPN
+  start: 3103
+  text: DOT
+- end: 3141
+  length_tokens: 2
+  modifiers:
+  - stricter
+  root: requirements
+  root_pos: NOUN
+  start: 3120
+  text: stricter requirements
+- end: 3180
+  length_tokens: 7
+  modifiers:
+  - The
+  - '*'
+  - '*'
+  - Food
+  - and
+  - Drug
+  root: Administration
+  root_pos: PROPN
+  start: 3146
+  text: The **Food and Drug Administration
+- end: 3187
+  length_tokens: 2
+  modifiers:
+  - (
+  root: FDA
+  root_pos: PROPN
+  start: 3183
+  text: (FDA
+- end: 3209
+  length_tokens: 2
+  modifiers:
+  - '15'
+  root: products
+  root_pos: NOUN
+  start: 3198
+  text: 15 products
+- end: 3250
+  length_tokens: 5
+  modifiers:
+  - '*'
+  - Consumer
+  - Product
+  - Safety
+  root: Commission
+  root_pos: PROPN
+  start: 3215
+  text: '*Consumer Product Safety Commission'
+- end: 3251
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 3250
+  text: '*'
+- end: 3258
+  length_tokens: 2
+  modifiers:
+  - (
+  root: CPSC
+  root_pos: PROPN
+  start: 3253
+  text: (CPSC
+- end: 3275
+  length_tokens: 1
+  modifiers: []
+  root: warnings
+  root_pos: NOUN
+  start: 3267
+  text: warnings
+- end: 3316
+  length_tokens: 6
+  modifiers:
+  - The
+  - '*'
+  - '*'
+  - Nuclear
+  - Regulatory
+  root: Commission
+  root_pos: PROPN
+  start: 3281
+  text: The **Nuclear Regulatory Commission
+- end: 3323
+  length_tokens: 2
+  modifiers:
+  - (
+  root: NRC
+  root_pos: PROPN
+  start: 3319
+  text: (NRC
+- end: 3348
+  length_tokens: 2
+  modifiers:
+  - '20'
+  root: facilities
+  root_pos: NOUN
+  start: 3335
+  text: 20 facilities
+- end: 3368
+  length_tokens: 5
+  modifiers:
+  - '#'
+  - '#'
+  - '#'
+  - '2.2'
+  root: Companies
+  root_pos: NOUN
+  start: 3351
+  text: '### 2.2 Companies'
+- end: 3386
+  length_tokens: 2
+  modifiers:
+  - '15'
+  root: organizations
+  root_pos: NOUN
+  start: 3370
+  text: 15 organizations
+- end: 3415
+  length_tokens: 2
+  modifiers:
+  - Microsoft
+  root: Corporation
+  root_pos: PROPN
+  start: 3394
+  text: Microsoft Corporation
+- end: 3460
+  length_tokens: 2
+  modifiers:
+  - safety
+  root: technology
+  root_pos: NOUN
+  start: 3443
+  text: safety technology
+- end: 3493
+  length_tokens: 1
+  modifiers: []
+  root: Inc.
+  root_pos: PROPN
+  start: 3489
+  text: Inc.
+- end: 3536
+  length_tokens: 3
+  modifiers:
+  - '5'
+  - new
+  root: locations
+  root_pos: NOUN
+  start: 3521
+  text: 5 new locations
+- end: 3568
+  length_tokens: 3
+  modifiers:
+  - General
+  - Electric
+  root: Company
+  root_pos: PROPN
+  start: 3544
+  text: General Electric Company
+- end: 3574
+  length_tokens: 2
+  modifiers:
+  - (
+  root: GE
+  root_pos: PROPN
+  start: 3571
+  text: (GE
+- end: 3600
+  length_tokens: 3
+  modifiers:
+  - '25'
+  - '%'
+  root: improvement
+  root_pos: NOUN
+  start: 3585
+  text: 25% improvement
+- end: 3618
+  length_tokens: 2
+  modifiers:
+  - safety
+  root: metrics
+  root_pos: NOUN
+  start: 3604
+  text: safety metrics
+- end: 3633
+  length_tokens: 1
+  modifiers: []
+  root: Johnson
+  root_pos: PROPN
+  start: 3626
+  text: Johnson
+- end: 3643
+  length_tokens: 1
+  modifiers: []
+  root: Johnson
+  root_pos: PROPN
+  start: 3636
+  text: Johnson
+- end: 3680
+  length_tokens: 3
+  modifiers:
+  - new
+  - protective
+  root: equipment
+  root_pos: NOUN
+  start: 3656
+  text: new protective equipment
+- end: 3698
+  length_tokens: 3
+  modifiers:
+  - '3'
+  - M
+  root: Company
+  root_pos: PROPN
+  start: 3688
+  text: 3M Company
+- end: 3731
+  length_tokens: 3
+  modifiers:
+  - '1'
+  - million
+  root: respirators
+  root_pos: NOUN
+  start: 3710
+  text: 1 million respirators
+- end: 3756
+  length_tokens: 2
+  modifiers:
+  - healthcare
+  root: facilities
+  root_pos: NOUN
+  start: 3735
+  text: healthcare facilities
+- end: 3782
+  length_tokens: 4
+  modifiers:
+  - '*'
+  - '*'
+  - Boeing
+  root: Corporation
+  root_pos: PROPN
+  start: 3762
+  text: '**Boeing Corporation'
+- end: 3817
+  length_tokens: 4
+  modifiers:
+  - enhanced
+  - aircraft
+  - safety
+  root: systems
+  root_pos: NOUN
+  start: 3785
+  text: enhanced aircraft safety systems
+- end: 3836
+  length_tokens: 5
+  modifiers:
+  - '*'
+  - '*'
+  - Tesla
+  - ','
+  root: Inc.
+  root_pos: PROPN
+  start: 3823
+  text: '**Tesla, Inc.'
+- end: 3871
+  length_tokens: 3
+  modifiers:
+  - zero
+  - workplace
+  root: injuries
+  root_pos: NOUN
+  start: 3848
+  text: zero workplace injuries
+- end: 3884
+  length_tokens: 2
+  modifiers:
+  - '365'
+  root: days
+  root_pos: NOUN
+  start: 3876
+  text: 365 days
+- end: 3904
+  length_tokens: 4
+  modifiers:
+  - '*'
+  - '*'
+  - Walmart
+  root: Inc.
+  root_pos: PROPN
+  start: 3890
+  text: '**Walmart Inc.'
+- end: 3931
+  length_tokens: 2
+  modifiers:
+  - 50,000
+  root: employees
+  root_pos: NOUN
+  start: 3915
+  text: 50,000 employees
+- end: 3955
+  length_tokens: 3
+  modifiers:
+  - new
+  - safety
+  root: protocols
+  root_pos: NOUN
+  start: 3935
+  text: new safety protocols
+- end: 3973
+  length_tokens: 4
+  modifiers:
+  - '*'
+  - '*'
+  - Apple
+  root: Inc.
+  root_pos: PROPN
+  start: 3961
+  text: '**Apple Inc.'
+- end: 4003
+  length_tokens: 3
+  modifiers:
+  - reduced
+  - workplace
+  root: incidents
+  root_pos: NOUN
+  start: 3976
+  text: reduced workplace incidents
+- end: 4010
+  length_tokens: 2
+  modifiers:
+  - '60'
+  root: '%'
+  root_pos: NOUN
+  start: 4007
+  text: 60%
+- end: 4028
+  length_tokens: 4
+  modifiers:
+  - '*'
+  - '*'
+  - Google
+  root: LLC
+  root_pos: PROPN
+  start: 4016
+  text: '**Google LLC'
+- end: 4030
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 4029
+  text: '*'
+- end: 4071
+  length_tokens: 6
+  modifiers:
+  - implemented
+  - AI
+  - '-'
+  - powered
+  - safety
+  root: monitoring
+  root_pos: NOUN
+  start: 4031
+  text: implemented AI-powered safety monitoring
+- end: 4100
+  length_tokens: 4
+  modifiers:
+  - '*'
+  - '*'
+  - Facebook
+  root: Technologies
+  root_pos: PROPN
+  start: 4077
+  text: '**Facebook Technologies'
+- end: 4105
+  length_tokens: 1
+  modifiers: []
+  root: LLC
+  root_pos: PROPN
+  start: 4102
+  text: LLC
+- end: 4113
+  length_tokens: 2
+  modifiers:
+  - (
+  root: Meta
+  root_pos: PROPN
+  start: 4108
+  text: (Meta
+- end: 4143
+  length_tokens: 3
+  modifiers:
+  - VR
+  - training
+  root: systems
+  root_pos: NOUN
+  start: 4124
+  text: VR training systems
+- end: 4172
+  length_tokens: 5
+  modifiers:
+  - '*'
+  - '*'
+  - United
+  - Parcel
+  root: Service
+  root_pos: PROPN
+  start: 4149
+  text: '**United Parcel Service'
+- end: 4179
+  length_tokens: 2
+  modifiers:
+  - (
+  root: UPS
+  root_pos: PROPN
+  start: 4175
+  text: (UPS
+- end: 4207
+  length_tokens: 2
+  modifiers:
+  - '200'
+  root: countries
+  root_pos: NOUN
+  start: 4194
+  text: 200 countries
+- end: 4239
+  length_tokens: 4
+  modifiers:
+  - '*'
+  - '*'
+  - FedEx
+  root: Corporation
+  root_pos: PROPN
+  start: 4220
+  text: '**FedEx Corporation'
+- end: 4276
+  length_tokens: 4
+  modifiers:
+  - '99.9'
+  - '%'
+  - delivery
+  root: accuracy
+  root_pos: NOUN
+  start: 4253
+  text: 99.9% delivery accuracy
+- end: 4311
+  length_tokens: 5
+  modifiers:
+  - '*'
+  - '*'
+  - Lockheed
+  - Martin
+  root: Corporation
+  root_pos: PROPN
+  start: 4282
+  text: '**Lockheed Martin Corporation'
+- end: 4341
+  length_tokens: 3
+  modifiers:
+  - completed
+  - defense
+  root: contracts
+  root_pos: NOUN
+  start: 4314
+  text: completed defense contracts
+- end: 4388
+  length_tokens: 4
+  modifiers:
+  - '*'
+  - '*'
+  - Raytheon
+  root: Technologies
+  root_pos: PROPN
+  start: 4365
+  text: '**Raytheon Technologies'
+- end: 4424
+  length_tokens: 4
+  modifiers:
+  - developed
+  - advanced
+  - safety
+  root: sensors
+  root_pos: NOUN
+  start: 4391
+  text: developed advanced safety sensors
+- end: 4459
+  length_tokens: 6
+  modifiers:
+  - '#'
+  - '#'
+  - '#'
+  - '2.3'
+  - Educational
+  root: Institutions
+  root_pos: PROPN
+  start: 4427
+  text: '### 2.3 Educational Institutions'
+- end: 4476
+  length_tokens: 2
+  modifiers:
+  - '5'
+  root: organizations
+  root_pos: NOUN
+  start: 4461
+  text: 5 organizations
+- end: 4507
+  length_tokens: 3
+  modifiers:
+  - '*'
+  - Massachusetts
+  root: Institute
+  root_pos: PROPN
+  start: 4483
+  text: '*Massachusetts Institute'
+- end: 4521
+  length_tokens: 1
+  modifiers: []
+  root: Technology
+  root_pos: PROPN
+  start: 4511
+  text: Technology
+- end: 4522
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 4521
+  text: '*'
+- end: 4528
+  length_tokens: 2
+  modifiers:
+  - (
+  root: MIT
+  root_pos: PROPN
+  start: 4524
+  text: (MIT
+- end: 4554
+  length_tokens: 2
+  modifiers:
+  - new
+  root: materials
+  root_pos: NOUN
+  start: 4541
+  text: new materials
+- end: 4581
+  length_tokens: 4
+  modifiers:
+  - '*'
+  - '*'
+  - Stanford
+  root: University
+  root_pos: PROPN
+  start: 4560
+  text: '**Stanford University'
+- end: 4583
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 4582
+  text: '*'
+- end: 4607
+  length_tokens: 1
+  modifiers: []
+  root: industry
+  root_pos: NOUN
+  start: 4599
+  text: industry
+- end: 4629
+  length_tokens: 2
+  modifiers:
+  - safety
+  root: innovations
+  root_pos: NOUN
+  start: 4611
+  text: safety innovations
+- end: 4660
+  length_tokens: 5
+  modifiers:
+  - '*'
+  - '*'
+  - Harvard
+  - Business
+  root: School
+  root_pos: PROPN
+  start: 4635
+  text: '**Harvard Business School'
+- end: 4685
+  length_tokens: 3
+  modifiers:
+  - published
+  - case
+  root: studies
+  root_pos: NOUN
+  start: 4663
+  text: published case studies
+- end: 4705
+  length_tokens: 2
+  modifiers:
+  - workplace
+  root: safety
+  root_pos: NOUN
+  start: 4689
+  text: workplace safety
+- end: 4727
+  length_tokens: 4
+  modifiers:
+  - The
+  - '*'
+  - '*'
+  root: University
+  root_pos: PROPN
+  start: 4711
+  text: The **University
+- end: 4741
+  length_tokens: 1
+  modifiers: []
+  root: California
+  root_pos: PROPN
+  start: 4731
+  text: California
+- end: 4751
+  length_tokens: 1
+  modifiers: []
+  root: Berkeley
+  root_pos: PROPN
+  start: 4743
+  text: Berkeley
+- end: 4818
+  length_tokens: 5
+  modifiers:
+  - '*'
+  - '*'
+  - Johns
+  - Hopkins
+  root: University
+  root_pos: PROPN
+  start: 4792
+  text: '**Johns Hopkins University'
+- end: 4855
+  length_tokens: 4
+  modifiers:
+  - developed
+  - medical
+  - safety
+  root: protocols
+  root_pos: NOUN
+  start: 4821
+  text: developed medical safety protocols
+- end: 4894
+  length_tokens: 2
+  modifiers:
+  - LOCATION
+  root: ENTITIES
+  root_pos: PROPN
+  start: 4877
+  text: LOCATION ENTITIES
+- end: 4901
+  length_tokens: 1
+  modifiers: []
+  root: Total
+  root_pos: NOUN
+  start: 4896
+  text: Total
+- end: 4915
+  length_tokens: 2
+  modifiers:
+  - '20'
+  root: locations
+  root_pos: NOUN
+  start: 4903
+  text: 20 locations
+- end: 4932
+  length_tokens: 3
+  modifiers:
+  - '#'
+  - '3.1'
+  root: Cities
+  root_pos: NOUN
+  start: 4920
+  text: '# 3.1 Cities'
+- end: 4946
+  length_tokens: 2
+  modifiers:
+  - '10'
+  root: locations
+  root_pos: NOUN
+  start: 4934
+  text: 10 locations
+- end: 4958
+  length_tokens: 1
+  modifiers: []
+  root: Operations
+  root_pos: NOUN
+  start: 4948
+  text: Operations
+- end: 4987
+  length_tokens: 3
+  modifiers:
+  - New
+  - York
+  root: City
+  root_pos: PROPN
+  start: 4974
+  text: New York City
+- end: 4988
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 4987
+  text: '*'
+- end: 4989
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 4988
+  text: '*'
+- end: 5005
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5004
+  text: '*'
+- end: 5006
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5005
+  text: '*'
+- end: 5018
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 5017
+  text: '*'
+- end: 5019
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5018
+  text: '*'
+- end: 5022
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5021
+  text: '*'
+- end: 5031
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5030
+  text: '*'
+- end: 5032
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5031
+  text: '*'
+- end: 5045
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5044
+  text: '*'
+- end: 5063
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 5062
+  text: '*'
+- end: 5079
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5078
+  text: '*'
+- end: 5080
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5079
+  text: '*'
+- end: 5094
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5093
+  text: '*'
+- end: 5095
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5094
+  text: '*'
+- end: 5098
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5097
+  text: '*'
+- end: 5107
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5106
+  text: '*'
+- end: 5124
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5123
+  text: '*'
+- end: 5125
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5124
+  text: '*'
+- end: 5142
+  length_tokens: 5
+  modifiers:
+  - '#'
+  - '#'
+  - '#'
+  - '3.2'
+  root: States
+  root_pos: PROPN
+  start: 5128
+  text: '### 3.2 States'
+- end: 5156
+  length_tokens: 1
+  modifiers: []
+  root: Countries
+  root_pos: PROPN
+  start: 5147
+  text: Countries
+- end: 5170
+  length_tokens: 3
+  modifiers:
+  - (
+  - '10'
+  root: locations
+  root_pos: NOUN
+  start: 5157
+  text: (10 locations
+- end: 5194
+  length_tokens: 2
+  modifiers:
+  - International
+  root: presence
+  root_pos: NOUN
+  start: 5172
+  text: International presence
+- end: 5213
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5212
+  text: '*'
+- end: 5216
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5215
+  text: '*'
+- end: 5223
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5222
+  text: '*'
+- end: 5224
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5223
+  text: '*'
+- end: 5227
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5226
+  text: '*'
+- end: 5237
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5236
+  text: '*'
+- end: 5240
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5239
+  text: '*'
+- end: 5254
+  length_tokens: 2
+  modifiers:
+  - United
+  root: States
+  root_pos: PROPN
+  start: 5241
+  text: United States
+- end: 5256
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5255
+  text: '*'
+- end: 5267
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 5266
+  text: '*'
+- end: 5268
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5267
+  text: '*'
+- end: 5271
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5270
+  text: '*'
+- end: 5287
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5286
+  text: '*'
+- end: 5288
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5287
+  text: '*'
+- end: 5300
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5299
+  text: '*'
+- end: 5301
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5300
+  text: '*'
+- end: 5311
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5310
+  text: '*'
+- end: 5312
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5311
+  text: '*'
+- end: 5343
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 5342
+  text: '*'
+- end: 5361
+  length_tokens: 5
+  modifiers:
+  - '---'
+  - '
+
+
+    '
+  - '#'
+  - '#'
+  root: SECTION
+  root_pos: NOUN
+  start: 5346
+  text: '---
+
+
+    ## SECTION'
+- end: 5377
+  length_tokens: 2
+  modifiers:
+  - GPE
+  root: ENTITIES
+  root_pos: NOUN
+  start: 5365
+  text: GPE ENTITIES
+- end: 5400
+  length_tokens: 2
+  modifiers:
+  - Geopolitical
+  root: Entities
+  root_pos: PROPN
+  start: 5379
+  text: Geopolitical Entities
+- end: 5408
+  length_tokens: 2
+  modifiers:
+  - (
+  root: Total
+  root_pos: NOUN
+  start: 5402
+  text: (Total
+- end: 5416
+  length_tokens: 2
+  modifiers:
+  - '8'
+  root: GPEs
+  root_pos: NOUN
+  start: 5410
+  text: 8 GPEs
+- end: 5438
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5437
+  text: '*'
+- end: 5439
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 5438
+  text: '*'
+- end: 5450
+  length_tokens: 1
+  modifiers: []
+  root: government
+  root_pos: NOUN
+  start: 5440
+  text: government
+- end: 5466
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5465
+  text: '*'
+- end: 5467
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5466
+  text: '*'
+- end: 5472
+  length_tokens: 1
+  modifiers: []
+  root: China
+  root_pos: PROPN
+  start: 5467
+  text: China
+- end: 5473
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5472
+  text: '*'
+- end: 5474
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5473
+  text: '*'
+- end: 5477
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5476
+  text: '*'
+- end: 5484
+  length_tokens: 1
+  modifiers: []
+  root: Russia
+  root_pos: NOUN
+  start: 5478
+  text: Russia
+- end: 5485
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 5484
+  text: '*'
+- end: 5486
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5485
+  text: '*'
+- end: 5489
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5488
+  text: '*'
+- end: 5495
+  length_tokens: 1
+  modifiers: []
+  root: India
+  root_pos: PROPN
+  start: 5490
+  text: India
+- end: 5497
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5496
+  text: '*'
+- end: 5505
+  length_tokens: 3
+  modifiers:
+  - the
+  - '*'
+  root: '*'
+  root_pos: PROPN
+  start: 5499
+  text: the **
+- end: 5519
+  length_tokens: 2
+  modifiers:
+  - European
+  root: Union
+  root_pos: PROPN
+  start: 5505
+  text: European Union
+- end: 5520
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5519
+  text: '*'
+- end: 5521
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5520
+  text: '*'
+- end: 5531
+  length_tokens: 1
+  modifiers: []
+  root: Mexico
+  root_pos: PROPN
+  start: 5525
+  text: Mexico
+- end: 5533
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5532
+  text: '*'
+- end: 5548
+  length_tokens: 2
+  modifiers:
+  - South
+  root: Korea
+  root_pos: PROPN
+  start: 5537
+  text: South Korea
+- end: 5564
+  length_tokens: 1
+  modifiers: []
+  root: Israel
+  root_pos: PROPN
+  start: 5558
+  text: Israel
+- end: 5565
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5564
+  text: '*'
+- end: 5593
+  length_tokens: 2
+  modifiers:
+  - international
+  root: standards
+  root_pos: NOUN
+  start: 5570
+  text: international standards
+- end: 5611
+  length_tokens: 5
+  modifiers:
+  - '---'
+  - '
+
+
+    '
+  - '#'
+  - '#'
+  root: SECTION
+  root_pos: NOUN
+  start: 5596
+  text: '---
+
+
+    ## SECTION'
+- end: 5628
+  length_tokens: 2
+  modifiers:
+  - DATE
+  root: ENTITIES
+  root_pos: NOUN
+  start: 5615
+  text: DATE ENTITIES
+- end: 5635
+  length_tokens: 1
+  modifiers: []
+  root: Total
+  root_pos: NOUN
+  start: 5630
+  text: Total
+- end: 5645
+  length_tokens: 2
+  modifiers:
+  - '15'
+  root: dates
+  root_pos: NOUN
+  start: 5637
+  text: 15 dates
+- end: 5665
+  length_tokens: 1
+  modifiers: []
+  root: Implementation
+  root_pos: NOUN
+  start: 5651
+  text: Implementation
+- end: 5685
+  length_tokens: 1
+  modifiers: []
+  root: January
+  root_pos: PROPN
+  start: 5678
+  text: January
+- end: 5711
+  length_tokens: 2
+  modifiers:
+  - First
+  root: review
+  root_pos: NOUN
+  start: 5699
+  text: First review
+- end: 5728
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 5727
+  text: '*'
+- end: 5736
+  length_tokens: 1
+  modifiers: []
+  root: February
+  root_pos: PROPN
+  start: 5728
+  text: February
+- end: 5767
+  length_tokens: 2
+  modifiers:
+  - Quarterly
+  root: report
+  root_pos: NOUN
+  start: 5751
+  text: Quarterly report
+- end: 5813
+  length_tokens: 1
+  modifiers: []
+  root: completion
+  root_pos: NOUN
+  start: 5803
+  text: completion
+- end: 5824
+  length_tokens: 1
+  modifiers: []
+  root: April
+  root_pos: PROPN
+  start: 5819
+  text: April
+- end: 5858
+  length_tokens: 4
+  modifiers:
+  - Mid
+  - '-'
+  - year
+  root: assessment
+  root_pos: NOUN
+  start: 5839
+  text: Mid-year assessment
+- end: 5863
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5862
+  text: '*'
+- end: 5864
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 5863
+  text: '*'
+- end: 5868
+  length_tokens: 1
+  modifiers: []
+  root: June
+  root_pos: PROPN
+  start: 5864
+  text: June
+- end: 5907
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 5906
+  text: '*'
+- end: 5911
+  length_tokens: 1
+  modifiers: []
+  root: July
+  root_pos: PROPN
+  start: 5907
+  text: July
+- end: 5946
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 5945
+  text: '*'
+- end: 5953
+  length_tokens: 1
+  modifiers: []
+  root: August
+  root_pos: PROPN
+  start: 5947
+  text: August
+- end: 5990
+  length_tokens: 2
+  modifiers:
+  - Compliance
+  root: deadline
+  root_pos: NOUN
+  start: 5971
+  text: Compliance deadline
+- end: 6028
+  length_tokens: 1
+  modifiers: []
+  root: Conference
+  root_pos: NOUN
+  start: 6018
+  text: Conference
+- end: 6077
+  length_tokens: 2
+  modifiers:
+  - Annual
+  root: review
+  root_pos: NOUN
+  start: 6064
+  text: Annual review
+- end: 6091
+  length_tokens: 1
+  modifiers: []
+  root: November
+  root_pos: PROPN
+  start: 6083
+  text: November
+- end: 6122
+  length_tokens: 4
+  modifiers:
+  - Year
+  - '-'
+  - end
+  root: report
+  root_pos: NOUN
+  start: 6107
+  text: Year-end report
+- end: 6128
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 6127
+  text: '*'
+- end: 6136
+  length_tokens: 1
+  modifiers: []
+  root: December
+  root_pos: PROPN
+  start: 6128
+  text: December
+- end: 6172
+  length_tokens: 2
+  modifiers:
+  - Historical
+  root: reference
+  root_pos: NOUN
+  start: 6152
+  text: Historical reference
+- end: 6204
+  length_tokens: 1
+  modifiers: []
+  root: regulations
+  root_pos: NOUN
+  start: 6193
+  text: regulations
+- end: 6224
+  length_tokens: 2
+  modifiers:
+  - Previous
+  root: update
+  root_pos: NOUN
+  start: 6209
+  text: Previous update
+- end: 6270
+  length_tokens: 2
+  modifiers:
+  - Original
+  root: implementation
+  root_pos: NOUN
+  start: 6247
+  text: Original implementation
+- end: 6303
+  length_tokens: 1
+  modifiers: []
+  root: Future
+  root_pos: NOUN
+  start: 6297
+  text: Future
+- end: 6318
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 6317
+  text: '*'
+- end: 6319
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 6318
+  text: '*'
+- end: 6326
+  length_tokens: 1
+  modifiers: []
+  root: January
+  root_pos: PROPN
+  start: 6319
+  text: January
+- end: 6353
+  length_tokens: 3
+  modifiers:
+  - '#'
+  - '#'
+  root: SECTION
+  root_pos: NOUN
+  start: 6343
+  text: '## SECTION'
+- end: 6370
+  length_tokens: 3
+  modifiers:
+  - ':'
+  - TIME
+  root: ENTITIES
+  root_pos: PROPN
+  start: 6355
+  text: ': TIME ENTITIES'
+- end: 6377
+  length_tokens: 1
+  modifiers: []
+  root: Total
+  root_pos: NOUN
+  start: 6372
+  text: Total
+- end: 6386
+  length_tokens: 2
+  modifiers:
+  - '8'
+  root: times
+  root_pos: NOUN
+  start: 6379
+  text: 8 times
+- end: 6397
+  length_tokens: 1
+  modifiers: []
+  root: Meetings
+  root_pos: NOUN
+  start: 6389
+  text: Meetings
+- end: 6421
+  length_tokens: 2
+  modifiers:
+  - '9:00'
+  root: AM
+  root_pos: NOUN
+  start: 6414
+  text: 9:00 AM
+- end: 6422
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 6421
+  text: '*'
+- end: 6423
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 6422
+  text: '*'
+- end: 6435
+  length_tokens: 2
+  modifiers:
+  - '10:30'
+  root: AM
+  root_pos: PROPN
+  start: 6427
+  text: 10:30 AM
+- end: 6436
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 6435
+  text: '*'
+- end: 6437
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 6436
+  text: '*'
+- end: 6449
+  length_tokens: 2
+  modifiers:
+  - '12:00'
+  root: PM
+  root_pos: NOUN
+  start: 6441
+  text: 12:00 PM
+- end: 6451
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 6450
+  text: '*'
+- end: 6457
+  length_tokens: 1
+  modifiers: []
+  root: noon
+  root_pos: NOUN
+  start: 6453
+  text: noon
+- end: 6461
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 6460
+  text: '*'
+- end: 6469
+  length_tokens: 1
+  modifiers: []
+  root: PM
+  root_pos: NOUN
+  start: 6467
+  text: PM
+- end: 6471
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 6470
+  text: '*'
+- end: 6484
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 6483
+  text: '*'
+- end: 6495
+  length_tokens: 1
+  modifiers: []
+  root: PM
+  root_pos: NOUN
+  start: 6493
+  text: PM
+- end: 6497
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 6496
+  text: '*'
+- end: 6526
+  length_tokens: 1
+  modifiers: []
+  root: PM
+  root_pos: NOUN
+  start: 6524
+  text: PM
+- end: 6546
+  length_tokens: 2
+  modifiers:
+  - '#'
+  root: SECTION
+  root_pos: NOUN
+  start: 6537
+  text: '# SECTION'
+- end: 6564
+  length_tokens: 2
+  modifiers:
+  - MONEY
+  root: ENTITIES
+  root_pos: NOUN
+  start: 6550
+  text: MONEY ENTITIES
+- end: 6571
+  length_tokens: 1
+  modifiers: []
+  root: Total
+  root_pos: NOUN
+  start: 6566
+  text: Total
+- end: 6581
+  length_tokens: 2
+  modifiers:
+  - '20'
+  root: money
+  root_pos: NOUN
+  start: 6573
+  text: 20 money
+- end: 6612
+  length_tokens: 6
+  modifiers:
+  - '#'
+  - '#'
+  - '#'
+  - '7.1'
+  - Budget
+  root: Items
+  root_pos: PROPN
+  start: 6592
+  text: '### 7.1 Budget Items'
+- end: 6624
+  length_tokens: 2
+  modifiers:
+  - '10'
+  root: amounts
+  root_pos: NOUN
+  start: 6614
+  text: 10 amounts
+- end: 6652
+  length_tokens: 3
+  modifiers:
+  - Safety
+  - equipment
+  root: budget
+  root_pos: NOUN
+  start: 6629
+  text: Safety equipment budget
+- end: 6689
+  length_tokens: 2
+  modifiers:
+  - Training
+  root: allocation
+  root_pos: NOUN
+  start: 6670
+  text: Training allocation
+- end: 6730
+  length_tokens: 2
+  modifiers:
+  - Compliance
+  root: software
+  root_pos: NOUN
+  start: 6711
+  text: Compliance software
+- end: 6763
+  length_tokens: 2
+  modifiers:
+  - Consulting
+  root: fees
+  root_pos: NOUN
+  start: 6748
+  text: Consulting fees
+- end: 6798
+  length_tokens: 2
+  modifiers:
+  - Insurance
+  root: premiums
+  root_pos: NOUN
+  start: 6780
+  text: Insurance premiums
+- end: 6837
+  length_tokens: 2
+  modifiers:
+  - Facility
+  root: upgrades
+  root_pos: NOUN
+  start: 6820
+  text: Facility upgrades
+- end: 6872
+  length_tokens: 2
+  modifiers:
+  - Emergency
+  root: fund
+  root_pos: NOUN
+  start: 6858
+  text: Emergency fund
+- end: 6905
+  length_tokens: 2
+  modifiers:
+  - Research
+  root: grants
+  root_pos: NOUN
+  start: 6890
+  text: Research grants
+- end: 6941
+  length_tokens: 2
+  modifiers:
+  - Legal
+  root: reserves
+  root_pos: NOUN
+  start: 6927
+  text: Legal reserves
+- end: 6986
+  length_tokens: 2
+  modifiers:
+  - Technology
+  root: investments
+  root_pos: NOUN
+  start: 6964
+  text: Technology investments
+- end: 7019
+  length_tokens: 3
+  modifiers:
+  - '#'
+  - '7.2'
+  root: Fines
+  root_pos: NOUN
+  start: 7008
+  text: '# 7.2 Fines'
+- end: 7033
+  length_tokens: 1
+  modifiers: []
+  root: Penalties
+  root_pos: PROPN
+  start: 7024
+  text: Penalties
+- end: 7045
+  length_tokens: 2
+  modifiers:
+  - '10'
+  root: amounts
+  root_pos: NOUN
+  start: 7035
+  text: 10 amounts
+- end: 7068
+  length_tokens: 3
+  modifiers:
+  - Maximum
+  - OSHA
+  root: fine
+  root_pos: NOUN
+  start: 7051
+  text: Maximum OSHA fine
+- end: 7095
+  length_tokens: 1
+  modifiers: []
+  root: violation
+  root_pos: NOUN
+  start: 7086
+  text: violation
+- end: 7117
+  length_tokens: 2
+  modifiers:
+  - Serious
+  root: violation
+  root_pos: NOUN
+  start: 7100
+  text: Serious violation
+- end: 7159
+  length_tokens: 2
+  modifiers:
+  - Willful
+  root: violation
+  root_pos: NOUN
+  start: 7142
+  text: Willful violation
+- end: 7178
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 7177
+  text: '*'
+- end: 7209
+  length_tokens: 2
+  modifiers:
+  - Repeat
+  root: violation
+  root_pos: NOUN
+  start: 7193
+  text: Repeat violation
+- end: 7243
+  length_tokens: 1
+  modifiers: []
+  root: Failure
+  root_pos: NOUN
+  start: 7236
+  text: Failure
+- end: 7265
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 7264
+  text: '*'
+- end: 7273
+  length_tokens: 1
+  modifiers: []
+  root: day
+  root_pos: NOUN
+  start: 7270
+  text: day
+- end: 7293
+  length_tokens: 2
+  modifiers:
+  - Total
+  root: penalties
+  root_pos: NOUN
+  start: 7278
+  text: Total penalties
+- end: 7337
+  length_tokens: 2
+  modifiers:
+  - Average
+  root: fine
+  root_pos: NOUN
+  start: 7325
+  text: Average fine
+- end: 7373
+  length_tokens: 3
+  modifiers:
+  - Largest
+  - single
+  root: fine
+  root_pos: NOUN
+  start: 7354
+  text: Largest single fine
+- end: 7413
+  length_tokens: 2
+  modifiers:
+  - Settlement
+  root: amount
+  root_pos: NOUN
+  start: 7396
+  text: Settlement amount
+- end: 7444
+  length_tokens: 2
+  modifiers:
+  - Cost
+  root: savings
+  root_pos: NOUN
+  start: 7432
+  text: Cost savings
+- end: 7488
+  length_tokens: 3
+  modifiers:
+  - '#'
+  - '#'
+  root: SECTION
+  root_pos: NOUN
+  start: 7478
+  text: '## SECTION'
+- end: 7515
+  length_tokens: 1
+  modifiers: []
+  root: Total
+  root_pos: NOUN
+  start: 7510
+  text: Total
+- end: 7531
+  length_tokens: 2
+  modifiers:
+  - '15'
+  root: percentages
+  root_pos: NOUN
+  start: 7517
+  text: 15 percentages
+- end: 7555
+  length_tokens: 2
+  modifiers:
+  - Safety
+  root: improvement
+  root_pos: NOUN
+  start: 7537
+  text: Safety improvement
+- end: 7562
+  length_tokens: 2
+  modifiers:
+  - '25'
+  root: '%'
+  root_pos: NOUN
+  start: 7559
+  text: 25%
+- end: 7564
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 7563
+  text: '*'
+- end: 7574
+  length_tokens: 1
+  modifiers: []
+  root: reduction
+  root_pos: NOUN
+  start: 7565
+  text: reduction
+- end: 7587
+  length_tokens: 1
+  modifiers: []
+  root: incidents
+  root_pos: NOUN
+  start: 7578
+  text: incidents
+- end: 7606
+  length_tokens: 2
+  modifiers:
+  - Compliance
+  root: rate
+  root_pos: NOUN
+  start: 7591
+  text: Compliance rate
+- end: 7615
+  length_tokens: 2
+  modifiers:
+  - '98.5'
+  root: '%'
+  root_pos: NOUN
+  start: 7610
+  text: 98.5%
+- end: 7617
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 7616
+  text: '*'
+- end: 7631
+  length_tokens: 1
+  modifiers: []
+  root: facilities
+  root_pos: NOUN
+  start: 7621
+  text: facilities
+- end: 7654
+  length_tokens: 2
+  modifiers:
+  - Training
+  root: completion
+  root_pos: NOUN
+  start: 7635
+  text: Training completion
+- end: 7662
+  length_tokens: 2
+  modifiers:
+  - '100'
+  root: '%'
+  root_pos: NOUN
+  start: 7658
+  text: 100%
+- end: 7664
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 7663
+  text: '*'
+- end: 7677
+  length_tokens: 1
+  modifiers: []
+  root: employees
+  root_pos: NOUN
+  start: 7668
+  text: employees
+- end: 7695
+  length_tokens: 2
+  modifiers:
+  - Cost
+  root: reduction
+  root_pos: NOUN
+  start: 7681
+  text: Cost reduction
+- end: 7702
+  length_tokens: 2
+  modifiers:
+  - '15'
+  root: '%'
+  root_pos: NOUN
+  start: 7699
+  text: 15%
+- end: 7719
+  length_tokens: 1
+  modifiers: []
+  root: year
+  root_pos: NOUN
+  start: 7715
+  text: year
+- end: 7738
+  length_tokens: 2
+  modifiers:
+  - Efficiency
+  root: gain
+  root_pos: NOUN
+  start: 7723
+  text: Efficiency gain
+- end: 7766
+  length_tokens: 2
+  modifiers:
+  - processing
+  root: time
+  root_pos: NOUN
+  start: 7751
+  text: processing time
+- end: 7782
+  length_tokens: 2
+  modifiers:
+  - Market
+  root: share
+  root_pos: NOUN
+  start: 7770
+  text: Market share
+- end: 7791
+  length_tokens: 2
+  modifiers:
+  - '45.5'
+  root: '%'
+  root_pos: NOUN
+  start: 7786
+  text: 45.5%
+- end: 7793
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 7792
+  text: '*'
+- end: 7805
+  length_tokens: 1
+  modifiers: []
+  root: industry
+  root_pos: NOUN
+  start: 7797
+  text: industry
+- end: 7830
+  length_tokens: 3
+  modifiers:
+  - .
+  - Customer
+  root: satisfaction
+  root_pos: NOUN
+  start: 7807
+  text: . Customer satisfaction
+- end: 7837
+  length_tokens: 2
+  modifiers:
+  - '92'
+  root: '%'
+  root_pos: NOUN
+  start: 7834
+  text: 92%
+- end: 7857
+  length_tokens: 2
+  modifiers:
+  - positive
+  root: feedback
+  root_pos: NOUN
+  start: 7840
+  text: positive feedback
+- end: 7871
+  length_tokens: 2
+  modifiers:
+  - Error
+  root: rate
+  root_pos: NOUN
+  start: 7861
+  text: Error rate
+- end: 7879
+  length_tokens: 2
+  modifiers:
+  - '0.5'
+  root: '%'
+  root_pos: NOUN
+  start: 7875
+  text: 0.5%
+- end: 7895
+  length_tokens: 2
+  modifiers:
+  - half
+  root: percent
+  root_pos: NOUN
+  start: 7883
+  text: half percent
+- end: 7917
+  length_tokens: 2
+  modifiers:
+  - Growth
+  root: projection
+  root_pos: NOUN
+  start: 7900
+  text: Growth projection
+- end: 7929
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 7928
+  text: '*'
+- end: 7935
+  length_tokens: 1
+  modifiers: []
+  root: range
+  root_pos: NOUN
+  start: 7930
+  text: range
+- end: 7961
+  length_tokens: 2
+  modifiers:
+  - Productivity
+  root: increase
+  root_pos: NOUN
+  start: 7940
+  text: Productivity increase
+- end: 7968
+  length_tokens: 2
+  modifiers:
+  - '20'
+  root: '%'
+  root_pos: NOUN
+  start: 7965
+  text: 20%
+- end: 7990
+  length_tokens: 2
+  modifiers:
+  - Waste
+  root: reduction
+  root_pos: NOUN
+  start: 7975
+  text: Waste reduction
+- end: 7997
+  length_tokens: 2
+  modifiers:
+  - '35'
+  root: '%'
+  root_pos: NOUN
+  start: 7994
+  text: 35%
+- end: 8018
+  length_tokens: 2
+  modifiers:
+  - Energy
+  root: savings
+  root_pos: NOUN
+  start: 8004
+  text: Energy savings
+- end: 8027
+  length_tokens: 2
+  modifiers:
+  - '18.5'
+  root: '%'
+  root_pos: NOUN
+  start: 8022
+  text: 18.5%
+- end: 8049
+  length_tokens: 2
+  modifiers:
+  - Attendance
+  root: rate
+  root_pos: NOUN
+  start: 8034
+  text: Attendance rate
+- end: 8056
+  length_tokens: 2
+  modifiers:
+  - '97'
+  root: '%'
+  root_pos: NOUN
+  start: 8053
+  text: 97%
+- end: 8075
+  length_tokens: 2
+  modifiers:
+  - Success
+  root: rate
+  root_pos: NOUN
+  start: 8063
+  text: Success rate
+- end: 8082
+  length_tokens: 2
+  modifiers:
+  - '88'
+  root: '%'
+  root_pos: NOUN
+  start: 8079
+  text: 88%
+- end: 8131
+  length_tokens: 2
+  modifiers:
+  - eligible
+  root: workers
+  root_pos: NOUN
+  start: 8115
+  text: eligible workers
+- end: 8148
+  length_tokens: 3
+  modifiers:
+  - '#'
+  - '#'
+  root: SECTION
+  root_pos: NOUN
+  start: 8138
+  text: '## SECTION'
+- end: 8191
+  length_tokens: 9
+  modifiers:
+  - SPECIAL
+  - ENTITIES
+  - '
+
+
+    '
+  - '#'
+  - '#'
+  - '#'
+  - '9.1'
+  - Phone
+  root: Numbers
+  root_pos: NOUN
+  start: 8152
+  text: 'SPECIAL ENTITIES
+
+
+    ### 9.1 Phone Numbers'
+- end: 8209
+  length_tokens: 3
+  modifiers:
+  - '10'
+  - phone
+  root: numbers
+  root_pos: NOUN
+  start: 8193
+  text: 10 phone numbers
+- end: 8226
+  length_tokens: 2
+  modifiers:
+  - Contact
+  root: numbers
+  root_pos: NOUN
+  start: 8211
+  text: Contact numbers
+- end: 8230
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 8229
+  text: '*'
+- end: 8249
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 8248
+  text: '*'
+- end: 8265
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 8264
+  text: '*'
+- end: 8269
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 8268
+  text: '*'
+- end: 8285
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 8284
+  text: '*'
+- end: 8289
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 8288
+  text: '*'
+- end: 8309
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 8308
+  text: '*'
+- end: 8329
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 8328
+  text: '*'
+- end: 8349
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 8348
+  text: '*'
+- end: 8369
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 8368
+  text: '*'
+- end: 8389
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 8388
+  text: '*'
+- end: 8409
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 8408
+  text: '*'
+- end: 8448
+  length_tokens: 5
+  modifiers:
+  - '#'
+  - '#'
+  - '#'
+  - '9.2'
+  root: Regulations
+  root_pos: PROPN
+  start: 8429
+  text: '### 9.2 Regulations'
+- end: 8464
+  length_tokens: 2
+  modifiers:
+  - '10'
+  root: regulations
+  root_pos: NOUN
+  start: 8450
+  text: 10 regulations
+- end: 8481
+  length_tokens: 2
+  modifiers:
+  - Key
+  root: regulations
+  root_pos: NOUN
+  start: 8466
+  text: Key regulations
+- end: 8501
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 8500
+  text: '*'
+- end: 8546
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 8545
+  text: '*'
+- end: 8565
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 8564
+  text: '*'
+- end: 8597
+  length_tokens: 9
+  modifiers:
+  - ISO
+  - 9001:2015
+  - '*'
+  - '*'
+  - ','
+  - '*'
+  - '*'
+  - ANSI
+  root: Z359.11
+  root_pos: NOUN
+  start: 8566
+  text: ISO 9001:2015**, **ANSI Z359.11
+- end: 8599
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 8598
+  text: '*'
+- end: 8607
+  length_tokens: 1
+  modifiers: []
+  root: NFPA
+  root_pos: NOUN
+  start: 8603
+  text: NFPA
+- end: 8612
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 8611
+  text: '*'
+- end: 8627
+  length_tokens: 3
+  modifiers:
+  - EPA
+  - '40'
+  root: CFR
+  root_pos: PROPN
+  start: 8617
+  text: EPA 40 CFR
+- end: 8647
+  length_tokens: 3
+  modifiers:
+  - DOT
+  - '49'
+  root: CFR
+  root_pos: PROPN
+  start: 8637
+  text: DOT 49 CFR
+- end: 8667
+  length_tokens: 3
+  modifiers:
+  - FDA
+  - '21'
+  root: CFR
+  root_pos: PROPN
+  start: 8657
+  text: FDA 21 CFR
+- end: 8688
+  length_tokens: 5
+  modifiers:
+  - '#'
+  - '#'
+  - '#'
+  - '9.3'
+  root: URLs
+  root_pos: NOUN
+  start: 8676
+  text: '### 9.3 URLs'
+- end: 8696
+  length_tokens: 2
+  modifiers:
+  - '5'
+  root: URLs
+  root_pos: NOUN
+  start: 8690
+  text: 5 URLs
+- end: 8707
+  length_tokens: 1
+  modifiers: []
+  root: Resources
+  root_pos: NOUN
+  start: 8698
+  text: Resources
+- end: 8749
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 8748
+  text: '*'
+- end: 8871
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 8870
+  text: '*'
+- end: 8912
+  length_tokens: 2
+  modifiers:
+  - '20'
+  root: measurements
+  root_pos: NOUN
+  start: 8897
+  text: 20 measurements
+- end: 8931
+  length_tokens: 3
+  modifiers:
+  - '-'
+  - Fall
+  root: protection
+  root_pos: NOUN
+  start: 8914
+  text: '- Fall protection'
+- end: 8955
+  length_tokens: 2
+  modifiers:
+  - '6'
+  root: feet
+  root_pos: NOUN
+  start: 8949
+  text: 6 feet
+- end: 8969
+  length_tokens: 2
+  modifiers:
+  - '1.8'
+  root: meters
+  root_pos: NOUN
+  start: 8959
+  text: 1.8 meters
+- end: 8999
+  length_tokens: 4
+  modifiers:
+  - construction
+  - '
+
+    '
+  - '-'
+  root: Guardrails
+  root_pos: PROPN
+  start: 8974
+  text: 'construction
+
+    - Guardrails'
+- end: 9010
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 9009
+  text: '*'
+- end: 9019
+  length_tokens: 2
+  modifiers:
+  - '42'
+  root: inches
+  root_pos: NOUN
+  start: 9010
+  text: 42 inches
+- end: 9021
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 9020
+  text: '*'
+- end: 9029
+  length_tokens: 2
+  modifiers:
+  - '107'
+  root: cm
+  root_pos: NOUN
+  start: 9023
+  text: 107 cm
+- end: 9048
+  length_tokens: 5
+  modifiers:
+  - high
+  - '
+
+    '
+  - '-'
+  - Toe
+  root: boards
+  root_pos: NOUN
+  start: 9031
+  text: 'high
+
+    - Toe boards'
+- end: 9076
+  length_tokens: 2
+  modifiers:
+  - '10'
+  root: cm
+  root_pos: NOUN
+  start: 9071
+  text: 10 cm
+- end: 9096
+  length_tokens: 5
+  modifiers:
+  - high
+  - '
+
+    '
+  - '-'
+  - Safety
+  root: nets
+  root_pos: NOUN
+  start: 9078
+  text: 'high
+
+    - Safety nets'
+- end: 9113
+  length_tokens: 2
+  modifiers:
+  - '30'
+  root: feet
+  root_pos: NOUN
+  start: 9106
+  text: 30 feet
+- end: 9127
+  length_tokens: 2
+  modifiers:
+  - '9.1'
+  root: meters
+  root_pos: NOUN
+  start: 9117
+  text: 9.1 meters
+- end: 9164
+  length_tokens: 2
+  modifiers:
+  - '3'
+  root: feet
+  root_pos: NOUN
+  start: 9158
+  text: 3 feet
+- end: 9216
+  length_tokens: 2
+  modifiers:
+  - '22'
+  root: inches
+  root_pos: NOUN
+  start: 9207
+  text: 22 inches
+- end: 9244
+  length_tokens: 3
+  modifiers:
+  - '-'
+  - Handrail
+  root: height
+  root_pos: NOUN
+  start: 9227
+  text: '- Handrail height'
+- end: 9261
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 9260
+  text: '*'
+- end: 9271
+  length_tokens: 4
+  modifiers:
+  - '76'
+  - '-'
+  - '94'
+  root: cm
+  root_pos: NOUN
+  start: 9263
+  text: 76-94 cm
+- end: 9288
+  length_tokens: 1
+  modifiers: []
+  root: depth
+  root_pos: NOUN
+  start: 9283
+  text: depth
+- end: 9290
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 9289
+  text: '*'
+- end: 9302
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 9301
+  text: '*'
+- end: 9309
+  length_tokens: 2
+  modifiers:
+  - '76'
+  root: cm
+  root_pos: NOUN
+  start: 9304
+  text: 76 cm
+- end: 9333
+  length_tokens: 5
+  modifiers:
+  - minimum
+  - '
+
+    '
+  - '-'
+  - Riser
+  root: height
+  root_pos: NOUN
+  start: 9311
+  text: 'minimum
+
+    - Riser height'
+- end: 9343
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 9342
+  text: '*'
+- end: 9344
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 9343
+  text: '*'
+- end: 9354
+  length_tokens: 2
+  modifiers:
+  - '9.5'
+  root: inches
+  root_pos: NOUN
+  start: 9344
+  text: 9.5 inches
+- end: 9386
+  length_tokens: 4
+  modifiers:
+  - '-'
+  - Tread
+  - depth
+  root: minimum
+  root_pos: NOUN
+  start: 9365
+  text: '- Tread depth minimum'
+- end: 9399
+  length_tokens: 3
+  modifiers:
+  - '*'
+  - '9.5'
+  root: inches
+  root_pos: NOUN
+  start: 9388
+  text: '*9.5 inches'
+- end: 9432
+  length_tokens: 4
+  modifiers:
+  - '-'
+  - Door
+  - swing
+  root: clearance
+  root_pos: NOUN
+  start: 9410
+  text: '- Door swing clearance'
+- end: 9444
+  length_tokens: 2
+  modifiers:
+  - '20'
+  root: inches
+  root_pos: NOUN
+  start: 9435
+  text: 20 inches
+- end: 9453
+  length_tokens: 2
+  modifiers:
+  - '51'
+  root: cm
+  root_pos: NOUN
+  start: 9448
+  text: 51 cm
+- end: 9479
+  length_tokens: 4
+  modifiers:
+  - '-'
+  - Scaffold
+  - width
+  root: minimum
+  root_pos: NOUN
+  start: 9455
+  text: '- Scaffold width minimum'
+- end: 9491
+  length_tokens: 3
+  modifiers:
+  - '*'
+  - '18'
+  root: inches
+  root_pos: NOUN
+  start: 9481
+  text: '*18 inches'
+- end: 9493
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 9492
+  text: '*'
+- end: 9500
+  length_tokens: 2
+  modifiers:
+  - '46'
+  root: cm
+  root_pos: NOUN
+  start: 9495
+  text: 46 cm
+- end: 9513
+  length_tokens: 2
+  modifiers:
+  - '-'
+  root: Clearance
+  root_pos: NOUN
+  start: 9502
+  text: '- Clearance'
+- end: 9530
+  length_tokens: 2
+  modifiers:
+  - power
+  root: lines
+  root_pos: NOUN
+  start: 9519
+  text: power lines
+- end: 9552
+  length_tokens: 2
+  modifiers:
+  - '3'
+  root: meters
+  root_pos: NOUN
+  start: 9544
+  text: 3 meters
+- end: 9593
+  length_tokens: 1
+  modifiers: []
+  root: protection
+  root_pos: NOUN
+  start: 9583
+  text: protection
+- end: 9616
+  length_tokens: 2
+  modifiers:
+  - '1.5'
+  root: meters
+  root_pos: NOUN
+  start: 9606
+  text: 1.5 meters
+- end: 9654
+  length_tokens: 2
+  modifiers:
+  - '90'
+  root: decibels
+  root_pos: NOUN
+  start: 9643
+  text: 90 decibels
+- end: 9686
+  length_tokens: 6
+  modifiers:
+  - '8'
+  - hours
+  - '
+
+    '
+  - '-'
+  - Weight
+  root: capacity
+  root_pos: NOUN
+  start: 9661
+  text: '8 hours
+
+    - Weight capacity'
+- end: 9699
+  length_tokens: 3
+  modifiers:
+  - '*'
+  - '250'
+  root: pounds
+  root_pos: NOUN
+  start: 9688
+  text: '*250 pounds'
+- end: 9709
+  length_tokens: 2
+  modifiers:
+  - '113'
+  root: kg
+  root_pos: NOUN
+  start: 9703
+  text: 113 kg
+- end: 9741
+  length_tokens: 5
+  modifiers:
+  - person
+  - '
+
+    '
+  - '-'
+  - Temperature
+  root: range
+  root_pos: NOUN
+  start: 9715
+  text: 'person
+
+    - Temperature range'
+- end: 9743
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 9742
+  text: '*'
+- end: 9747
+  length_tokens: 1
+  modifiers: []
+  root: '-20'
+  root_pos: NOUN
+  start: 9744
+  text: '-20'
+- end: 9748
+  length_tokens: 1
+  modifiers: []
+  root: °
+  root_pos: PROPN
+  start: 9747
+  text: °
+- end: 9749
+  length_tokens: 1
+  modifiers: []
+  root: F
+  root_pos: NOUN
+  start: 9748
+  text: F
+- end: 9757
+  length_tokens: 2
+  modifiers:
+  - '120'
+  root: °
+  root_pos: NOUN
+  start: 9753
+  text: 120°
+- end: 9758
+  length_tokens: 1
+  modifiers: []
+  root: F
+  root_pos: PROPN
+  start: 9757
+  text: F
+- end: 9760
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 9759
+  text: '*'
+- end: 9766
+  length_tokens: 1
+  modifiers: []
+  root: °
+  root_pos: PROPN
+  start: 9765
+  text: °
+- end: 9767
+  length_tokens: 1
+  modifiers: []
+  root: C
+  root_pos: NOUN
+  start: 9766
+  text: C
+- end: 9775
+  length_tokens: 1
+  modifiers: []
+  root: C
+  root_pos: PROPN
+  start: 9774
+  text: C
+- end: 9809
+  length_tokens: 2
+  modifiers:
+  - '500'
+  root: feet
+  root_pos: NOUN
+  start: 9801
+  text: 500 feet
+- end: 9811
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 9810
+  text: '*'
+- end: 9823
+  length_tokens: 2
+  modifiers:
+  - '152'
+  root: meters
+  root_pos: NOUN
+  start: 9813
+  text: 152 meters
+- end: 9840
+  length_tokens: 3
+  modifiers:
+  - '-'
+  - Response
+  root: time
+  root_pos: NOUN
+  start: 9825
+  text: '- Response time'
+- end: 9853
+  length_tokens: 2
+  modifiers:
+  - '15'
+  root: minutes
+  root_pos: NOUN
+  start: 9843
+  text: 15 minutes
+- end: 9886
+  length_tokens: 7
+  modifiers:
+  - '*'
+  - maximum
+  - '
+
+    '
+  - '-'
+  - Storage
+  - height
+  root: limit
+  root_pos: NOUN
+  start: 9854
+  text: '* maximum
+
+    - Storage height limit'
+- end: 9898
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 9897
+  text: '*'
+- end: 9910
+  length_tokens: 2
+  modifiers:
+  - '4.6'
+  root: meters
+  root_pos: NOUN
+  start: 9900
+  text: 4.6 meters
+- end: 9928
+  length_tokens: 3
+  modifiers:
+  - '#'
+  - '#'
+  root: SECTION
+  root_pos: NOUN
+  start: 9918
+  text: '## SECTION'
+- end: 9946
+  length_tokens: 1
+  modifiers: []
+  root: RELATIONSHIPS
+  root_pos: NOUN
+  start: 9933
+  text: RELATIONSHIPS
+- end: 9956
+  length_tokens: 1
+  modifiers: []
+  root: RULES
+  root_pos: NOUN
+  start: 9951
+  text: RULES
+- end: 10012
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10011
+  text: '*'
+- end: 10038
+  length_tokens: 2
+  modifiers:
+  - Mary
+  root: Johnson
+  root_pos: PROPN
+  start: 10026
+  text: Mary Johnson
+- end: 10039
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 10038
+  text: '*'
+- end: 10073
+  length_tokens: 6
+  modifiers:
+  - at
+  - '*'
+  - '*'
+  - Global
+  - Dynamics
+  root: Corporation
+  root_pos: PROPN
+  start: 10041
+  text: at **Global Dynamics Corporation
+- end: 10075
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10074
+  text: '*'
+- end: 10085
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10084
+  text: '*'
+- end: 10086
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10085
+  text: '*'
+- end: 10106
+  length_tokens: 2
+  modifiers:
+  - oversees
+  root: compliance
+  root_pos: NOUN
+  start: 10087
+  text: oversees compliance
+- end: 10131
+  length_tokens: 3
+  modifiers:
+  - Amazon
+  - Web
+  root: Services
+  root_pos: PROPN
+  start: 10112
+  text: Amazon Web Services
+- end: 10137
+  length_tokens: 1
+  modifiers: []
+  root: Inc.
+  root_pos: PROPN
+  start: 10133
+  text: Inc.
+- end: 10164
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 10163
+  text: '*'
+- end: 10165
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10164
+  text: '*'
+- end: 10178
+  length_tokens: 1
+  modifiers: []
+  root: collaborates
+  root_pos: NOUN
+  start: 10166
+  text: collaborates
+- end: 10185
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 10184
+  text: '*'
+- end: 10211
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 10210
+  text: '*'
+- end: 10212
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10211
+  text: '*'
+- end: 10234
+  length_tokens: 2
+  modifiers:
+  - Jennifer
+  root: Martinez
+  root_pos: PROPN
+  start: 10217
+  text: Jennifer Martinez
+- end: 10248
+  length_tokens: 2
+  modifiers:
+  - '*'
+  root: coordinates
+  root_pos: NOUN
+  start: 10235
+  text: '* coordinates'
+- end: 10258
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 10257
+  text: '*'
+- end: 10259
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10258
+  text: '*'
+- end: 10264
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10263
+  text: '*'
+- end: 10275
+  length_tokens: 1
+  modifiers: []
+  root: EPA
+  root_pos: PROPN
+  start: 10272
+  text: EPA
+- end: 10314
+  length_tokens: 5
+  modifiers:
+  - Microsoft
+  - Corporation
+  - '*'
+  - '*'
+  root: partners
+  root_pos: NOUN
+  start: 10282
+  text: Microsoft Corporation** partners
+- end: 10325
+  length_tokens: 1
+  modifiers: []
+  root: MIT
+  root_pos: PROPN
+  start: 10322
+  text: MIT
+- end: 10326
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10325
+  text: '*'
+- end: 10366
+  length_tokens: 5
+  modifiers:
+  - '#'
+  - '#'
+  - '10.2'
+  - Compliance
+  root: Rules
+  root_pos: NOUN
+  start: 10342
+  text: '## 10.2 Compliance Rules'
+- end: 10383
+  length_tokens: 2
+  modifiers:
+  - All
+  root: employees
+  root_pos: NOUN
+  start: 10370
+  text: All employees
+- end: 10389
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10388
+  text: '*'
+- end: 10399
+  length_tokens: 1
+  modifiers: []
+  root: facilities
+  root_pos: NOUN
+  start: 10389
+  text: facilities
+- end: 10423
+  length_tokens: 4
+  modifiers:
+  - over
+  - 10,000
+  - square
+  root: feet
+  root_pos: NOUN
+  start: 10400
+  text: over 10,000 square feet
+- end: 10425
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10424
+  text: '*'
+- end: 10455
+  length_tokens: 2
+  modifiers:
+  - safety
+  root: training
+  root_pos: NOUN
+  start: 10440
+  text: safety training
+- end: 10464
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10463
+  text: '*'
+- end: 10472
+  length_tokens: 2
+  modifiers:
+  - '30'
+  root: days
+  root_pos: NOUN
+  start: 10465
+  text: 30 days
+- end: 10474
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10473
+  text: '*'
+- end: 10487
+  length_tokens: 1
+  modifiers: []
+  root: Companies
+  root_pos: NOUN
+  start: 10478
+  text: Companies
+- end: 10505
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10504
+  text: '*'
+- end: 10536
+  length_tokens: 2
+  modifiers:
+  - federal
+  root: contracts
+  root_pos: NOUN
+  start: 10519
+  text: federal contracts
+- end: 10570
+  length_tokens: 2
+  modifiers:
+  - additional
+  root: certifications
+  root_pos: NOUN
+  start: 10545
+  text: additional certifications
+- end: 10584
+  length_tokens: 1
+  modifiers: []
+  root: Violations
+  root_pos: NOUN
+  start: 10574
+  text: Violations
+- end: 10597
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10596
+  text: '*'
+- end: 10607
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10606
+  text: '*'
+- end: 10632
+  length_tokens: 2
+  modifiers:
+  - automatic
+  root: review
+  root_pos: NOUN
+  start: 10616
+  text: automatic review
+- end: 10638
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 10637
+  text: '*'
+- end: 10648
+  length_tokens: 1
+  modifiers: []
+  root: Department
+  root_pos: PROPN
+  start: 10638
+  text: Department
+- end: 10657
+  length_tokens: 1
+  modifiers: []
+  root: Labor
+  root_pos: PROPN
+  start: 10652
+  text: Labor
+- end: 10658
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 10657
+  text: '*'
+- end: 10659
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10658
+  text: '*'
+- end: 10687
+  length_tokens: 2
+  modifiers:
+  - International
+  root: operations
+  root_pos: NOUN
+  start: 10663
+  text: International operations
+- end: 10693
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 10692
+  text: '*'
+- end: 10707
+  length_tokens: 2
+  modifiers:
+  - European
+  root: Union
+  root_pos: PROPN
+  start: 10693
+  text: European Union
+- end: 10708
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: PROPN
+  start: 10707
+  text: '*'
+- end: 10709
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10708
+  text: '*'
+- end: 10733
+  length_tokens: 2
+  modifiers:
+  - both
+  root: '*'
+  root_pos: NOUN
+  start: 10727
+  text: both *
+- end: 10739
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10738
+  text: '*'
+- end: 10751
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10750
+  text: '*'
+- end: 10762
+  length_tokens: 2
+  modifiers:
+  - '*'
+  root: standards
+  root_pos: NOUN
+  start: 10751
+  text: '* standards'
+- end: 10778
+  length_tokens: 2
+  modifiers:
+  - Any
+  root: incident
+  root_pos: NOUN
+  start: 10766
+  text: Any incident
+- end: 10805
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10804
+  text: '*'
+- end: 10814
+  length_tokens: 1
+  modifiers: []
+  root: injuries
+  root_pos: NOUN
+  start: 10806
+  text: injuries
+- end: 10843
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10842
+  text: '*'
+- end: 10850
+  length_tokens: 2
+  modifiers:
+  - '8'
+  root: hours
+  root_pos: NOUN
+  start: 10843
+  text: 8 hours
+- end: 10895
+  length_tokens: 10
+  modifiers:
+  - '#'
+  - '#'
+  - '#'
+  - '10.3'
+  - Financial
+  - Rules
+  - '
+
+    '
+  - '-'
+  - Fines
+  root: increase
+  root_pos: NOUN
+  start: 10854
+  text: '### 10.3 Financial Rules
+
+    - Fines increase'
+- end: 10900
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10899
+  text: '*'
+- end: 10904
+  length_tokens: 2
+  modifiers:
+  - '10'
+  root: '%'
+  root_pos: NOUN
+  start: 10901
+  text: 10%
+- end: 10906
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10905
+  text: '*'
+- end: 10946
+  length_tokens: 6
+  modifiers:
+  - each
+  - repeated
+  - violation
+  - '
+
+    '
+  - '-'
+  root: Companies
+  root_pos: NOUN
+  start: 10911
+  text: 'each repeated violation
+
+    - Companies'
+- end: 10968
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10967
+  text: '*'
+- end: 10982
+  length_tokens: 1
+  modifiers: []
+  root: every
+  root_pos: PRON
+  start: 10977
+  text: every
+- end: 10985
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10984
+  text: '*'
+- end: 10989
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 10988
+  text: '*'
+- end: 11029
+  length_tokens: 5
+  modifiers:
+  - safety
+  - '
+
+    '
+  - '-'
+  - Insurance
+  root: premiums
+  root_pos: NOUN
+  start: 11002
+  text: 'safety
+
+    - Insurance premiums'
+- end: 11042
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 11041
+  text: '*'
+- end: 11046
+  length_tokens: 2
+  modifiers:
+  - '15'
+  root: '%'
+  root_pos: NOUN
+  start: 11043
+  text: 15%
+- end: 11098
+  length_tokens: 7
+  modifiers:
+  - perfect
+  - safety
+  - record
+  - '
+
+    '
+  - '-'
+  - Training
+  root: investments
+  root_pos: NOUN
+  start: 11054
+  text: 'perfect safety record
+
+    - Training investments'
+- end: 11106
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 11105
+  text: '*'
+- end: 11139
+  length_tokens: 2
+  modifiers:
+  - tax
+  root: credits
+  root_pos: NOUN
+  start: 11128
+  text: tax credits
+- end: 11151
+  length_tokens: 2
+  modifiers:
+  - '-'
+  root: Penalties
+  root_pos: NOUN
+  start: 11140
+  text: '- Penalties'
+- end: 11172
+  length_tokens: 1
+  modifiers: []
+  root: violations
+  root_pos: NOUN
+  start: 11162
+  text: violations
+- end: 11188
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 11187
+  text: '*'
+- end: 11197
+  length_tokens: 2
+  modifiers:
+  - '12'
+  root: months
+  root_pos: NOUN
+  start: 11188
+  text: 12 months
+- end: 11253
+  length_tokens: 10
+  modifiers:
+  - '#'
+  - '#'
+  - VALIDATION
+  - SUMMARY
+  - '
+
+
+    '
+  - '*'
+  - '*'
+  - Expected
+  - Entity
+  root: Counts
+  root_pos: NOUN
+  start: 11206
+  text: '## VALIDATION SUMMARY
+
+
+    **Expected Entity Counts'
+- end: 11265
+  length_tokens: 5
+  modifiers:
+  - :*
+  - '*'
+  - '
+
+    '
+  - '-'
+  root: PERSON
+  root_pos: NOUN
+  start: 11253
+  text: ':**
+
+    - PERSON'
+- end: 11303
+  length_tokens: 6
+  modifiers:
+  - '25'
+  - unique
+  - individuals
+  - '
+
+    '
+  - '-'
+  root: ORGANIZATION
+  root_pos: PROPN
+  start: 11267
+  text: '25 unique individuals
+
+    - ORGANIZATION'
+- end: 11321
+  length_tokens: 2
+  modifiers:
+  - '30'
+  root: organizations
+  root_pos: NOUN
+  start: 11305
+  text: 30 organizations
+- end: 11336
+  length_tokens: 2
+  modifiers:
+  - '10'
+  root: government
+  root_pos: NOUN
+  start: 11323
+  text: 10 government
+- end: 11350
+  length_tokens: 2
+  modifiers:
+  - '15'
+  root: companies
+  root_pos: NOUN
+  start: 11338
+  text: 15 companies
+- end: 11377
+  length_tokens: 2
+  modifiers:
+  - '-'
+  root: LOCATION
+  root_pos: NOUN
+  start: 11367
+  text: '- LOCATION'
+- end: 11391
+  length_tokens: 2
+  modifiers:
+  - '20'
+  root: locations
+  root_pos: NOUN
+  start: 11379
+  text: 20 locations
+- end: 11402
+  length_tokens: 2
+  modifiers:
+  - '10'
+  root: cities
+  root_pos: NOUN
+  start: 11393
+  text: 10 cities
+- end: 11423
+  length_tokens: 4
+  modifiers:
+  - '10'
+  - states
+  - /
+  root: countries
+  root_pos: NOUN
+  start: 11404
+  text: 10 states/countries
+- end: 11430
+  length_tokens: 2
+  modifiers:
+  - '-'
+  root: GPE
+  root_pos: PROPN
+  start: 11425
+  text: '- GPE'
+- end: 11462
+  length_tokens: 6
+  modifiers:
+  - '8'
+  - geopolitical
+  - entities
+  - '
+
+    '
+  - '-'
+  root: DATE
+  root_pos: NOUN
+  start: 11432
+  text: '8 geopolitical entities
+
+    - DATE'
+- end: 11488
+  length_tokens: 6
+  modifiers:
+  - '15'
+  - specific
+  - dates
+  - '
+
+    '
+  - '-'
+  root: TIME
+  root_pos: NOUN
+  start: 11464
+  text: '15 specific dates
+
+    - TIME'
+- end: 11514
+  length_tokens: 6
+  modifiers:
+  - '8'
+  - specific
+  - times
+  - '
+
+    '
+  - '-'
+  root: MONEY
+  root_pos: NOUN
+  start: 11490
+  text: '8 specific times
+
+    - MONEY'
+- end: 11545
+  length_tokens: 6
+  modifiers:
+  - '20'
+  - monetary
+  - amounts
+  - '
+
+    '
+  - '-'
+  root: PERCENT
+  root_pos: PROPN
+  start: 11516
+  text: '20 monetary amounts
+
+    - PERCENT'
+- end: 11561
+  length_tokens: 2
+  modifiers:
+  - '15'
+  root: percentages
+  root_pos: NOUN
+  start: 11547
+  text: 15 percentages
+- end: 11584
+  length_tokens: 2
+  modifiers:
+  - Additional
+  root: Entities
+  root_pos: PROPN
+  start: 11565
+  text: Additional Entities
+- end: 11595
+  length_tokens: 5
+  modifiers:
+  - :*
+  - '*'
+  - '
+
+    '
+  - '-'
+  root: PHONE
+  root_pos: NOUN
+  start: 11584
+  text: ':**
+
+    - PHONE'
+- end: 11613
+  length_tokens: 3
+  modifiers:
+  - '10'
+  - phone
+  root: numbers
+  root_pos: NOUN
+  start: 11597
+  text: 10 phone numbers
+- end: 11626
+  length_tokens: 2
+  modifiers:
+  - '-'
+  root: REGULATION
+  root_pos: PROPN
+  start: 11614
+  text: '- REGULATION'
+- end: 11658
+  length_tokens: 6
+  modifiers:
+  - '10'
+  - regulatory
+  - references
+  - '
+
+    '
+  - '-'
+  root: URL
+  root_pos: PROPN
+  start: 11628
+  text: '10 regulatory references
+
+    - URL'
+- end: 11675
+  length_tokens: 3
+  modifiers:
+  - '5'
+  - web
+  root: addresses
+  root_pos: NOUN
+  start: 11660
+  text: 5 web addresses
+- end: 11689
+  length_tokens: 2
+  modifiers:
+  - '-'
+  root: MEASUREMENT
+  root_pos: PROPN
+  start: 11676
+  text: '- MEASUREMENT'
+- end: 11706
+  length_tokens: 2
+  modifiers:
+  - '20'
+  root: measurements
+  root_pos: NOUN
+  start: 11691
+  text: 20 measurements
+- end: 11717
+  length_tokens: 1
+  modifiers: []
+  root: units
+  root_pos: NOUN
+  start: 11712
+  text: units
+- end: 11742
+  length_tokens: 4
+  modifiers:
+  - Total
+  - Core
+  - '8'
+  root: Entities
+  root_pos: NOUN
+  start: 11721
+  text: Total Core 8 Entities
+- end: 11777
+  length_tokens: 3
+  modifiers:
+  - Total
+  - Additional
+  root: Entities
+  root_pos: PROPN
+  start: 11752
+  text: Total Additional Entities
+- end: 11797
+  length_tokens: 2
+  modifiers:
+  - Grand
+  root: Total
+  root_pos: NOUN
+  start: 11786
+  text: Grand Total
+- end: 11811
+  length_tokens: 2
+  modifiers:
+  - '186'
+  root: entities
+  root_pos: NOUN
+  start: 11799
+  text: 186 entities
+- end: 11844
+  length_tokens: 5
+  modifiers:
+  - '#'
+  - '#'
+  - TEST
+  - VALIDATION
+  root: RULES
+  root_pos: NOUN
+  start: 11820
+  text: '## TEST VALIDATION RULES'
+- end: 11872
+  length_tokens: 3
+  modifiers:
+  - Person
+  - Detection
+  root: Rule
+  root_pos: PROPN
+  start: 11851
+  text: Person Detection Rule
+- end: 11882
+  length_tokens: 1
+  modifiers: []
+  root: System
+  root_pos: NOUN
+  start: 11876
+  text: System
+- end: 11915
+  length_tokens: 3
+  modifiers:
+  - exactly
+  - '25'
+  root: persons
+  root_pos: NOUN
+  start: 11897
+  text: exactly 25 persons
+- end: 11944
+  length_tokens: 2
+  modifiers:
+  - challenging
+  root: names
+  root_pos: NOUN
+  start: 11927
+  text: challenging names
+- end: 11985
+  length_tokens: 2
+  modifiers:
+  - Each
+  root: person
+  root_pos: NOUN
+  start: 11974
+  text: Each person
+- end: 11998
+  length_tokens: 2
+  modifiers:
+  - a
+  root: title
+  root_pos: NOUN
+  start: 11991
+  text: a title
+- end: 12015
+  length_tokens: 1
+  modifiers: []
+  root: role
+  root_pos: NOUN
+  start: 12011
+  text: role
+- end: 12056
+  length_tokens: 3
+  modifiers:
+  - Organization
+  - Linking
+  root: Rule
+  root_pos: PROPN
+  start: 12031
+  text: Organization Linking Rule
+- end: 12058
+  length_tokens: 1
+  modifiers: []
+  root: '*'
+  root_pos: NOUN
+  start: 12057
+  text: '*'
+- end: 12067
+  length_tokens: 1
+  modifiers: []
+  root: Persons
+  root_pos: NOUN
+  start: 12060
+  text: Persons
+- end: 12117
+  length_tokens: 3
+  modifiers:
+  - their
+  - mentioned
+  root: organizations
+  root_pos: NOUN
+  start: 12088
+  text: their mentioned organizations
+- end: 12168
+  length_tokens: 3
+  modifiers:
+  - All
+  - money
+  root: amounts
+  root_pos: NOUN
+  start: 12151
+  text: All money amounts
+- end: 12207
+  length_tokens: 2
+  modifiers:
+  - numeric
+  root: values
+  root_pos: NOUN
+  start: 12193
+  text: numeric values
+- end: 12230
+  length_tokens: 5
+  modifiers:
+  - '*'
+  - '*'
+  - Date
+  - Parsing
+  root: Rule
+  root_pos: PROPN
+  start: 12211
+  text: '**Date Parsing Rule'
+- end: 12250
+  length_tokens: 3
+  modifiers:
+  - All
+  - date
+  root: formats
+  root_pos: NOUN
+  start: 12234
+  text: All date formats
+- end: 12310
+  length_tokens: 3
+  modifiers:
+  - Measurement
+  - Conversion
+  root: Rule
+  root_pos: PROPN
+  start: 12283
+  text: Measurement Conversion Rule
+- end: 12326
+  length_tokens: 1
+  modifiers: []
+  root: Measurements
+  root_pos: NOUN
+  start: 12314
+  text: Measurements
+- end: 12342
+  length_tokens: 2
+  modifiers:
+  - dual
+  root: units
+  root_pos: NOUN
+  start: 12332
+  text: dual units
+- end: 12366
+  length_tokens: 2
+  modifiers:
+  - both
+  root: values
+  root_pos: NOUN
+  start: 12355
+  text: both values
+- end: 12402
+  length_tokens: 2
+  modifiers:
+  - Identification
+  root: Rule
+  root_pos: PROPN
+  start: 12383
+  text: Identification Rule
+- end: 12431
+  length_tokens: 3
+  modifiers:
+  - All
+  - regulatory
+  root: references
+  root_pos: NOUN
+  start: 12406
+  text: All regulatory references
+- end: 12487
+  length_tokens: 3
+  modifiers:
+  - Relationship
+  - Extraction
+  root: Rule
+  root_pos: PROPN
+  start: 12459
+  text: Relationship Extraction Rule
+- end: 12526
+  length_tokens: 1
+  modifiers: []
+  root: partners
+  root_pos: NOUN
+  start: 12518
+  text: partners
+- end: 12546
+  length_tokens: 1
+  modifiers: []
+  root: relationships
+  root_pos: NOUN
+  start: 12533
+  text: relationships
+- end: 12583
+  length_tokens: 3
+  modifiers:
+  - '*'
+  - '*'
+  root: Compliance
+  root_pos: NOUN
+  start: 12571
+  text: '**Compliance'
+- end: 12599
+  length_tokens: 2
+  modifiers:
+  - Rule
+  root: Extraction
+  root_pos: PROPN
+  start: 12584
+  text: Rule Extraction
+- end: 12625
+  length_tokens: 2
+  modifiers:
+  - Conditional
+  root: statements
+  root_pos: NOUN
+  start: 12603
+  text: Conditional statements
+- end: 12641
+  length_tokens: 1
+  modifiers: []
+  root: thresholds
+  root_pos: NOUN
+  start: 12631
+  text: thresholds
+- end: 12670
+  length_tokens: 1
+  modifiers: []
+  root: rules
+  root_pos: NOUN
+  start: 12665
+  text: rules
+- end: 12695
+  length_tokens: 3
+  modifiers:
+  - Span
+  - Accuracy
+  root: Rule
+  root_pos: PROPN
+  start: 12677
+  text: Span Accuracy Rule
+- end: 12710
+  length_tokens: 2
+  modifiers:
+  - Each
+  root: entity
+  root_pos: NOUN
+  start: 12699
+  text: Each entity
+- end: 12756
+  length_tokens: 4
+  modifiers:
+  - accurate
+  - character
+  - position
+  root: spans
+  root_pos: NOUN
+  start: 12723
+  text: accurate character position spans
+- end: 12767
+  length_tokens: 2
+  modifiers:
+  - '*'
+  root: End
+  root_pos: NOUN
+  start: 12763
+  text: '*End'
+- end: 12784
+  length_tokens: 2
+  modifiers:
+  - Test
+  root: Document
+  root_pos: PROPN
+  start: 12771
+  text: Test Document
+- end: 12794
+  length_tokens: 2
+  modifiers:
+  - '-'
+  root: Version
+  root_pos: PROPN
+  start: 12785
+  text: '- Version'
+- end: 12814
+  length_tokens: 2
+  modifiers:
+  - This
+  root: document
+  root_pos: NOUN
+  start: 12801
+  text: This document
+- end: 12848
+  length_tokens: 3
+  modifiers:
+  - controlled
+  - entity
+  root: counts
+  root_pos: NOUN
+  start: 12824
+  text: controlled entity counts
+- end: 12872
+  length_tokens: 2
+  modifiers:
+  - validation
+  root: purposes
+  root_pos: NOUN
+  start: 12853
+  text: validation purposes
+pos_distribution:
+  ADJ: 93
+  ADP: 115
+  ADV: 9
+  AUX: 21
+  CCONJ: 17
+  DET: 26
+  NOUN: 656
+  NUM: 491
+  PART: 2
+  PRON: 3
+  PROPN: 573
+  PUNCT: 1154
+  SCONJ: 1
+  SYM: 94
+  VERB: 111
+  X: 32
+sentences:
+- complexity_score: 8
+  entity_count: 0
+  named_entities: []
+  root_verb: null
+  sentence_id: 0
+  text: '# Entity Extraction Comprehensive Test Document
+
+    ## Testing Framework for Core 8 Entity Recognition
+
+
+    **Document Purpose:**'
+  token_count: 21
+- complexity_score: 5
+  entity_count: 1
+  named_entities:
+  - label: ORG
+    text: MVP-Fusion
+  root_verb: contains
+  sentence_id: 1
+  text: 'This document contains precisely counted entities for validation of the MVP-Fusion
+    extraction pipeline.
+
+    '
+  token_count: 16
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: DATE
+    text: January 15, 2024
+  - label: CARDINAL
+    text: '1.0'
+  root_verb: null
+  sentence_id: 2
+  text: '**Test Date:** January 15, 2024
+
+    **Version:** 1.0
+
+
+    ---
+
+
+    '
+  token_count: 17
+- complexity_score: 3
+  entity_count: 4
+  named_entities:
+  - label: CARDINAL
+    text: '25'
+  - label: MONEY
+    text: '###'
+  - label: CARDINAL
+    text: '10'
+  - label: CARDINAL
+    text: '1'
+  root_verb: null
+  sentence_id: 3
+  text: '## SECTION 1: PERSON ENTITIES (Total: 25 persons)
+
+
+    ### 1.1 Standard Names (10 persons)
+
+    1.'
+  token_count: 25
+- complexity_score: 6
+  entity_count: 2
+  named_entities:
+  - label: PERSON
+    text: John Smith
+  - label: ORG
+    text: Global Dynamics Corporation
+  root_verb: reported
+  sentence_id: 4
+  text: '**John Smith**, Chief Executive Officer at Global Dynamics Corporation, reported
+    strong earnings.
+
+    '
+  token_count: 19
+- complexity_score: 4
+  entity_count: 3
+  named_entities:
+  - label: CARDINAL
+    text: '2'
+  - label: PERSON
+    text: Mary Johnson
+  - label: DATE
+    text: March 20, 2024
+  root_verb: present
+  sentence_id: 5
+  text: '2. **Mary Johnson**, Director of Engineering, will present at the conference
+    on March 20, 2024.
+
+    '
+  token_count: 24
+- complexity_score: 2
+  entity_count: 3
+  named_entities:
+  - label: CARDINAL
+    text: '3'
+  - label: PERSON
+    text: Robert Chen
+  - label: DATE
+    text: yesterday
+  root_verb: completed
+  sentence_id: 6
+  text: '3. **Robert Chen**, Senior Analyst, completed the regulatory review yesterday.
+
+    '
+  token_count: 18
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '4'
+  root_verb: null
+  sentence_id: 7
+  text: '4.'
+  token_count: 2
+- complexity_score: 4
+  entity_count: 3
+  named_entities:
+  - label: PERSON
+    text: Sarah Williams-Brown
+  - label: ORG
+    text: Operations
+  - label: CARDINAL
+    text: '500'
+  root_verb: manages
+  sentence_id: 8
+  text: '**Sarah Williams-Brown**, Vice President of Operations, manages 500 employees.
+
+    '
+  token_count: 18
+- complexity_score: 5
+  entity_count: 2
+  named_entities:
+  - label: CARDINAL
+    text: '5'
+  - label: PERSON
+    text: Michael O'Brien
+  root_verb: published
+  sentence_id: 9
+  text: '5. **Dr. Michael O''Brien**, Chief Medical Officer, published new safety
+    guidelines.
+
+    '
+  token_count: 19
+- complexity_score: 3
+  entity_count: 4
+  named_entities:
+  - label: CARDINAL
+    text: '6'
+  - label: PERSON
+    text: Jennifer Martinez
+  - label: CARDINAL
+    text: '50'
+  - label: DATE
+    text: last month
+  root_verb: reviewed
+  sentence_id: 10
+  text: '6. **Jennifer Martinez**, Compliance Manager at OSHA, reviewed 50 cases last
+    month.
+
+    '
+  token_count: 20
+- complexity_score: 3
+  entity_count: 2
+  named_entities:
+  - label: CARDINAL
+    text: '7'
+  - label: PERSON
+    text: David Kim**
+  root_verb: identified
+  sentence_id: 11
+  text: '7. **David Kim**, Lead Inspector, identified critical violations at the facility.
+
+    '
+  token_count: 19
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '8'
+  root_verb: null
+  sentence_id: 12
+  text: '8.'
+  token_count: 2
+- complexity_score: 3
+  entity_count: 3
+  named_entities:
+  - label: PERSON
+    text: Lisa Anderson**
+  - label: ORG
+    text: Safety Coordinator
+  - label: MONEY
+    text: $2.5 million
+  root_verb: implemented
+  sentence_id: 13
+  text: '**Lisa Anderson**, Safety Coordinator, implemented new protocols saving $2.5
+    million.
+
+    '
+  token_count: 18
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '9'
+  root_verb: null
+  sentence_id: 14
+  text: '9.'
+  token_count: 2
+- complexity_score: 5
+  entity_count: 3
+  named_entities:
+  - label: PERSON
+    text: James Wilson
+  - label: GPE
+    text: New York
+  - label: GPE
+    text: California
+  root_verb: oversees
+  sentence_id: 15
+  text: '**James Wilson**, Regional Director, oversees operations in New York and
+    California.
+
+    '
+  token_count: 18
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '10'
+  root_verb: null
+  sentence_id: 16
+  text: '10.'
+  token_count: 2
+- complexity_score: 6
+  entity_count: 6
+  named_entities:
+  - label: PERSON
+    text: Patricia Thompson
+  - label: ORG
+    text: Quality Assurance Specialist
+  - label: PERCENT
+    text: 99.5%
+  - label: MONEY
+    text: '###'
+  - label: MONEY
+    text: 8 persons
+  - label: CARDINAL
+    text: '11'
+  root_verb: achieved
+  sentence_id: 17
+  text: '**Patricia Thompson**, Quality Assurance Specialist, achieved 99.5% accuracy
+    rate.
+
+
+    ### 1.2 Challenging Names (8 persons)
+
+    11.'
+  token_count: 29
+- complexity_score: 3
+  entity_count: 2
+  named_entities:
+  - label: PERSON
+    text: Xi Zhang
+  - label: ORG
+    text: Software Engineer
+  root_verb: developed
+  sentence_id: 18
+  text: '**Xi Zhang**, Software Engineer, developed the new monitoring system.
+
+    '
+  token_count: 16
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '12'
+  root_verb: null
+  sentence_id: 19
+  text: '12.'
+  token_count: 2
+- complexity_score: 4
+  entity_count: 3
+  named_entities:
+  - label: PERSON
+    text: José García-López
+  - label: CARDINAL
+    text: '12'
+  - label: GPE
+    text: Texas
+  root_verb: assessed
+  sentence_id: 20
+  text: '**José García-López**, Environmental Consultant, assessed 12 sites in Texas.
+
+    '
+  token_count: 18
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '13'
+  root_verb: null
+  sentence_id: 21
+  text: '13.'
+  token_count: 2
+- complexity_score: 2
+  entity_count: 3
+  named_entities:
+  - label: PERSON
+    text: Patel
+  - label: ORG
+    text: Data Scientist
+  - label: CARDINAL
+    text: 10,000
+  root_verb: analyzed
+  sentence_id: 22
+  text: '**Priya Patel**, Data Scientist, analyzed 10,000 records for compliance.
+
+    '
+  token_count: 16
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '14'
+  root_verb: null
+  sentence_id: 23
+  text: '14.'
+  token_count: 2
+- complexity_score: 4
+  entity_count: 4
+  named_entities:
+  - label: PERSON
+    text: François Dubois**
+  - label: PERSON
+    text: International Liaison
+  - label: ORG
+    text: EU
+  - label: CARDINAL
+    text: '15'
+  root_verb: null
+  sentence_id: 24
+  text: '**François Dubois**, International Liaison, coordinates with EU offices.
+
+    15.'
+  token_count: 17
+- complexity_score: 3
+  entity_count: 1
+  named_entities:
+  - label: PERSON
+    text: Yuki Tanaka
+  root_verb: delivered
+  sentence_id: 25
+  text: '**Yuki Tanaka**, Project Manager, delivered ahead of schedule.
+
+    '
+  token_count: 15
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '16'
+  root_verb: null
+  sentence_id: 26
+  text: '16.'
+  token_count: 2
+- complexity_score: 4
+  entity_count: 3
+  named_entities:
+  - label: PERSON
+    text: Ahmed Al-Rashid
+  - label: ORG
+    text: Security Specialist
+  - label: PERCENT
+    text: 40%
+  root_verb: null
+  sentence_id: 27
+  text: '**Ahmed Al-Rashid**, Security Specialist, enhanced protocols by 40%.
+
+    '
+  token_count: 18
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '17'
+  root_verb: null
+  sentence_id: 28
+  text: '17.'
+  token_count: 2
+- complexity_score: 4
+  entity_count: 1
+  named_entities:
+  - label: ORG
+    text: Moscow Institute
+  root_verb: published
+  sentence_id: 29
+  text: '**Olga Volkov**, Research Director at Moscow Institute, published findings.
+
+    '
+  token_count: 16
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '18'
+  root_verb: null
+  sentence_id: 30
+  text: '18.'
+  token_count: 2
+- complexity_score: 6
+  entity_count: 5
+  named_entities:
+  - label: PERSON
+    text: João Silva Santos
+  - label: NORP
+    text: Brazilian
+  - label: CARDINAL
+    text: '5'
+  - label: MONEY
+    text: '###'
+  - label: CARDINAL
+    text: '19'
+  root_verb: expanded
+  sentence_id: 31
+  text: '**João Silva Santos**, Brazilian Operations Manager, expanded to 5 cities.
+
+
+    ### 1.3 Edge Cases (7 persons)
+
+    19.'
+  token_count: 29
+- complexity_score: 4
+  entity_count: 1
+  named_entities:
+  - label: PERSON
+    text: Van Der Berg
+  root_verb: advised
+  sentence_id: 32
+  text: '**Van Der Berg**, Consultant (last name only with title), advised on restructuring.
+
+    '
+  token_count: 21
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '20'
+  root_verb: null
+  sentence_id: 33
+  text: '20.'
+  token_count: 2
+- complexity_score: 2
+  entity_count: 1
+  named_entities:
+  - label: PERSON
+    text: Li
+  root_verb: presented
+  sentence_id: 34
+  text: '**Dr. Li** (title with short name), presented breakthrough research.
+
+    '
+  token_count: 17
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '21'
+  root_verb: null
+  sentence_id: 35
+  text: '21.'
+  token_count: 2
+- complexity_score: 3
+  entity_count: 1
+  named_entities:
+  - label: PERSON
+    text: Madonna
+  root_verb: null
+  sentence_id: 36
+  text: '**Madonna** (single name), celebrity spokesperson for safety campaign.
+
+    '
+  token_count: 16
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '22'
+  root_verb: null
+  sentence_id: 37
+  text: '22.'
+  token_count: 2
+- complexity_score: 3
+  entity_count: 3
+  named_entities:
+  - label: PERSON
+    text: John John*
+  - label: ORG
+    text: Tech Corp.
+  - label: CARDINAL
+    text: '23'
+  root_verb: null
+  sentence_id: 38
+  text: '**John John** (repeated name), Analyst at Tech Corp.
+
+    23.'
+  token_count: 17
+- complexity_score: 5
+  entity_count: 1
+  named_entities:
+  - label: PERSON
+    text: Mary Mary Quite Contrary*
+  root_verb: null
+  sentence_id: 39
+  text: '**Mary Mary Quite Contrary** (unusual but real name), Marketing Director.
+
+    '
+  token_count: 18
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '24'
+  root_verb: null
+  sentence_id: 40
+  text: '24.'
+  token_count: 2
+- complexity_score: 1
+  entity_count: 1
+  named_entities:
+  - label: WORK_OF_ART
+    text: The Builder" Johnson*
+  root_verb: null
+  sentence_id: 41
+  text: '**Bob "The Builder" Johnson** (nickname), Construction Supervisor.
+
+    '
+  token_count: 17
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '25'
+  root_verb: null
+  sentence_id: 42
+  text: '25.'
+  token_count: 2
+- complexity_score: 4
+  entity_count: 2
+  named_entities:
+  - label: PERSON
+    text: Charles Winchester III*
+  - label: PERSON
+    text: Emeritus
+  root_verb: founded
+  sentence_id: 43
+  text: '**Sir Charles Winchester III**, Chairman Emeritus, founded the organization.
+
+
+    '
+  token_count: 16
+- complexity_score: 4
+  entity_count: 5
+  named_entities:
+  - label: CARDINAL
+    text: '30'
+  - label: MONEY
+    text: '### 2.1'
+  - label: CARDINAL
+    text: '10'
+  - label: CARDINAL
+    text: '1'
+  - label: ORG
+    text: Occupational Safety and Health Administration
+  root_verb: issued
+  sentence_id: 44
+  text: '---
+
+
+    ## SECTION 2: ORGANIZATION ENTITIES (Total: 30 organizations)
+
+
+    ### 2.1 Government Agencies (10 organizations)
+
+    1. **OSHA** (Occupational Safety and Health Administration) issued new guidelines.
+
+    '
+  token_count: 42
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '2'
+  root_verb: null
+  sentence_id: 45
+  text: '2.'
+  token_count: 2
+- complexity_score: 3
+  entity_count: 1
+  named_entities:
+  - label: DATE
+    text: June 1, 2024
+  root_verb: announced
+  sentence_id: 46
+  text: 'The **Department of Labor** announced updated regulations effective June
+    1, 2024.
+
+    '
+  token_count: 17
+- complexity_score: 3
+  entity_count: 3
+  named_entities:
+  - label: CARDINAL
+    text: '3'
+  - label: CARDINAL
+    text: three
+  - label: MONEY
+    text: $5 million
+  root_verb: fined
+  sentence_id: 47
+  text: '3. **EPA** (Environmental Protection Agency) fined three companies $5 million
+    total.
+
+    '
+  token_count: 20
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '4'
+  root_verb: null
+  sentence_id: 48
+  text: '4.'
+  token_count: 2
+- complexity_score: 4
+  entity_count: 1
+  named_entities:
+  - label: ORG
+    text: CDC
+  root_verb: released
+  sentence_id: 49
+  text: 'The **Centers for Disease Control and Prevention** (CDC) released health
+    advisories.
+
+    '
+  token_count: 18
+- complexity_score: 5
+  entity_count: 3
+  named_entities:
+  - label: CARDINAL
+    text: '5'
+  - label: ORG
+    text: National Institute for Occupational Safety and Health*
+  - label: ORG
+    text: NIOSH
+  root_verb: conducted
+  sentence_id: 50
+  text: '5. **National Institute for Occupational Safety and Health** (NIOSH) conducted
+    studies.
+
+    '
+  token_count: 19
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '6'
+  root_verb: null
+  sentence_id: 51
+  text: '6.'
+  token_count: 2
+- complexity_score: 5
+  entity_count: 1
+  named_entities:
+  - label: ORG
+    text: FAA
+  root_verb: approved
+  sentence_id: 52
+  text: 'The **Federal Aviation Administration** (FAA) approved new safety measures.
+
+    '
+  token_count: 16
+- complexity_score: 1
+  entity_count: 3
+  named_entities:
+  - label: CARDINAL
+    text: '7'
+  - label: ORG
+    text: Department of Transportation**
+  - label: ORG
+    text: DOT
+  root_verb: implemented
+  sentence_id: 53
+  text: '7. **Department of Transportation** (DOT) implemented stricter requirements.
+
+    '
+  token_count: 16
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '8'
+  root_verb: null
+  sentence_id: 54
+  text: '8.'
+  token_count: 2
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: ORG
+    text: FDA
+  - label: CARDINAL
+    text: '15'
+  root_verb: recalled
+  sentence_id: 55
+  text: 'The **Food and Drug Administration** (FDA) recalled 15 products.
+
+    '
+  token_count: 16
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '9'
+  root_verb: null
+  sentence_id: 56
+  text: '9.'
+  token_count: 2
+- complexity_score: 3
+  entity_count: 2
+  named_entities:
+  - label: ORG
+    text: Consumer Product Safety Commission
+  - label: ORG
+    text: CPSC
+  root_verb: issued
+  sentence_id: 57
+  text: '**Consumer Product Safety Commission** (CPSC) issued warnings.
+
+    '
+  token_count: 14
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '10'
+  root_verb: null
+  sentence_id: 58
+  text: '10.'
+  token_count: 2
+- complexity_score: 2
+  entity_count: 5
+  named_entities:
+  - label: ORG
+    text: NRC
+  - label: CARDINAL
+    text: '20'
+  - label: MONEY
+    text: '###'
+  - label: CARDINAL
+    text: '15'
+  - label: CARDINAL
+    text: '11'
+  root_verb: inspected
+  sentence_id: 59
+  text: 'The **Nuclear Regulatory Commission** (NRC) inspected 20 facilities.
+
+
+    ### 2.2 Companies (15 organizations)
+
+    11.'
+  token_count: 26
+- complexity_score: 4
+  entity_count: 2
+  named_entities:
+  - label: ORG
+    text: Microsoft Corporation
+  - label: MONEY
+    text: $100 million
+  root_verb: invested
+  sentence_id: 60
+  text: '**Microsoft Corporation** invested $100 million in safety technology.
+
+    '
+  token_count: 14
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '12'
+  root_verb: null
+  sentence_id: 61
+  text: '12.'
+  token_count: 2
+- complexity_score: 4
+  entity_count: 2
+  named_entities:
+  - label: ORG
+    text: Amazon Web Services
+  - label: CARDINAL
+    text: '5'
+  root_verb: null
+  sentence_id: 62
+  text: '**Amazon Web Services, Inc.** expanded data centers to 5 new locations.
+
+    '
+  token_count: 17
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '13'
+  root_verb: null
+  sentence_id: 63
+  text: '13.'
+  token_count: 2
+- complexity_score: 5
+  entity_count: 2
+  named_entities:
+  - label: ORG
+    text: GE
+  - label: PERCENT
+    text: 25%
+  root_verb: reported
+  sentence_id: 64
+  text: '**General Electric Company** (GE) reported 25% improvement in safety metrics.
+
+    '
+  token_count: 18
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '14'
+  root_verb: null
+  sentence_id: 65
+  text: '14.'
+  token_count: 2
+- complexity_score: 1
+  entity_count: 1
+  named_entities:
+  - label: ORG
+    text: Johnson & Johnson
+  root_verb: developed
+  sentence_id: 66
+  text: '**Johnson & Johnson** developed new protective equipment.
+
+    '
+  token_count: 12
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '15'
+  root_verb: null
+  sentence_id: 67
+  text: '15.'
+  token_count: 2
+- complexity_score: 4
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: 1 million
+  root_verb: supplied
+  sentence_id: 68
+  text: '**3M Company** supplied 1 million respirators to healthcare facilities.
+
+    '
+  token_count: 15
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '16'
+  root_verb: null
+  sentence_id: 69
+  text: '16.'
+  token_count: 2
+- complexity_score: 3
+  entity_count: 1
+  named_entities:
+  - label: ORG
+    text: Boeing Corporation
+  root_verb: null
+  sentence_id: 70
+  text: '**Boeing Corporation** enhanced aircraft safety systems.
+
+    '
+  token_count: 11
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '17'
+  root_verb: null
+  sentence_id: 71
+  text: '17.'
+  token_count: 2
+- complexity_score: 2
+  entity_count: 2
+  named_entities:
+  - label: CARDINAL
+    text: zero
+  - label: DATE
+    text: 365 days
+  root_verb: achieved
+  sentence_id: 72
+  text: '**Tesla, Inc.** achieved zero workplace injuries for 365 days.
+
+    '
+  token_count: 15
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '18'
+  root_verb: null
+  sentence_id: 73
+  text: '18.'
+  token_count: 2
+- complexity_score: 3
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: 50,000
+  root_verb: trained
+  sentence_id: 74
+  text: '**Walmart Inc.** trained 50,000 employees in new safety protocols.
+
+    '
+  token_count: 14
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '19'
+  root_verb: null
+  sentence_id: 75
+  text: '19.'
+  token_count: 2
+- complexity_score: 2
+  entity_count: 1
+  named_entities:
+  - label: PERCENT
+    text: 60%
+  root_verb: null
+  sentence_id: 76
+  text: '**Apple Inc.** reduced workplace incidents by 60%.
+
+    '
+  token_count: 13
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '20'
+  root_verb: null
+  sentence_id: 77
+  text: '20.'
+  token_count: 2
+- complexity_score: 2
+  entity_count: 0
+  named_entities: []
+  root_verb: null
+  sentence_id: 78
+  text: '**Google LLC** implemented AI-powered safety monitoring.
+
+    '
+  token_count: 13
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '21'
+  root_verb: null
+  sentence_id: 79
+  text: '21.'
+  token_count: 2
+- complexity_score: 3
+  entity_count: 1
+  named_entities:
+  - label: ORG
+    text: Meta
+  root_verb: upgraded
+  sentence_id: 80
+  text: '**Facebook Technologies, LLC** (Meta) upgraded VR training systems.
+
+    '
+  token_count: 16
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '22'
+  root_verb: null
+  sentence_id: 81
+  text: '22.'
+  token_count: 2
+- complexity_score: 3
+  entity_count: 3
+  named_entities:
+  - label: ORG
+    text: United Parcel Service
+  - label: CARDINAL
+    text: '200'
+  - label: CARDINAL
+    text: '23'
+  root_verb: delivered
+  sentence_id: 82
+  text: '**United Parcel Service** (UPS) delivered to 200 countries safely.
+
+    23.'
+  token_count: 18
+- complexity_score: 3
+  entity_count: 1
+  named_entities:
+  - label: PERCENT
+    text: 99.9%
+  root_verb: maintained
+  sentence_id: 83
+  text: '**FedEx Corporation** maintained 99.9% delivery accuracy.
+
+    '
+  token_count: 12
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '24'
+  root_verb: null
+  sentence_id: 84
+  text: '24.'
+  token_count: 2
+- complexity_score: 4
+  entity_count: 2
+  named_entities:
+  - label: PERSON
+    text: Martin Corporation
+  - label: MONEY
+    text: $10 billion
+  root_verb: null
+  sentence_id: 85
+  text: '**Lockheed Martin Corporation** completed defense contracts worth $10 billion.
+
+    '
+  token_count: 15
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '25'
+  root_verb: null
+  sentence_id: 86
+  text: '25.'
+  token_count: 2
+- complexity_score: 3
+  entity_count: 3
+  named_entities:
+  - label: MONEY
+    text: '###'
+  - label: CARDINAL
+    text: '5'
+  - label: CARDINAL
+    text: '26'
+  root_verb: null
+  sentence_id: 87
+  text: '**Raytheon Technologies** developed advanced safety sensors.
+
+
+    ### 2.3 Educational Institutions (5 organizations)
+
+    26.'
+  token_count: 23
+- complexity_score: 2
+  entity_count: 2
+  named_entities:
+  - label: ORG
+    text: Massachusetts Institute of Technology*
+  - label: ORG
+    text: MIT
+  root_verb: researched
+  sentence_id: 88
+  text: '**Massachusetts Institute of Technology** (MIT) researched new materials.
+
+    '
+  token_count: 15
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '27'
+  root_verb: null
+  sentence_id: 89
+  text: '27.'
+  token_count: 2
+- complexity_score: 4
+  entity_count: 1
+  named_entities:
+  - label: ORG
+    text: Stanford University**
+  root_verb: null
+  sentence_id: 90
+  text: '**Stanford University** partnered with industry on safety innovations.
+
+    '
+  token_count: 13
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '28'
+  root_verb: null
+  sentence_id: 91
+  text: '28.'
+  token_count: 2
+- complexity_score: 4
+  entity_count: 1
+  named_entities:
+  - label: ORG
+    text: Harvard Business School*
+  root_verb: null
+  sentence_id: 92
+  text: '**Harvard Business School** published case studies on workplace safety.
+
+    '
+  token_count: 14
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '29'
+  root_verb: null
+  sentence_id: 93
+  text: '29.'
+  token_count: 2
+- complexity_score: 2
+  entity_count: 2
+  named_entities:
+  - label: GPE
+    text: Berkeley
+  - label: CARDINAL
+    text: '500'
+  root_verb: null
+  sentence_id: 94
+  text: 'The **University of California, Berkeley** trained 500 safety professionals.
+
+    '
+  token_count: 15
+- complexity_score: 0
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '30'
+  root_verb: null
+  sentence_id: 95
+  text: '30.'
+  token_count: 2
+- complexity_score: 3
+  entity_count: 1
+  named_entities:
+  - label: ORG
+    text: Johns Hopkins University**
+  root_verb: null
+  sentence_id: 96
+  text: '**Johns Hopkins University** developed medical safety protocols.
+
+
+    '
+  token_count: 12
+- complexity_score: 18
+  entity_count: 16
+  named_entities:
+  - label: CARDINAL
+    text: '20'
+  - label: MONEY
+    text: '### 3.1'
+  - label: CARDINAL
+    text: '10'
+  - label: GPE
+    text: New York City
+  - label: GPE
+    text: Los Angeles
+  - label: GPE
+    text: San Antonio
+  - label: GPE
+    text: San Diego
+  - label: GPE
+    text: Dallas
+  - label: GPE
+    text: San Jose
+  - label: MONEY
+    text: '###'
+  - label: CARDINAL
+    text: '10'
+  - label: GPE
+    text: Texas
+  - label: GPE
+    text: Florida
+  - label: GPE
+    text: United Kingdom
+  - label: GPE
+    text: Australia
+  - label: GPE
+    text: Brazil
+  root_verb: expanded
+  sentence_id: 97
+  text: '---
+
+
+    ## SECTION 3: LOCATION ENTITIES (Total: 20 locations)
+
+
+    ### 3.1 Cities (10 locations)
+
+    Operations expanded to: **New York City**, **Los Angeles**, **Chicago**, **Houston**,
+    **Phoenix**, **Philadelphia**, **San Antonio**, **San Diego**, **Dallas**, and
+    **San Jose**.
+
+
+    ### 3.2 States and Countries (10 locations)
+
+    International presence in: **California**, **Texas**, **Florida**, **United States**,
+    **Canada**, **United Kingdom**, **Germany**, **Japan**, **Australia**, and **Brazil**.
+
+
+    ---
+
+
+    ## SECTION 4: GPE ENTITIES (Geopolitical Entities)'
+  token_count: 184
+- complexity_score: 5
+  entity_count: 5
+  named_entities:
+  - label: CARDINAL
+    text: '8'
+  - label: GPE
+    text: China
+  - label: GPE
+    text: Russia
+  - label: GPE
+    text: South Korea
+  - label: GPE
+    text: Israel
+  root_verb: null
+  sentence_id: 98
+  text: '(Total: 8 GPEs)
+
+    The **United States** government, working with **China**, **Russia**, **India**,
+    the **European Union**, **Mexico**, **South Korea**, and **Israel** on international
+    standards.
+
+
+    '
+  token_count: 66
+- complexity_score: 2
+  entity_count: 2
+  named_entities:
+  - label: CARDINAL
+    text: '15'
+  - label: CARDINAL
+    text: '1'
+  root_verb: null
+  sentence_id: 99
+  text: '---
+
+
+    ## SECTION 5: DATE ENTITIES (Total: 15 dates)
+
+
+    1.'
+  token_count: 16
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: DATE
+    text: January 1, 2024*
+  - label: CARDINAL
+    text: '2'
+  root_verb: begins
+  sentence_id: 100
+  text: 'Implementation begins on **January 1, 2024**
+
+    2.'
+  token_count: 13
+- complexity_score: 1
+  entity_count: 3
+  named_entities:
+  - label: ORDINAL
+    text: First
+  - label: DATE
+    text: February 15, 2024*
+  - label: CARDINAL
+    text: '3'
+  root_verb: null
+  sentence_id: 101
+  text: 'First review scheduled for **February 15, 2024**
+
+    3.'
+  token_count: 14
+- complexity_score: 0
+  entity_count: 3
+  named_entities:
+  - label: DATE
+    text: Quarterly
+  - label: DATE
+    text: March 31, 2024*
+  - label: CARDINAL
+    text: '4'
+  root_verb: null
+  sentence_id: 102
+  text: 'Quarterly report due **March 31, 2024**
+
+    4.'
+  token_count: 13
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: DATE
+    text: April 30, 2024*
+  - label: CARDINAL
+    text: '5'
+  root_verb: Training
+  sentence_id: 103
+  text: 'Training completion by **April 30, 2024**
+
+    5.'
+  token_count: 13
+- complexity_score: 2
+  entity_count: 3
+  named_entities:
+  - label: DATE
+    text: Mid-year
+  - label: DATE
+    text: June 30, 2024*
+  - label: CARDINAL
+    text: '6'
+  root_verb: null
+  sentence_id: 104
+  text: 'Mid-year assessment on **June 30, 2024**
+
+    6.'
+  token_count: 15
+- complexity_score: 2
+  entity_count: 4
+  named_entities:
+  - label: DATE
+    text: July 1, 2024*
+  - label: CARDINAL
+    text: '7'
+  - label: DATE
+    text: August 15-20, 2024*
+  - label: CARDINAL
+    text: '8'
+  root_verb: null
+  sentence_id: 105
+  text: 'Policy effective from **July 1, 2024**
+
+    7. Audit scheduled for **August 15-20, 2024**
+
+    8.'
+  token_count: 28
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: DATE
+    text: September 30, 2024*
+  - label: CARDINAL
+    text: '9'
+  root_verb: null
+  sentence_id: 106
+  text: 'Compliance deadline: **September 30, 2024**
+
+    9.'
+  token_count: 13
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: DATE
+    text: October 10-12, 2024*
+  - label: CARDINAL
+    text: '10'
+  root_verb: dates
+  sentence_id: 107
+  text: 'Conference dates: **October 10-12, 2024**
+
+    10.'
+  token_count: 15
+- complexity_score: 1
+  entity_count: 3
+  named_entities:
+  - label: DATE
+    text: Annual
+  - label: DATE
+    text: November 15, 2024*
+  - label: CARDINAL
+    text: '11'
+  root_verb: null
+  sentence_id: 108
+  text: 'Annual review on **November 15, 2024**
+
+    11.'
+  token_count: 13
+- complexity_score: 3
+  entity_count: 3
+  named_entities:
+  - label: DATE
+    text: Year-end
+  - label: DATE
+    text: December 31, 2024*
+  - label: CARDINAL
+    text: '12'
+  root_verb: null
+  sentence_id: 109
+  text: 'Year-end report by **December 31, 2024**
+
+    12.'
+  token_count: 15
+- complexity_score: 0
+  entity_count: 2
+  named_entities:
+  - label: DATE
+    text: March 15, 1991
+  - label: CARDINAL
+    text: '13'
+  root_verb: null
+  sentence_id: 110
+  text: 'Historical reference: **March 15, 1991** regulations
+
+    13.'
+  token_count: 14
+- complexity_score: 0
+  entity_count: 2
+  named_entities:
+  - label: DATE
+    text: June 1, 2020
+  - label: CARDINAL
+    text: '14'
+  root_verb: null
+  sentence_id: 111
+  text: 'Previous update: **June 1, 2020**
+
+    14.'
+  token_count: 13
+- complexity_score: 0
+  entity_count: 2
+  named_entities:
+  - label: DATE
+    text: January 26, 1989
+  - label: CARDINAL
+    text: '15'
+  root_verb: null
+  sentence_id: 112
+  text: 'Original implementation: **January 26, 1989**
+
+    15.'
+  token_count: 13
+- complexity_score: 9
+  entity_count: 16
+  named_entities:
+  - label: DATE
+    text: January 1, 2025
+  - label: MONEY
+    text: '## SECTION 6'
+  - label: CARDINAL
+    text: '8'
+  - label: TIME
+    text: 9:00 AM
+  - label: TIME
+    text: 10:30 AM
+  - label: TIME
+    text: 12:00 PM
+  - label: TIME
+    text: noon
+  - label: TIME
+    text: 2:15 PM
+  - label: TIME
+    text: 3:45 PM
+  - label: TIME
+    text: 5:00 PM
+  - label: TIME
+    text: 6:30 PM
+  - label: TIME
+    text: 11:59 PM
+  - label: CARDINAL
+    text: '20'
+  - label: MONEY
+    text: '### 7.1'
+  - label: CARDINAL
+    text: '10'
+  - label: CARDINAL
+    text: '1'
+  root_verb: null
+  sentence_id: 113
+  text: 'Future planning for **January 1, 2025**
+
+
+    ---
+
+
+    ## SECTION 6: TIME ENTITIES (Total: 8 times)
+
+
+    Meetings scheduled at: **9:00 AM**, **10:30 AM**, **12:00 PM** (noon), **2:15
+    PM**, **3:45 PM**, **5:00 PM**, **6:30 PM**, and **11:59 PM**.
+
+
+    ---
+
+
+    ## SECTION 7: MONEY ENTITIES (Total: 20 money amounts)
+
+
+    ### 7.1 Budget Items (10 amounts)
+
+    1.'
+  token_count: 116
+- complexity_score: 2
+  entity_count: 2
+  named_entities:
+  - label: MONEY
+    text: 500,000
+  - label: CARDINAL
+    text: '2'
+  root_verb: null
+  sentence_id: 114
+  text: 'Safety equipment budget: **$500,000**
+
+    2.'
+  token_count: 12
+- complexity_score: 2
+  entity_count: 2
+  named_entities:
+  - label: MONEY
+    text: $1.2 million
+  - label: CARDINAL
+    text: '3'
+  root_verb: null
+  sentence_id: 115
+  text: 'Training allocation: **$1.2 million**
+
+    3.'
+  token_count: 12
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: MONEY
+    text: 250,000
+  - label: CARDINAL
+    text: '4'
+  root_verb: null
+  sentence_id: 116
+  text: 'Compliance software: **$250,000**
+
+    4.'
+  token_count: 11
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: MONEY
+    text: 75,000
+  - label: CARDINAL
+    text: '5'
+  root_verb: null
+  sentence_id: 117
+  text: 'Consulting fees: **$75,000**
+
+    5.'
+  token_count: 11
+- complexity_score: 2
+  entity_count: 2
+  named_entities:
+  - label: MONEY
+    text: $3.5 million
+  - label: CARDINAL
+    text: '6'
+  root_verb: null
+  sentence_id: 118
+  text: 'Insurance premiums: **$3.5 million**
+
+    6.'
+  token_count: 12
+- complexity_score: 3
+  entity_count: 4
+  named_entities:
+  - label: MONEY
+    text: $10 million
+  - label: CARDINAL
+    text: '7'
+  - label: MONEY
+    text: 500,000
+  - label: CARDINAL
+    text: '8'
+  root_verb: null
+  sentence_id: 119
+  text: 'Facility upgrades: **$10 million**
+
+    7. Emergency fund: **$500,000**
+
+    8.'
+  token_count: 23
+- complexity_score: 2
+  entity_count: 2
+  named_entities:
+  - label: MONEY
+    text: $2.8 million
+  - label: CARDINAL
+    text: '9'
+  root_verb: null
+  sentence_id: 120
+  text: 'Research grants: **$2.8 million**
+
+    9.'
+  token_count: 12
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: MONEY
+    text: $1.5 million
+  - label: CARDINAL
+    text: '10'
+  root_verb: null
+  sentence_id: 121
+  text: 'Legal reserves: **$1.5 million**
+
+    10.'
+  token_count: 12
+- complexity_score: 4
+  entity_count: 4
+  named_entities:
+  - label: MONEY
+    text: $5.2 million
+  - label: MONEY
+    text: '### 7.2 Fines'
+  - label: CARDINAL
+    text: '10'
+  - label: CARDINAL
+    text: '11'
+  root_verb: null
+  sentence_id: 122
+  text: 'Technology investments: **$5.2 million**
+
+
+    ### 7.2 Fines and Penalties (10 amounts)
+
+    11.'
+  token_count: 23
+- complexity_score: 2
+  entity_count: 2
+  named_entities:
+  - label: MONEY
+    text: 14,502
+  - label: CARDINAL
+    text: '12'
+  root_verb: null
+  sentence_id: 123
+  text: 'Maximum OSHA fine: **$14,502** per violation
+
+    12.'
+  token_count: 14
+- complexity_score: 0
+  entity_count: 2
+  named_entities:
+  - label: MONEY
+    text: 1,000
+  - label: CARDINAL
+    text: '13'
+  root_verb: null
+  sentence_id: 124
+  text: 'Serious violation: **$1,000** minimum
+
+    13.'
+  token_count: 12
+- complexity_score: 1
+  entity_count: 3
+  named_entities:
+  - label: MONEY
+    text: 10,000
+  - label: MONEY
+    text: 145,027
+  - label: CARDINAL
+    text: '14'
+  root_verb: null
+  sentence_id: 125
+  text: 'Willful violation: **$10,000** to **$145,027**
+
+    14.'
+  token_count: 18
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: MONEY
+    text: 145,027
+  - label: CARDINAL
+    text: '15'
+  root_verb: null
+  sentence_id: 126
+  text: 'Repeat violation: **$145,027** maximum
+
+    15.'
+  token_count: 12
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: MONEY
+    text: 14,502
+  - label: CARDINAL
+    text: '16'
+  root_verb: null
+  sentence_id: 127
+  text: 'Failure to abate: **$14,502** per day
+
+    16.'
+  token_count: 14
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: MONEY
+    text: $50 million
+  - label: CARDINAL
+    text: '17'
+  root_verb: collected
+  sentence_id: 128
+  text: 'Total penalties collected: **$50 million**
+
+    17.'
+  token_count: 13
+- complexity_score: 0
+  entity_count: 2
+  named_entities:
+  - label: MONEY
+    text: 3,500
+  - label: CARDINAL
+    text: '18'
+  root_verb: null
+  sentence_id: 129
+  text: 'Average fine: **$3,500**
+
+    18.'
+  token_count: 11
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: MONEY
+    text: $2.3 million
+  - label: CARDINAL
+    text: '19'
+  root_verb: null
+  sentence_id: 130
+  text: 'Largest single fine: **$2.3 million**
+
+    19.'
+  token_count: 13
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: MONEY
+    text: 750,000
+  - label: CARDINAL
+    text: '20'
+  root_verb: null
+  sentence_id: 131
+  text: 'Settlement amount: **$750,000**
+
+    20.'
+  token_count: 11
+- complexity_score: 4
+  entity_count: 3
+  named_entities:
+  - label: MONEY
+    text: $100 million
+  - label: CARDINAL
+    text: '15'
+  - label: CARDINAL
+    text: '1'
+  root_verb: achieved
+  sentence_id: 132
+  text: 'Cost savings achieved: **$100 million**
+
+
+    ---
+
+
+    ## SECTION 8: PERCENT ENTITIES (Total: 15 percentages)
+
+
+    1.'
+  token_count: 27
+- complexity_score: 2
+  entity_count: 2
+  named_entities:
+  - label: PERCENT
+    text: 25%
+  - label: CARDINAL
+    text: '2'
+  root_verb: null
+  sentence_id: 133
+  text: 'Safety improvement: **25%** reduction in incidents
+
+    2.'
+  token_count: 14
+- complexity_score: 2
+  entity_count: 2
+  named_entities:
+  - label: PERCENT
+    text: 98.5%
+  - label: CARDINAL
+    text: '3'
+  root_verb: null
+  sentence_id: 134
+  text: 'Compliance rate: **98.5%** of facilities
+
+    3.'
+  token_count: 13
+- complexity_score: 2
+  entity_count: 2
+  named_entities:
+  - label: PERCENT
+    text: 100%
+  - label: CARDINAL
+    text: '4'
+  root_verb: null
+  sentence_id: 135
+  text: 'Training completion: **100%** of employees
+
+    4.'
+  token_count: 13
+- complexity_score: 2
+  entity_count: 2
+  named_entities:
+  - label: PERCENT
+    text: 15%
+  - label: CARDINAL
+    text: '5'
+  root_verb: null
+  sentence_id: 136
+  text: 'Cost reduction: **15%** year-over-year
+
+    5.'
+  token_count: 16
+- complexity_score: 3
+  entity_count: 2
+  named_entities:
+  - label: PERCENT
+    text: 30%
+  - label: CARDINAL
+    text: '6'
+  root_verb: null
+  sentence_id: 137
+  text: 'Efficiency gain: **30%** in processing time
+
+    6.'
+  token_count: 14
+- complexity_score: 3
+  entity_count: 4
+  named_entities:
+  - label: PERCENT
+    text: 45.5%
+  - label: CARDINAL
+    text: '7'
+  - label: PERCENT
+    text: 92%
+  - label: CARDINAL
+    text: '8'
+  root_verb: null
+  sentence_id: 138
+  text: 'Market share: **45.5%** of industry
+
+    7. Customer satisfaction: **92%** positive feedback
+
+    8.'
+  token_count: 26
+- complexity_score: 2
+  entity_count: 3
+  named_entities:
+  - label: PERCENT
+    text: 0.5%
+  - label: PERCENT
+    text: half percent
+  - label: CARDINAL
+    text: '9'
+  root_verb: null
+  sentence_id: 139
+  text: 'Error rate: **0.5%** (half percent)
+
+    9.'
+  token_count: 15
+- complexity_score: 2
+  entity_count: 2
+  named_entities:
+  - label: PERCENT
+    text: 10-15%
+  - label: CARDINAL
+    text: '10'
+  root_verb: null
+  sentence_id: 140
+  text: 'Growth projection: **10-15%** range
+
+    10.'
+  token_count: 14
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: PERCENT
+    text: 20%
+  - label: CARDINAL
+    text: '11'
+  root_verb: null
+  sentence_id: 141
+  text: 'Productivity increase: **20%**
+
+    11.'
+  token_count: 11
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: PERCENT
+    text: 35%
+  - label: CARDINAL
+    text: '12'
+  root_verb: null
+  sentence_id: 142
+  text: 'Waste reduction: **35%**
+
+    12.'
+  token_count: 11
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: PERCENT
+    text: 18.5%
+  - label: CARDINAL
+    text: '13'
+  root_verb: null
+  sentence_id: 143
+  text: 'Energy savings: **18.5%**
+
+    13.'
+  token_count: 11
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: PERCENT
+    text: 97%
+  - label: CARDINAL
+    text: '14'
+  root_verb: null
+  sentence_id: 144
+  text: 'Attendance rate: **97%**
+
+    14.'
+  token_count: 11
+- complexity_score: 1
+  entity_count: 2
+  named_entities:
+  - label: PERCENT
+    text: 88%
+  - label: CARDINAL
+    text: '15'
+  root_verb: null
+  sentence_id: 145
+  text: 'Success rate: **88%**
+
+    15.'
+  token_count: 11
+- complexity_score: 82
+  entity_count: 85
+  named_entities:
+  - label: PERCENT
+    text: 75%
+  - label: CARDINAL
+    text: '10'
+  - label: CARDINAL
+    text: '800'
+  - label: CARDINAL
+    text: '202'
+  - label: DATE
+    text: 693-1999
+  - label: CARDINAL
+    text: '877'
+  - label: CARDINAL
+    text: '889'
+  - label: CARDINAL
+    text: '617'
+  - label: DATE
+    text: 565-9860
+  - label: CARDINAL
+    text: '212'
+  - label: CARDINAL
+    text: '337'
+  - label: CARDINAL
+    text: '404'
+  - label: CARDINAL
+    text: 562-2300
+  - label: CARDINAL
+    text: '312'
+  - label: CARDINAL
+    text: 353-2220
+  - label: CARDINAL
+    text: '214'
+  - label: PRODUCT
+    text: 767-4731
+  - label: CARDINAL
+    text: '303'
+  - label: CARDINAL
+    text: '844'
+  - label: CARDINAL
+    text: '415'
+  - label: CARDINAL
+    text: 975-4310
+  - label: MONEY
+    text: '### 9.2 Regulations'
+  - label: CARDINAL
+    text: '29'
+  - label: CARDINAL
+    text: '29'
+  - label: CARDINAL
+    text: '29'
+  - label: ORG
+    text: EPA
+  - label: CARDINAL
+    text: '40'
+  - label: ORG
+    text: DOT
+  - label: CARDINAL
+    text: '49'
+  - label: CARDINAL
+    text: '172'
+  - label: ORG
+    text: FDA
+  - label: CARDINAL
+    text: '21'
+  - label: MONEY
+    text: '### 9.3 URLs'
+  - label: MONEY
+    text: '###'
+  - label: CARDINAL
+    text: '20'
+  - label: QUANTITY
+    text: 6 feet
+  - label: QUANTITY
+    text: 1.8 meters
+  - label: QUANTITY
+    text: 42 inches
+  - label: QUANTITY
+    text: 107 cm
+  - label: QUANTITY
+    text: 4 inches
+  - label: QUANTITY
+    text: 10 cm
+  - label: QUANTITY
+    text: 30 feet
+  - label: QUANTITY
+    text: 9.1 meters
+  - label: QUANTITY
+    text: 3 feet
+  - label: QUANTITY
+    text: 0.9 meters
+  - label: QUANTITY
+    text: 22 inches
+  - label: QUANTITY
+    text: 56 cm
+  - label: QUANTITY
+    text: 30-37 inches
+  - label: QUANTITY
+    text: 76-94 cm
+  - label: QUANTITY
+    text: 30 inches
+  - label: QUANTITY
+    text: 76 cm
+  - label: QUANTITY
+    text: 9.5 inches
+  - label: QUANTITY
+    text: 24 cm
+  - label: QUANTITY
+    text: 9.5 inches
+  - label: QUANTITY
+    text: 24 cm
+  - label: QUANTITY
+    text: 20 inches
+  - label: QUANTITY
+    text: 51 cm
+  - label: QUANTITY
+    text: 18 inches
+  - label: QUANTITY
+    text: 46 cm
+  - label: QUANTITY
+    text: 10 feet
+  - label: QUANTITY
+    text: 3 meters
+  - label: QUANTITY
+    text: 5 feet
+  - label: QUANTITY
+    text: 1.5 meters
+  - label: CARDINAL
+    text: '90'
+  - label: TIME
+    text: 8 hours
+  - label: QUANTITY
+    text: 250 pounds
+  - label: QUANTITY
+    text: 113 kg
+  - label: CARDINAL
+    text: '120'
+  - label: CARDINAL
+    text: '49'
+  - label: QUANTITY
+    text: 500 feet
+  - label: QUANTITY
+    text: 152 meters
+  - label: TIME
+    text: 15 minutes
+  - label: QUANTITY
+    text: 15 feet
+  - label: QUANTITY
+    text: 4.6 meters
+  - label: MONEY
+    text: '## SECTION 10'
+  - label: MONEY
+    text: '### 10.1'
+  - label: PERSON
+    text: John Smith
+  - label: PERSON
+    text: Mary Johnson
+  - label: ORG
+    text: Global Dynamics Corporation
+  - label: ORG
+    text: Amazon Web Services
+  - label: PERSON
+    text: Michael O'Brien
+  - label: ORG
+    text: Johns Hopkins University
+  - label: PERSON
+    text: Jennifer Martinez
+  - label: MONEY
+    text: '### 10.2 Compliance Rules
+
+      '
+  - label: CARDINAL
+    text: '1'
+  root_verb: null
+  sentence_id: 146
+  text: 'Participation: **75%** of eligible workers
+
+
+    ---
+
+
+    ## SECTION 9: SPECIAL ENTITIES
+
+
+    ### 9.1 Phone Numbers (10 phone numbers)
+
+    Contact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617)
+    565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214)
+    767-4731**, **(303) 844-1600**, **(415) 975-4310**.
+
+
+    ### 9.2 Regulations (10 regulations)
+
+    Key regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**,
+    **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40
+    CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.
+
+
+    ### 9.3 URLs (5 URLs)
+
+    Resources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**,
+    **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.
+
+
+    ### 9.4 Measurements (20 measurements)
+
+    - Fall protection required above **6 feet** (1.8 meters) in construction
+
+    - Guardrails must be **42 inches** (107 cm) high
+
+    - Toe boards minimum **4 inches** (10 cm) high
+
+    - Safety nets within **30 feet** (9.1 meters)
+
+    - Ladder side rails extend **3 feet** (0.9 meters)
+
+    - Stairway width minimum **22 inches** (56 cm)
+
+    - Handrail height **30-37 inches** (76-94 cm)
+
+    - Landing depth **30 inches** (76 cm) minimum
+
+    - Riser height maximum **9.5 inches** (24 cm)
+
+    - Tread depth minimum **9.5 inches** (24 cm)
+
+    - Door swing clearance **20 inches** (51 cm)
+
+    - Scaffold width minimum **18 inches** (46 cm)
+
+    - Clearance from power lines **10 feet** (3 meters)
+
+    - Excavation depth requiring protection **5 feet** (1.5 meters)
+
+    - Noise exposure limit **90 decibels** for 8 hours
+
+    - Weight capacity **250 pounds** (113 kg) per person
+
+    - Temperature range **-20°F to 120°F** (-29°C to 49°C)
+
+    - Visibility distance **500 feet** (152 meters)
+
+    - Response time **15 minutes** maximum
+
+    - Storage height limit **15 feet** (4.6 meters)
+
+
+    ---
+
+
+    ## SECTION 10: RELATIONSHIPS AND RULES
+
+
+    ### 10.1 Organizational Relationships
+
+    - **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**
+
+    - **OSHA** oversees compliance at **Amazon Web Services, Inc.**
+
+    - **Dr. Michael O''Brien** collaborates with **Johns Hopkins University**
+
+    - **Jennifer Martinez** coordinates between **OSHA** and **EPA**
+
+    - **Microsoft Corporation** partners with **MIT** on research
+
+
+    ### 10.2 Compliance Rules
+
+    1.'
+  token_count: 700
+- complexity_score: 3
+  entity_count: 3
+  named_entities:
+  - label: QUANTITY
+    text: over 10,000 square feet
+  - label: DATE
+    text: 30 days
+  - label: CARDINAL
+    text: '2'
+  root_verb: complete
+  sentence_id: 147
+  text: 'All employees at **facilities over 10,000 square feet** must complete safety
+    training within **30 days**
+
+    2.'
+  token_count: 25
+- complexity_score: 2
+  entity_count: 2
+  named_entities:
+  - label: MONEY
+    text: 500,000
+  - label: CARDINAL
+    text: '3'
+  root_verb: require
+  sentence_id: 148
+  text: 'Companies with more than **$500,000** in federal contracts require additional
+    certifications
+
+    3.'
+  token_count: 18
+- complexity_score: 2
+  entity_count: 2
+  named_entities:
+  - label: MONEY
+    text: 100,000
+  - label: CARDINAL
+    text: '4'
+  root_verb: null
+  sentence_id: 149
+  text: 'Violations exceeding **$100,000** trigger automatic review by **Department
+    of Labor**
+
+    4.'
+  token_count: 21
+- complexity_score: 5
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '5'
+  root_verb: comply
+  sentence_id: 150
+  text: 'International operations in **European Union** must comply with both **OSHA**
+    and **ISO** standards
+
+    5.'
+  token_count: 27
+- complexity_score: 41
+  entity_count: 33
+  named_entities:
+  - label: CARDINAL
+    text: '3'
+  - label: TIME
+    text: 8 hours
+  - label: MONEY
+    text: '###'
+  - label: ORG
+    text: 'Financial Rules
+
+      - Fines'
+  - label: PERCENT
+    text: 10%
+  - label: MONEY
+    text: '4'
+  - label: MONEY
+    text: '1'
+  - label: PERCENT
+    text: 15%
+  - label: MONEY
+    text: 50,000
+  - label: DATE
+    text: 12 months
+  - label: CARDINAL
+    text: '25'
+  - label: CARDINAL
+    text: '30'
+  - label: CARDINAL
+    text: '10'
+  - label: CARDINAL
+    text: '15'
+  - label: CARDINAL
+    text: '5'
+  - label: CARDINAL
+    text: '20'
+  - label: CARDINAL
+    text: '10'
+  - label: CARDINAL
+    text: '10'
+  - label: CARDINAL
+    text: '8'
+  - label: CARDINAL
+    text: '15'
+  - label: CARDINAL
+    text: '8'
+  - label: CARDINAL
+    text: '20'
+  - label: CARDINAL
+    text: '15'
+  - label: CARDINAL
+    text: '10'
+  - label: CARDINAL
+    text: '10'
+  - label: CARDINAL
+    text: '5'
+  - label: CARDINAL
+    text: '20'
+  - label: CARDINAL
+    text: '8'
+  - label: CARDINAL
+    text: '141'
+  - label: CARDINAL
+    text: '45'
+  - label: CARDINAL
+    text: '186'
+  - label: MONEY
+    text: '#'
+  - label: CARDINAL
+    text: '1'
+  root_verb: save
+  sentence_id: 151
+  text: 'Any incident resulting in **3 or more** injuries requires reporting within
+    **8 hours**
+
+
+    ### 10.3 Financial Rules
+
+    - Fines increase by **10%** for each repeated violation
+
+    - Companies save approximately **$4** for every **$1** invested in safety
+
+    - Insurance premiums reduced by **15%** with perfect safety record
+
+    - Training investments over **$50,000** qualify for tax credits
+
+    - Penalties double if violations occur within **12 months**
+
+
+    ---
+
+
+    ## VALIDATION SUMMARY
+
+
+    **Expected Entity Counts:**
+
+    - PERSON: 25 unique individuals
+
+    - ORGANIZATION: 30 organizations (10 government, 15 companies, 5 educational)
+
+    - LOCATION: 20 locations (10 cities, 10 states/countries)
+
+    - GPE: 8 geopolitical entities
+
+    - DATE: 15 specific dates
+
+    - TIME: 8 specific times
+
+    - MONEY: 20 monetary amounts
+
+    - PERCENT: 15 percentages
+
+
+    **Additional Entities:**
+
+    - PHONE: 10 phone numbers
+
+    - REGULATION: 10 regulatory references
+
+    - URL: 5 web addresses
+
+    - MEASUREMENT: 20 measurements with units
+
+
+    **Total Core 8 Entities: 141**
+
+    **Total Additional Entities: 45**
+
+    **Grand Total: 186 entities**
+
+
+    ---
+
+
+    ## TEST VALIDATION RULES
+
+
+    1.'
+  token_count: 247
+- complexity_score: 4
+  entity_count: 2
+  named_entities:
+  - label: CARDINAL
+    text: '25'
+  - label: CARDINAL
+    text: '2'
+  root_verb: detect
+  sentence_id: 152
+  text: '**Person Detection Rule**: System should detect exactly 25 persons, including
+    challenging names
+
+    2.'
+  token_count: 20
+- complexity_score: 6
+  entity_count: 2
+  named_entities:
+  - label: CARDINAL
+    text: '3'
+  - label: CARDINAL
+    text: '4'
+  root_verb: linked
+  sentence_id: 153
+  text: '**Role Extraction Rule**: Each person with a title should have role extracted
+
+    3. **Organization Linking Rule**: Persons should be linked to their mentioned
+    organizations
+
+    4.'
+  token_count: 37
+- complexity_score: 4
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '5'
+  root_verb: normalized
+  sentence_id: 154
+  text: '**Money Normalization Rule**: All money amounts should be normalized to numeric
+    values
+
+    5.'
+  token_count: 19
+- complexity_score: 3
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '6'
+  root_verb: parsed
+  sentence_id: 155
+  text: '**Date Parsing Rule**: All date formats should be correctly parsed
+
+    6.'
+  token_count: 17
+- complexity_score: 4
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '7'
+  root_verb: link
+  sentence_id: 156
+  text: '**Measurement Conversion Rule**: Measurements with dual units should link
+    both values
+
+    7.'
+  token_count: 18
+- complexity_score: 2
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '8'
+  root_verb: categorized
+  sentence_id: 157
+  text: '**Regulation Identification Rule**: All regulatory references should be categorized
+
+    8.'
+  token_count: 16
+- complexity_score: 3
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '9'
+  root_verb: reports
+  sentence_id: 158
+  text: '**Relationship Extraction Rule**: "reports to", "oversees", "partners with"
+    relationships should be identified
+
+    9.'
+  token_count: 27
+- complexity_score: 3
+  entity_count: 1
+  named_entities:
+  - label: CARDINAL
+    text: '10'
+  root_verb: extracted
+  sentence_id: 159
+  text: '**Compliance Rule Extraction**: Conditional statements with thresholds should
+    be extracted as rules
+
+    10.'
+  token_count: 19
+- complexity_score: 9
+  entity_count: 3
+  named_entities:
+  - label: PERSON
+    text: Accuracy Rule
+  - label: ORG
+    text: Test Document - Version
+  - label: CARDINAL
+    text: '1.0'
+  root_verb: have
+  sentence_id: 160
+  text: '**Span Accuracy Rule**: Each entity should have accurate character position
+    spans
+
+
+    ---
+
+
+    *End of Test Document - Version 1.0*
+
+    *This document contains controlled entity counts for validation purposes*'
+  token_count: 37
+top_lemmas:
+  $: 30
+  '1': 15
+  '10': 27
+  '12': 8
+  '15': 22
+  '2': 8
+  '20': 14
+  '2024': 14
+  '25': 7
+  '3': 12
+  '30': 11
+  '4': 10
+  '5': 16
+  '6': 8
+  '7': 8
+  '8': 16
+  '9': 7
+  cfr: 6
+  cm: 9
+  company: 7
+  compliance: 8
+  corporation: 7
+  date: 8
+  document: 5
+  entity: 16
+  extraction: 5
+  facility: 6
+  foot: 8
+  inch: 9
+  johnson: 5
+  location: 7
+  measurement: 6
+  meter: 7
+  million: 13
+  minimum: 6
+  new: 11
+  organization: 10
+  osha: 7
+  person: 11
+  pm: 6
+  rate: 5
+  regulation: 6
+  report: 7
+  review: 5
+  rule: 14
+  safety: 23
+  section: 10
+  time: 6
+  total: 13
+  violation: 8

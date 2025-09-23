@@ -1,0 +1,4966 @@
+all_entities:
+- &id304
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 204
+  end_token: 36
+  label: ORG
+  sentence_id: 1
+  start_char: 194
+  start_token: 33
+  text: MVP-Fusion
+- &id204
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 257
+  end_token: 50
+  label: DATE
+  sentence_id: 2
+  start_char: 241
+  start_token: 46
+  text: January 15, 2024
+- &id001
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 274
+  end_token: 57
+  label: CARDINAL
+  sentence_id: 2
+  start_char: 271
+  start_token: 56
+  text: '1.0'
+- &id002
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 321
+  end_token: 71
+  label: CARDINAL
+  sentence_id: 3
+  start_char: 319
+  start_token: 70
+  text: '25'
+- &id252
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 335
+  end_token: 77
+  label: MONEY
+  sentence_id: 3
+  start_char: 332
+  start_token: 74
+  text: '###'
+- &id003
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 358
+  end_token: 82
+  label: CARDINAL
+  sentence_id: 3
+  start_char: 356
+  start_token: 81
+  text: '10'
+- &id004
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 369
+  end_token: 86
+  label: CARDINAL
+  sentence_id: 3
+  start_char: 368
+  start_token: 85
+  text: '1'
+- &id369
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 383
+  end_token: 91
+  label: PERSON
+  sentence_id: 4
+  start_char: 373
+  start_token: 89
+  text: John Smith
+- &id305
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 441
+  end_token: 101
+  label: ORG
+  sentence_id: 4
+  start_char: 414
+  start_token: 98
+  text: Global Dynamics Corporation
+- &id005
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 470
+  end_token: 108
+  label: CARDINAL
+  sentence_id: 5
+  start_char: 469
+  start_token: 107
+  text: '2'
+- &id370
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 486
+  end_token: 113
+  label: PERSON
+  sentence_id: 5
+  start_char: 474
+  start_token: 111
+  text: Mary Johnson
+- &id205
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 563
+  end_token: 130
+  label: DATE
+  sentence_id: 5
+  start_char: 549
+  start_token: 126
+  text: March 20, 2024
+- &id006
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 566
+  end_token: 133
+  label: CARDINAL
+  sentence_id: 6
+  start_char: 565
+  start_token: 132
+  text: '3'
+- &id371
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 581
+  end_token: 138
+  label: PERSON
+  sentence_id: 6
+  start_char: 570
+  start_token: 136
+  text: Robert Chen
+- &id206
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 642
+  end_token: 149
+  label: DATE
+  sentence_id: 6
+  start_char: 633
+  start_token: 148
+  text: yesterday
+- &id007
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 645
+  end_token: 152
+  label: CARDINAL
+  sentence_id: 7
+  start_char: 644
+  start_token: 151
+  text: '4'
+- &id372
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 669
+  end_token: 159
+  label: PERSON
+  sentence_id: 8
+  start_char: 649
+  start_token: 155
+  text: Sarah Williams-Brown
+- &id306
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 701
+  end_token: 166
+  label: ORG
+  sentence_id: 8
+  start_char: 691
+  start_token: 165
+  text: Operations
+- &id008
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 714
+  end_token: 169
+  label: CARDINAL
+  sentence_id: 8
+  start_char: 711
+  start_token: 168
+  text: '500'
+- &id009
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 727
+  end_token: 173
+  label: CARDINAL
+  sentence_id: 9
+  start_char: 726
+  start_token: 172
+  text: '5'
+- &id373
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 750
+  end_token: 179
+  label: PERSON
+  sentence_id: 9
+  start_char: 735
+  start_token: 177
+  text: Michael O'Brien
+- &id010
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 811
+  end_token: 193
+  label: CARDINAL
+  sentence_id: 10
+  start_char: 810
+  start_token: 192
+  text: '6'
+- &id374
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 832
+  end_token: 198
+  label: PERSON
+  sentence_id: 10
+  start_char: 815
+  start_token: 196
+  text: Jennifer Martinez
+- &id011
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 875
+  end_token: 208
+  label: CARDINAL
+  sentence_id: 10
+  start_char: 873
+  start_token: 207
+  text: '50'
+- &id207
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 892
+  end_token: 211
+  label: DATE
+  sentence_id: 10
+  start_char: 882
+  start_token: 209
+  text: last month
+- &id012
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 895
+  end_token: 214
+  label: CARDINAL
+  sentence_id: 11
+  start_char: 894
+  start_token: 213
+  text: '7'
+- &id375
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 910
+  end_token: 221
+  label: PERSON
+  sentence_id: 11
+  start_char: 899
+  start_token: 217
+  text: David Kim**
+- &id013
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 977
+  end_token: 234
+  label: CARDINAL
+  sentence_id: 12
+  start_char: 976
+  start_token: 233
+  text: '8'
+- &id376
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 996
+  end_token: 241
+  label: PERSON
+  sentence_id: 13
+  start_char: 981
+  start_token: 237
+  text: Lisa Anderson**
+- &id307
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 1016
+  end_token: 244
+  label: ORG
+  sentence_id: 13
+  start_char: 998
+  start_token: 242
+  text: Safety Coordinator
+- &id253
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 1063
+  end_token: 252
+  label: MONEY
+  sentence_id: 13
+  start_char: 1051
+  start_token: 249
+  text: $2.5 million
+- &id014
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 1066
+  end_token: 255
+  label: CARDINAL
+  sentence_id: 14
+  start_char: 1065
+  start_token: 254
+  text: '9'
+- &id377
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 1082
+  end_token: 260
+  label: PERSON
+  sentence_id: 15
+  start_char: 1070
+  start_token: 258
+  text: James Wilson
+- &id233
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 1136
+  end_token: 271
+  label: GPE
+  sentence_id: 15
+  start_char: 1128
+  start_token: 269
+  text: New York
+- &id234
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 1151
+  end_token: 273
+  label: GPE
+  sentence_id: 15
+  start_char: 1141
+  start_token: 272
+  text: California
+- &id015
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 1155
+  end_token: 276
+  label: CARDINAL
+  sentence_id: 16
+  start_char: 1153
+  start_token: 275
+  text: '10'
+- &id378
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 1176
+  end_token: 281
+  label: PERSON
+  sentence_id: 17
+  start_char: 1159
+  start_token: 279
+  text: Patricia Thompson
+- &id308
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 1208
+  end_token: 287
+  label: ORG
+  sentence_id: 17
+  start_char: 1180
+  start_token: 284
+  text: Quality Assurance Specialist
+- &id346
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 1224
+  end_token: 291
+  label: PERCENT
+  sentence_id: 17
+  start_char: 1219
+  start_token: 289
+  text: 99.5%
+- &id254
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 1244
+  end_token: 298
+  label: MONEY
+  sentence_id: 17
+  start_char: 1241
+  start_token: 295
+  text: '###'
+- &id255
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 1277
+  end_token: 304
+  label: MONEY
+  sentence_id: 17
+  start_char: 1268
+  start_token: 302
+  text: 8 persons
+- &id016
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 1281
+  end_token: 307
+  label: CARDINAL
+  sentence_id: 17
+  start_char: 1279
+  start_token: 306
+  text: '11'
+- &id379
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 1293
+  end_token: 312
+  label: PERSON
+  sentence_id: 18
+  start_char: 1285
+  start_token: 310
+  text: Xi Zhang
+- &id309
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 1314
+  end_token: 317
+  label: ORG
+  sentence_id: 18
+  start_char: 1297
+  start_token: 315
+  text: Software Engineer
+- &id017
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 1355
+  end_token: 326
+  label: CARDINAL
+  sentence_id: 19
+  start_char: 1353
+  start_token: 325
+  text: '12'
+- &id380
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 1376
+  end_token: 333
+  label: PERSON
+  sentence_id: 20
+  start_char: 1359
+  start_token: 329
+  text: José García-López
+- &id018
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 1417
+  end_token: 341
+  label: CARDINAL
+  sentence_id: 20
+  start_char: 1415
+  start_token: 340
+  text: '12'
+- &id235
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 1432
+  end_token: 344
+  label: GPE
+  sentence_id: 20
+  start_char: 1427
+  start_token: 343
+  text: Texas
+- &id019
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 1436
+  end_token: 347
+  label: CARDINAL
+  sentence_id: 21
+  start_char: 1434
+  start_token: 346
+  text: '13'
+- &id381
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 1451
+  end_token: 352
+  label: PERSON
+  sentence_id: 22
+  start_char: 1446
+  start_token: 351
+  text: Patel
+- &id310
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 1469
+  end_token: 357
+  label: ORG
+  sentence_id: 22
+  start_char: 1455
+  start_token: 355
+  text: Data Scientist
+- &id020
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 1486
+  end_token: 360
+  label: CARDINAL
+  sentence_id: 22
+  start_char: 1480
+  start_token: 359
+  text: 10,000
+- &id021
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 1513
+  end_token: 366
+  label: CARDINAL
+  sentence_id: 23
+  start_char: 1511
+  start_token: 365
+  text: '14'
+- &id382
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 1534
+  end_token: 373
+  label: PERSON
+  sentence_id: 24
+  start_char: 1517
+  start_token: 369
+  text: François Dubois**
+- &id383
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 1557
+  end_token: 376
+  label: PERSON
+  sentence_id: 24
+  start_char: 1536
+  start_token: 374
+  text: International Liaison
+- &id311
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 1578
+  end_token: 380
+  label: ORG
+  sentence_id: 24
+  start_char: 1576
+  start_token: 379
+  text: EU
+- &id022
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 1590
+  end_token: 384
+  label: CARDINAL
+  sentence_id: 24
+  start_char: 1588
+  start_token: 383
+  text: '15'
+- &id384
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 1605
+  end_token: 389
+  label: PERSON
+  sentence_id: 25
+  start_char: 1594
+  start_token: 387
+  text: Yuki Tanaka
+- &id023
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 1657
+  end_token: 402
+  label: CARDINAL
+  sentence_id: 26
+  start_char: 1655
+  start_token: 401
+  text: '16'
+- &id385
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 1676
+  end_token: 409
+  label: PERSON
+  sentence_id: 27
+  start_char: 1661
+  start_token: 405
+  text: Ahmed Al-Rashid
+- &id312
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 1699
+  end_token: 414
+  label: ORG
+  sentence_id: 27
+  start_char: 1680
+  start_token: 412
+  text: Security Specialist
+- &id347
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 1726
+  end_token: 420
+  label: PERCENT
+  sentence_id: 27
+  start_char: 1723
+  start_token: 418
+  text: 40%
+- &id024
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 1730
+  end_token: 423
+  label: CARDINAL
+  sentence_id: 28
+  start_char: 1728
+  start_token: 422
+  text: '17'
+- &id313
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 1786
+  end_token: 436
+  label: ORG
+  sentence_id: 29
+  start_char: 1770
+  start_token: 434
+  text: Moscow Institute
+- &id025
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 1810
+  end_token: 442
+  label: CARDINAL
+  sentence_id: 30
+  start_char: 1808
+  start_token: 441
+  text: '18'
+- &id386
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 1831
+  end_token: 448
+  label: PERSON
+  sentence_id: 31
+  start_char: 1814
+  start_token: 445
+  text: João Silva Santos
+- &id302
+  confidence: 1.0
+  description: Nationalities or religious or political groups
+  end_char: 1844
+  end_token: 452
+  label: NORP
+  sentence_id: 31
+  start_char: 1835
+  start_token: 451
+  text: Brazilian
+- &id026
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 1878
+  end_token: 458
+  label: CARDINAL
+  sentence_id: 31
+  start_char: 1877
+  start_token: 457
+  text: '5'
+- &id256
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 1891
+  end_token: 464
+  label: MONEY
+  sentence_id: 31
+  start_char: 1888
+  start_token: 461
+  text: '###'
+- &id027
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 1921
+  end_token: 473
+  label: CARDINAL
+  sentence_id: 31
+  start_char: 1919
+  start_token: 472
+  text: '19'
+- &id387
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 1937
+  end_token: 479
+  label: PERSON
+  sentence_id: 32
+  start_char: 1925
+  start_token: 476
+  text: Van Der Berg
+- &id028
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 2009
+  end_token: 497
+  label: CARDINAL
+  sentence_id: 33
+  start_char: 2007
+  start_token: 496
+  text: '20'
+- &id388
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 2019
+  end_token: 502
+  label: PERSON
+  sentence_id: 34
+  start_char: 2017
+  start_token: 501
+  text: Li
+- &id029
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 2082
+  end_token: 517
+  label: CARDINAL
+  sentence_id: 35
+  start_char: 2080
+  start_token: 516
+  text: '21'
+- &id389
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 2093
+  end_token: 521
+  label: PERSON
+  sentence_id: 36
+  start_char: 2086
+  start_token: 520
+  text: Madonna
+- &id030
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 2157
+  end_token: 536
+  label: CARDINAL
+  sentence_id: 37
+  start_char: 2155
+  start_token: 535
+  text: '22'
+- &id390
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 2171
+  end_token: 542
+  label: PERSON
+  sentence_id: 38
+  start_char: 2161
+  start_token: 539
+  text: John John*
+- &id314
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 2211
+  end_token: 552
+  label: ORG
+  sentence_id: 38
+  start_char: 2201
+  start_token: 550
+  text: Tech Corp.
+- &id031
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 2214
+  end_token: 554
+  label: CARDINAL
+  sentence_id: 38
+  start_char: 2212
+  start_token: 553
+  text: '23'
+- &id391
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 2243
+  end_token: 562
+  label: PERSON
+  sentence_id: 39
+  start_char: 2218
+  start_token: 557
+  text: Mary Mary Quite Contrary*
+- &id032
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 2292
+  end_token: 575
+  label: CARDINAL
+  sentence_id: 40
+  start_char: 2290
+  start_token: 574
+  text: '24'
+- &id448
+  confidence: 1.0
+  description: Titles of books, songs, etc.
+  end_char: 2322
+  end_token: 585
+  label: WORK_OF_ART
+  sentence_id: 41
+  start_char: 2301
+  start_token: 580
+  text: The Builder" Johnson*
+- &id033
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 2363
+  end_token: 595
+  label: CARDINAL
+  sentence_id: 42
+  start_char: 2361
+  start_token: 594
+  text: '25'
+- &id392
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 2394
+  end_token: 603
+  label: PERSON
+  sentence_id: 43
+  start_char: 2371
+  start_token: 599
+  text: Charles Winchester III*
+- &id393
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 2414
+  end_token: 607
+  label: PERSON
+  sentence_id: 43
+  start_char: 2406
+  start_token: 606
+  text: Emeritus
+- &id034
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 2494
+  end_token: 626
+  label: CARDINAL
+  sentence_id: 44
+  start_char: 2492
+  start_token: 625
+  text: '30'
+- &id257
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 2518
+  end_token: 633
+  label: MONEY
+  sentence_id: 44
+  start_char: 2511
+  start_token: 629
+  text: '### 2.1'
+- &id035
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 2542
+  end_token: 637
+  label: CARDINAL
+  sentence_id: 44
+  start_char: 2540
+  start_token: 636
+  text: '10'
+- &id036
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 2559
+  end_token: 641
+  label: CARDINAL
+  sentence_id: 44
+  start_char: 2558
+  start_token: 640
+  text: '1'
+- &id315
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 2616
+  end_token: 653
+  label: ORG
+  sentence_id: 44
+  start_char: 2571
+  start_token: 648
+  text: Occupational Safety and Health Administration
+- &id037
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 2642
+  end_token: 660
+  label: CARDINAL
+  sentence_id: 45
+  start_char: 2641
+  start_token: 659
+  text: '2'
+- &id208
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 2724
+  end_token: 677
+  label: DATE
+  sentence_id: 46
+  start_char: 2712
+  start_token: 673
+  text: June 1, 2024
+- &id038
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 2727
+  end_token: 680
+  label: CARDINAL
+  sentence_id: 47
+  start_char: 2726
+  start_token: 679
+  text: '3'
+- &id039
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 2782
+  end_token: 693
+  label: CARDINAL
+  sentence_id: 47
+  start_char: 2777
+  start_token: 692
+  text: three
+- &id258
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 2803
+  end_token: 697
+  label: MONEY
+  sentence_id: 47
+  start_char: 2793
+  start_token: 694
+  text: $5 million
+- &id040
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 2812
+  end_token: 701
+  label: CARDINAL
+  sentence_id: 48
+  start_char: 2811
+  start_token: 700
+  text: '4'
+- &id316
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 2869
+  end_token: 715
+  label: ORG
+  sentence_id: 49
+  start_char: 2866
+  start_token: 714
+  text: CDC
+- &id041
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 2900
+  end_token: 722
+  label: CARDINAL
+  sentence_id: 50
+  start_char: 2899
+  start_token: 721
+  text: '5'
+- &id317
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 2958
+  end_token: 733
+  label: ORG
+  sentence_id: 50
+  start_char: 2904
+  start_token: 725
+  text: National Institute for Occupational Safety and Health*
+- &id318
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 2966
+  end_token: 736
+  label: ORG
+  sentence_id: 50
+  start_char: 2961
+  start_token: 735
+  text: NIOSH
+- &id042
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 2988
+  end_token: 742
+  label: CARDINAL
+  sentence_id: 51
+  start_char: 2987
+  start_token: 741
+  text: '6'
+- &id319
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 3034
+  end_token: 753
+  label: ORG
+  sentence_id: 52
+  start_char: 3031
+  start_token: 752
+  text: FAA
+- &id043
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3067
+  end_token: 761
+  label: CARDINAL
+  sentence_id: 53
+  start_char: 3066
+  start_token: 760
+  text: '7'
+- &id320
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 3101
+  end_token: 769
+  label: ORG
+  sentence_id: 53
+  start_char: 3071
+  start_token: 764
+  text: Department of Transportation**
+- &id321
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 3106
+  end_token: 771
+  label: ORG
+  sentence_id: 53
+  start_char: 3103
+  start_token: 770
+  text: DOT
+- &id044
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3144
+  end_token: 778
+  label: CARDINAL
+  sentence_id: 54
+  start_char: 3143
+  start_token: 777
+  text: '8'
+- &id322
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 3187
+  end_token: 790
+  label: ORG
+  sentence_id: 55
+  start_char: 3184
+  start_token: 789
+  text: FDA
+- &id045
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3200
+  end_token: 793
+  label: CARDINAL
+  sentence_id: 55
+  start_char: 3198
+  start_token: 792
+  text: '15'
+- &id046
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3212
+  end_token: 797
+  label: CARDINAL
+  sentence_id: 56
+  start_char: 3211
+  start_token: 796
+  text: '9'
+- &id323
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 3250
+  end_token: 804
+  label: ORG
+  sentence_id: 57
+  start_char: 3216
+  start_token: 800
+  text: Consumer Product Safety Commission
+- &id324
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 3258
+  end_token: 808
+  label: ORG
+  sentence_id: 57
+  start_char: 3254
+  start_token: 807
+  text: CPSC
+- &id047
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3279
+  end_token: 814
+  label: CARDINAL
+  sentence_id: 58
+  start_char: 3277
+  start_token: 813
+  text: '10'
+- &id325
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 3323
+  end_token: 825
+  label: ORG
+  sentence_id: 59
+  start_char: 3320
+  start_token: 824
+  text: NRC
+- &id048
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3337
+  end_token: 828
+  label: CARDINAL
+  sentence_id: 59
+  start_char: 3335
+  start_token: 827
+  text: '20'
+- &id259
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 3354
+  end_token: 834
+  label: MONEY
+  sentence_id: 59
+  start_char: 3351
+  start_token: 831
+  text: '###'
+- &id049
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3372
+  end_token: 838
+  label: CARDINAL
+  sentence_id: 59
+  start_char: 3370
+  start_token: 837
+  text: '15'
+- &id050
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3390
+  end_token: 842
+  label: CARDINAL
+  sentence_id: 59
+  start_char: 3388
+  start_token: 841
+  text: '11'
+- &id326
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 3415
+  end_token: 847
+  label: ORG
+  sentence_id: 60
+  start_char: 3394
+  start_token: 845
+  text: Microsoft Corporation
+- &id260
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 3439
+  end_token: 853
+  label: MONEY
+  sentence_id: 60
+  start_char: 3427
+  start_token: 850
+  text: $100 million
+- &id051
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3464
+  end_token: 859
+  label: CARDINAL
+  sentence_id: 61
+  start_char: 3462
+  start_token: 858
+  text: '12'
+- &id327
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 3487
+  end_token: 865
+  label: ORG
+  sentence_id: 62
+  start_char: 3468
+  start_token: 862
+  text: Amazon Web Services
+- &id052
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3522
+  end_token: 874
+  label: CARDINAL
+  sentence_id: 62
+  start_char: 3521
+  start_token: 873
+  text: '5'
+- &id053
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3540
+  end_token: 879
+  label: CARDINAL
+  sentence_id: 63
+  start_char: 3538
+  start_token: 878
+  text: '13'
+- &id328
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 3574
+  end_token: 889
+  label: ORG
+  sentence_id: 64
+  start_char: 3572
+  start_token: 888
+  text: GE
+- &id348
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 3588
+  end_token: 893
+  label: PERCENT
+  sentence_id: 64
+  start_char: 3585
+  start_token: 891
+  text: 25%
+- &id054
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3622
+  end_token: 900
+  label: CARDINAL
+  sentence_id: 65
+  start_char: 3620
+  start_token: 899
+  text: '14'
+- &id329
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 3643
+  end_token: 906
+  label: ORG
+  sentence_id: 66
+  start_char: 3626
+  start_token: 903
+  text: Johnson & Johnson
+- &id055
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3684
+  end_token: 915
+  label: CARDINAL
+  sentence_id: 67
+  start_char: 3682
+  start_token: 914
+  text: '15'
+- &id056
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3719
+  end_token: 926
+  label: CARDINAL
+  sentence_id: 68
+  start_char: 3710
+  start_token: 924
+  text: 1 million
+- &id057
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3760
+  end_token: 933
+  label: CARDINAL
+  sentence_id: 69
+  start_char: 3758
+  start_token: 932
+  text: '16'
+- &id330
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 3782
+  end_token: 938
+  label: ORG
+  sentence_id: 70
+  start_char: 3764
+  start_token: 936
+  text: Boeing Corporation
+- &id058
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3821
+  end_token: 947
+  label: CARDINAL
+  sentence_id: 71
+  start_char: 3819
+  start_token: 946
+  text: '17'
+- &id059
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3852
+  end_token: 957
+  label: CARDINAL
+  sentence_id: 72
+  start_char: 3848
+  start_token: 956
+  text: zero
+- &id209
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 3884
+  end_token: 962
+  label: DATE
+  sentence_id: 72
+  start_char: 3876
+  start_token: 960
+  text: 365 days
+- &id060
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3888
+  end_token: 965
+  label: CARDINAL
+  sentence_id: 73
+  start_char: 3886
+  start_token: 964
+  text: '18'
+- &id061
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3921
+  end_token: 974
+  label: CARDINAL
+  sentence_id: 74
+  start_char: 3915
+  start_token: 973
+  text: 50,000
+- &id062
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 3959
+  end_token: 982
+  label: CARDINAL
+  sentence_id: 75
+  start_char: 3957
+  start_token: 981
+  text: '19'
+- &id349
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 4010
+  end_token: 995
+  label: PERCENT
+  sentence_id: 76
+  start_char: 4007
+  start_token: 993
+  text: 60%
+- &id063
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 4014
+  end_token: 998
+  label: CARDINAL
+  sentence_id: 77
+  start_char: 4012
+  start_token: 997
+  text: '20'
+- &id064
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 4075
+  end_token: 1014
+  label: CARDINAL
+  sentence_id: 79
+  start_char: 4073
+  start_token: 1013
+  text: '21'
+- &id331
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 4113
+  end_token: 1025
+  label: ORG
+  sentence_id: 80
+  start_char: 4109
+  start_token: 1024
+  text: Meta
+- &id065
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 4147
+  end_token: 1033
+  label: CARDINAL
+  sentence_id: 81
+  start_char: 4145
+  start_token: 1032
+  text: '22'
+- &id332
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 4172
+  end_token: 1039
+  label: ORG
+  sentence_id: 82
+  start_char: 4151
+  start_token: 1036
+  text: United Parcel Service
+- &id066
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 4197
+  end_token: 1047
+  label: CARDINAL
+  sentence_id: 82
+  start_char: 4194
+  start_token: 1046
+  text: '200'
+- &id067
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 4218
+  end_token: 1052
+  label: CARDINAL
+  sentence_id: 82
+  start_char: 4216
+  start_token: 1051
+  text: '23'
+- &id350
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 4258
+  end_token: 1062
+  label: PERCENT
+  sentence_id: 83
+  start_char: 4253
+  start_token: 1060
+  text: 99.9%
+- &id068
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 4280
+  end_token: 1067
+  label: CARDINAL
+  sentence_id: 84
+  start_char: 4278
+  start_token: 1066
+  text: '24'
+- &id394
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 4311
+  end_token: 1073
+  label: PERSON
+  sentence_id: 85
+  start_char: 4293
+  start_token: 1071
+  text: Martin Corporation
+- &id261
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 4359
+  end_token: 1082
+  label: MONEY
+  sentence_id: 85
+  start_char: 4348
+  start_token: 1079
+  text: $10 billion
+- &id069
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 4363
+  end_token: 1085
+  label: CARDINAL
+  sentence_id: 86
+  start_char: 4361
+  start_token: 1084
+  text: '25'
+- &id262
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 4430
+  end_token: 1101
+  label: MONEY
+  sentence_id: 87
+  start_char: 4427
+  start_token: 1098
+  text: '###'
+- &id070
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 4462
+  end_token: 1106
+  label: CARDINAL
+  sentence_id: 87
+  start_char: 4461
+  start_token: 1105
+  text: '5'
+- &id071
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 4480
+  end_token: 1110
+  label: CARDINAL
+  sentence_id: 87
+  start_char: 4478
+  start_token: 1109
+  text: '26'
+- &id333
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 4522
+  end_token: 1118
+  label: ORG
+  sentence_id: 88
+  start_char: 4484
+  start_token: 1113
+  text: Massachusetts Institute of Technology*
+- &id334
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 4528
+  end_token: 1121
+  label: ORG
+  sentence_id: 88
+  start_char: 4525
+  start_token: 1120
+  text: MIT
+- &id072
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 4558
+  end_token: 1128
+  label: CARDINAL
+  sentence_id: 89
+  start_char: 4556
+  start_token: 1127
+  text: '27'
+- &id335
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 4583
+  end_token: 1135
+  label: ORG
+  sentence_id: 90
+  start_char: 4562
+  start_token: 1131
+  text: Stanford University**
+- &id073
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 4633
+  end_token: 1144
+  label: CARDINAL
+  sentence_id: 91
+  start_char: 4631
+  start_token: 1143
+  text: '28'
+- &id336
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 4661
+  end_token: 1151
+  label: ORG
+  sentence_id: 92
+  start_char: 4637
+  start_token: 1147
+  text: Harvard Business School*
+- &id074
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 4709
+  end_token: 1161
+  label: CARDINAL
+  sentence_id: 93
+  start_char: 4707
+  start_token: 1160
+  text: '29'
+- &id236
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 4751
+  end_token: 1170
+  label: GPE
+  sentence_id: 94
+  start_char: 4743
+  start_token: 1169
+  text: Berkeley
+- &id075
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 4765
+  end_token: 1174
+  label: CARDINAL
+  sentence_id: 94
+  start_char: 4762
+  start_token: 1173
+  text: '500'
+- &id076
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 4790
+  end_token: 1179
+  label: CARDINAL
+  sentence_id: 95
+  start_char: 4788
+  start_token: 1178
+  text: '30'
+- &id337
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 4820
+  end_token: 1187
+  label: ORG
+  sentence_id: 96
+  start_char: 4794
+  start_token: 1182
+  text: Johns Hopkins University**
+- &id077
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 4905
+  end_token: 1206
+  label: CARDINAL
+  sentence_id: 97
+  start_char: 4903
+  start_token: 1205
+  text: '20'
+- &id263
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 4925
+  end_token: 1213
+  label: MONEY
+  sentence_id: 97
+  start_char: 4918
+  start_token: 1209
+  text: '### 3.1'
+- &id078
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 4936
+  end_token: 1216
+  label: CARDINAL
+  sentence_id: 97
+  start_char: 4934
+  start_token: 1215
+  text: '10'
+- &id237
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 4987
+  end_token: 1228
+  label: GPE
+  sentence_id: 97
+  start_char: 4974
+  start_token: 1225
+  text: New York City
+- &id238
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 5004
+  end_token: 1235
+  label: GPE
+  sentence_id: 97
+  start_char: 4993
+  start_token: 1233
+  text: Los Angeles
+- &id239
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 5078
+  end_token: 1266
+  label: GPE
+  sentence_id: 97
+  start_char: 5067
+  start_token: 1264
+  text: San Antonio
+- &id240
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 5093
+  end_token: 1273
+  label: GPE
+  sentence_id: 97
+  start_char: 5084
+  start_token: 1271
+  text: San Diego
+- &id241
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 5105
+  end_token: 1279
+  label: GPE
+  sentence_id: 97
+  start_char: 5099
+  start_token: 1278
+  text: Dallas
+- &id242
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 5123
+  end_token: 1287
+  label: GPE
+  sentence_id: 97
+  start_char: 5115
+  start_token: 1285
+  text: San Jose
+- &id264
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 5131
+  end_token: 1294
+  label: MONEY
+  sentence_id: 97
+  start_char: 5128
+  start_token: 1291
+  text: '###'
+- &id079
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 5160
+  end_token: 1300
+  label: CARDINAL
+  sentence_id: 97
+  start_char: 5158
+  start_token: 1299
+  text: '10'
+- &id243
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 5222
+  end_token: 1316
+  label: GPE
+  sentence_id: 97
+  start_char: 5217
+  start_token: 1315
+  text: Texas
+- &id244
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 5235
+  end_token: 1322
+  label: GPE
+  sentence_id: 97
+  start_char: 5228
+  start_token: 1321
+  text: Florida
+- &id245
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 5286
+  end_token: 1342
+  label: GPE
+  sentence_id: 97
+  start_char: 5272
+  start_token: 1340
+  text: United Kingdom
+- &id246
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 5325
+  end_token: 1360
+  label: GPE
+  sentence_id: 97
+  start_char: 5316
+  start_token: 1359
+  text: Australia
+- &id247
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 5341
+  end_token: 1367
+  label: GPE
+  sentence_id: 97
+  start_char: 5335
+  start_token: 1366
+  text: Brazil
+- &id080
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 5411
+  end_token: 1388
+  label: CARDINAL
+  sentence_id: 98
+  start_char: 5410
+  start_token: 1387
+  text: '8'
+- &id248
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 5472
+  end_token: 1405
+  label: GPE
+  sentence_id: 98
+  start_char: 5467
+  start_token: 1404
+  text: China
+- &id249
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 5484
+  end_token: 1411
+  label: GPE
+  sentence_id: 98
+  start_char: 5478
+  start_token: 1410
+  text: Russia
+- &id250
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 5548
+  end_token: 1438
+  label: GPE
+  sentence_id: 98
+  start_char: 5537
+  start_token: 1436
+  text: South Korea
+- &id251
+  confidence: 1.0
+  description: Countries, cities, states
+  end_char: 5564
+  end_token: 1445
+  label: GPE
+  sentence_id: 98
+  start_char: 5558
+  start_token: 1444
+  text: Israel
+- &id081
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 5639
+  end_token: 1465
+  label: CARDINAL
+  sentence_id: 99
+  start_char: 5637
+  start_token: 1464
+  text: '15'
+- &id082
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 5649
+  end_token: 1469
+  label: CARDINAL
+  sentence_id: 99
+  start_char: 5648
+  start_token: 1468
+  text: '1'
+- &id210
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 5694
+  end_token: 1480
+  label: DATE
+  sentence_id: 100
+  start_char: 5678
+  start_token: 1475
+  text: January 1, 2024*
+- &id083
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 5697
+  end_token: 1483
+  label: CARDINAL
+  sentence_id: 100
+  start_char: 5696
+  start_token: 1482
+  text: '2'
+- &id303
+  confidence: 1.0
+  description: '"first", "second", etc.'
+  end_char: 5704
+  end_token: 1485
+  label: ORDINAL
+  sentence_id: 101
+  start_char: 5699
+  start_token: 1484
+  text: First
+- &id211
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 5746
+  end_token: 1495
+  label: DATE
+  sentence_id: 101
+  start_char: 5728
+  start_token: 1490
+  text: February 15, 2024*
+- &id084
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 5749
+  end_token: 1498
+  label: CARDINAL
+  sentence_id: 101
+  start_char: 5748
+  start_token: 1497
+  text: '3'
+- &id212
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 5760
+  end_token: 1500
+  label: DATE
+  sentence_id: 102
+  start_char: 5751
+  start_token: 1499
+  text: Quarterly
+- &id213
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 5789
+  end_token: 1509
+  label: DATE
+  sentence_id: 102
+  start_char: 5774
+  start_token: 1504
+  text: March 31, 2024*
+- &id085
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 5792
+  end_token: 1512
+  label: CARDINAL
+  sentence_id: 102
+  start_char: 5791
+  start_token: 1511
+  text: '4'
+- &id214
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 5834
+  end_token: 1523
+  label: DATE
+  sentence_id: 103
+  start_char: 5819
+  start_token: 1518
+  text: April 30, 2024*
+- &id086
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 5837
+  end_token: 1526
+  label: CARDINAL
+  sentence_id: 103
+  start_char: 5836
+  start_token: 1525
+  text: '5'
+- &id215
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 5847
+  end_token: 1530
+  label: DATE
+  sentence_id: 104
+  start_char: 5839
+  start_token: 1527
+  text: Mid-year
+- &id216
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 5878
+  end_token: 1539
+  label: DATE
+  sentence_id: 104
+  start_char: 5864
+  start_token: 1534
+  text: June 30, 2024*
+- &id087
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 5881
+  end_token: 1542
+  label: CARDINAL
+  sentence_id: 104
+  start_char: 5880
+  start_token: 1541
+  text: '6'
+- &id217
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 5920
+  end_token: 1553
+  label: DATE
+  sentence_id: 105
+  start_char: 5907
+  start_token: 1548
+  text: July 1, 2024*
+- &id088
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 5923
+  end_token: 1556
+  label: CARDINAL
+  sentence_id: 105
+  start_char: 5922
+  start_token: 1555
+  text: '7'
+- &id218
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 5966
+  end_token: 1569
+  label: DATE
+  sentence_id: 105
+  start_char: 5947
+  start_token: 1562
+  text: August 15-20, 2024*
+- &id089
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 5969
+  end_token: 1572
+  label: CARDINAL
+  sentence_id: 105
+  start_char: 5968
+  start_token: 1571
+  text: '8'
+- &id219
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 6013
+  end_token: 1583
+  label: DATE
+  sentence_id: 106
+  start_char: 5994
+  start_token: 1578
+  text: September 30, 2024*
+- &id090
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6016
+  end_token: 1586
+  label: CARDINAL
+  sentence_id: 106
+  start_char: 6015
+  start_token: 1585
+  text: '9'
+- &id220
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 6058
+  end_token: 1599
+  label: DATE
+  sentence_id: 107
+  start_char: 6038
+  start_token: 1592
+  text: October 10-12, 2024*
+- &id091
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6062
+  end_token: 1602
+  label: CARDINAL
+  sentence_id: 107
+  start_char: 6060
+  start_token: 1601
+  text: '10'
+- &id221
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 6070
+  end_token: 1604
+  label: DATE
+  sentence_id: 108
+  start_char: 6064
+  start_token: 1603
+  text: Annual
+- &id222
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 6101
+  end_token: 1613
+  label: DATE
+  sentence_id: 108
+  start_char: 6083
+  start_token: 1608
+  text: November 15, 2024*
+- &id092
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6105
+  end_token: 1616
+  label: CARDINAL
+  sentence_id: 108
+  start_char: 6103
+  start_token: 1615
+  text: '11'
+- &id223
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 6115
+  end_token: 1620
+  label: DATE
+  sentence_id: 109
+  start_char: 6107
+  start_token: 1617
+  text: Year-end
+- &id224
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 6146
+  end_token: 1629
+  label: DATE
+  sentence_id: 109
+  start_char: 6128
+  start_token: 1624
+  text: December 31, 2024*
+- &id093
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6150
+  end_token: 1632
+  label: CARDINAL
+  sentence_id: 109
+  start_char: 6148
+  start_token: 1631
+  text: '12'
+- &id225
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 6190
+  end_token: 1642
+  label: DATE
+  sentence_id: 110
+  start_char: 6176
+  start_token: 1638
+  text: March 15, 1991
+- &id094
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6207
+  end_token: 1647
+  label: CARDINAL
+  sentence_id: 110
+  start_char: 6205
+  start_token: 1646
+  text: '13'
+- &id226
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 6240
+  end_token: 1657
+  label: DATE
+  sentence_id: 111
+  start_char: 6228
+  start_token: 1653
+  text: June 1, 2020
+- &id095
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6245
+  end_token: 1661
+  label: CARDINAL
+  sentence_id: 111
+  start_char: 6243
+  start_token: 1660
+  text: '14'
+- &id227
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 6290
+  end_token: 1671
+  label: DATE
+  sentence_id: 112
+  start_char: 6274
+  start_token: 1667
+  text: January 26, 1989
+- &id096
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6295
+  end_token: 1675
+  label: CARDINAL
+  sentence_id: 112
+  start_char: 6293
+  start_token: 1674
+  text: '15'
+- &id228
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 6334
+  end_token: 1685
+  label: DATE
+  sentence_id: 113
+  start_char: 6319
+  start_token: 1681
+  text: January 1, 2025
+- &id265
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 6355
+  end_token: 1694
+  label: MONEY
+  sentence_id: 113
+  start_char: 6343
+  start_token: 1690
+  text: '## SECTION 6'
+- &id097
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6380
+  end_token: 1701
+  label: CARDINAL
+  sentence_id: 113
+  start_char: 6379
+  start_token: 1700
+  text: '8'
+- &id436
+  confidence: 1.0
+  description: Times smaller than a day
+  end_char: 6421
+  end_token: 1712
+  label: TIME
+  sentence_id: 113
+  start_char: 6414
+  start_token: 1710
+  text: 9:00 AM
+- &id437
+  confidence: 1.0
+  description: Times smaller than a day
+  end_char: 6435
+  end_token: 1719
+  label: TIME
+  sentence_id: 113
+  start_char: 6427
+  start_token: 1717
+  text: 10:30 AM
+- &id438
+  confidence: 1.0
+  description: Times smaller than a day
+  end_char: 6449
+  end_token: 1726
+  label: TIME
+  sentence_id: 113
+  start_char: 6441
+  start_token: 1724
+  text: 12:00 PM
+- &id439
+  confidence: 1.0
+  description: Times smaller than a day
+  end_char: 6457
+  end_token: 1730
+  label: TIME
+  sentence_id: 113
+  start_char: 6453
+  start_token: 1729
+  text: noon
+- &id440
+  confidence: 1.0
+  description: Times smaller than a day
+  end_char: 6469
+  end_token: 1736
+  label: TIME
+  sentence_id: 113
+  start_char: 6462
+  start_token: 1734
+  text: 2:15 PM
+- &id441
+  confidence: 1.0
+  description: Times smaller than a day
+  end_char: 6482
+  end_token: 1743
+  label: TIME
+  sentence_id: 113
+  start_char: 6475
+  start_token: 1741
+  text: 3:45 PM
+- &id442
+  confidence: 1.0
+  description: Times smaller than a day
+  end_char: 6495
+  end_token: 1750
+  label: TIME
+  sentence_id: 113
+  start_char: 6488
+  start_token: 1748
+  text: 5:00 PM
+- &id443
+  confidence: 1.0
+  description: Times smaller than a day
+  end_char: 6508
+  end_token: 1757
+  label: TIME
+  sentence_id: 113
+  start_char: 6501
+  start_token: 1755
+  text: 6:30 PM
+- &id444
+  confidence: 1.0
+  description: Times smaller than a day
+  end_char: 6526
+  end_token: 1765
+  label: TIME
+  sentence_id: 113
+  start_char: 6518
+  start_token: 1763
+  text: 11:59 PM
+- &id098
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6575
+  end_token: 1782
+  label: CARDINAL
+  sentence_id: 113
+  start_char: 6573
+  start_token: 1781
+  text: '20'
+- &id266
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 6599
+  end_token: 1790
+  label: MONEY
+  sentence_id: 113
+  start_char: 6592
+  start_token: 1786
+  text: '### 7.1'
+- &id099
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6616
+  end_token: 1794
+  label: CARDINAL
+  sentence_id: 113
+  start_char: 6614
+  start_token: 1793
+  text: '10'
+- &id100
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6627
+  end_token: 1798
+  label: CARDINAL
+  sentence_id: 113
+  start_char: 6626
+  start_token: 1797
+  text: '1'
+- &id267
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 6664
+  end_token: 1807
+  label: MONEY
+  sentence_id: 114
+  start_char: 6657
+  start_token: 1806
+  text: 500,000
+- &id101
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6668
+  end_token: 1811
+  label: CARDINAL
+  sentence_id: 114
+  start_char: 6667
+  start_token: 1810
+  text: '2'
+- &id268
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 6705
+  end_token: 1820
+  label: MONEY
+  sentence_id: 115
+  start_char: 6693
+  start_token: 1817
+  text: $1.2 million
+- &id102
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6709
+  end_token: 1824
+  label: CARDINAL
+  sentence_id: 115
+  start_char: 6708
+  start_token: 1823
+  text: '3'
+- &id269
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 6742
+  end_token: 1832
+  label: MONEY
+  sentence_id: 116
+  start_char: 6735
+  start_token: 1831
+  text: 250,000
+- &id103
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6746
+  end_token: 1836
+  label: CARDINAL
+  sentence_id: 116
+  start_char: 6745
+  start_token: 1835
+  text: '4'
+- &id270
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 6774
+  end_token: 1844
+  label: MONEY
+  sentence_id: 117
+  start_char: 6768
+  start_token: 1843
+  text: 75,000
+- &id104
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6778
+  end_token: 1848
+  label: CARDINAL
+  sentence_id: 117
+  start_char: 6777
+  start_token: 1847
+  text: '5'
+- &id271
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 6814
+  end_token: 1857
+  label: MONEY
+  sentence_id: 118
+  start_char: 6802
+  start_token: 1854
+  text: $3.5 million
+- &id105
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6818
+  end_token: 1861
+  label: CARDINAL
+  sentence_id: 118
+  start_char: 6817
+  start_token: 1860
+  text: '6'
+- &id272
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 6852
+  end_token: 1870
+  label: MONEY
+  sentence_id: 119
+  start_char: 6841
+  start_token: 1867
+  text: $10 million
+- &id106
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6856
+  end_token: 1874
+  label: CARDINAL
+  sentence_id: 119
+  start_char: 6855
+  start_token: 1873
+  text: '7'
+- &id273
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 6884
+  end_token: 1882
+  label: MONEY
+  sentence_id: 119
+  start_char: 6877
+  start_token: 1881
+  text: 500,000
+- &id107
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6888
+  end_token: 1886
+  label: CARDINAL
+  sentence_id: 119
+  start_char: 6887
+  start_token: 1885
+  text: '8'
+- &id274
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 6921
+  end_token: 1895
+  label: MONEY
+  sentence_id: 120
+  start_char: 6909
+  start_token: 1892
+  text: $2.8 million
+- &id108
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6925
+  end_token: 1899
+  label: CARDINAL
+  sentence_id: 120
+  start_char: 6924
+  start_token: 1898
+  text: '9'
+- &id275
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 6957
+  end_token: 1908
+  label: MONEY
+  sentence_id: 121
+  start_char: 6945
+  start_token: 1905
+  text: $1.5 million
+- &id109
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 6962
+  end_token: 1912
+  label: CARDINAL
+  sentence_id: 121
+  start_char: 6960
+  start_token: 1911
+  text: '10'
+- &id276
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 7002
+  end_token: 1921
+  label: MONEY
+  sentence_id: 122
+  start_char: 6990
+  start_token: 1918
+  text: $5.2 million
+- &id277
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 7019
+  end_token: 1929
+  label: MONEY
+  sentence_id: 122
+  start_char: 7006
+  start_token: 1924
+  text: '### 7.2 Fines'
+- &id110
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7037
+  end_token: 1933
+  label: CARDINAL
+  sentence_id: 122
+  start_char: 7035
+  start_token: 1932
+  text: '10'
+- &id111
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7049
+  end_token: 1937
+  label: CARDINAL
+  sentence_id: 122
+  start_char: 7047
+  start_token: 1936
+  text: '11'
+- &id278
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 7079
+  end_token: 1946
+  label: MONEY
+  sentence_id: 123
+  start_char: 7073
+  start_token: 1945
+  text: 14,502
+- &id112
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7098
+  end_token: 1952
+  label: CARDINAL
+  sentence_id: 123
+  start_char: 7096
+  start_token: 1951
+  text: '12'
+- &id279
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 7127
+  end_token: 1960
+  label: MONEY
+  sentence_id: 124
+  start_char: 7122
+  start_token: 1959
+  text: 1,000
+- &id113
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7140
+  end_token: 1965
+  label: CARDINAL
+  sentence_id: 124
+  start_char: 7138
+  start_token: 1964
+  text: '13'
+- &id280
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 7170
+  end_token: 1973
+  label: MONEY
+  sentence_id: 125
+  start_char: 7164
+  start_token: 1972
+  text: 10,000
+- &id281
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 7186
+  end_token: 1980
+  label: MONEY
+  sentence_id: 125
+  start_char: 7179
+  start_token: 1979
+  text: 145,027
+- &id114
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7191
+  end_token: 1984
+  label: CARDINAL
+  sentence_id: 125
+  start_char: 7189
+  start_token: 1983
+  text: '14'
+- &id282
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 7221
+  end_token: 1992
+  label: MONEY
+  sentence_id: 126
+  start_char: 7214
+  start_token: 1991
+  text: 145,027
+- &id115
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7234
+  end_token: 1997
+  label: CARDINAL
+  sentence_id: 126
+  start_char: 7232
+  start_token: 1996
+  text: '15'
+- &id283
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 7263
+  end_token: 2006
+  label: MONEY
+  sentence_id: 127
+  start_char: 7257
+  start_token: 2005
+  text: 14,502
+- &id116
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7276
+  end_token: 2012
+  label: CARDINAL
+  sentence_id: 127
+  start_char: 7274
+  start_token: 2011
+  text: '16'
+- &id284
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 7318
+  end_token: 2022
+  label: MONEY
+  sentence_id: 128
+  start_char: 7307
+  start_token: 2019
+  text: $50 million
+- &id117
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7323
+  end_token: 2026
+  label: CARDINAL
+  sentence_id: 128
+  start_char: 7321
+  start_token: 2025
+  text: '17'
+- &id285
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 7347
+  end_token: 2034
+  label: MONEY
+  sentence_id: 129
+  start_char: 7342
+  start_token: 2033
+  text: 3,500
+- &id118
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7352
+  end_token: 2038
+  label: CARDINAL
+  sentence_id: 129
+  start_char: 7350
+  start_token: 2037
+  text: '18'
+- &id286
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 7389
+  end_token: 2048
+  label: MONEY
+  sentence_id: 130
+  start_char: 7377
+  start_token: 2045
+  text: $2.3 million
+- &id119
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7394
+  end_token: 2052
+  label: CARDINAL
+  sentence_id: 130
+  start_char: 7392
+  start_token: 2051
+  text: '19'
+- &id287
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 7425
+  end_token: 2060
+  label: MONEY
+  sentence_id: 131
+  start_char: 7418
+  start_token: 2059
+  text: 750,000
+- &id120
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7430
+  end_token: 2064
+  label: CARDINAL
+  sentence_id: 131
+  start_char: 7428
+  start_token: 2063
+  text: '20'
+- &id288
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 7469
+  end_token: 2074
+  label: MONEY
+  sentence_id: 132
+  start_char: 7457
+  start_token: 2071
+  text: $100 million
+- &id121
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7519
+  end_token: 2090
+  label: CARDINAL
+  sentence_id: 132
+  start_char: 7517
+  start_token: 2089
+  text: '15'
+- &id122
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7535
+  end_token: 2094
+  label: CARDINAL
+  sentence_id: 132
+  start_char: 7534
+  start_token: 2093
+  text: '1'
+- &id351
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 7562
+  end_token: 2102
+  label: PERCENT
+  sentence_id: 133
+  start_char: 7559
+  start_token: 2100
+  text: 25%
+- &id123
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7589
+  end_token: 2109
+  label: CARDINAL
+  sentence_id: 133
+  start_char: 7588
+  start_token: 2108
+  text: '2'
+- &id352
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 7615
+  end_token: 2117
+  label: PERCENT
+  sentence_id: 134
+  start_char: 7610
+  start_token: 2115
+  text: 98.5%
+- &id124
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7633
+  end_token: 2123
+  label: CARDINAL
+  sentence_id: 134
+  start_char: 7632
+  start_token: 2122
+  text: '3'
+- &id353
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 7662
+  end_token: 2131
+  label: PERCENT
+  sentence_id: 135
+  start_char: 7658
+  start_token: 2129
+  text: 100%
+- &id125
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7679
+  end_token: 2137
+  label: CARDINAL
+  sentence_id: 135
+  start_char: 7678
+  start_token: 2136
+  text: '4'
+- &id354
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 7702
+  end_token: 2145
+  label: PERCENT
+  sentence_id: 136
+  start_char: 7699
+  start_token: 2143
+  text: 15%
+- &id126
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7721
+  end_token: 2154
+  label: CARDINAL
+  sentence_id: 136
+  start_char: 7720
+  start_token: 2153
+  text: '5'
+- &id355
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 7745
+  end_token: 2162
+  label: PERCENT
+  sentence_id: 137
+  start_char: 7742
+  start_token: 2160
+  text: 30%
+- &id127
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7768
+  end_token: 2169
+  label: CARDINAL
+  sentence_id: 137
+  start_char: 7767
+  start_token: 2168
+  text: '6'
+- &id356
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 7791
+  end_token: 2177
+  label: PERCENT
+  sentence_id: 138
+  start_char: 7786
+  start_token: 2175
+  text: 45.5%
+- &id128
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7807
+  end_token: 2183
+  label: CARDINAL
+  sentence_id: 138
+  start_char: 7806
+  start_token: 2182
+  text: '7'
+- &id357
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 7837
+  end_token: 2191
+  label: PERCENT
+  sentence_id: 138
+  start_char: 7834
+  start_token: 2189
+  text: 92%
+- &id129
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7859
+  end_token: 2197
+  label: CARDINAL
+  sentence_id: 138
+  start_char: 7858
+  start_token: 2196
+  text: '8'
+- &id358
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 7879
+  end_token: 2205
+  label: PERCENT
+  sentence_id: 139
+  start_char: 7875
+  start_token: 2203
+  text: 0.5%
+- &id359
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 7895
+  end_token: 2210
+  label: PERCENT
+  sentence_id: 139
+  start_char: 7883
+  start_token: 2208
+  text: half percent
+- &id130
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7898
+  end_token: 2213
+  label: CARDINAL
+  sentence_id: 139
+  start_char: 7897
+  start_token: 2212
+  text: '9'
+- &id360
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 7927
+  end_token: 2223
+  label: PERCENT
+  sentence_id: 140
+  start_char: 7921
+  start_token: 2219
+  text: 10-15%
+- &id131
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7938
+  end_token: 2228
+  label: CARDINAL
+  sentence_id: 140
+  start_char: 7936
+  start_token: 2227
+  text: '10'
+- &id361
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 7968
+  end_token: 2236
+  label: PERCENT
+  sentence_id: 141
+  start_char: 7965
+  start_token: 2234
+  text: 20%
+- &id132
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 7973
+  end_token: 2240
+  label: CARDINAL
+  sentence_id: 141
+  start_char: 7971
+  start_token: 2239
+  text: '11'
+- &id362
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 7997
+  end_token: 2248
+  label: PERCENT
+  sentence_id: 142
+  start_char: 7994
+  start_token: 2246
+  text: 35%
+- &id133
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8002
+  end_token: 2252
+  label: CARDINAL
+  sentence_id: 142
+  start_char: 8000
+  start_token: 2251
+  text: '12'
+- &id363
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 8027
+  end_token: 2260
+  label: PERCENT
+  sentence_id: 143
+  start_char: 8022
+  start_token: 2258
+  text: 18.5%
+- &id134
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8032
+  end_token: 2264
+  label: CARDINAL
+  sentence_id: 143
+  start_char: 8030
+  start_token: 2263
+  text: '13'
+- &id364
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 8056
+  end_token: 2272
+  label: PERCENT
+  sentence_id: 144
+  start_char: 8053
+  start_token: 2270
+  text: 97%
+- &id135
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8061
+  end_token: 2276
+  label: CARDINAL
+  sentence_id: 144
+  start_char: 8059
+  start_token: 2275
+  text: '14'
+- &id365
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 8082
+  end_token: 2284
+  label: PERCENT
+  sentence_id: 145
+  start_char: 8079
+  start_token: 2282
+  text: 88%
+- &id136
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8087
+  end_token: 2288
+  label: CARDINAL
+  sentence_id: 145
+  start_char: 8085
+  start_token: 2287
+  text: '15'
+- &id366
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 8109
+  end_token: 2295
+  label: PERCENT
+  sentence_id: 146
+  start_char: 8106
+  start_token: 2293
+  text: 75%
+- &id137
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8195
+  end_token: 2319
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8193
+  start_token: 2318
+  text: '10'
+- &id138
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8234
+  end_token: 2330
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8231
+  start_token: 2329
+  text: '800'
+- &id139
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8254
+  end_token: 2341
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8251
+  start_token: 2340
+  text: '202'
+- &id229
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 8264
+  end_token: 2345
+  label: DATE
+  sentence_id: 146
+  start_char: 8256
+  start_token: 2342
+  text: 693-1999
+- &id140
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8274
+  end_token: 2352
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8271
+  start_token: 2351
+  text: '877'
+- &id141
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8279
+  end_token: 2354
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8276
+  start_token: 2353
+  text: '889'
+- &id142
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8294
+  end_token: 2363
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8291
+  start_token: 2362
+  text: '617'
+- &id230
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 8304
+  end_token: 2367
+  label: DATE
+  sentence_id: 146
+  start_char: 8296
+  start_token: 2364
+  text: 565-9860
+- &id143
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8314
+  end_token: 2374
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8311
+  start_token: 2373
+  text: '212'
+- &id144
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8319
+  end_token: 2376
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8316
+  start_token: 2375
+  text: '337'
+- &id145
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8334
+  end_token: 2385
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8331
+  start_token: 2384
+  text: '404'
+- &id146
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8344
+  end_token: 2389
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8336
+  start_token: 2386
+  text: 562-2300
+- &id147
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8354
+  end_token: 2396
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8351
+  start_token: 2395
+  text: '312'
+- &id148
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8364
+  end_token: 2400
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8356
+  start_token: 2397
+  text: 353-2220
+- &id149
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8374
+  end_token: 2407
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8371
+  start_token: 2406
+  text: '214'
+- &id400
+  confidence: 1.0
+  description: Objects, vehicles, foods, etc. (not services)
+  end_char: 8384
+  end_token: 2411
+  label: PRODUCT
+  sentence_id: 146
+  start_char: 8376
+  start_token: 2408
+  text: 767-4731
+- &id150
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8394
+  end_token: 2418
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8391
+  start_token: 2417
+  text: '303'
+- &id151
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8399
+  end_token: 2420
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8396
+  start_token: 2419
+  text: '844'
+- &id152
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8414
+  end_token: 2429
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8411
+  start_token: 2428
+  text: '415'
+- &id153
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8424
+  end_token: 2433
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8416
+  start_token: 2430
+  text: 975-4310
+- &id289
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 8448
+  end_token: 2442
+  label: MONEY
+  sentence_id: 146
+  start_char: 8429
+  start_token: 2437
+  text: '### 9.2 Regulations'
+- &id154
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8487
+  end_token: 2453
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8485
+  start_token: 2452
+  text: '29'
+- &id155
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8508
+  end_token: 2461
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8506
+  start_token: 2460
+  text: '29'
+- &id156
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8528
+  end_token: 2469
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8526
+  start_token: 2468
+  text: '29'
+- &id338
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 8620
+  end_token: 2507
+  label: ORG
+  sentence_id: 146
+  start_char: 8617
+  start_token: 2506
+  text: EPA
+- &id157
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8623
+  end_token: 2508
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8621
+  start_token: 2507
+  text: '40'
+- &id339
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 8640
+  end_token: 2516
+  label: ORG
+  sentence_id: 146
+  start_char: 8637
+  start_token: 2515
+  text: DOT
+- &id158
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8643
+  end_token: 2517
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8641
+  start_token: 2516
+  text: '49'
+- &id159
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8651
+  end_token: 2519
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8648
+  start_token: 2518
+  text: '172'
+- &id340
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 8660
+  end_token: 2525
+  label: ORG
+  sentence_id: 146
+  start_char: 8657
+  start_token: 2524
+  text: FDA
+- &id160
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8663
+  end_token: 2526
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8661
+  start_token: 2525
+  text: '21'
+- &id290
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 8688
+  end_token: 2537
+  label: MONEY
+  sentence_id: 146
+  start_char: 8676
+  start_token: 2532
+  text: '### 9.3 URLs'
+- &id291
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 8878
+  end_token: 2580
+  label: MONEY
+  sentence_id: 146
+  start_char: 8875
+  start_token: 2577
+  text: '###'
+- &id161
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 8899
+  end_token: 2584
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 8897
+  start_token: 2583
+  text: '20'
+- &id401
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 8955
+  end_token: 2596
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 8949
+  start_token: 2594
+  text: 6 feet
+- &id402
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 8969
+  end_token: 2601
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 8959
+  start_token: 2599
+  text: 1.8 meters
+- &id403
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9019
+  end_token: 2613
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9010
+  start_token: 2611
+  text: 42 inches
+- &id404
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9029
+  end_token: 2618
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9023
+  start_token: 2616
+  text: 107 cm
+- &id405
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9067
+  end_token: 2629
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9059
+  start_token: 2627
+  text: 4 inches
+- &id406
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9076
+  end_token: 2634
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9071
+  start_token: 2632
+  text: 10 cm
+- &id407
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9113
+  end_token: 2645
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9106
+  start_token: 2643
+  text: 30 feet
+- &id408
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9127
+  end_token: 2650
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9117
+  start_token: 2648
+  text: 9.1 meters
+- &id409
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9164
+  end_token: 2661
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9158
+  start_token: 2659
+  text: 3 feet
+- &id410
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9178
+  end_token: 2666
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9168
+  start_token: 2664
+  text: 0.9 meters
+- &id411
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9216
+  end_token: 2676
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9207
+  start_token: 2674
+  text: 22 inches
+- &id412
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9225
+  end_token: 2681
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9220
+  start_token: 2679
+  text: 56 cm
+- &id413
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9259
+  end_token: 2692
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9247
+  start_token: 2688
+  text: 30-37 inches
+- &id414
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9271
+  end_token: 2699
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9263
+  start_token: 2695
+  text: 76-94 cm
+- &id415
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9300
+  end_token: 2708
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9291
+  start_token: 2706
+  text: 30 inches
+- &id416
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9309
+  end_token: 2713
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9304
+  start_token: 2711
+  text: 76 cm
+- &id417
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9354
+  end_token: 2724
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9344
+  start_token: 2722
+  text: 9.5 inches
+- &id418
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9363
+  end_token: 2729
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9358
+  start_token: 2727
+  text: 24 cm
+- &id419
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9399
+  end_token: 2739
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9389
+  start_token: 2737
+  text: 9.5 inches
+- &id420
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9408
+  end_token: 2744
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9403
+  start_token: 2742
+  text: 24 cm
+- &id421
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9444
+  end_token: 2754
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9435
+  start_token: 2752
+  text: 20 inches
+- &id422
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9453
+  end_token: 2759
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9448
+  start_token: 2757
+  text: 51 cm
+- &id423
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9491
+  end_token: 2769
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9482
+  start_token: 2767
+  text: 18 inches
+- &id424
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9500
+  end_token: 2774
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9495
+  start_token: 2772
+  text: 46 cm
+- &id425
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9540
+  end_token: 2785
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9533
+  start_token: 2783
+  text: 10 feet
+- &id426
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9552
+  end_token: 2790
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9544
+  start_token: 2788
+  text: 3 meters
+- &id427
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9602
+  end_token: 2801
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9596
+  start_token: 2799
+  text: 5 feet
+- &id428
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9616
+  end_token: 2806
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9606
+  start_token: 2804
+  text: 1.5 meters
+- &id162
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 9645
+  end_token: 2815
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 9643
+  start_token: 2814
+  text: '90'
+- &id445
+  confidence: 1.0
+  description: Times smaller than a day
+  end_char: 9668
+  end_token: 2821
+  label: TIME
+  sentence_id: 146
+  start_char: 9661
+  start_token: 2819
+  text: 8 hours
+- &id429
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9699
+  end_token: 2829
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9689
+  start_token: 2827
+  text: 250 pounds
+- &id430
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9709
+  end_token: 2834
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9703
+  start_token: 2832
+  text: 113 kg
+- &id163
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 9756
+  end_token: 2848
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 9753
+  start_token: 2847
+  text: '120'
+- &id164
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 9773
+  end_token: 2858
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 9771
+  start_token: 2857
+  text: '49'
+- &id431
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9809
+  end_token: 2869
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9801
+  start_token: 2867
+  text: 500 feet
+- &id432
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9823
+  end_token: 2874
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9813
+  start_token: 2872
+  text: 152 meters
+- &id446
+  confidence: 1.0
+  description: Times smaller than a day
+  end_char: 9853
+  end_token: 2883
+  label: TIME
+  sentence_id: 146
+  start_char: 9843
+  start_token: 2881
+  text: 15 minutes
+- &id433
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9896
+  end_token: 2895
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9889
+  start_token: 2893
+  text: 15 feet
+- &id434
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 9910
+  end_token: 2900
+  label: QUANTITY
+  sentence_id: 146
+  start_char: 9900
+  start_token: 2898
+  text: 4.6 meters
+- &id292
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 9931
+  end_token: 2908
+  label: MONEY
+  sentence_id: 146
+  start_char: 9918
+  start_token: 2904
+  text: '## SECTION 10'
+- &id293
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 9966
+  end_token: 2917
+  label: MONEY
+  sentence_id: 146
+  start_char: 9958
+  start_token: 2913
+  text: '### 10.1'
+- &id395
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 10010
+  end_token: 2925
+  label: PERSON
+  sentence_id: 146
+  start_char: 10000
+  start_token: 2923
+  text: John Smith
+- &id396
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 10038
+  end_token: 2933
+  label: PERSON
+  sentence_id: 146
+  start_char: 10026
+  start_token: 2931
+  text: Mary Johnson
+- &id341
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 10073
+  end_token: 2941
+  label: ORG
+  sentence_id: 146
+  start_char: 10046
+  start_token: 2938
+  text: Global Dynamics Corporation
+- &id342
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 10131
+  end_token: 2958
+  label: ORG
+  sentence_id: 146
+  start_char: 10112
+  start_token: 2955
+  text: Amazon Web Services
+- &id397
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 10163
+  end_token: 2969
+  label: PERSON
+  sentence_id: 146
+  start_char: 10148
+  start_token: 2967
+  text: Michael O'Brien
+- &id343
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 10210
+  end_token: 2978
+  label: ORG
+  sentence_id: 146
+  start_char: 10186
+  start_token: 2975
+  text: Johns Hopkins University
+- &id398
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 10234
+  end_token: 2986
+  label: PERSON
+  sentence_id: 146
+  start_char: 10217
+  start_token: 2984
+  text: Jennifer Martinez
+- &id294
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 10367
+  end_token: 3026
+  label: MONEY
+  sentence_id: 146
+  start_char: 10341
+  start_token: 3019
+  text: '### 10.2 Compliance Rules
+
+    '
+- &id165
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 10368
+  end_token: 3027
+  label: CARDINAL
+  sentence_id: 146
+  start_char: 10367
+  start_token: 3026
+  text: '1'
+- &id435
+  confidence: 1.0
+  description: Measurements, as of weight or distance
+  end_char: 10423
+  end_token: 3038
+  label: QUANTITY
+  sentence_id: 147
+  start_char: 10400
+  start_token: 3034
+  text: over 10,000 square feet
+- &id231
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 10472
+  end_token: 3049
+  label: DATE
+  sentence_id: 147
+  start_char: 10465
+  start_token: 3047
+  text: 30 days
+- &id166
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 10476
+  end_token: 3053
+  label: CARDINAL
+  sentence_id: 147
+  start_char: 10475
+  start_token: 3052
+  text: '2'
+- &id295
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 10513
+  end_token: 3062
+  label: MONEY
+  sentence_id: 148
+  start_char: 10506
+  start_token: 3061
+  text: 500,000
+- &id167
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 10572
+  end_token: 3072
+  label: CARDINAL
+  sentence_id: 148
+  start_char: 10571
+  start_token: 3071
+  text: '3'
+- &id296
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 10605
+  end_token: 3079
+  label: MONEY
+  sentence_id: 149
+  start_char: 10598
+  start_token: 3078
+  text: 100,000
+- &id168
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 10661
+  end_token: 3094
+  label: CARDINAL
+  sentence_id: 149
+  start_char: 10660
+  start_token: 3093
+  text: '4'
+- &id169
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 10764
+  end_token: 3122
+  label: CARDINAL
+  sentence_id: 150
+  start_char: 10763
+  start_token: 3121
+  text: '5'
+- &id170
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 10795
+  end_token: 3130
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 10794
+  start_token: 3129
+  text: '3'
+- &id447
+  confidence: 1.0
+  description: Times smaller than a day
+  end_char: 10850
+  end_token: 3142
+  label: TIME
+  sentence_id: 151
+  start_char: 10843
+  start_token: 3140
+  text: 8 hours
+- &id297
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 10857
+  end_token: 3148
+  label: MONEY
+  sentence_id: 151
+  start_char: 10854
+  start_token: 3145
+  text: '###'
+- &id344
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 10886
+  end_token: 3154
+  label: ORG
+  sentence_id: 151
+  start_char: 10863
+  start_token: 3149
+  text: 'Financial Rules
+
+    - Fines'
+- &id367
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 10904
+  end_token: 3160
+  label: PERCENT
+  sentence_id: 151
+  start_char: 10901
+  start_token: 3158
+  text: 10%
+- &id298
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 10970
+  end_token: 3175
+  label: MONEY
+  sentence_id: 151
+  start_char: 10969
+  start_token: 3174
+  text: '4'
+- &id299
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 10987
+  end_token: 3183
+  label: MONEY
+  sentence_id: 151
+  start_char: 10986
+  start_token: 3182
+  text: '1'
+- &id368
+  confidence: 1.0
+  description: Percentage, including "%"
+  end_char: 11046
+  end_token: 3198
+  label: PERCENT
+  sentence_id: 151
+  start_char: 11043
+  start_token: 3196
+  text: 15%
+- &id300
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 11113
+  end_token: 3213
+  label: MONEY
+  sentence_id: 151
+  start_char: 11107
+  start_token: 3212
+  text: 50,000
+- &id232
+  confidence: 1.0
+  description: Absolute or relative dates or periods
+  end_char: 11197
+  end_token: 3231
+  label: DATE
+  sentence_id: 151
+  start_char: 11188
+  start_token: 3229
+  text: 12 months
+- &id171
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11269
+  end_token: 3253
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11267
+  start_token: 3252
+  text: '25'
+- &id172
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11307
+  end_token: 3260
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11305
+  start_token: 3259
+  text: '30'
+- &id173
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11325
+  end_token: 3263
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11323
+  start_token: 3262
+  text: '10'
+- &id174
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11340
+  end_token: 3266
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11338
+  start_token: 3265
+  text: '15'
+- &id175
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11353
+  end_token: 3269
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11352
+  start_token: 3268
+  text: '5'
+- &id176
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11381
+  end_token: 3276
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11379
+  start_token: 3275
+  text: '20'
+- &id177
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11395
+  end_token: 3279
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11393
+  start_token: 3278
+  text: '10'
+- &id178
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11406
+  end_token: 3282
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11404
+  start_token: 3281
+  text: '10'
+- &id179
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11433
+  end_token: 3291
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11432
+  start_token: 3290
+  text: '8'
+- &id180
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11466
+  end_token: 3298
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11464
+  start_token: 3297
+  text: '15'
+- &id181
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11491
+  end_token: 3305
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11490
+  start_token: 3304
+  text: '8'
+- &id182
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11518
+  end_token: 3312
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11516
+  start_token: 3311
+  text: '20'
+- &id183
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11549
+  end_token: 3319
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11547
+  start_token: 3318
+  text: '15'
+- &id184
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11599
+  end_token: 3332
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11597
+  start_token: 3331
+  text: '10'
+- &id185
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11630
+  end_token: 3339
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11628
+  start_token: 3338
+  text: '10'
+- &id186
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11661
+  end_token: 3346
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11660
+  start_token: 3345
+  text: '5'
+- &id187
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11693
+  end_token: 3353
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11691
+  start_token: 3352
+  text: '20'
+- &id188
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11733
+  end_token: 3362
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11732
+  start_token: 3361
+  text: '8'
+- &id189
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11747
+  end_token: 3365
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11744
+  start_token: 3364
+  text: '141'
+- &id190
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11781
+  end_token: 3375
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11779
+  start_token: 3374
+  text: '45'
+- &id191
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11802
+  end_token: 3384
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11799
+  start_token: 3383
+  text: '186'
+- &id301
+  confidence: 1.0
+  description: Monetary values, including unit
+  end_char: 11822
+  end_token: 3392
+  label: MONEY
+  sentence_id: 151
+  start_char: 11821
+  start_token: 3391
+  text: '#'
+- &id192
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11847
+  end_token: 3397
+  label: CARDINAL
+  sentence_id: 151
+  start_char: 11846
+  start_token: 3396
+  text: '1'
+- &id193
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11907
+  end_token: 3411
+  label: CARDINAL
+  sentence_id: 152
+  start_char: 11905
+  start_token: 3410
+  text: '25'
+- &id194
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 11946
+  end_token: 3418
+  label: CARDINAL
+  sentence_id: 152
+  start_char: 11945
+  start_token: 3417
+  text: '2'
+- &id195
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 12027
+  end_token: 3438
+  label: CARDINAL
+  sentence_id: 153
+  start_char: 12026
+  start_token: 3437
+  text: '3'
+- &id196
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 12119
+  end_token: 3457
+  label: CARDINAL
+  sentence_id: 153
+  start_char: 12118
+  start_token: 3456
+  text: '4'
+- &id197
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 12209
+  end_token: 3477
+  label: CARDINAL
+  sentence_id: 154
+  start_char: 12208
+  start_token: 3476
+  text: '5'
+- &id198
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 12279
+  end_token: 3495
+  label: CARDINAL
+  sentence_id: 155
+  start_char: 12278
+  start_token: 3494
+  text: '6'
+- &id199
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 12368
+  end_token: 3514
+  label: CARDINAL
+  sentence_id: 156
+  start_char: 12367
+  start_token: 3513
+  text: '7'
+- &id200
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 12455
+  end_token: 3531
+  label: CARDINAL
+  sentence_id: 157
+  start_char: 12454
+  start_token: 3530
+  text: '8'
+- &id201
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 12569
+  end_token: 3559
+  label: CARDINAL
+  sentence_id: 158
+  start_char: 12568
+  start_token: 3558
+  text: '9'
+- &id202
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 12673
+  end_token: 3579
+  label: CARDINAL
+  sentence_id: 159
+  start_char: 12671
+  start_token: 3578
+  text: '10'
+- &id399
+  confidence: 1.0
+  description: People, including fictional
+  end_char: 12695
+  end_token: 3585
+  label: PERSON
+  sentence_id: 160
+  start_char: 12682
+  start_token: 3583
+  text: Accuracy Rule
+- &id345
+  confidence: 1.0
+  description: Companies, agencies, institutions, etc.
+  end_char: 12794
+  end_token: 3606
+  label: ORG
+  sentence_id: 160
+  start_char: 12771
+  start_token: 3602
+  text: Test Document - Version
+- &id203
+  confidence: 1.0
+  description: Numerals that do not fall under another type
+  end_char: 12798
+  end_token: 3607
+  label: CARDINAL
+  sentence_id: 160
+  start_char: 12795
+  start_token: 3606
+  text: '1.0'
+distribution:
+  CARDINAL: 203
+  DATE: 29
+  GPE: 19
+  MONEY: 50
+  NORP: 1
+  ORDINAL: 1
+  ORG: 42
+  PERCENT: 23
+  PERSON: 31
+  PRODUCT: 1
+  QUANTITY: 35
+  TIME: 12
+  WORK_OF_ART: 1
+entities_by_type:
+  CARDINAL:
+  - *id001
+  - *id002
+  - *id003
+  - *id004
+  - *id005
+  - *id006
+  - *id007
+  - *id008
+  - *id009
+  - *id010
+  - *id011
+  - *id012
+  - *id013
+  - *id014
+  - *id015
+  - *id016
+  - *id017
+  - *id018
+  - *id019
+  - *id020
+  - *id021
+  - *id022
+  - *id023
+  - *id024
+  - *id025
+  - *id026
+  - *id027
+  - *id028
+  - *id029
+  - *id030
+  - *id031
+  - *id032
+  - *id033
+  - *id034
+  - *id035
+  - *id036
+  - *id037
+  - *id038
+  - *id039
+  - *id040
+  - *id041
+  - *id042
+  - *id043
+  - *id044
+  - *id045
+  - *id046
+  - *id047
+  - *id048
+  - *id049
+  - *id050
+  - *id051
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  - *id080
+  - *id081
+  - *id082
+  - *id083
+  - *id084
+  - *id085
+  - *id086
+  - *id087
+  - *id088
+  - *id089
+  - *id090
+  - *id091
+  - *id092
+  - *id093
+  - *id094
+  - *id095
+  - *id096
+  - *id097
+  - *id098
+  - *id099
+  - *id100
+  - *id101
+  - *id102
+  - *id103
+  - *id104
+  - *id105
+  - *id106
+  - *id107
+  - *id108
+  - *id109
+  - *id110
+  - *id111
+  - *id112
+  - *id113
+  - *id114
+  - *id115
+  - *id116
+  - *id117
+  - *id118
+  - *id119
+  - *id120
+  - *id121
+  - *id122
+  - *id123
+  - *id124
+  - *id125
+  - *id126
+  - *id127
+  - *id128
+  - *id129
+  - *id130
+  - *id131
+  - *id132
+  - *id133
+  - *id134
+  - *id135
+  - *id136
+  - *id137
+  - *id138
+  - *id139
+  - *id140
+  - *id141
+  - *id142
+  - *id143
+  - *id144
+  - *id145
+  - *id146
+  - *id147
+  - *id148
+  - *id149
+  - *id150
+  - *id151
+  - *id152
+  - *id153
+  - *id154
+  - *id155
+  - *id156
+  - *id157
+  - *id158
+  - *id159
+  - *id160
+  - *id161
+  - *id162
+  - *id163
+  - *id164
+  - *id165
+  - *id166
+  - *id167
+  - *id168
+  - *id169
+  - *id170
+  - *id171
+  - *id172
+  - *id173
+  - *id174
+  - *id175
+  - *id176
+  - *id177
+  - *id178
+  - *id179
+  - *id180
+  - *id181
+  - *id182
+  - *id183
+  - *id184
+  - *id185
+  - *id186
+  - *id187
+  - *id188
+  - *id189
+  - *id190
+  - *id191
+  - *id192
+  - *id193
+  - *id194
+  - *id195
+  - *id196
+  - *id197
+  - *id198
+  - *id199
+  - *id200
+  - *id201
+  - *id202
+  - *id203
+  DATE:
+  - *id204
+  - *id205
+  - *id206
+  - *id207
+  - *id208
+  - *id209
+  - *id210
+  - *id211
+  - *id212
+  - *id213
+  - *id214
+  - *id215
+  - *id216
+  - *id217
+  - *id218
+  - *id219
+  - *id220
+  - *id221
+  - *id222
+  - *id223
+  - *id224
+  - *id225
+  - *id226
+  - *id227
+  - *id228
+  - *id229
+  - *id230
+  - *id231
+  - *id232
+  GPE:
+  - *id233
+  - *id234
+  - *id235
+  - *id236
+  - *id237
+  - *id238
+  - *id239
+  - *id240
+  - *id241
+  - *id242
+  - *id243
+  - *id244
+  - *id245
+  - *id246
+  - *id247
+  - *id248
+  - *id249
+  - *id250
+  - *id251
+  MONEY:
+  - *id252
+  - *id253
+  - *id254
+  - *id255
+  - *id256
+  - *id257
+  - *id258
+  - *id259
+  - *id260
+  - *id261
+  - *id262
+  - *id263
+  - *id264
+  - *id265
+  - *id266
+  - *id267
+  - *id268
+  - *id269
+  - *id270
+  - *id271
+  - *id272
+  - *id273
+  - *id274
+  - *id275
+  - *id276
+  - *id277
+  - *id278
+  - *id279
+  - *id280
+  - *id281
+  - *id282
+  - *id283
+  - *id284
+  - *id285
+  - *id286
+  - *id287
+  - *id288
+  - *id289
+  - *id290
+  - *id291
+  - *id292
+  - *id293
+  - *id294
+  - *id295
+  - *id296
+  - *id297
+  - *id298
+  - *id299
+  - *id300
+  - *id301
+  NORP:
+  - *id302
+  ORDINAL:
+  - *id303
+  ORG:
+  - *id304
+  - *id305
+  - *id306
+  - *id307
+  - *id308
+  - *id309
+  - *id310
+  - *id311
+  - *id312
+  - *id313
+  - *id314
+  - *id315
+  - *id316
+  - *id317
+  - *id318
+  - *id319
+  - *id320
+  - *id321
+  - *id322
+  - *id323
+  - *id324
+  - *id325
+  - *id326
+  - *id327
+  - *id328
+  - *id329
+  - *id330
+  - *id331
+  - *id332
+  - *id333
+  - *id334
+  - *id335
+  - *id336
+  - *id337
+  - *id338
+  - *id339
+  - *id340
+  - *id341
+  - *id342
+  - *id343
+  - *id344
+  - *id345
+  PERCENT:
+  - *id346
+  - *id347
+  - *id348
+  - *id349
+  - *id350
+  - *id351
+  - *id352
+  - *id353
+  - *id354
+  - *id355
+  - *id356
+  - *id357
+  - *id358
+  - *id359
+  - *id360
+  - *id361
+  - *id362
+  - *id363
+  - *id364
+  - *id365
+  - *id366
+  - *id367
+  - *id368
+  PERSON:
+  - *id369
+  - *id370
+  - *id371
+  - *id372
+  - *id373
+  - *id374
+  - *id375
+  - *id376
+  - *id377
+  - *id378
+  - *id379
+  - *id380
+  - *id381
+  - *id382
+  - *id383
+  - *id384
+  - *id385
+  - *id386
+  - *id387
+  - *id388
+  - *id389
+  - *id390
+  - *id391
+  - *id392
+  - *id393
+  - *id394
+  - *id395
+  - *id396
+  - *id397
+  - *id398
+  - *id399
+  PRODUCT:
+  - *id400
+  QUANTITY:
+  - *id401
+  - *id402
+  - *id403
+  - *id404
+  - *id405
+  - *id406
+  - *id407
+  - *id408
+  - *id409
+  - *id410
+  - *id411
+  - *id412
+  - *id413
+  - *id414
+  - *id415
+  - *id416
+  - *id417
+  - *id418
+  - *id419
+  - *id420
+  - *id421
+  - *id422
+  - *id423
+  - *id424
+  - *id425
+  - *id426
+  - *id427
+  - *id428
+  - *id429
+  - *id430
+  - *id431
+  - *id432
+  - *id433
+  - *id434
+  - *id435
+  TIME:
+  - *id436
+  - *id437
+  - *id438
+  - *id439
+  - *id440
+  - *id441
+  - *id442
+  - *id443
+  - *id444
+  - *id445
+  - *id446
+  - *id447
+  WORK_OF_ART:
+  - *id448
+metadata:
+  entity_types: 13
+  extraction_time: '2025-09-23T02:41:37.001882'
+  spacy_model: en_core_web_sm
+  total_entities: 448

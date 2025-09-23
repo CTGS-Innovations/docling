@@ -1,0 +1,2223 @@
+{
+  "metadata": {
+    "extraction_time": "2025-09-23T02:41:37.211549",
+    "total_rules": 45,
+    "rule_types": 3,
+    "extraction_method": "co_occurrence_with_dependency_analysis"
+  },
+  "rules_by_type": {
+    "organization_person_relationship": [
+      {
+        "rule_type": "organization_person_relationship",
+        "rule_id": "org_person_0",
+        "organization": {
+          "text": "Global Dynamics Corporation",
+          "start": 414,
+          "end": 441
+        },
+        "people": [
+          {
+            "text": "John Smith",
+            "start": 373,
+            "end": 383
+          }
+        ],
+        "context": "**John Smith**, Chief Executive Officer at Global Dynamics Corporation, reported strong earnings.\n",
+        "sentence_id": 4,
+        "confidence": 0.8
+      },
+      {
+        "rule_type": "organization_person_relationship",
+        "rule_id": "org_person_1",
+        "organization": {
+          "text": "Operations",
+          "start": 691,
+          "end": 701
+        },
+        "people": [
+          {
+            "text": "Sarah Williams-Brown",
+            "start": 649,
+            "end": 669
+          }
+        ],
+        "context": "**Sarah Williams-Brown**, Vice President of Operations, manages 500 employees.\n",
+        "sentence_id": 8,
+        "confidence": 0.8
+      },
+      {
+        "rule_type": "organization_person_relationship",
+        "rule_id": "org_person_2",
+        "organization": {
+          "text": "Safety Coordinator",
+          "start": 998,
+          "end": 1016
+        },
+        "people": [
+          {
+            "text": "Lisa Anderson**",
+            "start": 981,
+            "end": 996
+          }
+        ],
+        "context": "**Lisa Anderson**, Safety Coordinator, implemented new protocols saving $2.5 million.\n",
+        "sentence_id": 13,
+        "confidence": 0.8
+      },
+      {
+        "rule_type": "organization_person_relationship",
+        "rule_id": "org_person_3",
+        "organization": {
+          "text": "Quality Assurance Specialist",
+          "start": 1180,
+          "end": 1208
+        },
+        "people": [
+          {
+            "text": "Patricia Thompson",
+            "start": 1159,
+            "end": 1176
+          }
+        ],
+        "context": "**Patricia Thompson**, Quality Assurance Specialist, achieved 99.5% accuracy rate.\n\n### 1.2 Challenging Names (8 persons)\n11.",
+        "sentence_id": 17,
+        "confidence": 0.8
+      },
+      {
+        "rule_type": "organization_person_relationship",
+        "rule_id": "org_person_4",
+        "organization": {
+          "text": "Software Engineer",
+          "start": 1297,
+          "end": 1314
+        },
+        "people": [
+          {
+            "text": "Xi Zhang",
+            "start": 1285,
+            "end": 1293
+          }
+        ],
+        "context": "**Xi Zhang**, Software Engineer, developed the new monitoring system.\n",
+        "sentence_id": 18,
+        "confidence": 0.8
+      },
+      {
+        "rule_type": "organization_person_relationship",
+        "rule_id": "org_person_5",
+        "organization": {
+          "text": "Data Scientist",
+          "start": 1455,
+          "end": 1469
+        },
+        "people": [
+          {
+            "text": "Patel",
+            "start": 1446,
+            "end": 1451
+          }
+        ],
+        "context": "**Priya Patel**, Data Scientist, analyzed 10,000 records for compliance.\n",
+        "sentence_id": 22,
+        "confidence": 0.8
+      },
+      {
+        "rule_type": "organization_person_relationship",
+        "rule_id": "org_person_6",
+        "organization": {
+          "text": "EU",
+          "start": 1576,
+          "end": 1578
+        },
+        "people": [
+          {
+            "text": "François Dubois**",
+            "start": 1517,
+            "end": 1534
+          },
+          {
+            "text": "International Liaison",
+            "start": 1536,
+            "end": 1557
+          }
+        ],
+        "context": "**François Dubois**, International Liaison, coordinates with EU offices.\n15.",
+        "sentence_id": 24,
+        "confidence": 0.8
+      },
+      {
+        "rule_type": "organization_person_relationship",
+        "rule_id": "org_person_7",
+        "organization": {
+          "text": "Security Specialist",
+          "start": 1680,
+          "end": 1699
+        },
+        "people": [
+          {
+            "text": "Ahmed Al-Rashid",
+            "start": 1661,
+            "end": 1676
+          }
+        ],
+        "context": "**Ahmed Al-Rashid**, Security Specialist, enhanced protocols by 40%.\n",
+        "sentence_id": 27,
+        "confidence": 0.8
+      },
+      {
+        "rule_type": "organization_person_relationship",
+        "rule_id": "org_person_8",
+        "organization": {
+          "text": "Tech Corp.",
+          "start": 2201,
+          "end": 2211
+        },
+        "people": [
+          {
+            "text": "John John*",
+            "start": 2161,
+            "end": 2171
+          }
+        ],
+        "context": "**John John** (repeated name), Analyst at Tech Corp.\n23.",
+        "sentence_id": 38,
+        "confidence": 0.8
+      },
+      {
+        "rule_type": "organization_person_relationship",
+        "rule_id": "org_person_9",
+        "organization": {
+          "text": "EPA",
+          "start": 8617,
+          "end": 8620
+        },
+        "people": [
+          {
+            "text": "John Smith",
+            "start": 10000,
+            "end": 10010
+          },
+          {
+            "text": "Mary Johnson",
+            "start": 10026,
+            "end": 10038
+          },
+          {
+            "text": "Michael O'Brien",
+            "start": 10148,
+            "end": 10163
+          },
+          {
+            "text": "Jennifer Martinez",
+            "start": 10217,
+            "end": 10234
+          }
+        ],
+        "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+        "sentence_id": 146,
+        "confidence": 0.8
+      },
+      {
+        "rule_type": "organization_person_relationship",
+        "rule_id": "org_person_10",
+        "organization": {
+          "text": "DOT",
+          "start": 8637,
+          "end": 8640
+        },
+        "people": [
+          {
+            "text": "John Smith",
+            "start": 10000,
+            "end": 10010
+          },
+          {
+            "text": "Mary Johnson",
+            "start": 10026,
+            "end": 10038
+          },
+          {
+            "text": "Michael O'Brien",
+            "start": 10148,
+            "end": 10163
+          },
+          {
+            "text": "Jennifer Martinez",
+            "start": 10217,
+            "end": 10234
+          }
+        ],
+        "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+        "sentence_id": 146,
+        "confidence": 0.8
+      },
+      {
+        "rule_type": "organization_person_relationship",
+        "rule_id": "org_person_11",
+        "organization": {
+          "text": "FDA",
+          "start": 8657,
+          "end": 8660
+        },
+        "people": [
+          {
+            "text": "John Smith",
+            "start": 10000,
+            "end": 10010
+          },
+          {
+            "text": "Mary Johnson",
+            "start": 10026,
+            "end": 10038
+          },
+          {
+            "text": "Michael O'Brien",
+            "start": 10148,
+            "end": 10163
+          },
+          {
+            "text": "Jennifer Martinez",
+            "start": 10217,
+            "end": 10234
+          }
+        ],
+        "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+        "sentence_id": 146,
+        "confidence": 0.8
+      },
+      {
+        "rule_type": "organization_person_relationship",
+        "rule_id": "org_person_12",
+        "organization": {
+          "text": "Global Dynamics Corporation",
+          "start": 10046,
+          "end": 10073
+        },
+        "people": [
+          {
+            "text": "John Smith",
+            "start": 10000,
+            "end": 10010
+          },
+          {
+            "text": "Mary Johnson",
+            "start": 10026,
+            "end": 10038
+          },
+          {
+            "text": "Michael O'Brien",
+            "start": 10148,
+            "end": 10163
+          },
+          {
+            "text": "Jennifer Martinez",
+            "start": 10217,
+            "end": 10234
+          }
+        ],
+        "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+        "sentence_id": 146,
+        "confidence": 0.8
+      },
+      {
+        "rule_type": "organization_person_relationship",
+        "rule_id": "org_person_13",
+        "organization": {
+          "text": "Amazon Web Services",
+          "start": 10112,
+          "end": 10131
+        },
+        "people": [
+          {
+            "text": "John Smith",
+            "start": 10000,
+            "end": 10010
+          },
+          {
+            "text": "Mary Johnson",
+            "start": 10026,
+            "end": 10038
+          },
+          {
+            "text": "Michael O'Brien",
+            "start": 10148,
+            "end": 10163
+          },
+          {
+            "text": "Jennifer Martinez",
+            "start": 10217,
+            "end": 10234
+          }
+        ],
+        "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+        "sentence_id": 146,
+        "confidence": 0.8
+      },
+      {
+        "rule_type": "organization_person_relationship",
+        "rule_id": "org_person_14",
+        "organization": {
+          "text": "Johns Hopkins University",
+          "start": 10186,
+          "end": 10210
+        },
+        "people": [
+          {
+            "text": "John Smith",
+            "start": 10000,
+            "end": 10010
+          },
+          {
+            "text": "Mary Johnson",
+            "start": 10026,
+            "end": 10038
+          },
+          {
+            "text": "Michael O'Brien",
+            "start": 10148,
+            "end": 10163
+          },
+          {
+            "text": "Jennifer Martinez",
+            "start": 10217,
+            "end": 10234
+          }
+        ],
+        "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+        "sentence_id": 146,
+        "confidence": 0.8
+      },
+      {
+        "rule_type": "organization_person_relationship",
+        "rule_id": "org_person_15",
+        "organization": {
+          "text": "Test Document - Version",
+          "start": 12771,
+          "end": 12794
+        },
+        "people": [
+          {
+            "text": "Accuracy Rule",
+            "start": 12682,
+            "end": 12695
+          }
+        ],
+        "context": "**Span Accuracy Rule**: Each entity should have accurate character position spans\n\n---\n\n*End of Test Document - Version 1.0*\n*This document contains controlled entity counts for validation purposes*",
+        "sentence_id": 160,
+        "confidence": 0.8
+      }
+    ],
+    "financial_transaction": [
+      {
+        "rule_type": "financial_transaction",
+        "rule_id": "money_org_16",
+        "amount": {
+          "text": "$2.5 million",
+          "start": 1051,
+          "end": 1063
+        },
+        "organizations": [
+          {
+            "text": "Safety Coordinator",
+            "start": 998,
+            "end": 1016
+          }
+        ],
+        "context": "**Lisa Anderson**, Safety Coordinator, implemented new protocols saving $2.5 million.\n",
+        "sentence_id": 13,
+        "confidence": 0.9
+      },
+      {
+        "rule_type": "financial_transaction",
+        "rule_id": "money_org_17",
+        "amount": {
+          "text": "###",
+          "start": 1241,
+          "end": 1244
+        },
+        "organizations": [
+          {
+            "text": "Quality Assurance Specialist",
+            "start": 1180,
+            "end": 1208
+          }
+        ],
+        "context": "**Patricia Thompson**, Quality Assurance Specialist, achieved 99.5% accuracy rate.\n\n### 1.2 Challenging Names (8 persons)\n11.",
+        "sentence_id": 17,
+        "confidence": 0.9
+      },
+      {
+        "rule_type": "financial_transaction",
+        "rule_id": "money_org_18",
+        "amount": {
+          "text": "8 persons",
+          "start": 1268,
+          "end": 1277
+        },
+        "organizations": [
+          {
+            "text": "Quality Assurance Specialist",
+            "start": 1180,
+            "end": 1208
+          }
+        ],
+        "context": "**Patricia Thompson**, Quality Assurance Specialist, achieved 99.5% accuracy rate.\n\n### 1.2 Challenging Names (8 persons)\n11.",
+        "sentence_id": 17,
+        "confidence": 0.9
+      },
+      {
+        "rule_type": "financial_transaction",
+        "rule_id": "money_org_19",
+        "amount": {
+          "text": "### 2.1",
+          "start": 2511,
+          "end": 2518
+        },
+        "organizations": [
+          {
+            "text": "Occupational Safety and Health Administration",
+            "start": 2571,
+            "end": 2616
+          }
+        ],
+        "context": "---\n\n## SECTION 2: ORGANIZATION ENTITIES (Total: 30 organizations)\n\n### 2.1 Government Agencies (10 organizations)\n1. **OSHA** (Occupational Safety and Health Administration) issued new guidelines.\n",
+        "sentence_id": 44,
+        "confidence": 0.9
+      },
+      {
+        "rule_type": "financial_transaction",
+        "rule_id": "money_org_20",
+        "amount": {
+          "text": "###",
+          "start": 3351,
+          "end": 3354
+        },
+        "organizations": [
+          {
+            "text": "NRC",
+            "start": 3320,
+            "end": 3323
+          }
+        ],
+        "context": "The **Nuclear Regulatory Commission** (NRC) inspected 20 facilities.\n\n### 2.2 Companies (15 organizations)\n11.",
+        "sentence_id": 59,
+        "confidence": 0.9
+      },
+      {
+        "rule_type": "financial_transaction",
+        "rule_id": "money_org_21",
+        "amount": {
+          "text": "$100 million",
+          "start": 3427,
+          "end": 3439
+        },
+        "organizations": [
+          {
+            "text": "Microsoft Corporation",
+            "start": 3394,
+            "end": 3415
+          }
+        ],
+        "context": "**Microsoft Corporation** invested $100 million in safety technology.\n",
+        "sentence_id": 60,
+        "confidence": 0.9
+      },
+      {
+        "rule_type": "financial_transaction",
+        "rule_id": "money_org_22",
+        "amount": {
+          "text": "### 9.2 Regulations",
+          "start": 8429,
+          "end": 8448
+        },
+        "organizations": [
+          {
+            "text": "EPA",
+            "start": 8617,
+            "end": 8620
+          },
+          {
+            "text": "DOT",
+            "start": 8637,
+            "end": 8640
+          },
+          {
+            "text": "FDA",
+            "start": 8657,
+            "end": 8660
+          },
+          {
+            "text": "Global Dynamics Corporation",
+            "start": 10046,
+            "end": 10073
+          },
+          {
+            "text": "Amazon Web Services",
+            "start": 10112,
+            "end": 10131
+          },
+          {
+            "text": "Johns Hopkins University",
+            "start": 10186,
+            "end": 10210
+          }
+        ],
+        "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+        "sentence_id": 146,
+        "confidence": 0.9
+      },
+      {
+        "rule_type": "financial_transaction",
+        "rule_id": "money_org_23",
+        "amount": {
+          "text": "### 9.3 URLs",
+          "start": 8676,
+          "end": 8688
+        },
+        "organizations": [
+          {
+            "text": "EPA",
+            "start": 8617,
+            "end": 8620
+          },
+          {
+            "text": "DOT",
+            "start": 8637,
+            "end": 8640
+          },
+          {
+            "text": "FDA",
+            "start": 8657,
+            "end": 8660
+          },
+          {
+            "text": "Global Dynamics Corporation",
+            "start": 10046,
+            "end": 10073
+          },
+          {
+            "text": "Amazon Web Services",
+            "start": 10112,
+            "end": 10131
+          },
+          {
+            "text": "Johns Hopkins University",
+            "start": 10186,
+            "end": 10210
+          }
+        ],
+        "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+        "sentence_id": 146,
+        "confidence": 0.9
+      },
+      {
+        "rule_type": "financial_transaction",
+        "rule_id": "money_org_24",
+        "amount": {
+          "text": "###",
+          "start": 8875,
+          "end": 8878
+        },
+        "organizations": [
+          {
+            "text": "EPA",
+            "start": 8617,
+            "end": 8620
+          },
+          {
+            "text": "DOT",
+            "start": 8637,
+            "end": 8640
+          },
+          {
+            "text": "FDA",
+            "start": 8657,
+            "end": 8660
+          },
+          {
+            "text": "Global Dynamics Corporation",
+            "start": 10046,
+            "end": 10073
+          },
+          {
+            "text": "Amazon Web Services",
+            "start": 10112,
+            "end": 10131
+          },
+          {
+            "text": "Johns Hopkins University",
+            "start": 10186,
+            "end": 10210
+          }
+        ],
+        "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+        "sentence_id": 146,
+        "confidence": 0.9
+      },
+      {
+        "rule_type": "financial_transaction",
+        "rule_id": "money_org_25",
+        "amount": {
+          "text": "## SECTION 10",
+          "start": 9918,
+          "end": 9931
+        },
+        "organizations": [
+          {
+            "text": "EPA",
+            "start": 8617,
+            "end": 8620
+          },
+          {
+            "text": "DOT",
+            "start": 8637,
+            "end": 8640
+          },
+          {
+            "text": "FDA",
+            "start": 8657,
+            "end": 8660
+          },
+          {
+            "text": "Global Dynamics Corporation",
+            "start": 10046,
+            "end": 10073
+          },
+          {
+            "text": "Amazon Web Services",
+            "start": 10112,
+            "end": 10131
+          },
+          {
+            "text": "Johns Hopkins University",
+            "start": 10186,
+            "end": 10210
+          }
+        ],
+        "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+        "sentence_id": 146,
+        "confidence": 0.9
+      },
+      {
+        "rule_type": "financial_transaction",
+        "rule_id": "money_org_26",
+        "amount": {
+          "text": "### 10.1",
+          "start": 9958,
+          "end": 9966
+        },
+        "organizations": [
+          {
+            "text": "EPA",
+            "start": 8617,
+            "end": 8620
+          },
+          {
+            "text": "DOT",
+            "start": 8637,
+            "end": 8640
+          },
+          {
+            "text": "FDA",
+            "start": 8657,
+            "end": 8660
+          },
+          {
+            "text": "Global Dynamics Corporation",
+            "start": 10046,
+            "end": 10073
+          },
+          {
+            "text": "Amazon Web Services",
+            "start": 10112,
+            "end": 10131
+          },
+          {
+            "text": "Johns Hopkins University",
+            "start": 10186,
+            "end": 10210
+          }
+        ],
+        "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+        "sentence_id": 146,
+        "confidence": 0.9
+      },
+      {
+        "rule_type": "financial_transaction",
+        "rule_id": "money_org_27",
+        "amount": {
+          "text": "### 10.2 Compliance Rules\n",
+          "start": 10341,
+          "end": 10367
+        },
+        "organizations": [
+          {
+            "text": "EPA",
+            "start": 8617,
+            "end": 8620
+          },
+          {
+            "text": "DOT",
+            "start": 8637,
+            "end": 8640
+          },
+          {
+            "text": "FDA",
+            "start": 8657,
+            "end": 8660
+          },
+          {
+            "text": "Global Dynamics Corporation",
+            "start": 10046,
+            "end": 10073
+          },
+          {
+            "text": "Amazon Web Services",
+            "start": 10112,
+            "end": 10131
+          },
+          {
+            "text": "Johns Hopkins University",
+            "start": 10186,
+            "end": 10210
+          }
+        ],
+        "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+        "sentence_id": 146,
+        "confidence": 0.9
+      },
+      {
+        "rule_type": "financial_transaction",
+        "rule_id": "money_org_28",
+        "amount": {
+          "text": "###",
+          "start": 10854,
+          "end": 10857
+        },
+        "organizations": [
+          {
+            "text": "Financial Rules\n- Fines",
+            "start": 10863,
+            "end": 10886
+          }
+        ],
+        "context": "Any incident resulting in **3 or more** injuries requires reporting within **8 hours**\n\n### 10.3 Financial Rules\n- Fines increase by **10%** for each repeated violation\n- Companies save approximately **$4** for every **$1** invested in safety\n- Insurance premiums reduced by **15%** with perfect safety record\n- Training investments over **$50,000** qualify for tax credits\n- Penalties double if violations occur within **12 months**\n\n---\n\n## VALIDATION SUMMARY\n\n**Expected Entity Counts:**\n- PERSON: 25 unique individuals\n- ORGANIZATION: 30 organizations (10 government, 15 companies, 5 educational)\n- LOCATION: 20 locations (10 cities, 10 states/countries)\n- GPE: 8 geopolitical entities\n- DATE: 15 specific dates\n- TIME: 8 specific times\n- MONEY: 20 monetary amounts\n- PERCENT: 15 percentages\n\n**Additional Entities:**\n- PHONE: 10 phone numbers\n- REGULATION: 10 regulatory references\n- URL: 5 web addresses\n- MEASUREMENT: 20 measurements with units\n\n**Total Core 8 Entities: 141**\n**Total Additional Entities: 45**\n**Grand Total: 186 entities**\n\n---\n\n## TEST VALIDATION RULES\n\n1.",
+        "sentence_id": 151,
+        "confidence": 0.9
+      },
+      {
+        "rule_type": "financial_transaction",
+        "rule_id": "money_org_29",
+        "amount": {
+          "text": "4",
+          "start": 10969,
+          "end": 10970
+        },
+        "organizations": [
+          {
+            "text": "Financial Rules\n- Fines",
+            "start": 10863,
+            "end": 10886
+          }
+        ],
+        "context": "Any incident resulting in **3 or more** injuries requires reporting within **8 hours**\n\n### 10.3 Financial Rules\n- Fines increase by **10%** for each repeated violation\n- Companies save approximately **$4** for every **$1** invested in safety\n- Insurance premiums reduced by **15%** with perfect safety record\n- Training investments over **$50,000** qualify for tax credits\n- Penalties double if violations occur within **12 months**\n\n---\n\n## VALIDATION SUMMARY\n\n**Expected Entity Counts:**\n- PERSON: 25 unique individuals\n- ORGANIZATION: 30 organizations (10 government, 15 companies, 5 educational)\n- LOCATION: 20 locations (10 cities, 10 states/countries)\n- GPE: 8 geopolitical entities\n- DATE: 15 specific dates\n- TIME: 8 specific times\n- MONEY: 20 monetary amounts\n- PERCENT: 15 percentages\n\n**Additional Entities:**\n- PHONE: 10 phone numbers\n- REGULATION: 10 regulatory references\n- URL: 5 web addresses\n- MEASUREMENT: 20 measurements with units\n\n**Total Core 8 Entities: 141**\n**Total Additional Entities: 45**\n**Grand Total: 186 entities**\n\n---\n\n## TEST VALIDATION RULES\n\n1.",
+        "sentence_id": 151,
+        "confidence": 0.9
+      },
+      {
+        "rule_type": "financial_transaction",
+        "rule_id": "money_org_30",
+        "amount": {
+          "text": "1",
+          "start": 10986,
+          "end": 10987
+        },
+        "organizations": [
+          {
+            "text": "Financial Rules\n- Fines",
+            "start": 10863,
+            "end": 10886
+          }
+        ],
+        "context": "Any incident resulting in **3 or more** injuries requires reporting within **8 hours**\n\n### 10.3 Financial Rules\n- Fines increase by **10%** for each repeated violation\n- Companies save approximately **$4** for every **$1** invested in safety\n- Insurance premiums reduced by **15%** with perfect safety record\n- Training investments over **$50,000** qualify for tax credits\n- Penalties double if violations occur within **12 months**\n\n---\n\n## VALIDATION SUMMARY\n\n**Expected Entity Counts:**\n- PERSON: 25 unique individuals\n- ORGANIZATION: 30 organizations (10 government, 15 companies, 5 educational)\n- LOCATION: 20 locations (10 cities, 10 states/countries)\n- GPE: 8 geopolitical entities\n- DATE: 15 specific dates\n- TIME: 8 specific times\n- MONEY: 20 monetary amounts\n- PERCENT: 15 percentages\n\n**Additional Entities:**\n- PHONE: 10 phone numbers\n- REGULATION: 10 regulatory references\n- URL: 5 web addresses\n- MEASUREMENT: 20 measurements with units\n\n**Total Core 8 Entities: 141**\n**Total Additional Entities: 45**\n**Grand Total: 186 entities**\n\n---\n\n## TEST VALIDATION RULES\n\n1.",
+        "sentence_id": 151,
+        "confidence": 0.9
+      },
+      {
+        "rule_type": "financial_transaction",
+        "rule_id": "money_org_31",
+        "amount": {
+          "text": "50,000",
+          "start": 11107,
+          "end": 11113
+        },
+        "organizations": [
+          {
+            "text": "Financial Rules\n- Fines",
+            "start": 10863,
+            "end": 10886
+          }
+        ],
+        "context": "Any incident resulting in **3 or more** injuries requires reporting within **8 hours**\n\n### 10.3 Financial Rules\n- Fines increase by **10%** for each repeated violation\n- Companies save approximately **$4** for every **$1** invested in safety\n- Insurance premiums reduced by **15%** with perfect safety record\n- Training investments over **$50,000** qualify for tax credits\n- Penalties double if violations occur within **12 months**\n\n---\n\n## VALIDATION SUMMARY\n\n**Expected Entity Counts:**\n- PERSON: 25 unique individuals\n- ORGANIZATION: 30 organizations (10 government, 15 companies, 5 educational)\n- LOCATION: 20 locations (10 cities, 10 states/countries)\n- GPE: 8 geopolitical entities\n- DATE: 15 specific dates\n- TIME: 8 specific times\n- MONEY: 20 monetary amounts\n- PERCENT: 15 percentages\n\n**Additional Entities:**\n- PHONE: 10 phone numbers\n- REGULATION: 10 regulatory references\n- URL: 5 web addresses\n- MEASUREMENT: 20 measurements with units\n\n**Total Core 8 Entities: 141**\n**Total Additional Entities: 45**\n**Grand Total: 186 entities**\n\n---\n\n## TEST VALIDATION RULES\n\n1.",
+        "sentence_id": 151,
+        "confidence": 0.9
+      },
+      {
+        "rule_type": "financial_transaction",
+        "rule_id": "money_org_32",
+        "amount": {
+          "text": "#",
+          "start": 11821,
+          "end": 11822
+        },
+        "organizations": [
+          {
+            "text": "Financial Rules\n- Fines",
+            "start": 10863,
+            "end": 10886
+          }
+        ],
+        "context": "Any incident resulting in **3 or more** injuries requires reporting within **8 hours**\n\n### 10.3 Financial Rules\n- Fines increase by **10%** for each repeated violation\n- Companies save approximately **$4** for every **$1** invested in safety\n- Insurance premiums reduced by **15%** with perfect safety record\n- Training investments over **$50,000** qualify for tax credits\n- Penalties double if violations occur within **12 months**\n\n---\n\n## VALIDATION SUMMARY\n\n**Expected Entity Counts:**\n- PERSON: 25 unique individuals\n- ORGANIZATION: 30 organizations (10 government, 15 companies, 5 educational)\n- LOCATION: 20 locations (10 cities, 10 states/countries)\n- GPE: 8 geopolitical entities\n- DATE: 15 specific dates\n- TIME: 8 specific times\n- MONEY: 20 monetary amounts\n- PERCENT: 15 percentages\n\n**Additional Entities:**\n- PHONE: 10 phone numbers\n- REGULATION: 10 regulatory references\n- URL: 5 web addresses\n- MEASUREMENT: 20 measurements with units\n\n**Total Core 8 Entities: 141**\n**Total Additional Entities: 45**\n**Grand Total: 186 entities**\n\n---\n\n## TEST VALIDATION RULES\n\n1.",
+        "sentence_id": 151,
+        "confidence": 0.9
+      }
+    ],
+    "temporal_event": [
+      {
+        "rule_type": "temporal_event",
+        "rule_id": "date_event_33",
+        "date": {
+          "text": "March 20, 2024",
+          "start": 549,
+          "end": 563
+        },
+        "actions": [
+          {
+            "lemma": "present",
+            "text": "present",
+            "pos": "VERB"
+          }
+        ],
+        "context": "2. **Mary Johnson**, Director of Engineering, will present at the conference on March 20, 2024.\n",
+        "sentence_id": 5,
+        "confidence": 0.7
+      },
+      {
+        "rule_type": "temporal_event",
+        "rule_id": "date_event_34",
+        "date": {
+          "text": "yesterday",
+          "start": 633,
+          "end": 642
+        },
+        "actions": [
+          {
+            "lemma": "complete",
+            "text": "completed",
+            "pos": "VERB"
+          }
+        ],
+        "context": "3. **Robert Chen**, Senior Analyst, completed the regulatory review yesterday.\n",
+        "sentence_id": 6,
+        "confidence": 0.7
+      },
+      {
+        "rule_type": "temporal_event",
+        "rule_id": "date_event_35",
+        "date": {
+          "text": "last month",
+          "start": 882,
+          "end": 892
+        },
+        "actions": [
+          {
+            "lemma": "review",
+            "text": "reviewed",
+            "pos": "VERB"
+          }
+        ],
+        "context": "6. **Jennifer Martinez**, Compliance Manager at OSHA, reviewed 50 cases last month.\n",
+        "sentence_id": 10,
+        "confidence": 0.7
+      },
+      {
+        "rule_type": "temporal_event",
+        "rule_id": "date_event_36",
+        "date": {
+          "text": "June 1, 2024",
+          "start": 2712,
+          "end": 2724
+        },
+        "actions": [
+          {
+            "lemma": "announce",
+            "text": "announced",
+            "pos": "VERB"
+          }
+        ],
+        "context": "The **Department of Labor** announced updated regulations effective June 1, 2024.\n",
+        "sentence_id": 46,
+        "confidence": 0.7
+      },
+      {
+        "rule_type": "temporal_event",
+        "rule_id": "date_event_37",
+        "date": {
+          "text": "365 days",
+          "start": 3876,
+          "end": 3884
+        },
+        "actions": [
+          {
+            "lemma": "achieve",
+            "text": "achieved",
+            "pos": "VERB"
+          }
+        ],
+        "context": "**Tesla, Inc.** achieved zero workplace injuries for 365 days.\n",
+        "sentence_id": 72,
+        "confidence": 0.7
+      },
+      {
+        "rule_type": "temporal_event",
+        "rule_id": "date_event_38",
+        "date": {
+          "text": "January 1, 2024*",
+          "start": 5678,
+          "end": 5694
+        },
+        "actions": [
+          {
+            "lemma": "begin",
+            "text": "begins",
+            "pos": "VERB"
+          }
+        ],
+        "context": "Implementation begins on **January 1, 2024**\n2.",
+        "sentence_id": 100,
+        "confidence": 0.7
+      },
+      {
+        "rule_type": "temporal_event",
+        "rule_id": "date_event_39",
+        "date": {
+          "text": "April 30, 2024*",
+          "start": 5819,
+          "end": 5834
+        },
+        "actions": [
+          {
+            "lemma": "train",
+            "text": "Training",
+            "pos": "VERB"
+          }
+        ],
+        "context": "Training completion by **April 30, 2024**\n5.",
+        "sentence_id": 103,
+        "confidence": 0.7
+      },
+      {
+        "rule_type": "temporal_event",
+        "rule_id": "date_event_40",
+        "date": {
+          "text": "October 10-12, 2024*",
+          "start": 6038,
+          "end": 6058
+        },
+        "actions": [
+          {
+            "lemma": "date",
+            "text": "dates",
+            "pos": "VERB"
+          }
+        ],
+        "context": "Conference dates: **October 10-12, 2024**\n10.",
+        "sentence_id": 107,
+        "confidence": 0.7
+      },
+      {
+        "rule_type": "temporal_event",
+        "rule_id": "date_event_41",
+        "date": {
+          "text": "693-1999",
+          "start": 8256,
+          "end": 8264
+        },
+        "actions": [
+          {
+            "lemma": "land",
+            "text": "Landing",
+            "pos": "VERB"
+          }
+        ],
+        "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+        "sentence_id": 146,
+        "confidence": 0.7
+      },
+      {
+        "rule_type": "temporal_event",
+        "rule_id": "date_event_42",
+        "date": {
+          "text": "565-9860",
+          "start": 8296,
+          "end": 8304
+        },
+        "actions": [
+          {
+            "lemma": "land",
+            "text": "Landing",
+            "pos": "VERB"
+          }
+        ],
+        "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+        "sentence_id": 146,
+        "confidence": 0.7
+      },
+      {
+        "rule_type": "temporal_event",
+        "rule_id": "date_event_43",
+        "date": {
+          "text": "30 days",
+          "start": 10465,
+          "end": 10472
+        },
+        "actions": [
+          {
+            "lemma": "complete",
+            "text": "complete",
+            "pos": "VERB"
+          }
+        ],
+        "context": "All employees at **facilities over 10,000 square feet** must complete safety training within **30 days**\n2.",
+        "sentence_id": 147,
+        "confidence": 0.7
+      },
+      {
+        "rule_type": "temporal_event",
+        "rule_id": "date_event_44",
+        "date": {
+          "text": "12 months",
+          "start": 11188,
+          "end": 11197
+        },
+        "actions": [
+          {
+            "lemma": "save",
+            "text": "save",
+            "pos": "VERB"
+          }
+        ],
+        "context": "Any incident resulting in **3 or more** injuries requires reporting within **8 hours**\n\n### 10.3 Financial Rules\n- Fines increase by **10%** for each repeated violation\n- Companies save approximately **$4** for every **$1** invested in safety\n- Insurance premiums reduced by **15%** with perfect safety record\n- Training investments over **$50,000** qualify for tax credits\n- Penalties double if violations occur within **12 months**\n\n---\n\n## VALIDATION SUMMARY\n\n**Expected Entity Counts:**\n- PERSON: 25 unique individuals\n- ORGANIZATION: 30 organizations (10 government, 15 companies, 5 educational)\n- LOCATION: 20 locations (10 cities, 10 states/countries)\n- GPE: 8 geopolitical entities\n- DATE: 15 specific dates\n- TIME: 8 specific times\n- MONEY: 20 monetary amounts\n- PERCENT: 15 percentages\n\n**Additional Entities:**\n- PHONE: 10 phone numbers\n- REGULATION: 10 regulatory references\n- URL: 5 web addresses\n- MEASUREMENT: 20 measurements with units\n\n**Total Core 8 Entities: 141**\n**Total Additional Entities: 45**\n**Grand Total: 186 entities**\n\n---\n\n## TEST VALIDATION RULES\n\n1.",
+        "sentence_id": 151,
+        "confidence": 0.7
+      }
+    ]
+  },
+  "all_rules": [
+    {
+      "rule_type": "organization_person_relationship",
+      "rule_id": "org_person_0",
+      "organization": {
+        "text": "Global Dynamics Corporation",
+        "start": 414,
+        "end": 441
+      },
+      "people": [
+        {
+          "text": "John Smith",
+          "start": 373,
+          "end": 383
+        }
+      ],
+      "context": "**John Smith**, Chief Executive Officer at Global Dynamics Corporation, reported strong earnings.\n",
+      "sentence_id": 4,
+      "confidence": 0.8
+    },
+    {
+      "rule_type": "organization_person_relationship",
+      "rule_id": "org_person_1",
+      "organization": {
+        "text": "Operations",
+        "start": 691,
+        "end": 701
+      },
+      "people": [
+        {
+          "text": "Sarah Williams-Brown",
+          "start": 649,
+          "end": 669
+        }
+      ],
+      "context": "**Sarah Williams-Brown**, Vice President of Operations, manages 500 employees.\n",
+      "sentence_id": 8,
+      "confidence": 0.8
+    },
+    {
+      "rule_type": "organization_person_relationship",
+      "rule_id": "org_person_2",
+      "organization": {
+        "text": "Safety Coordinator",
+        "start": 998,
+        "end": 1016
+      },
+      "people": [
+        {
+          "text": "Lisa Anderson**",
+          "start": 981,
+          "end": 996
+        }
+      ],
+      "context": "**Lisa Anderson**, Safety Coordinator, implemented new protocols saving $2.5 million.\n",
+      "sentence_id": 13,
+      "confidence": 0.8
+    },
+    {
+      "rule_type": "organization_person_relationship",
+      "rule_id": "org_person_3",
+      "organization": {
+        "text": "Quality Assurance Specialist",
+        "start": 1180,
+        "end": 1208
+      },
+      "people": [
+        {
+          "text": "Patricia Thompson",
+          "start": 1159,
+          "end": 1176
+        }
+      ],
+      "context": "**Patricia Thompson**, Quality Assurance Specialist, achieved 99.5% accuracy rate.\n\n### 1.2 Challenging Names (8 persons)\n11.",
+      "sentence_id": 17,
+      "confidence": 0.8
+    },
+    {
+      "rule_type": "organization_person_relationship",
+      "rule_id": "org_person_4",
+      "organization": {
+        "text": "Software Engineer",
+        "start": 1297,
+        "end": 1314
+      },
+      "people": [
+        {
+          "text": "Xi Zhang",
+          "start": 1285,
+          "end": 1293
+        }
+      ],
+      "context": "**Xi Zhang**, Software Engineer, developed the new monitoring system.\n",
+      "sentence_id": 18,
+      "confidence": 0.8
+    },
+    {
+      "rule_type": "organization_person_relationship",
+      "rule_id": "org_person_5",
+      "organization": {
+        "text": "Data Scientist",
+        "start": 1455,
+        "end": 1469
+      },
+      "people": [
+        {
+          "text": "Patel",
+          "start": 1446,
+          "end": 1451
+        }
+      ],
+      "context": "**Priya Patel**, Data Scientist, analyzed 10,000 records for compliance.\n",
+      "sentence_id": 22,
+      "confidence": 0.8
+    },
+    {
+      "rule_type": "organization_person_relationship",
+      "rule_id": "org_person_6",
+      "organization": {
+        "text": "EU",
+        "start": 1576,
+        "end": 1578
+      },
+      "people": [
+        {
+          "text": "François Dubois**",
+          "start": 1517,
+          "end": 1534
+        },
+        {
+          "text": "International Liaison",
+          "start": 1536,
+          "end": 1557
+        }
+      ],
+      "context": "**François Dubois**, International Liaison, coordinates with EU offices.\n15.",
+      "sentence_id": 24,
+      "confidence": 0.8
+    },
+    {
+      "rule_type": "organization_person_relationship",
+      "rule_id": "org_person_7",
+      "organization": {
+        "text": "Security Specialist",
+        "start": 1680,
+        "end": 1699
+      },
+      "people": [
+        {
+          "text": "Ahmed Al-Rashid",
+          "start": 1661,
+          "end": 1676
+        }
+      ],
+      "context": "**Ahmed Al-Rashid**, Security Specialist, enhanced protocols by 40%.\n",
+      "sentence_id": 27,
+      "confidence": 0.8
+    },
+    {
+      "rule_type": "organization_person_relationship",
+      "rule_id": "org_person_8",
+      "organization": {
+        "text": "Tech Corp.",
+        "start": 2201,
+        "end": 2211
+      },
+      "people": [
+        {
+          "text": "John John*",
+          "start": 2161,
+          "end": 2171
+        }
+      ],
+      "context": "**John John** (repeated name), Analyst at Tech Corp.\n23.",
+      "sentence_id": 38,
+      "confidence": 0.8
+    },
+    {
+      "rule_type": "organization_person_relationship",
+      "rule_id": "org_person_9",
+      "organization": {
+        "text": "EPA",
+        "start": 8617,
+        "end": 8620
+      },
+      "people": [
+        {
+          "text": "John Smith",
+          "start": 10000,
+          "end": 10010
+        },
+        {
+          "text": "Mary Johnson",
+          "start": 10026,
+          "end": 10038
+        },
+        {
+          "text": "Michael O'Brien",
+          "start": 10148,
+          "end": 10163
+        },
+        {
+          "text": "Jennifer Martinez",
+          "start": 10217,
+          "end": 10234
+        }
+      ],
+      "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+      "sentence_id": 146,
+      "confidence": 0.8
+    },
+    {
+      "rule_type": "organization_person_relationship",
+      "rule_id": "org_person_10",
+      "organization": {
+        "text": "DOT",
+        "start": 8637,
+        "end": 8640
+      },
+      "people": [
+        {
+          "text": "John Smith",
+          "start": 10000,
+          "end": 10010
+        },
+        {
+          "text": "Mary Johnson",
+          "start": 10026,
+          "end": 10038
+        },
+        {
+          "text": "Michael O'Brien",
+          "start": 10148,
+          "end": 10163
+        },
+        {
+          "text": "Jennifer Martinez",
+          "start": 10217,
+          "end": 10234
+        }
+      ],
+      "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+      "sentence_id": 146,
+      "confidence": 0.8
+    },
+    {
+      "rule_type": "organization_person_relationship",
+      "rule_id": "org_person_11",
+      "organization": {
+        "text": "FDA",
+        "start": 8657,
+        "end": 8660
+      },
+      "people": [
+        {
+          "text": "John Smith",
+          "start": 10000,
+          "end": 10010
+        },
+        {
+          "text": "Mary Johnson",
+          "start": 10026,
+          "end": 10038
+        },
+        {
+          "text": "Michael O'Brien",
+          "start": 10148,
+          "end": 10163
+        },
+        {
+          "text": "Jennifer Martinez",
+          "start": 10217,
+          "end": 10234
+        }
+      ],
+      "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+      "sentence_id": 146,
+      "confidence": 0.8
+    },
+    {
+      "rule_type": "organization_person_relationship",
+      "rule_id": "org_person_12",
+      "organization": {
+        "text": "Global Dynamics Corporation",
+        "start": 10046,
+        "end": 10073
+      },
+      "people": [
+        {
+          "text": "John Smith",
+          "start": 10000,
+          "end": 10010
+        },
+        {
+          "text": "Mary Johnson",
+          "start": 10026,
+          "end": 10038
+        },
+        {
+          "text": "Michael O'Brien",
+          "start": 10148,
+          "end": 10163
+        },
+        {
+          "text": "Jennifer Martinez",
+          "start": 10217,
+          "end": 10234
+        }
+      ],
+      "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+      "sentence_id": 146,
+      "confidence": 0.8
+    },
+    {
+      "rule_type": "organization_person_relationship",
+      "rule_id": "org_person_13",
+      "organization": {
+        "text": "Amazon Web Services",
+        "start": 10112,
+        "end": 10131
+      },
+      "people": [
+        {
+          "text": "John Smith",
+          "start": 10000,
+          "end": 10010
+        },
+        {
+          "text": "Mary Johnson",
+          "start": 10026,
+          "end": 10038
+        },
+        {
+          "text": "Michael O'Brien",
+          "start": 10148,
+          "end": 10163
+        },
+        {
+          "text": "Jennifer Martinez",
+          "start": 10217,
+          "end": 10234
+        }
+      ],
+      "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+      "sentence_id": 146,
+      "confidence": 0.8
+    },
+    {
+      "rule_type": "organization_person_relationship",
+      "rule_id": "org_person_14",
+      "organization": {
+        "text": "Johns Hopkins University",
+        "start": 10186,
+        "end": 10210
+      },
+      "people": [
+        {
+          "text": "John Smith",
+          "start": 10000,
+          "end": 10010
+        },
+        {
+          "text": "Mary Johnson",
+          "start": 10026,
+          "end": 10038
+        },
+        {
+          "text": "Michael O'Brien",
+          "start": 10148,
+          "end": 10163
+        },
+        {
+          "text": "Jennifer Martinez",
+          "start": 10217,
+          "end": 10234
+        }
+      ],
+      "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+      "sentence_id": 146,
+      "confidence": 0.8
+    },
+    {
+      "rule_type": "organization_person_relationship",
+      "rule_id": "org_person_15",
+      "organization": {
+        "text": "Test Document - Version",
+        "start": 12771,
+        "end": 12794
+      },
+      "people": [
+        {
+          "text": "Accuracy Rule",
+          "start": 12682,
+          "end": 12695
+        }
+      ],
+      "context": "**Span Accuracy Rule**: Each entity should have accurate character position spans\n\n---\n\n*End of Test Document - Version 1.0*\n*This document contains controlled entity counts for validation purposes*",
+      "sentence_id": 160,
+      "confidence": 0.8
+    },
+    {
+      "rule_type": "financial_transaction",
+      "rule_id": "money_org_16",
+      "amount": {
+        "text": "$2.5 million",
+        "start": 1051,
+        "end": 1063
+      },
+      "organizations": [
+        {
+          "text": "Safety Coordinator",
+          "start": 998,
+          "end": 1016
+        }
+      ],
+      "context": "**Lisa Anderson**, Safety Coordinator, implemented new protocols saving $2.5 million.\n",
+      "sentence_id": 13,
+      "confidence": 0.9
+    },
+    {
+      "rule_type": "financial_transaction",
+      "rule_id": "money_org_17",
+      "amount": {
+        "text": "###",
+        "start": 1241,
+        "end": 1244
+      },
+      "organizations": [
+        {
+          "text": "Quality Assurance Specialist",
+          "start": 1180,
+          "end": 1208
+        }
+      ],
+      "context": "**Patricia Thompson**, Quality Assurance Specialist, achieved 99.5% accuracy rate.\n\n### 1.2 Challenging Names (8 persons)\n11.",
+      "sentence_id": 17,
+      "confidence": 0.9
+    },
+    {
+      "rule_type": "financial_transaction",
+      "rule_id": "money_org_18",
+      "amount": {
+        "text": "8 persons",
+        "start": 1268,
+        "end": 1277
+      },
+      "organizations": [
+        {
+          "text": "Quality Assurance Specialist",
+          "start": 1180,
+          "end": 1208
+        }
+      ],
+      "context": "**Patricia Thompson**, Quality Assurance Specialist, achieved 99.5% accuracy rate.\n\n### 1.2 Challenging Names (8 persons)\n11.",
+      "sentence_id": 17,
+      "confidence": 0.9
+    },
+    {
+      "rule_type": "financial_transaction",
+      "rule_id": "money_org_19",
+      "amount": {
+        "text": "### 2.1",
+        "start": 2511,
+        "end": 2518
+      },
+      "organizations": [
+        {
+          "text": "Occupational Safety and Health Administration",
+          "start": 2571,
+          "end": 2616
+        }
+      ],
+      "context": "---\n\n## SECTION 2: ORGANIZATION ENTITIES (Total: 30 organizations)\n\n### 2.1 Government Agencies (10 organizations)\n1. **OSHA** (Occupational Safety and Health Administration) issued new guidelines.\n",
+      "sentence_id": 44,
+      "confidence": 0.9
+    },
+    {
+      "rule_type": "financial_transaction",
+      "rule_id": "money_org_20",
+      "amount": {
+        "text": "###",
+        "start": 3351,
+        "end": 3354
+      },
+      "organizations": [
+        {
+          "text": "NRC",
+          "start": 3320,
+          "end": 3323
+        }
+      ],
+      "context": "The **Nuclear Regulatory Commission** (NRC) inspected 20 facilities.\n\n### 2.2 Companies (15 organizations)\n11.",
+      "sentence_id": 59,
+      "confidence": 0.9
+    },
+    {
+      "rule_type": "financial_transaction",
+      "rule_id": "money_org_21",
+      "amount": {
+        "text": "$100 million",
+        "start": 3427,
+        "end": 3439
+      },
+      "organizations": [
+        {
+          "text": "Microsoft Corporation",
+          "start": 3394,
+          "end": 3415
+        }
+      ],
+      "context": "**Microsoft Corporation** invested $100 million in safety technology.\n",
+      "sentence_id": 60,
+      "confidence": 0.9
+    },
+    {
+      "rule_type": "financial_transaction",
+      "rule_id": "money_org_22",
+      "amount": {
+        "text": "### 9.2 Regulations",
+        "start": 8429,
+        "end": 8448
+      },
+      "organizations": [
+        {
+          "text": "EPA",
+          "start": 8617,
+          "end": 8620
+        },
+        {
+          "text": "DOT",
+          "start": 8637,
+          "end": 8640
+        },
+        {
+          "text": "FDA",
+          "start": 8657,
+          "end": 8660
+        },
+        {
+          "text": "Global Dynamics Corporation",
+          "start": 10046,
+          "end": 10073
+        },
+        {
+          "text": "Amazon Web Services",
+          "start": 10112,
+          "end": 10131
+        },
+        {
+          "text": "Johns Hopkins University",
+          "start": 10186,
+          "end": 10210
+        }
+      ],
+      "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+      "sentence_id": 146,
+      "confidence": 0.9
+    },
+    {
+      "rule_type": "financial_transaction",
+      "rule_id": "money_org_23",
+      "amount": {
+        "text": "### 9.3 URLs",
+        "start": 8676,
+        "end": 8688
+      },
+      "organizations": [
+        {
+          "text": "EPA",
+          "start": 8617,
+          "end": 8620
+        },
+        {
+          "text": "DOT",
+          "start": 8637,
+          "end": 8640
+        },
+        {
+          "text": "FDA",
+          "start": 8657,
+          "end": 8660
+        },
+        {
+          "text": "Global Dynamics Corporation",
+          "start": 10046,
+          "end": 10073
+        },
+        {
+          "text": "Amazon Web Services",
+          "start": 10112,
+          "end": 10131
+        },
+        {
+          "text": "Johns Hopkins University",
+          "start": 10186,
+          "end": 10210
+        }
+      ],
+      "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+      "sentence_id": 146,
+      "confidence": 0.9
+    },
+    {
+      "rule_type": "financial_transaction",
+      "rule_id": "money_org_24",
+      "amount": {
+        "text": "###",
+        "start": 8875,
+        "end": 8878
+      },
+      "organizations": [
+        {
+          "text": "EPA",
+          "start": 8617,
+          "end": 8620
+        },
+        {
+          "text": "DOT",
+          "start": 8637,
+          "end": 8640
+        },
+        {
+          "text": "FDA",
+          "start": 8657,
+          "end": 8660
+        },
+        {
+          "text": "Global Dynamics Corporation",
+          "start": 10046,
+          "end": 10073
+        },
+        {
+          "text": "Amazon Web Services",
+          "start": 10112,
+          "end": 10131
+        },
+        {
+          "text": "Johns Hopkins University",
+          "start": 10186,
+          "end": 10210
+        }
+      ],
+      "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+      "sentence_id": 146,
+      "confidence": 0.9
+    },
+    {
+      "rule_type": "financial_transaction",
+      "rule_id": "money_org_25",
+      "amount": {
+        "text": "## SECTION 10",
+        "start": 9918,
+        "end": 9931
+      },
+      "organizations": [
+        {
+          "text": "EPA",
+          "start": 8617,
+          "end": 8620
+        },
+        {
+          "text": "DOT",
+          "start": 8637,
+          "end": 8640
+        },
+        {
+          "text": "FDA",
+          "start": 8657,
+          "end": 8660
+        },
+        {
+          "text": "Global Dynamics Corporation",
+          "start": 10046,
+          "end": 10073
+        },
+        {
+          "text": "Amazon Web Services",
+          "start": 10112,
+          "end": 10131
+        },
+        {
+          "text": "Johns Hopkins University",
+          "start": 10186,
+          "end": 10210
+        }
+      ],
+      "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+      "sentence_id": 146,
+      "confidence": 0.9
+    },
+    {
+      "rule_type": "financial_transaction",
+      "rule_id": "money_org_26",
+      "amount": {
+        "text": "### 10.1",
+        "start": 9958,
+        "end": 9966
+      },
+      "organizations": [
+        {
+          "text": "EPA",
+          "start": 8617,
+          "end": 8620
+        },
+        {
+          "text": "DOT",
+          "start": 8637,
+          "end": 8640
+        },
+        {
+          "text": "FDA",
+          "start": 8657,
+          "end": 8660
+        },
+        {
+          "text": "Global Dynamics Corporation",
+          "start": 10046,
+          "end": 10073
+        },
+        {
+          "text": "Amazon Web Services",
+          "start": 10112,
+          "end": 10131
+        },
+        {
+          "text": "Johns Hopkins University",
+          "start": 10186,
+          "end": 10210
+        }
+      ],
+      "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+      "sentence_id": 146,
+      "confidence": 0.9
+    },
+    {
+      "rule_type": "financial_transaction",
+      "rule_id": "money_org_27",
+      "amount": {
+        "text": "### 10.2 Compliance Rules\n",
+        "start": 10341,
+        "end": 10367
+      },
+      "organizations": [
+        {
+          "text": "EPA",
+          "start": 8617,
+          "end": 8620
+        },
+        {
+          "text": "DOT",
+          "start": 8637,
+          "end": 8640
+        },
+        {
+          "text": "FDA",
+          "start": 8657,
+          "end": 8660
+        },
+        {
+          "text": "Global Dynamics Corporation",
+          "start": 10046,
+          "end": 10073
+        },
+        {
+          "text": "Amazon Web Services",
+          "start": 10112,
+          "end": 10131
+        },
+        {
+          "text": "Johns Hopkins University",
+          "start": 10186,
+          "end": 10210
+        }
+      ],
+      "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+      "sentence_id": 146,
+      "confidence": 0.9
+    },
+    {
+      "rule_type": "financial_transaction",
+      "rule_id": "money_org_28",
+      "amount": {
+        "text": "###",
+        "start": 10854,
+        "end": 10857
+      },
+      "organizations": [
+        {
+          "text": "Financial Rules\n- Fines",
+          "start": 10863,
+          "end": 10886
+        }
+      ],
+      "context": "Any incident resulting in **3 or more** injuries requires reporting within **8 hours**\n\n### 10.3 Financial Rules\n- Fines increase by **10%** for each repeated violation\n- Companies save approximately **$4** for every **$1** invested in safety\n- Insurance premiums reduced by **15%** with perfect safety record\n- Training investments over **$50,000** qualify for tax credits\n- Penalties double if violations occur within **12 months**\n\n---\n\n## VALIDATION SUMMARY\n\n**Expected Entity Counts:**\n- PERSON: 25 unique individuals\n- ORGANIZATION: 30 organizations (10 government, 15 companies, 5 educational)\n- LOCATION: 20 locations (10 cities, 10 states/countries)\n- GPE: 8 geopolitical entities\n- DATE: 15 specific dates\n- TIME: 8 specific times\n- MONEY: 20 monetary amounts\n- PERCENT: 15 percentages\n\n**Additional Entities:**\n- PHONE: 10 phone numbers\n- REGULATION: 10 regulatory references\n- URL: 5 web addresses\n- MEASUREMENT: 20 measurements with units\n\n**Total Core 8 Entities: 141**\n**Total Additional Entities: 45**\n**Grand Total: 186 entities**\n\n---\n\n## TEST VALIDATION RULES\n\n1.",
+      "sentence_id": 151,
+      "confidence": 0.9
+    },
+    {
+      "rule_type": "financial_transaction",
+      "rule_id": "money_org_29",
+      "amount": {
+        "text": "4",
+        "start": 10969,
+        "end": 10970
+      },
+      "organizations": [
+        {
+          "text": "Financial Rules\n- Fines",
+          "start": 10863,
+          "end": 10886
+        }
+      ],
+      "context": "Any incident resulting in **3 or more** injuries requires reporting within **8 hours**\n\n### 10.3 Financial Rules\n- Fines increase by **10%** for each repeated violation\n- Companies save approximately **$4** for every **$1** invested in safety\n- Insurance premiums reduced by **15%** with perfect safety record\n- Training investments over **$50,000** qualify for tax credits\n- Penalties double if violations occur within **12 months**\n\n---\n\n## VALIDATION SUMMARY\n\n**Expected Entity Counts:**\n- PERSON: 25 unique individuals\n- ORGANIZATION: 30 organizations (10 government, 15 companies, 5 educational)\n- LOCATION: 20 locations (10 cities, 10 states/countries)\n- GPE: 8 geopolitical entities\n- DATE: 15 specific dates\n- TIME: 8 specific times\n- MONEY: 20 monetary amounts\n- PERCENT: 15 percentages\n\n**Additional Entities:**\n- PHONE: 10 phone numbers\n- REGULATION: 10 regulatory references\n- URL: 5 web addresses\n- MEASUREMENT: 20 measurements with units\n\n**Total Core 8 Entities: 141**\n**Total Additional Entities: 45**\n**Grand Total: 186 entities**\n\n---\n\n## TEST VALIDATION RULES\n\n1.",
+      "sentence_id": 151,
+      "confidence": 0.9
+    },
+    {
+      "rule_type": "financial_transaction",
+      "rule_id": "money_org_30",
+      "amount": {
+        "text": "1",
+        "start": 10986,
+        "end": 10987
+      },
+      "organizations": [
+        {
+          "text": "Financial Rules\n- Fines",
+          "start": 10863,
+          "end": 10886
+        }
+      ],
+      "context": "Any incident resulting in **3 or more** injuries requires reporting within **8 hours**\n\n### 10.3 Financial Rules\n- Fines increase by **10%** for each repeated violation\n- Companies save approximately **$4** for every **$1** invested in safety\n- Insurance premiums reduced by **15%** with perfect safety record\n- Training investments over **$50,000** qualify for tax credits\n- Penalties double if violations occur within **12 months**\n\n---\n\n## VALIDATION SUMMARY\n\n**Expected Entity Counts:**\n- PERSON: 25 unique individuals\n- ORGANIZATION: 30 organizations (10 government, 15 companies, 5 educational)\n- LOCATION: 20 locations (10 cities, 10 states/countries)\n- GPE: 8 geopolitical entities\n- DATE: 15 specific dates\n- TIME: 8 specific times\n- MONEY: 20 monetary amounts\n- PERCENT: 15 percentages\n\n**Additional Entities:**\n- PHONE: 10 phone numbers\n- REGULATION: 10 regulatory references\n- URL: 5 web addresses\n- MEASUREMENT: 20 measurements with units\n\n**Total Core 8 Entities: 141**\n**Total Additional Entities: 45**\n**Grand Total: 186 entities**\n\n---\n\n## TEST VALIDATION RULES\n\n1.",
+      "sentence_id": 151,
+      "confidence": 0.9
+    },
+    {
+      "rule_type": "financial_transaction",
+      "rule_id": "money_org_31",
+      "amount": {
+        "text": "50,000",
+        "start": 11107,
+        "end": 11113
+      },
+      "organizations": [
+        {
+          "text": "Financial Rules\n- Fines",
+          "start": 10863,
+          "end": 10886
+        }
+      ],
+      "context": "Any incident resulting in **3 or more** injuries requires reporting within **8 hours**\n\n### 10.3 Financial Rules\n- Fines increase by **10%** for each repeated violation\n- Companies save approximately **$4** for every **$1** invested in safety\n- Insurance premiums reduced by **15%** with perfect safety record\n- Training investments over **$50,000** qualify for tax credits\n- Penalties double if violations occur within **12 months**\n\n---\n\n## VALIDATION SUMMARY\n\n**Expected Entity Counts:**\n- PERSON: 25 unique individuals\n- ORGANIZATION: 30 organizations (10 government, 15 companies, 5 educational)\n- LOCATION: 20 locations (10 cities, 10 states/countries)\n- GPE: 8 geopolitical entities\n- DATE: 15 specific dates\n- TIME: 8 specific times\n- MONEY: 20 monetary amounts\n- PERCENT: 15 percentages\n\n**Additional Entities:**\n- PHONE: 10 phone numbers\n- REGULATION: 10 regulatory references\n- URL: 5 web addresses\n- MEASUREMENT: 20 measurements with units\n\n**Total Core 8 Entities: 141**\n**Total Additional Entities: 45**\n**Grand Total: 186 entities**\n\n---\n\n## TEST VALIDATION RULES\n\n1.",
+      "sentence_id": 151,
+      "confidence": 0.9
+    },
+    {
+      "rule_type": "financial_transaction",
+      "rule_id": "money_org_32",
+      "amount": {
+        "text": "#",
+        "start": 11821,
+        "end": 11822
+      },
+      "organizations": [
+        {
+          "text": "Financial Rules\n- Fines",
+          "start": 10863,
+          "end": 10886
+        }
+      ],
+      "context": "Any incident resulting in **3 or more** injuries requires reporting within **8 hours**\n\n### 10.3 Financial Rules\n- Fines increase by **10%** for each repeated violation\n- Companies save approximately **$4** for every **$1** invested in safety\n- Insurance premiums reduced by **15%** with perfect safety record\n- Training investments over **$50,000** qualify for tax credits\n- Penalties double if violations occur within **12 months**\n\n---\n\n## VALIDATION SUMMARY\n\n**Expected Entity Counts:**\n- PERSON: 25 unique individuals\n- ORGANIZATION: 30 organizations (10 government, 15 companies, 5 educational)\n- LOCATION: 20 locations (10 cities, 10 states/countries)\n- GPE: 8 geopolitical entities\n- DATE: 15 specific dates\n- TIME: 8 specific times\n- MONEY: 20 monetary amounts\n- PERCENT: 15 percentages\n\n**Additional Entities:**\n- PHONE: 10 phone numbers\n- REGULATION: 10 regulatory references\n- URL: 5 web addresses\n- MEASUREMENT: 20 measurements with units\n\n**Total Core 8 Entities: 141**\n**Total Additional Entities: 45**\n**Grand Total: 186 entities**\n\n---\n\n## TEST VALIDATION RULES\n\n1.",
+      "sentence_id": 151,
+      "confidence": 0.9
+    },
+    {
+      "rule_type": "temporal_event",
+      "rule_id": "date_event_33",
+      "date": {
+        "text": "March 20, 2024",
+        "start": 549,
+        "end": 563
+      },
+      "actions": [
+        {
+          "lemma": "present",
+          "text": "present",
+          "pos": "VERB"
+        }
+      ],
+      "context": "2. **Mary Johnson**, Director of Engineering, will present at the conference on March 20, 2024.\n",
+      "sentence_id": 5,
+      "confidence": 0.7
+    },
+    {
+      "rule_type": "temporal_event",
+      "rule_id": "date_event_34",
+      "date": {
+        "text": "yesterday",
+        "start": 633,
+        "end": 642
+      },
+      "actions": [
+        {
+          "lemma": "complete",
+          "text": "completed",
+          "pos": "VERB"
+        }
+      ],
+      "context": "3. **Robert Chen**, Senior Analyst, completed the regulatory review yesterday.\n",
+      "sentence_id": 6,
+      "confidence": 0.7
+    },
+    {
+      "rule_type": "temporal_event",
+      "rule_id": "date_event_35",
+      "date": {
+        "text": "last month",
+        "start": 882,
+        "end": 892
+      },
+      "actions": [
+        {
+          "lemma": "review",
+          "text": "reviewed",
+          "pos": "VERB"
+        }
+      ],
+      "context": "6. **Jennifer Martinez**, Compliance Manager at OSHA, reviewed 50 cases last month.\n",
+      "sentence_id": 10,
+      "confidence": 0.7
+    },
+    {
+      "rule_type": "temporal_event",
+      "rule_id": "date_event_36",
+      "date": {
+        "text": "June 1, 2024",
+        "start": 2712,
+        "end": 2724
+      },
+      "actions": [
+        {
+          "lemma": "announce",
+          "text": "announced",
+          "pos": "VERB"
+        }
+      ],
+      "context": "The **Department of Labor** announced updated regulations effective June 1, 2024.\n",
+      "sentence_id": 46,
+      "confidence": 0.7
+    },
+    {
+      "rule_type": "temporal_event",
+      "rule_id": "date_event_37",
+      "date": {
+        "text": "365 days",
+        "start": 3876,
+        "end": 3884
+      },
+      "actions": [
+        {
+          "lemma": "achieve",
+          "text": "achieved",
+          "pos": "VERB"
+        }
+      ],
+      "context": "**Tesla, Inc.** achieved zero workplace injuries for 365 days.\n",
+      "sentence_id": 72,
+      "confidence": 0.7
+    },
+    {
+      "rule_type": "temporal_event",
+      "rule_id": "date_event_38",
+      "date": {
+        "text": "January 1, 2024*",
+        "start": 5678,
+        "end": 5694
+      },
+      "actions": [
+        {
+          "lemma": "begin",
+          "text": "begins",
+          "pos": "VERB"
+        }
+      ],
+      "context": "Implementation begins on **January 1, 2024**\n2.",
+      "sentence_id": 100,
+      "confidence": 0.7
+    },
+    {
+      "rule_type": "temporal_event",
+      "rule_id": "date_event_39",
+      "date": {
+        "text": "April 30, 2024*",
+        "start": 5819,
+        "end": 5834
+      },
+      "actions": [
+        {
+          "lemma": "train",
+          "text": "Training",
+          "pos": "VERB"
+        }
+      ],
+      "context": "Training completion by **April 30, 2024**\n5.",
+      "sentence_id": 103,
+      "confidence": 0.7
+    },
+    {
+      "rule_type": "temporal_event",
+      "rule_id": "date_event_40",
+      "date": {
+        "text": "October 10-12, 2024*",
+        "start": 6038,
+        "end": 6058
+      },
+      "actions": [
+        {
+          "lemma": "date",
+          "text": "dates",
+          "pos": "VERB"
+        }
+      ],
+      "context": "Conference dates: **October 10-12, 2024**\n10.",
+      "sentence_id": 107,
+      "confidence": 0.7
+    },
+    {
+      "rule_type": "temporal_event",
+      "rule_id": "date_event_41",
+      "date": {
+        "text": "693-1999",
+        "start": 8256,
+        "end": 8264
+      },
+      "actions": [
+        {
+          "lemma": "land",
+          "text": "Landing",
+          "pos": "VERB"
+        }
+      ],
+      "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+      "sentence_id": 146,
+      "confidence": 0.7
+    },
+    {
+      "rule_type": "temporal_event",
+      "rule_id": "date_event_42",
+      "date": {
+        "text": "565-9860",
+        "start": 8296,
+        "end": 8304
+      },
+      "actions": [
+        {
+          "lemma": "land",
+          "text": "Landing",
+          "pos": "VERB"
+        }
+      ],
+      "context": "Participation: **75%** of eligible workers\n\n---\n\n## SECTION 9: SPECIAL ENTITIES\n\n### 9.1 Phone Numbers (10 phone numbers)\nContact numbers: **(800) 321-6742**, **(202) 693-1999**, **(877) 889-5627**, **(617) 565-9860**, **(212) 337-2378**, **(404) 562-2300**, **(312) 353-2220**, **(214) 767-4731**, **(303) 844-1600**, **(415) 975-4310**.\n\n### 9.2 Regulations (10 regulations)\nKey regulations: **29 CFR 1910.132**, **29 CFR 1926.95**, **29 CFR 1910.134**, **OSHA 3124-12R**, **ISO 9001:2015**, **ANSI Z359.11**, **NFPA 70E**, **EPA 40 CFR 264**, **DOT 49 CFR 172**, **FDA 21 CFR 211**.\n\n### 9.3 URLs (5 URLs)\nResources available at: **https://www.osha.gov**, **http://www.cdc.gov/niosh**, **https://www.epa.gov/compliance**, **https://www.iso.org/standards**, **http://www.ansi.org**.\n\n### 9.4 Measurements (20 measurements)\n- Fall protection required above **6 feet** (1.8 meters) in construction\n- Guardrails must be **42 inches** (107 cm) high\n- Toe boards minimum **4 inches** (10 cm) high\n- Safety nets within **30 feet** (9.1 meters)\n- Ladder side rails extend **3 feet** (0.9 meters)\n- Stairway width minimum **22 inches** (56 cm)\n- Handrail height **30-37 inches** (76-94 cm)\n- Landing depth **30 inches** (76 cm) minimum\n- Riser height maximum **9.5 inches** (24 cm)\n- Tread depth minimum **9.5 inches** (24 cm)\n- Door swing clearance **20 inches** (51 cm)\n- Scaffold width minimum **18 inches** (46 cm)\n- Clearance from power lines **10 feet** (3 meters)\n- Excavation depth requiring protection **5 feet** (1.5 meters)\n- Noise exposure limit **90 decibels** for 8 hours\n- Weight capacity **250 pounds** (113 kg) per person\n- Temperature range **-20°F to 120°F** (-29°C to 49°C)\n- Visibility distance **500 feet** (152 meters)\n- Response time **15 minutes** maximum\n- Storage height limit **15 feet** (4.6 meters)\n\n---\n\n## SECTION 10: RELATIONSHIPS AND RULES\n\n### 10.1 Organizational Relationships\n- **John Smith** reports to **Mary Johnson** at **Global Dynamics Corporation**\n- **OSHA** oversees compliance at **Amazon Web Services, Inc.**\n- **Dr. Michael O'Brien** collaborates with **Johns Hopkins University**\n- **Jennifer Martinez** coordinates between **OSHA** and **EPA**\n- **Microsoft Corporation** partners with **MIT** on research\n\n### 10.2 Compliance Rules\n1.",
+      "sentence_id": 146,
+      "confidence": 0.7
+    },
+    {
+      "rule_type": "temporal_event",
+      "rule_id": "date_event_43",
+      "date": {
+        "text": "30 days",
+        "start": 10465,
+        "end": 10472
+      },
+      "actions": [
+        {
+          "lemma": "complete",
+          "text": "complete",
+          "pos": "VERB"
+        }
+      ],
+      "context": "All employees at **facilities over 10,000 square feet** must complete safety training within **30 days**\n2.",
+      "sentence_id": 147,
+      "confidence": 0.7
+    },
+    {
+      "rule_type": "temporal_event",
+      "rule_id": "date_event_44",
+      "date": {
+        "text": "12 months",
+        "start": 11188,
+        "end": 11197
+      },
+      "actions": [
+        {
+          "lemma": "save",
+          "text": "save",
+          "pos": "VERB"
+        }
+      ],
+      "context": "Any incident resulting in **3 or more** injuries requires reporting within **8 hours**\n\n### 10.3 Financial Rules\n- Fines increase by **10%** for each repeated violation\n- Companies save approximately **$4** for every **$1** invested in safety\n- Insurance premiums reduced by **15%** with perfect safety record\n- Training investments over **$50,000** qualify for tax credits\n- Penalties double if violations occur within **12 months**\n\n---\n\n## VALIDATION SUMMARY\n\n**Expected Entity Counts:**\n- PERSON: 25 unique individuals\n- ORGANIZATION: 30 organizations (10 government, 15 companies, 5 educational)\n- LOCATION: 20 locations (10 cities, 10 states/countries)\n- GPE: 8 geopolitical entities\n- DATE: 15 specific dates\n- TIME: 8 specific times\n- MONEY: 20 monetary amounts\n- PERCENT: 15 percentages\n\n**Additional Entities:**\n- PHONE: 10 phone numbers\n- REGULATION: 10 regulatory references\n- URL: 5 web addresses\n- MEASUREMENT: 20 measurements with units\n\n**Total Core 8 Entities: 141**\n**Total Additional Entities: 45**\n**Grand Total: 186 entities**\n\n---\n\n## TEST VALIDATION RULES\n\n1.",
+      "sentence_id": 151,
+      "confidence": 0.7
+    }
+  ],
+  "distribution": {
+    "organization_person_relationship": 16,
+    "financial_transaction": 17,
+    "temporal_event": 12
+  }
+}

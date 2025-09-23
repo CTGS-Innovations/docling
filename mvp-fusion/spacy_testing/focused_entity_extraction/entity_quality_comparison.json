@@ -1,0 +1,237 @@
+{
+  "PERSON": {
+    "entity_type": "PERSON",
+    "expected_count": 25,
+    "spacy": {
+      "total_extracted": 31,
+      "expected_found": 24,
+      "detection_rate": 96.0,
+      "found_entities": [
+        "Robert Chen",
+        "Priya Patel",
+        "Dr. Michael O'Brien",
+        "Xi Zhang",
+        "Madonna",
+        "Patricia Thompson",
+        "Mary Johnson",
+        "Ahmed Al-Rashid",
+        "John Smith",
+        "Lisa Anderson",
+        "Jennifer Martinez",
+        "Mary Mary Quite Contrary",
+        "Bob Johnson",
+        "Sarah Williams-Brown",
+        "Yuki Tanaka",
+        "Sir Charles Winchester III",
+        "João Silva Santos",
+        "John John",
+        "James Wilson",
+        "Dr. Li",
+        "José García-López",
+        "François Dubois",
+        "David Kim",
+        "Van Der Berg"
+      ],
+      "unique_finds": [
+        "Sarah Williams-Brown",
+        "Mary Mary Quite Contrary",
+        "John John",
+        "José García-López",
+        "François Dubois",
+        "David Kim",
+        "Robert Chen",
+        "Lisa Anderson",
+        "João Silva Santos",
+        "Xi Zhang",
+        "Madonna",
+        "Patricia Thompson",
+        "Bob Johnson",
+        "Mary Johnson",
+        "Ahmed Al-Rashid",
+        "John Smith",
+        "James Wilson",
+        "Dr. Li"
+      ]
+    },
+    "mvp_fusion": {
+      "total_extracted": 19,
+      "expected_found": 6,
+      "detection_rate": 24.0,
+      "found_entities": [
+        "Yuki Tanaka",
+        "Sir Charles Winchester III",
+        "Priya Patel",
+        "Dr. Michael O'Brien",
+        "Jennifer Martinez",
+        "Van Der Berg"
+      ],
+      "unique_finds": []
+    },
+    "missed_by_both": [
+      "Olga Volkov"
+    ]
+  },
+  "ORG": {
+    "entity_type": "ORG",
+    "expected_count": 30,
+    "spacy": {
+      "total_extracted": 42,
+      "expected_found": 21,
+      "detection_rate": 70.0,
+      "found_entities": [
+        "Massachusetts Institute of Technology",
+        "Department of Labor",
+        "Consumer Product Safety Commission",
+        "University of California, Berkeley",
+        "Harvard Business School",
+        "Boeing Corporation",
+        "Johnson & Johnson",
+        "Lockheed Martin Corporation",
+        "National Institute for Occupational Safety and Health",
+        "United Parcel Service",
+        "Amazon Web Services, Inc.",
+        "Federal Aviation Administration",
+        "FedEx Corporation",
+        "General Electric Company",
+        "EPA",
+        "Food and Drug Administration",
+        "Stanford University",
+        "Johns Hopkins University",
+        "Nuclear Regulatory Commission",
+        "Microsoft Corporation",
+        "Department of Transportation"
+      ],
+      "unique_finds": []
+    },
+    "mvp_fusion": {
+      "total_extracted": 379,
+      "expected_found": 29,
+      "detection_rate": 96.66666666666667,
+      "found_entities": [
+        "Massachusetts Institute of Technology",
+        "Department of Labor",
+        "Consumer Product Safety Commission",
+        "University of California, Berkeley",
+        "Harvard Business School",
+        "Boeing Corporation",
+        "Facebook Technologies, LLC",
+        "Johnson & Johnson",
+        "Lockheed Martin Corporation",
+        "3M Company",
+        "National Institute for Occupational Safety and Health",
+        "United Parcel Service",
+        "Tesla, Inc.",
+        "Amazon Web Services, Inc.",
+        "Apple Inc.",
+        "Federal Aviation Administration",
+        "FedEx Corporation",
+        "General Electric Company",
+        "EPA",
+        "Food and Drug Administration",
+        "Centers for Disease Control and Prevention",
+        "Stanford University",
+        "Raytheon Technologies",
+        "Johns Hopkins University",
+        "Nuclear Regulatory Commission",
+        "Microsoft Corporation",
+        "Walmart Inc.",
+        "Department of Transportation",
+        "Google LLC"
+      ],
+      "unique_finds": [
+        "Centers for Disease Control and Prevention",
+        "Tesla, Inc.",
+        "Apple Inc.",
+        "Facebook Technologies, LLC",
+        "Raytheon Technologies",
+        "3M Company",
+        "Walmart Inc.",
+        "Google LLC"
+      ]
+    },
+    "missed_by_both": [
+      "OSHA"
+    ]
+  },
+  "GPE": {
+    "entity_type": "GPE",
+    "expected_count": 8,
+    "spacy": {
+      "total_extracted": 19,
+      "expected_found": 5,
+      "detection_rate": 62.5,
+      "found_entities": [
+        "Russia",
+        "South Korea",
+        "Israel",
+        "United States",
+        "China"
+      ],
+      "unique_finds": []
+    },
+    "mvp_fusion": {
+      "total_extracted": 347,
+      "expected_found": 8,
+      "detection_rate": 100.0,
+      "found_entities": [
+        "India",
+        "Russia",
+        "South Korea",
+        "Mexico",
+        "Israel",
+        "United States",
+        "China",
+        "European Union"
+      ],
+      "unique_finds": [
+        "Mexico",
+        "India",
+        "European Union"
+      ]
+    },
+    "missed_by_both": []
+  },
+  "LOC": {
+    "entity_type": "LOC",
+    "expected_count": 19,
+    "spacy": {
+      "total_extracted": 0,
+      "expected_found": 0,
+      "detection_rate": 0.0,
+      "found_entities": [],
+      "unique_finds": []
+    },
+    "mvp_fusion": {
+      "total_extracted": 13,
+      "expected_found": 2,
+      "detection_rate": 10.526315789473683,
+      "found_entities": [
+        "California",
+        "San Jose"
+      ],
+      "unique_finds": [
+        "California",
+        "San Jose"
+      ]
+    },
+    "missed_by_both": [
+      "Chicago",
+      "Phoenix",
+      "New York City",
+      "Canada",
+      "United Kingdom",
+      "Florida",
+      "Philadelphia",
+      "San Diego",
+      "Australia",
+      "Brazil",
+      "Los Angeles",
+      "Germany",
+      "Texas",
+      "Houston",
+      "Japan",
+      "Dallas",
+      "San Antonio"
+    ]
+  }
+}

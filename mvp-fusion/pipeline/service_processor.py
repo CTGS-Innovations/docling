@@ -113,6 +113,22 @@ class ServiceProcessor:
         # PERFORMANCE FIX: Initialize FLPC engine ONCE for high-speed pattern matching
         self.flpc_engine = None
         
+        # PERFORMANCE OPTIMIZATION: Pre-build YAML template structure (avoid per-document overhead)
+        self.yaml_template = {
+            'conversion': {
+                'engine': 'mvp-fusion-highspeed',
+                'page_count': 0,  # Will be updated per document
+                'conversion_time_ms': 0,  # Will be updated per document
+                'source_file': '',  # Will be updated per document
+                'format': ''  # Will be updated per document
+            },
+            'content_detection': {},  # Will be updated per document
+            'processing': {
+                'stage': 'converted',
+                'content_length': 0  # Will be updated per document
+            }
+        }
+        
         # Worker configuration - use CLI override if provided, otherwise config
         if max_workers is not None:
             self.cpu_workers = max_workers  # Use CLI override
@@ -380,8 +396,8 @@ class ServiceProcessor:
                     }
                     entities['person'].append(entity)
                 
-                # Limit to 20 persons
-                entities['person'] = entities['person'][:20]
+                # Limit to 30 persons (increased to capture key people)
+                entities['person'] = entities['person'][:30]
                 
             except Exception as e:
                 self.logger.logger.warning(f"World-scale person extraction failed: {e}")
@@ -401,7 +417,7 @@ class ServiceProcessor:
                                 }
                             }
                             entities['person'].append(entity)
-                        entities['person'] = entities['person'][:20]
+                        entities['person'] = entities['person'][:30]
                         self.logger.logger.info(f"🟡 Using fallback conservative extractor: {len(entities['person'])} persons")
                     except Exception as e2:
                         self.logger.logger.warning(f"Conservative fallback also failed: {e2}")
@@ -433,7 +449,7 @@ class ServiceProcessor:
             org_entities = []
             for pattern in org_patterns:
                 org_entities.extend(self._extract_entities_with_spans(content, pattern, 'ORG'))
-            entities['org'] = self._deduplicate_entities(org_entities)[:20]
+            entities['org'] = self._deduplicate_entities(org_entities)[:50]
         timing_breakdown['org'] = (time.perf_counter() - org_start) * 1000
         
         # ENHANCED LOCATION & GPE EXTRACTION with subcategory metadata - TEMPORARILY DISABLED FOR PERFORMANCE TESTING
@@ -503,8 +519,8 @@ class ServiceProcessor:
                         
                         entities['gpe'].append(entity)
                 
-                # Deduplicate and limit
-                entities['gpe'] = self._deduplicate_entities(entities['gpe'])[:20]
+                # Deduplicate and limit (increased from 20 to 50 to capture basic geography)
+                entities['gpe'] = self._deduplicate_entities(entities['gpe'])[:50]
                 self.logger.logger.info(f"🌍 GPE extraction: {len(entities['gpe'])} entities found")
             except Exception as e:
                 self.logger.logger.warning(f"GPE extraction error: {e}")
@@ -545,8 +561,8 @@ class ServiceProcessor:
                         
                         entities['location'].append(entity)
                 
-                # Deduplicate and limit
-                entities['location'] = self._deduplicate_entities(entities['location'])[:20]
+                # Deduplicate and limit (increased from 20 to 50 to capture basic geography)  
+                entities['location'] = self._deduplicate_entities(entities['location'])[:50]
                 self.logger.logger.info(f"📍 LOC extraction: {len(entities['location'])} entities found")
             except Exception as e:
                 self.logger.logger.warning(f"LOC extraction error: {e}")
@@ -566,9 +582,9 @@ class ServiceProcessor:
                 flpc_entities = flpc_results.get('entities', {})
                 
                 # Convert FLPC results to service processor format (FLPC uses UPPERCASE keys)
-                entities['date'] = self._convert_flpc_entities(flpc_entities.get('DATE', []), 'DATE')[:20]
+                entities['date'] = self._convert_flpc_entities(flpc_entities.get('DATE', []), 'DATE')[:30]
                 entities['time'] = self._convert_flpc_entities(flpc_entities.get('TIME', []), 'TIME')[:10]
-                entities['money'] = self._convert_flpc_entities(flpc_entities.get('MONEY', []), 'MONEY')[:20]
+                entities['money'] = self._convert_flpc_entities(flpc_entities.get('MONEY', []), 'MONEY')[:40]
                 
                 self.logger.logger.info(f"🟢 FLPC extraction: DATE={len(entities['date'])}, MONEY={len(entities['money'])}, TIME={len(entities['time'])}")
             except Exception as e:
@@ -586,7 +602,7 @@ class ServiceProcessor:
         
         # PERCENT - Use FLPC for percentages if available (FLPC uses UPPERCASE keys)
         if flpc_entities:
-            percent_entities = self._convert_flpc_entities(flpc_entities.get('PERCENT', []), 'MEASUREMENT')[:20]
+            percent_entities = self._convert_flpc_entities(flpc_entities.get('PERCENT', []), 'MEASUREMENT')[:30]
         else:
             percent_entities = []
         # Keep clean structure - no extra metadata fields
@@ -596,7 +612,7 @@ class ServiceProcessor:
             entities['phone'] = self._convert_flpc_entities(flpc_entities.get('PHONE', []), 'PHONE')[:10]
             entities['email'] = self._convert_flpc_entities(flpc_entities.get('EMAIL', []), 'EMAIL')[:10]
             entities['url'] = self._convert_flpc_entities(flpc_entities.get('URL', []), 'URL')[:10]
-            measurement_entities = self._convert_flpc_entities(flpc_entities.get('MEASUREMENT', []), 'MEASUREMENT')[:20]
+            measurement_entities = self._convert_flpc_entities(flpc_entities.get('MEASUREMENT', []), 'MEASUREMENT')[:30]
         else:
             # No FLPC - use empty entities (eliminating slow Python regex)
             entities['phone'] = []
@@ -608,7 +624,7 @@ class ServiceProcessor:
         # This is acceptable as it's domain-specific and infrequent
         if content and 'CFR' in content or 'USC' in content:
             reg_pattern = r'\b\d+\s+(?:CFR|USC|U\.S\.C\.|C\.F\.R\.)\s+§?\s*\d+(?:\.\d+)?(?:\([a-z]\))?|\b(?:Section|Sec\.)\s+\d+(?:\.\d+)?'
-            entities['regulation'] = self._extract_entities_with_spans(content, reg_pattern, 'REGULATION', re.IGNORECASE)[:20]
+            entities['regulation'] = self._extract_entities_with_spans(content, reg_pattern, 'REGULATION', re.IGNORECASE)[:30]
         else:
             entities['regulation'] = []
         
@@ -850,10 +866,10 @@ class ServiceProcessor:
     
     def _extract_entities_sentence_based(self, content: str, entity_type: str) -> List[Dict]:
         """
-        Extract entities using sentence-based processing (OpenNLP best practice).
+        Extract entities using sentence-based processing (fast sentence splitting).
         
         This follows the standard NLP approach:
-        1. Detect sentence boundaries first
+        1. Detect sentence boundaries using simple patterns
         2. Process each sentence independently 
         3. Apply longest-match-first within each sentence
         4. No cross-sentence overlaps possible
@@ -867,49 +883,98 @@ class ServiceProcessor:
         """
         all_entities = []
         
-        try:
-            # Step 1: Sentence detection using spaCy sentencizer
-            import spacy
-            nlp = spacy.blank("en")
-            nlp.add_pipe("sentencizer")
-            doc = nlp(content)
+        # Step 1: Fast sentence detection using simple patterns (no spaCy needed)
+        # Split on sentence boundaries: periods, exclamation marks, question marks
+        # Keep track of character positions for span calculation
+        sentences = self._fast_sentence_split(content)
+        
+        # Step 2: Process each sentence independently 
+        automaton = self.core8_automatons[entity_type]
+        
+        for sentence_text, sentence_start in sentences:
+            sentence_entities = []
             
-            # Step 2: Process each sentence independently 
-            automaton = self.core8_automatons[entity_type]
-            
-            for sent in doc.sents:
-                sentence_text = sent.text
-                sentence_start = sent.start_char
-                sentence_entities = []
+            # Extract entities from this sentence
+            for end_pos, (ent_type, canonical) in automaton.iter(sentence_text.lower()):
+                start_pos = end_pos - len(canonical) + 1
+                original_text = sentence_text[start_pos:end_pos + 1]
                 
-                # Extract entities from this sentence
-                for end_pos, (ent_type, canonical) in automaton.iter(sentence_text.lower()):
-                    start_pos = end_pos - len(canonical) + 1
-                    original_text = sentence_text[start_pos:end_pos + 1]
-                    
-                    # Only add reasonable matches
-                    if len(original_text) > 2:
-                        entity = {
-                            'value': original_text,
-                            'text': original_text,
-                            'type': entity_type,
-                            'span': {
-                                'start': sentence_start + start_pos,  # Adjust to document coordinates
-                                'end': sentence_start + end_pos + 1
-                            }
+                # Only add reasonable matches
+                if len(original_text) > 2:
+                    entity = {
+                        'value': original_text,
+                        'text': original_text,
+                        'type': entity_type,
+                        'span': {
+                            'start': sentence_start + start_pos,  # Adjust to document coordinates
+                            'end': sentence_start + end_pos + 1
                         }
-                        sentence_entities.append(entity)
+                    }
+                    sentence_entities.append(entity)
+            
+            # Step 3: Apply longest-match-first deduplication within sentence
+            # This works perfectly because no cross-sentence overlaps are possible
+            sentence_entities = self._deduplicate_entities(sentence_entities)
+            all_entities.extend(sentence_entities)
+        
+        return all_entities
+    
+    def _fast_sentence_split(self, content: str) -> List[tuple]:
+        """
+        Fast sentence splitting without spaCy dependency.
+        
+        Returns:
+            List of (sentence_text, sentence_start_position) tuples
+        """
+        sentences = []
+        current_start = 0
+        
+        # Simple sentence boundary patterns (much faster than spaCy)
+        # Look for periods, exclamation marks, question marks followed by whitespace/newlines
+        i = 0
+        while i < len(content):
+            char = content[i]
+            
+            # Check for sentence boundary markers
+            if char in '.!?':
+                # Look ahead to see if this is likely a sentence boundary
+                next_pos = i + 1
                 
-                # Step 3: Apply longest-match-first deduplication within sentence
-                # This works perfectly because no cross-sentence overlaps are possible
-                sentence_entities = self._deduplicate_entities(sentence_entities)
-                all_entities.extend(sentence_entities)
+                # Skip if at end of content
+                if next_pos >= len(content):
+                    # Add final sentence
+                    sentence_text = content[current_start:].strip()
+                    if sentence_text:
+                        sentences.append((sentence_text, current_start))
+                    break
+                
+                # Check if followed by whitespace (strong sentence boundary indicator)
+                next_char = content[next_pos]
+                if next_char.isspace():
+                    # Extract sentence from current_start to i+1
+                    sentence_text = content[current_start:i+1].strip()
+                    if sentence_text and len(sentence_text) > 5:  # Skip very short "sentences"
+                        sentences.append((sentence_text, current_start))
+                    
+                    # Move to start of next sentence (skip whitespace)
+                    while next_pos < len(content) and content[next_pos].isspace():
+                        next_pos += 1
+                    current_start = next_pos
+                    i = next_pos - 1  # Will be incremented by loop
             
-            return all_entities
-            
-        except ImportError:
-            # Fallback to document-level processing if spaCy not available
-            return self._extract_entities_document_level(content, entity_type)
+            i += 1
+        
+        # Add any remaining content as final sentence
+        if current_start < len(content):
+            sentence_text = content[current_start:].strip()
+            if sentence_text and len(sentence_text) > 5:
+                sentences.append((sentence_text, current_start))
+        
+        # If no sentences found, treat entire content as one sentence
+        if not sentences and content.strip():
+            sentences.append((content.strip(), 0))
+        
+        return sentences
     
     def _extract_entities_document_level(self, content: str, entity_type: str) -> List[Dict]:
         """Fallback document-level extraction (legacy approach)."""
@@ -988,27 +1053,46 @@ class ServiceProcessor:
         """
         Quick pre-screening scan for content types (tables, images, formulas, etc.)
         Fast yes/no flags to inform classification downstream.
+        PERFORMANCE: Optimized for minimal string operations and single-pass scanning
         """
         content_lower = content.lower()
         
-        # Quick pattern-based detection
+        # OPTIMIZED: Single split for line-based detection
+        lines = None
+        if '\n' in content:
+            lines = content.split('\n')
+        
+        # Fast single-pass detection
+        has_lists = False
+        has_headers = False
+        if lines:
+            for line in lines:
+                stripped = line.strip()
+                if not has_lists and stripped and (stripped.startswith(('-', '*', '+', '•')) or 
+                                                  (stripped[0].isdigit() and '.' in stripped[:10])):
+                    has_lists = True
+                if not has_headers and stripped.startswith('#'):
+                    has_headers = True
+                if has_lists and has_headers:
+                    break
+        
         return {
-            'has_tables': bool(re.search(r'\|.*\|.*\|', content)) or 'table' in content_lower,
-            'has_images': bool(re.search(r'!\[.*\]\(.*\)', content)) or any(x in content_lower for x in ['image', 'figure', 'diagram']),
-            'has_formulas': bool(re.search(r'[\$`]{1,2}.*?[\$`]{1,2}', content)) or any(x in content_lower for x in ['equation', 'formula', '∑', '∫', 'α', 'β']),
-            'has_code': bool(re.search(r'```.*?```', content, re.DOTALL)) or 'import ' in content,
-            'has_links': bool(re.search(r'https?://', content)) or bool(re.search(r'\[.*?\]\(.*?\)', content)),
-            'has_lists': bool(re.search(r'^\s*[-*+•]\s', content, re.MULTILINE)) or bool(re.search(r'^\s*\d+\.', content, re.MULTILINE)),
-            'has_headers': bool(re.search(r'^#+\s', content, re.MULTILINE)),
-            'has_footnotes': bool(re.search(r'\[\d+\]', content)) or 'footnote' in content_lower,
-            'has_citations': bool(re.search(r'\(\d{4}\)', content)) or 'et al' in content_lower,
-            'has_structured_data': 'json' in content_lower or 'xml' in content_lower or 'yaml' in content_lower
+            'has_tables': '|' in content and content.count('|') >= 3,
+            'has_images': '![' in content or 'image' in content_lower,
+            'has_formulas': '$' in content or '`' in content,
+            'has_code': '```' in content or 'import ' in content,
+            'has_links': 'http' in content_lower,
+            'has_lists': has_lists,
+            'has_headers': has_headers,
+            'has_footnotes': '[' in content and ']' in content,
+            'has_citations': 'et al' in content_lower or '(202' in content,
+            'has_structured_data': 'json' in content_lower or 'xml' in content_lower
         }
     
-    def _convert_pdf_to_markdown(self, pdf_path: Path) -> str:
-        """Convert PDF to markdown using PyMuPDF (real conversion)"""
+    def _convert_pdf_to_markdown(self, pdf_path: Path) -> tuple[str, int]:
+        """Convert PDF to markdown using PyMuPDF (real conversion) - returns (content, page_count)"""
         if not fitz:
-            return f"# {pdf_path.name}\n\nPyMuPDF not available - mock content"
+            return f"# {pdf_path.name}\n\nPyMuPDF not available - mock content", 0
         
         try:
             doc = fitz.open(str(pdf_path))
@@ -1017,7 +1101,7 @@ class ServiceProcessor:
             # Skip files that are too large
             if page_count > 100:
                 doc.close()
-                return f"# {pdf_path.name}\n\nSkipped: {page_count} pages (>100 limit)"
+                return f"# {pdf_path.name}\n\nSkipped: {page_count} pages (>100 limit)", page_count
             
             # Extract text from all pages
             markdown_content = [f"# {pdf_path.stem}\n"]
@@ -1036,10 +1120,10 @@ class ServiceProcessor:
                                 markdown_content.append(text + "\n")
             
             doc.close()
-            return '\n'.join(markdown_content)
+            return '\n'.join(markdown_content), page_count
             
         except Exception as e:
-            return f"# {pdf_path.name}\n\nPDF conversion error: {str(e)}"
+            return f"# {pdf_path.name}\n\nPDF conversion error: {str(e)}", 0
     
     def _io_worker_ingestion(self, file_paths: List[Path]) -> None:
         """
@@ -1063,16 +1147,30 @@ class ServiceProcessor:
             ingestion_start = time.perf_counter()
             
             try:
-                self.logger.conversion(f"Reading file: {file_path.name}")
+                # PERFORMANCE TEST: Disable hot path logging
+                # self.logger.conversion(f"Reading file: {file_path.name}")
                 
-                # Real file processing (I/O bound)
+                # Real file processing (I/O bound) - FIXED: No double PDF opening
+                page_count = 0
                 if file_path.suffix.lower() == '.pdf':
-                    self.pdf_converter.conversion(f"Converting PDF to markdown: {file_path.name}")
-                    markdown_content = self._convert_pdf_to_markdown(file_path)
+                    # TIMING FIX: Measure only PDF conversion time
+                    set_current_phase('pdf_conversion')
+                    add_pages_processed(0)  # Will update after we know page count
+                    pdf_start = time.perf_counter()
+                    markdown_content, page_count = self._convert_pdf_to_markdown(file_path)
+                    # Update page count after PDF processing
+                    add_pages_processed(page_count)
                 else:
                     # Read text files directly
                     with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
                         markdown_content = f.read()
+                    page_count = 0  # Non-PDF files don't have page count
+                
+                # TIMING FIX: Measure document object creation and metadata generation
+                set_current_phase('document_processing') 
+                add_files_processed(1)
+                if page_count == 0:  # For non-PDF files, add them here
+                    add_pages_processed(1)  # Treat text files as 1 page equivalent
                 
                 # Create InMemoryDocument with basic YAML metadata (I/O worker responsibility)
                 doc = InMemoryDocument(
@@ -1081,42 +1179,25 @@ class ServiceProcessor:
                 )
                 doc.markdown_content = markdown_content
                 
-                # Quick content pre-screening (fast yes/no flags)
+                # Quick content pre-screening (fast yes/no flags) - FIXED: No regex violations
                 content_flags = self._quick_content_scan(markdown_content)
                 
-                # Calculate page count for PDFs
-                page_count = 0
-                if file_path.suffix.lower() == '.pdf' and fitz:
-                    try:
-                        pdf_doc = fitz.open(str(file_path))
-                        page_count = len(pdf_doc)
-                        pdf_doc.close()
-                    except:
-                        page_count = 0
-                
-                # Use YAMLMetadataEngine to generate comprehensive metadata
+                # PERFORMANCE OPTIMIZED: Use pre-built template with minimal updates
                 conversion_time = time.perf_counter() - ingestion_start
-                yaml_content = self.yaml_engine.generate_conversion_metadata(
-                    file_path=file_path,
-                    page_count=page_count,
-                    extra_metadata={
-                        'content_detection': content_flags,  # Add pre-screening flags
-                        'processing_info': {
-                            'conversion_time_ms': conversion_time * 1000,
-                            'content_length': len(markdown_content),
-                            'stage': 'converted'
-                        }
-                    }
-                )
                 
-                # Parse YAML string back to dict for frontmatter
-                import yaml
-                doc.yaml_frontmatter = yaml.safe_load(yaml_content.replace('---\n', '').replace('\n---', ''))
+                # Copy template and update only necessary fields (faster than dict creation)
+                doc.yaml_frontmatter = self.yaml_template.copy()
+                doc.yaml_frontmatter['conversion'] = self.yaml_template['conversion'].copy()
+                doc.yaml_frontmatter['processing'] = self.yaml_template['processing'].copy()
                 
-                set_current_phase('document_processing')
-                add_files_processed(1)
-                add_pages_processed(page_count)
-                self.phase_manager.log('document_processor', f"📄 Created InMemoryDocument with basic YAML: {file_path.name}")
+                # Update only the dynamic values
+                doc.yaml_frontmatter['conversion']['page_count'] = page_count
+                doc.yaml_frontmatter['conversion']['conversion_time_ms'] = conversion_time * 1000
+                doc.yaml_frontmatter['conversion']['source_file'] = file_path.name
+                doc.yaml_frontmatter['conversion']['format'] = file_path.suffix.upper().replace('.', '') if file_path.suffix else 'TXT'
+                doc.yaml_frontmatter['content_detection'] = content_flags
+                doc.yaml_frontmatter['processing']['content_length'] = len(markdown_content)
+                # self.phase_manager.log('document_processor', f"📄 Created InMemoryDocument with basic YAML: {file_path.name}")
                 
                 # Create work item for CPU workers (now passes the document)
                 work_item = WorkItem(
@@ -1128,9 +1209,9 @@ class ServiceProcessor:
                 # Add to queue with backpressure handling
                 try:
                     self.work_queue.put(work_item, timeout=5.0)
-                    queue_size = self.work_queue.qsize()
-                    self.logger.queue(f"Queued InMemoryDocument: {file_path.name}", 
-                                    queue_size=queue_size, queue_max=self.queue_size)
+                    # queue_size = self.work_queue.qsize()
+                    # self.logger.queue(f"Queued InMemoryDocument: {file_path.name}", 
+                    #                 queue_size=queue_size, queue_max=self.queue_size)
                 except Full:
                     self.logger.logger.warning(f"⚠️  Queue full, dropping: {file_path.name}")
                     
@@ -1175,13 +1256,14 @@ class ServiceProcessor:
                 # Get the InMemoryDocument from I/O worker (shared memory handoff)
                 doc = work_item.document
                 
-                self.entity_extraction.semantics(f"Processing entities: {doc.source_filename}")
-                set_current_phase('document_processing')
-                self.phase_manager.log('document_processor', f"📄 Received InMemoryDocument with YAML: {doc.source_filename}")
-                
                 # Real entity extraction and classification (enrich existing document)
                 try:
                     if self.aho_corasick_engine and self.semantic_extractor:
+                        # TIMING FIX: Start classification phase  
+                        set_current_phase('classification')
+                        doc_page_count = doc.yaml_frontmatter.get('conversion', {}).get('page_count', 0)
+                        add_pages_processed(doc_page_count)
+                        
                         # Real classification with Aho-Corasick
                         self.document_classifier.classification(f"Classifying document: {doc.source_filename}")
                         
@@ -1223,11 +1305,12 @@ class ServiceProcessor:
                                 doc.yaml_frontmatter['processing'] = {}
                             doc.yaml_frontmatter['processing']['stage'] = 'classified'
                             
-                            set_current_phase('classification')
-                            # Get page count from document metadata
-                            doc_page_count = doc.yaml_frontmatter.get('page_count', 0)
-                            add_pages_processed(doc_page_count)
+                            # No page counting here - already done above
                             self.phase_manager.log('document_classifier', f"📋 Added classification to YAML: {doc.source_filename}")
+                            
+                            # TIMING FIX: Start entity extraction phase
+                            set_current_phase('entity_extraction')
+                            # Pages already counted in classification phase
                             
                             # Extract Core 8 Universal Entities
                             self.core8_extractor.enrichment(f"Extracting entities: {doc.source_filename}")
@@ -1315,10 +1398,13 @@ class ServiceProcessor:
                                 }
                                 
                                 normalization_time = (time.perf_counter() - normalization_start) * 1000
-                                # Track pages processed for phase performance reporting
-                                add_pages_processed(doc_page_count)
+                                # Pages already counted in classification phase
                                 self.phase_manager.log('normalization', f"🔄 Normalized {canonical_count} canonical entities from {original_count} raw entities")
                                 self.entity_normalizer_logger.normalization(f"✅ Normalization complete: {normalization_time:.1f}ms (enhanced text ready for semantic analysis): {doc.source_filename}")
+                            
+                            # TIMING FIX: Start semantic analysis phase
+                            set_current_phase('semantic_analysis')
+                            # Pages already counted in classification phase
                             
                             # Real semantic extraction
                             self.semantic_analyzer.semantics(f"Extracting semantic facts: {doc.source_filename}")
@@ -1335,10 +1421,7 @@ class ServiceProcessor:
                                     doc.yaml_frontmatter['processing'] = {}
                                 doc.yaml_frontmatter['processing']['stage'] = 'extracted'
                                 
-                                set_current_phase('semantic_analysis')
-                                # Get page count from document metadata
-                                doc_page_count = doc.yaml_frontmatter.get('page_count', 0)
-                                add_pages_processed(doc_page_count)
+                                # Pages already counted in classification phase
                                 self.phase_manager.log('semantic_analyzer', f"🔍 Added semantic JSON to document: {doc.source_filename}")
                                 
                                 # Log entity counts (following Rule #11 format)
