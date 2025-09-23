@@ -854,8 +854,11 @@ class ServiceProcessor:
                 start_pos = end_pos - len(canonical) + 1
                 original_text = sentence_text[start_pos:end_pos + 1]
                 
-                # Only add reasonable matches
-                if len(original_text) > 2:
+                # Only add reasonable matches - filter out short ambiguous org names and common words
+                common_words = {'standard', 'addition', 'current', 'time', 'side', 'express', 'general', 'national', 'international', 'global', 'service', 'services', 'company', 'group', 'systems', 'solutions', 'technologies', 'management', 'development', 'research', 'institute', 'center', 'association', 'corporation', 'foundation'}
+                is_valid = (len(original_text) >= 4 or (entity_type != 'ORG' and len(original_text) > 2))
+                is_not_common_word = (entity_type != 'ORG' or original_text.lower() not in common_words)
+                if is_valid and is_not_common_word:
                     entity = {
                         'value': original_text,
                         'text': original_text,
@@ -1372,10 +1375,9 @@ class ServiceProcessor:
                             
                             # Real semantic extraction
                             self.semantic_analyzer.semantics(f"Extracting semantic facts: {doc.source_filename}")
-                            semantic_facts = self.semantic_extractor.extract_semantic_facts_from_classification(
-                                classification_result, 
-                                doc.markdown_content
-                            )
+                            # Generate full document with YAML frontmatter for semantic extraction
+                            full_document = doc.generate_final_markdown()
+                            semantic_facts = self.semantic_extractor.extract_semantic_facts(full_document)
                             
                             if semantic_facts:
                                 # Store semantic data in document

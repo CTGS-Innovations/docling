@@ -174,7 +174,7 @@ extractor:
 # Clean Pipeline Architecture Configuration (NEW)
 pipeline:
   # Use orchestrated pipeline with 7 isolated stages
-  use_orchestrated: false        # Disable orchestrated pipeline to test original
+  use_orchestrated: true         # Enable orchestrated pipeline wrapper with working semantic extraction
   
   # Memory limits for edge deployment (CloudFlare Workers ready)
   memory_limit_mb: 100           # Per document memory limit

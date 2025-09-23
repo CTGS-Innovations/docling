@@ -241,10 +241,10 @@ class SemanticFactExtractor:
             ],
             
             'Requirement': [
-                r'(must|shall|required|mandatory)\s+(.+?)(?=\.|,|;)',
-                r'(should|recommended|advised)\s+(.+?)(?=\.|,|;)', 
-                r'(may|optional|permitted)\s+(.+?)(?=\.|,|;)',
-                r'(prohibited|forbidden|not\s+allowed)\s+(.+?)(?=\.|,|;)',
+                r'(must|shall|required|mandatory)\s+(.+)',
+                r'(should|recommended|advised)\s+(.+)', 
+                r'(may|optional|permitted)\s+(.+)',
+                r'(prohibited|forbidden|not\s+allowed)\s+(.+)',
             ],
             
             'FinancialImpact': [
@@ -324,7 +324,7 @@ class SemanticFactExtractor:
         
         for pattern in self.fact_patterns['RegulationCitation']:
             try:
-                for match in re.finditer(pattern, text, re.IGNORECASE):
+                for match in re.finditer(pattern, text, 0):
                     raw_text = match.group(0)
                     
                     # Determine authority and regulation
@@ -357,39 +357,71 @@ class SemanticFactExtractor:
                 
         return facts
     
+    def _split_into_sentences(self, text: str) -> List[Tuple[str, int]]:
+        """Split text into sentences and return (sentence_text, start_position) tuples"""
+        sentences = []
+        
+        # Simple sentence boundary detection using periods, exclamation marks, question marks
+        import re as stdlib_re  # Use standard regex for simple splitting
+        
+        # Split on sentence boundaries while keeping track of positions
+        sentence_pattern = r'[.!?]+\s+'
+        
+        current_pos = 0
+        for match in stdlib_re.finditer(sentence_pattern, text):
+            sentence_end = match.start() + 1  # Include the punctuation
+            sentence_text = text[current_pos:sentence_end].strip()
+            
+            if len(sentence_text) > 10:  # Skip very short fragments
+                sentences.append((sentence_text, current_pos))
+            
+            current_pos = match.end()
+        
+        # Add final sentence if text doesn't end with punctuation
+        if current_pos < len(text):
+            final_sentence = text[current_pos:].strip()
+            if len(final_sentence) > 10:
+                sentences.append((final_sentence, current_pos))
+        
+        return sentences
+    
     def _extract_requirements(self, text: str, normalized_entities: Dict) -> List[Requirement]:
-        """Extract requirements as structured facts"""
+        """Extract requirements as structured facts - sentence-by-sentence processing"""
         facts = []
         
-        for pattern in self.fact_patterns['Requirement']:
-            try:
-                for match in re.finditer(pattern, text, re.IGNORECASE):
-                    modality = match.group(1).lower()
-                    requirement_text = match.group(2).strip()
-                    
-                    # Classify modality strength
-                    if modality in ['must', 'shall', 'required', 'mandatory']:
-                        modality_type = 'mandatory'
-                    elif modality in ['should', 'recommended', 'advised']:
-                        modality_type = 'recommended'
-                    elif modality in ['may', 'optional', 'permitted']:
-                        modality_type = 'optional'
-                    else:
-                        modality_type = 'prohibited'
-                    
-                    fact = Requirement(
-                        fact_type='Requirement',
-                        confidence=0.85,
-                        span={'start': match.start(), 'end': match.end()},
-                        raw_text=match.group(0),
-                        requirement_text=requirement_text,
-                        subject='',
-                        modality=modality_type,
-                        normalized_entities=normalized_entities
-                    )
-                    facts.append(fact)
-            except:
-                continue
+        # Split text into sentences using simple sentence boundaries
+        sentences = self._split_into_sentences(text)
+        
+        for sentence_text, sentence_start in sentences:
+            for pattern in self.fact_patterns['Requirement']:
+                try:
+                    for match in re.finditer(pattern, sentence_text):
+                        modality = match.group(1).lower()
+                        requirement_text = match.group(2).strip()
+                        
+                        # Classify modality strength
+                        if modality in ['must', 'shall', 'required', 'mandatory']:
+                            modality_type = 'mandatory'
+                        elif modality in ['should', 'recommended', 'advised']:
+                            modality_type = 'recommended'
+                        elif modality in ['may', 'optional', 'permitted']:
+                            modality_type = 'optional'
+                        else:
+                            modality_type = 'prohibited'
+                        
+                        fact = Requirement(
+                            fact_type='Requirement',
+                            confidence=0.85,
+                            span={'start': sentence_start + match.start(), 'end': sentence_start + match.end()},
+                            raw_text=match.group(0),
+                            requirement_text=requirement_text,
+                            subject='',
+                            modality=modality_type,
+                            normalized_entities=normalized_entities
+                        )
+                        facts.append(fact)
+                except:
+                    continue
                 
         return facts
     
@@ -399,7 +431,7 @@ class SemanticFactExtractor:
         
         for pattern in self.fact_patterns['FinancialImpact']:
             try:
-                for match in re.finditer(pattern, text, re.IGNORECASE):
+                for match in re.finditer(pattern, text, 0):
                     raw_text = match.group(0)
                     
                     # Extract amount
@@ -502,7 +534,7 @@ class SemanticFactExtractor:
         ]
         
         for pattern in role_patterns:
-            match = re.search(pattern, context, re.IGNORECASE)
+            match = re.search(pattern, context, 0)
             if match:
                 return match.group(1)
         
@@ -535,7 +567,7 @@ class SemanticFactExtractor:
         
         for pattern in self.fact_patterns['ActionFact']:
             try:
-                for match in re.finditer(pattern, text, re.IGNORECASE):
+                for match in re.finditer(pattern, text, 0):
                     subject = match.group(1).strip()
                     action_verb = match.group(2).strip()
                     object_text = match.group(3).strip()
@@ -1111,7 +1143,6 @@ class SemanticFactExtractor:
         """
         Apply normalization and minimum occurrence threshold filtering to reduce noise
         """
-        print("🔄 Normalizing entity variants...")
         
         # Step 1: Define normalization mappings for common variants
         normalization_map = {
@@ -1294,6 +1325,9 @@ class SemanticFactExtractor:
         if not existing_entities:
             # Fallback to global_entities if structure is different
             existing_entities = yaml_data.get('global_entities', {})
+        if not existing_entities:
+            # Fallback to raw_entities structure (modern format)
+            existing_entities = yaml_data.get('raw_entities', {})
         
         self.logger.logger.debug(f"🔍 Found entities in YAML: {list(existing_entities.keys()) if existing_entities else 'None'}")
         if existing_entities:
@@ -1323,7 +1357,34 @@ class SemanticFactExtractor:
         self.logger.logger.debug("🧹 Applying normalization and threshold filtering...")
         all_facts = self._apply_entity_normalization_and_filtering(all_facts)
         
-        # Step 6: Extract additional semantic relationships from markdown content
+        # Step 6: Extract meaningful semantic facts from markdown content (regulations, requirements, financial impacts)
+        self.logger.logger.debug("🔍 Extracting semantic facts from markdown content...")
+        
+        # Extract regulation citations
+        regulation_facts = self._extract_regulation_citations(markdown_content, normalized_entities)
+        if regulation_facts:
+            all_facts['regulation_citations'] = regulation_facts
+            self.logger.logger.debug(f"   - regulation_citations: {len(regulation_facts)} regulatory citations found")
+        
+        # Extract requirements and rules
+        requirement_facts = self._extract_requirements(markdown_content, normalized_entities)
+        if requirement_facts:
+            all_facts['requirements'] = requirement_facts
+            self.logger.logger.debug(f"   - requirements: {len(requirement_facts)} compliance requirements found")
+        
+        # Extract financial impacts
+        financial_facts = self._extract_financial_impacts(markdown_content, normalized_entities)
+        if financial_facts:
+            all_facts['financial_impacts'] = financial_facts
+            self.logger.logger.debug(f"   - financial_impacts: {len(financial_facts)} financial facts found")
+        
+        # Extract action facts (subject-verb-object relationships)
+        action_facts = self._extract_action_facts(markdown_content, normalized_entities)
+        if action_facts:
+            all_facts['action_facts'] = action_facts
+            self.logger.logger.debug(f"   - action_facts: {len(action_facts)} action relationships found")
+        
+        # Step 7: Extract additional semantic relationships from markdown content
         self.logger.logger.debug("🔍 Extracting semantic relationships from markdown content...")
         relationships = self._extract_semantic_relationships(markdown_content, all_facts)
         if relationships:

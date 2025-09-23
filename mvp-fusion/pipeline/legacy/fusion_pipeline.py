@@ -24,7 +24,7 @@ from pathlib import Path
 from typing import List, Dict, Any, Union
 import yaml
 from datetime import datetime
-from .in_memory_document import InMemoryDocument, MemoryOverflowError
+from pipeline.in_memory_document import InMemoryDocument, MemoryOverflowError
 
 # Import centralized logging
 import sys
@@ -40,7 +40,7 @@ try:
     AHOCORASICK_AVAILABLE = True
 except ImportError:
     AHOCORASICK_AVAILABLE = False
-    logging.warning("âš ï¸  Aho-Corasick engine not available, falling back to regex patterns")
+    logging.warning("âš ï¸ Aho-Corasick engine not available, falling back to regex patterns")
 
 # Import entity normalizer for structured data enhancement
 try:
@@ -260,7 +260,7 @@ class FusionPipeline:
                 
                 if doc.success and proceed_to_classification:
                     try:
-                        self.logger.logger.debug(f"ðŸ§  Processing classification for {doc.source_filename}")
+                        self.logger.logger.debug(f"ï¿½  Processing classification for {doc.source_filename}")
                         classification_data = self._generate_classification_data(doc.markdown_content, doc.source_filename)
                         doc.add_classification_data(classification_data)
                         doc.record_stage_timing('classify', (time.perf_counter() - stage_start) * 1000)
@@ -614,7 +614,7 @@ class FusionPipeline:
                         total_facts = knowledge_data.get('semantic_summary', {}).get('total_facts', 0)
                         self.logger.entity(f"ðŸ“„ Generated knowledge file: {json_file.name} ({total_facts} facts)")
                     else:
-                        self.logger.logger.warning(f"âš ï¸  No semantic facts to write for {doc.source_filename}")
+                        self.logger.logger.warning(f"ï¿½ ï¸  No semantic facts to write for {doc.source_filename}")
                 
                 # Note: Failed URLs only get markdown files with failure metadata, no JSON files
                 
@@ -824,10 +824,10 @@ class FusionPipeline:
                 layer_timings['layer6_semantic_facts'] = (time.perf_counter() - layer6_start) * 1000
                 
                 total_facts = semantic_facts.get('semantic_summary', {}).get('total_facts', 0)
-                self.logger.entity(f"ðŸ§  Layer 6: Semantic facts extracted - {total_facts} facts found [{filename}]")
+                self.logger.entity(f"ï¿½  Layer 6: Semantic facts extracted - {total_facts} facts found [{filename}]")
                 
             except Exception as e:
-                self.logger.logger.warning(f"âš ï¸  Layer 6 semantic extraction failed: {e}")
+                self.logger.logger.warning(f"ï¿½ ï¸  Layer 6 semantic extraction failed: {e}")
                 layer_timings['layer6_semantic_facts'] = (time.perf_counter() - layer6_start) * 1000
         
         # Final performance summary (clean structure)
@@ -1025,7 +1025,7 @@ class FusionPipeline:
             return enrichment_data
             
         except Exception as e:
-            self.logger.logger.warning(f"âš ï¸ Entity enrichment failed: {e}")
+            self.logger.logger.warning(f"ï¿½ ï¸ Entity enrichment failed: {e}")
             # Fallback to basic enrichment data
             return {
                 'description': 'Basic Enrichment (Fallback)',
@@ -1112,7 +1112,7 @@ class FusionPipeline:
             return enhanced_domain_entities
             
         except Exception as e:
-            self.logger.logger.warning(f"âš ï¸ Government entity enrichment failed: {e}")
+            self.logger.logger.warning(f"ï¿½ ï¸ Government entity enrichment failed: {e}")
             return domain_entities  # Return original data on error
     
     # Core 8 Entity Extraction Methods
@@ -1600,7 +1600,7 @@ class FusionPipeline:
             return validated_entities
             
         except Exception as e:
-            self.logger.logger.warning(f"âš ï¸ Domain entity validation failed: {e}")
+            self.logger.logger.warning(f"ï¿½ ï¸ Domain entity validation failed: {e}")
             return domain_entities  # Return unvalidated if validation fails
     
     def _layer5_deep_domain_entities(self, content: str, domain_scores: Dict[str, float]) -> Dict[str, Any]:

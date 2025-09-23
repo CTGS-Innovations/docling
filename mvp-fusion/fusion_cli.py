@@ -570,7 +570,7 @@ def process_single_url(extractor: BaseExtractor, url: str, output_dir: Path = No
                 pipeline = SharedMemoryFusionPipeline(config)
             else:
                 logger.entity(f"🔄 Using Traditional Pipeline for URL")
-                from pipeline.fusion_pipeline import FusionPipeline
+                from pipeline.legacy.fusion_pipeline import FusionPipeline
                 pipeline = FusionPipeline(config)
             
             # Process single file through complete pipeline (use configured workers even for single files)
@@ -810,12 +810,13 @@ def process_directory(extractor: BaseExtractor, directory: Path,
     
     start_time = time.time()
     
-    # Use full pipeline to support all stages (classify, enrich, extract)
-    from pipeline.fusion_pipeline import FusionPipeline
-    pipeline = FusionPipeline(config or {})
+    # Use new clean pipeline architecture (with orchestrated pipeline wrapper)
+    pipeline = CleanFusionPipeline(config or {})
     
-    # Process through complete pipeline
-    batch_result = pipeline.process_files(extractor, files, output_dir or Path.cwd())
+    # Process through clean pipeline with configurable processors
+    pipeline_metadata = {'output_dir': output_dir or Path.cwd(), 'max_workers': 2}
+    file_results, pipeline_info = pipeline.process(files, pipeline_metadata)
+    batch_result = (file_results, pipeline_info.get('pipeline_timing_ms', 0) / 1000)
     
     # Handle different return signatures (some extractors return resource summary)
     if len(batch_result) == 3:
@@ -1270,7 +1271,7 @@ Examples:
                     
                 logger.stage(f"\n📂 Processing directory: {directory}")
                 extensions = config.get('files', {}).get('supported_extensions', args.extensions)
-                results = process_directory(fusion, directory, extensions, output_dir, config)
+                results = process_directory(extractor, directory, extensions, output_dir, config)
                 all_results.extend(results if isinstance(results, list) else [results])
             
             logger.success(f"\n✅ Processed {len(all_results)} total files across all directories")
