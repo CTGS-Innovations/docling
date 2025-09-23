@@ -229,7 +229,7 @@ class ServiceProcessor:
                         first_names_path=corpus_dir / "first_names_2025_09_18.txt",
                         last_names_path=corpus_dir / "last_names_2025_09_18.txt", 
                         organizations_path=corpus_dir / "organizations_2025_09_18.txt",
-                        min_confidence=0.7
+                        min_confidence=0.5  # Lowered from 0.7 to catch legitimate names
                     )
                     set_current_phase('initialization')
                     self.phase_manager.log('core8_extractor', "✅ Conservative person extractor initialized with 429K first names, 99K last names, 139K orgs")
@@ -376,14 +376,15 @@ class ServiceProcessor:
         
         # PERSON - World-scale AC + FLPC strategy (NO Python regex)
         person_start = time.perf_counter()
-        if self.world_scale_person_extractor:
+        # PERSON EXTRACTION FIX: Use conservative extractor directly since world-scale has quality issues
+        if self.person_extractor:
             try:
-                world_scale_persons = self.world_scale_person_extractor.extract_persons(content)
                 set_current_phase('entity_extraction')
-                self.phase_manager.log('core8_extractor', f"🎯 World-scale person extractor found {len(world_scale_persons)} validated persons")
+                conservative_persons = self.person_extractor.extract_persons(content)
+                self.phase_manager.log('core8_extractor', f"🎯 Conservative person extractor found {len(conservative_persons)} validated persons")
                 
                 entities['person'] = []
-                for person in world_scale_persons:
+                for person in conservative_persons:
                     # Standard NER format with clean, consistent structure
                     entity = {
                         'value': person.get('text', person.get('name', '')),
@@ -400,32 +401,10 @@ class ServiceProcessor:
                 entities['person'] = entities['person'][:30]
                 
             except Exception as e:
-                self.logger.logger.warning(f"World-scale person extraction failed: {e}")
-                # Fallback to old conservative extractor if available
-                if self.person_extractor:
-                    try:
-                        conservative_persons = self.person_extractor.extract_persons(content)
-                        entities['person'] = []
-                        for person in conservative_persons:
-                            entity = {
-                                'value': person.get('text', person.get('name', '')),
-                                'text': person.get('text', person.get('name', '')),
-                                'type': 'PERSON',
-                                'span': {
-                                    'start': person.get('position', 0),
-                                    'end': person.get('position', 0) + len(person.get('text', person.get('name', '')))
-                                }
-                            }
-                            entities['person'].append(entity)
-                        entities['person'] = entities['person'][:30]
-                        self.logger.logger.info(f"🟡 Using fallback conservative extractor: {len(entities['person'])} persons")
-                    except Exception as e2:
-                        self.logger.logger.warning(f"Conservative fallback also failed: {e2}")
-                        entities['person'] = []
-                else:
-                    entities['person'] = []
+                self.logger.logger.warning(f"Conservative person extraction failed: {e}")
+                entities['person'] = []
         else:
-            self.logger.logger.warning("World-scale PersonEntityExtractor not available")
+            self.logger.logger.warning("Conservative PersonEntityExtractor not available")
             entities['person'] = []
         
         timing_breakdown['person'] = (time.perf_counter() - person_start) * 1000

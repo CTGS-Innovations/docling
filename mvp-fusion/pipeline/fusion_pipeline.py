@@ -108,6 +108,19 @@ class FusionPipeline:
             except Exception as e:
                 self.logger.logger.warning(f"⚠️  EntityNormalizer initialization failed: {e}")
                 self.entity_normalizer = None
+        
+        # Initialize spaCy model for person entity extraction during startup (performance optimization)
+        self.spacy_nlp = None
+        try:
+            import spacy
+            self.spacy_nlp = spacy.load("en_core_web_sm")
+            self.logger.entity("✅ spaCy NER model initialized for international person name detection")
+        except ImportError:
+            self.logger.logger.warning("⚠️  spaCy not available, falling back to conservative person extraction")
+        except OSError:
+            self.logger.logger.warning("⚠️  spaCy model 'en_core_web_sm' not found, falling back to conservative person extraction")
+        except Exception as e:
+            self.logger.logger.warning(f"⚠️  spaCy initialization failed: {e}, falling back to conservative person extraction")
         else:
             self.entity_normalizer = None
         
@@ -1753,38 +1766,56 @@ class FusionPipeline:
         return unique_entities[:10]
     
     def _extract_core8_person_flpc(self, content: str, flpc) -> List[Dict]:
-        """Extract person names with spans using comprehensive domain extraction (Core 8)"""
-        # Use the comprehensive entity extractor that's working well for people
+        """Hybrid person extraction: Fast AC/FLPC first, spaCy only for gaps (performance optimized)"""
+        
+        # STEP 1: Try fast conservative extraction first (AC/FLPC speed)
         try:
-            # Import and use the comprehensive extractor
-            from knowledge.extractors.comprehensive_entity_extractor import ComprehensiveEntityExtractor
-            comprehensive = ComprehensiveEntityExtractor(config=self.config)
+            fast_persons = self._extract_people_conservative(content)
             
-            # Extract all entities and get the people
-            all_entities = comprehensive.extract_all_entities(content)
-            people_entities = all_entities.get('domain_entities', {}).get('people', [])
+            # If we got good results from fast extraction, use them
+            if len(fast_persons) >= 3:  # Threshold: if we found several people, trust fast extraction
+                return fast_persons[:30]
             
-            # Convert to global entity format with spans
-            global_people = []
-            for person in people_entities:
-                # Find the person's position in the content to get spans
-                name = person.get('name', '')
-                if name and len(name.strip()) > 2:
-                    # Simple span finding - look for first occurrence
-                    start_pos = content.find(name)
-                    if start_pos != -1:
-                        global_people.append({
-                            "value": name,
-                            "span": {"start": start_pos, "end": start_pos + len(name)},
-                            "text": name,
+        except Exception:
+            fast_persons = []
+        
+        # STEP 2: Fast extraction found few/no people - use spaCy for comprehensive detection
+        if self.spacy_nlp is not None:
+            try:
+                # Process text with pre-loaded spaCy model for international names
+                doc = self.spacy_nlp(content)
+                
+                # Extract PERSON entities with spans
+                spacy_people = []
+                for ent in doc.ents:
+                    if ent.label_ == "PERSON" and len(ent.text.strip()) > 2:
+                        spacy_people.append({
+                            "value": ent.text,
+                            "span": {"start": ent.start_char, "end": ent.end_char},
+                            "text": ent.text,
                             "type": "PERSON"
                         })
-            
-            return global_people[:10]
-            
-        except Exception as e:
-            # Fallback to simple conservative extraction
-            return self._extract_people_conservative(content)
+                
+                # Merge fast + spaCy results, deduplicate by text spans
+                all_persons = fast_persons + spacy_people
+                
+                # Simple deduplication by entity text (keep first occurrence)
+                seen_texts = set()
+                deduplicated = []
+                for person in all_persons:
+                    text = person.get('value', '').lower().strip()
+                    if text not in seen_texts and len(text) > 2:
+                        seen_texts.add(text)
+                        deduplicated.append(person)
+                
+                return deduplicated[:30]
+                
+            except Exception as e:
+                # Fallback to fast extraction results if spaCy fails
+                return fast_persons[:30]
+        else:
+            # spaCy not available, return fast extraction results
+            return fast_persons[:30]
     
     def _extract_core8_org_flpc(self, content: str, flpc) -> List[Dict]:
         """Extract organization names with spans using FLPC (Core 8)"""

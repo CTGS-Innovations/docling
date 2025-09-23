@@ -1,0 +1,2477 @@
+{
+  "source_info": {
+    "source_file": "/home/corey/projects/docling/cli/data_complex/complex_pdfs/ENTITY_EXTRACTION_MD_DOCUMENT.md",
+    "source_type": "file",
+    "extraction_timestamp": "2025-09-23T04:44:22",
+    "extraction_engine": "MVP-Fusion Structured Semantics",
+    "processing_method": "mvp-fusion-structured-semantics"
+  },
+  "entities": {
+    "Organizations": [
+      {
+        "id": "org_1",
+        "canonical_name": "Global Dynamics Corp",
+        "aliases": [],
+        "type": "company"
+      },
+      {
+        "id": "org_2",
+        "canonical_name": "Moscow Institute",
+        "aliases": [],
+        "type": "company"
+      },
+      {
+        "id": "org_3",
+        "canonical_name": "Tech Corp",
+        "aliases": [],
+        "type": "company"
+      },
+      {
+        "id": "org_4",
+        "canonical_name": "National Institute",
+        "aliases": [],
+        "type": "company"
+      },
+      {
+        "id": "org_5",
+        "canonical_name": "Microsoft Corp",
+        "aliases": [],
+        "type": "company"
+      },
+      {
+        "id": "org_6",
+        "canonical_name": "General Electric Company",
+        "aliases": [],
+        "type": "company"
+      },
+      {
+        "id": "org_7",
+        "canonical_name": "M Company",
+        "aliases": [],
+        "type": "company"
+      },
+      {
+        "id": "org_8",
+        "canonical_name": "Boeing Corp",
+        "aliases": [],
+        "type": "company"
+      },
+      {
+        "id": "org_9",
+        "canonical_name": "Walmart Inc",
+        "aliases": [],
+        "type": "company"
+      },
+      {
+        "id": "org_10",
+        "canonical_name": "Apple Inc",
+        "aliases": [],
+        "type": "company"
+      }
+    ],
+    "Standards": [
+      {
+        "id": "std_1",
+        "canonical_name": "29 CFR 1910.132",
+        "type": "osha_standard"
+      },
+      {
+        "id": "std_2",
+        "canonical_name": "29 CFR 1926.95",
+        "type": "osha_standard"
+      },
+      {
+        "id": "std_3",
+        "canonical_name": "29 CFR 1910.134",
+        "type": "osha_standard"
+      },
+      {
+        "id": "std_4",
+        "canonical_name": "40 CFR 264",
+        "type": "osha_standard"
+      },
+      {
+        "id": "std_5",
+        "canonical_name": "49 CFR 172",
+        "type": "osha_standard"
+      },
+      {
+        "id": "std_6",
+        "canonical_name": "21 CFR 211",
+        "type": "osha_standard"
+      }
+    ],
+    "Hazards": [],
+    "Programs": [],
+    "Financial": [
+      {
+        "id": "fin_1",
+        "canonical_name": "USD 2.0",
+        "amount": 2.0,
+        "currency": "USD",
+        "type": "amount",
+        "context": "ety Coordinator, implemented new protocols saving $2.5 million. 9. **James Wilson**, Regional Direct..."
+      },
+      {
+        "id": "fin_2",
+        "canonical_name": "USD 5.0",
+        "amount": 5.0,
+        "currency": "USD",
+        "type": "penalty",
+        "context": "onmental Protection Agency) fined three companies $5 million total. 4. The **Centers for Disease Con..."
+      },
+      {
+        "id": "fin_3",
+        "canonical_name": "USD 100.0",
+        "amount": 100.0,
+        "currency": "USD",
+        "type": "amount",
+        "context": "nizations) 11. **Microsoft Corporation** invested $100 million in safety technology. 12. **Amazon We..."
+      },
+      {
+        "id": "fin_4",
+        "canonical_name": "USD 10.0",
+        "amount": 10.0,
+        "currency": "USD",
+        "type": "amount",
+        "context": "n Corporation** completed defense contracts worth $10 billion. 25. **Raytheon Technologies** develop..."
+      },
+      {
+        "id": "fin_5",
+        "canonical_name": "USD 500000.0",
+        "amount": 500000.0,
+        "currency": "USD",
+        "type": "amount",
+        "context": "Safety equipment budget: **$500,000** 2."
+      },
+      {
+        "id": "fin_6",
+        "canonical_name": "USD 1.0",
+        "amount": 1.0,
+        "currency": "USD",
+        "type": "cost",
+        "context": "Training allocation: **$1."
+      },
+      {
+        "id": "fin_7",
+        "canonical_name": "USD 250000.0",
+        "amount": 250000.0,
+        "currency": "USD",
+        "type": "amount",
+        "context": "Compliance software: **$250,000** 4."
+      },
+      {
+        "id": "fin_8",
+        "canonical_name": "USD 75000.0",
+        "amount": 75000.0,
+        "currency": "USD",
+        "type": "amount",
+        "context": "Consulting fees: **$75,000** 5."
+      },
+      {
+        "id": "fin_9",
+        "canonical_name": "USD 3.0",
+        "amount": 3.0,
+        "currency": "USD",
+        "type": "amount",
+        "context": "Insurance premiums: **$3."
+      },
+      {
+        "id": "fin_10",
+        "canonical_name": "USD 14502.0",
+        "amount": 14502.0,
+        "currency": "USD",
+        "type": "penalty",
+        "context": "Maximum OSHA fine: **$14,502** per violation 12."
+      }
+    ],
+    "Contacts": [
+      {
+        "id": "contact_1",
+        "canonical_name": "(800) 321-6742",
+        "type": "phone",
+        "contact_value": "(800) 321-6742"
+      },
+      {
+        "id": "contact_2",
+        "canonical_name": "(202) 693-1999",
+        "type": "phone",
+        "contact_value": "(202) 693-1999"
+      },
+      {
+        "id": "contact_3",
+        "canonical_name": "(877) 889-5627",
+        "type": "phone",
+        "contact_value": "(877) 889-5627"
+      },
+      {
+        "id": "contact_4",
+        "canonical_name": "(617) 565-9860",
+        "type": "phone",
+        "contact_value": "(617) 565-9860"
+      },
+      {
+        "id": "contact_5",
+        "canonical_name": "(212) 337-2378",
+        "type": "phone",
+        "contact_value": "(212) 337-2378"
+      },
+      {
+        "id": "contact_6",
+        "canonical_name": "(404) 562-2300",
+        "type": "phone",
+        "contact_value": "(404) 562-2300"
+      },
+      {
+        "id": "contact_7",
+        "canonical_name": "(312) 353-2220",
+        "type": "phone",
+        "contact_value": "(312) 353-2220"
+      },
+      {
+        "id": "contact_8",
+        "canonical_name": "(214) 767-4731",
+        "type": "phone",
+        "contact_value": "(214) 767-4731"
+      },
+      {
+        "id": "contact_9",
+        "canonical_name": "(303) 844-1600",
+        "type": "phone",
+        "contact_value": "(303) 844-1600"
+      },
+      {
+        "id": "contact_10",
+        "canonical_name": "(415) 975-4310",
+        "type": "phone",
+        "contact_value": "(415) 975-4310"
+      }
+    ],
+    "Temporal": [
+      {
+        "id": "date_1",
+        "canonical_name": "January 15, 2024",
+        "type": "deadline",
+        "temporal_context": "he MVP-Fusion extraction pipeline. **Test Date:** January 15, 2024 **Version:** 1.0 --- ## SECTION 1: PERSON ENTIT"
+      },
+      {
+        "id": "date_2",
+        "canonical_name": "March 20, 2024",
+        "type": "deadline",
+        "temporal_context": "of Engineering, will present at the conference on March 20, 2024. 3. **Robert Chen**, Senior Analyst, completed th"
+      },
+      {
+        "id": "date_3",
+        "canonical_name": "June 1, 2024",
+        "type": "deadline",
+        "temporal_context": "The **Department of Labor** announced updated regulations effective June 1, 2024."
+      },
+      {
+        "id": "date_4",
+        "canonical_name": "January 1, 2024",
+        "type": "deadline",
+        "temporal_context": "Implementation begins on **January 1, 2024** 2."
+      },
+      {
+        "id": "date_5",
+        "canonical_name": "February 15, 2024",
+        "type": "deadline",
+        "temporal_context": "First review scheduled for **February 15, 2024** 3."
+      },
+      {
+        "id": "date_6",
+        "canonical_name": "March 31, 2024",
+        "type": "deadline",
+        "temporal_context": "Quarterly report due **March 31, 2024** 4."
+      },
+      {
+        "id": "date_7",
+        "canonical_name": "April 30, 2024",
+        "type": "deadline",
+        "temporal_context": "Training completion by **April 30, 2024** 5."
+      },
+      {
+        "id": "date_8",
+        "canonical_name": "June 30, 2024",
+        "type": "deadline",
+        "temporal_context": "Mid-year assessment on **June 30, 2024** 6."
+      },
+      {
+        "id": "date_9",
+        "canonical_name": "July 1, 2024",
+        "type": "deadline",
+        "temporal_context": "Policy effective from **July 1, 2024** 7."
+      },
+      {
+        "id": "date_10",
+        "canonical_name": "September 30, 2024",
+        "type": "deadline",
+        "temporal_context": "Compliance deadline: **September 30, 2024** 9."
+      },
+      {
+        "id": "time_1",
+        "canonical_name": "9:00 AM",
+        "type": "time",
+        "temporal_context": ""
+      },
+      {
+        "id": "time_2",
+        "canonical_name": "10:30 AM",
+        "type": "time",
+        "temporal_context": ""
+      },
+      {
+        "id": "time_3",
+        "canonical_name": "12:00 PM",
+        "type": "time",
+        "temporal_context": ""
+      },
+      {
+        "id": "time_4",
+        "canonical_name": "2:15 PM",
+        "type": "time",
+        "temporal_context": ""
+      },
+      {
+        "id": "time_5",
+        "canonical_name": "3:45 PM",
+        "type": "time",
+        "temporal_context": ""
+      },
+      {
+        "id": "time_6",
+        "canonical_name": "5:00 PM",
+        "type": "time",
+        "temporal_context": ""
+      },
+      {
+        "id": "time_7",
+        "canonical_name": "6:30 PM",
+        "type": "time",
+        "temporal_context": ""
+      },
+      {
+        "id": "time_8",
+        "canonical_name": "11:59 PM",
+        "type": "time",
+        "temporal_context": ""
+      },
+      {
+        "id": "time_9",
+        "canonical_name": "noon",
+        "type": "time",
+        "temporal_context": ""
+      }
+    ]
+  },
+  "relationships": [
+    {
+      "subject": "OSHA",
+      "predicate": "can_impose",
+      "object": "fin_2",
+      "condition": "for serious violations"
+    },
+    {
+      "subject": "Employers",
+      "predicate": "must_pay",
+      "object": "fin_6",
+      "condition": "for safety training"
+    },
+    {
+      "subject": "OSHA",
+      "predicate": "can_impose",
+      "object": "fin_10",
+      "condition": "for serious violations"
+    }
+  ],
+  "facts": [
+    {
+      "id": "fact_001",
+      "subject": "Employers",
+      "predicate": "must_provide",
+      "object": "PPE equipment at $500000.0 per worker",
+      "condition": "Personal protective equipment requirement",
+      "source": "Document analysis"
+    },
+    {
+      "id": "fact_002",
+      "subject": "Employers",
+      "predicate": "must_provide",
+      "object": "Safety training at $1.0 per group",
+      "condition": "Required for construction workers",
+      "source": "Document analysis"
+    },
+    {
+      "id": "fact_003",
+      "subject": "Construction workers",
+      "predicate": "must_comply_with",
+      "object": "29 CFR 1910.132",
+      "condition": "OSHA safety requirements",
+      "source": "Document analysis"
+    },
+    {
+      "id": "fact_004",
+      "subject": "Construction workers",
+      "predicate": "must_comply_with",
+      "object": "29 CFR 1926.95",
+      "condition": "OSHA safety requirements",
+      "source": "Document analysis"
+    },
+    {
+      "id": "fact_005",
+      "subject": "Construction workers",
+      "predicate": "must_comply_with",
+      "object": "29 CFR 1910.134",
+      "condition": "OSHA safety requirements",
+      "source": "Document analysis"
+    },
+    {
+      "id": "fact_006",
+      "subject": "Construction workers",
+      "predicate": "must_comply_with",
+      "object": "40 CFR 264",
+      "condition": "OSHA safety requirements",
+      "source": "Document analysis"
+    },
+    {
+      "id": "fact_007",
+      "subject": "Construction workers",
+      "predicate": "must_comply_with",
+      "object": "49 CFR 172",
+      "condition": "OSHA safety requirements",
+      "source": "Document analysis"
+    },
+    {
+      "id": "fact_008",
+      "subject": "Construction workers",
+      "predicate": "must_comply_with",
+      "object": "21 CFR 211",
+      "condition": "OSHA safety requirements",
+      "source": "Document analysis"
+    },
+    {
+      "id": "fact_009",
+      "subject": "Workers",
+      "predicate": "can_contact",
+      "object": "Safety coordinator at (800) 321-6742",
+      "condition": "For training scheduling",
+      "source": "Document analysis"
+    },
+    {
+      "id": "fact_010",
+      "subject": "Workers",
+      "predicate": "can_contact",
+      "object": "Safety coordinator at (202) 693-1999",
+      "condition": "For training scheduling",
+      "source": "Document analysis"
+    },
+    {
+      "id": "fact_011",
+      "subject": "Workers",
+      "predicate": "can_contact",
+      "object": "Safety coordinator at (877) 889-5627",
+      "condition": "For training scheduling",
+      "source": "Document analysis"
+    },
+    {
+      "id": "fact_012",
+      "subject": "Workers",
+      "predicate": "can_contact",
+      "object": "Safety coordinator at (617) 565-9860",
+      "condition": "For training scheduling",
+      "source": "Document analysis"
+    },
+    {
+      "id": "fact_013",
+      "subject": "Workers",
+      "predicate": "can_contact",
+      "object": "Safety coordinator at (212) 337-2378",
+      "condition": "For training scheduling",
+      "source": "Document analysis"
+    },
+    {
+      "id": "fact_014",
+      "subject": "Workers",
+      "predicate": "can_contact",
+      "object": "Safety coordinator at (404) 562-2300",
+      "condition": "For training scheduling",
+      "source": "Document analysis"
+    },
+    {
+      "id": "fact_015",
+      "subject": "Workers",
+      "predicate": "can_contact",
+      "object": "Safety coordinator at (312) 353-2220",
+      "condition": "For training scheduling",
+      "source": "Document analysis"
+    },
+    {
+      "id": "fact_016",
+      "subject": "Workers",
+      "predicate": "can_contact",
+      "object": "Safety coordinator at (214) 767-4731",
+      "condition": "For training scheduling",
+      "source": "Document analysis"
+    },
+    {
+      "id": "fact_017",
+      "subject": "Workers",
+      "predicate": "can_contact",
+      "object": "Safety coordinator at (303) 844-1600",
+      "condition": "For training scheduling",
+      "source": "Document analysis"
+    },
+    {
+      "id": "fact_018",
+      "subject": "Workers",
+      "predicate": "can_contact",
+      "object": "Safety coordinator at (415) 975-4310",
+      "condition": "For training scheduling",
+      "source": "Document analysis"
+    }
+  ],
+  "semantic_summary": {
+    "total_facts": 18,
+    "total_entities": 55,
+    "total_relationships": 3,
+    "semantic_facts_count": 122,
+    "canonical_entities_count": 27,
+    "extraction_layers": [
+      "semantic_facts",
+      "canonical_entities",
+      "structured_output"
+    ]
+  },
+  "legacy_semantic_facts": {
+    "global_person": [
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 901,
+          "end": 910
+        },
+        "raw_text": "David Kim",
+        "entity_type": "person",
+        "canonical_name": "David Kim",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "David Kim",
+        "person_role": "Identified Critical Violations At The Facility",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 572,
+          "end": 583
+        },
+        "raw_text": "Robert Chen",
+        "entity_type": "person",
+        "canonical_name": "Robert Chen",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Robert Chen",
+        "person_role": "Senior Analyst",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 375,
+          "end": 385
+        },
+        "raw_text": "John Smith",
+        "entity_type": "person",
+        "canonical_name": "John Smith",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "John Smith",
+        "person_role": "Chief Executive Officer At Global Dynamics Corporation",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 476,
+          "end": 488
+        },
+        "raw_text": "Mary Johnson",
+        "entity_type": "person",
+        "canonical_name": "Mary Johnson",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Mary Johnson",
+        "person_role": "Director Of Engineering",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 817,
+          "end": 834
+        },
+        "raw_text": "Jennifer Martinez",
+        "entity_type": "person",
+        "canonical_name": "Jennifer Martinez",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Jennifer Martinez",
+        "person_role": "Compliance Manager At Osha",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 651,
+          "end": 665
+        },
+        "raw_text": "Sarah Williams",
+        "entity_type": "person",
+        "canonical_name": "Sarah Williams",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Sarah Williams",
+        "person_role": "Vice President Of Operations",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1072,
+          "end": 1084
+        },
+        "raw_text": "James Wilson",
+        "entity_type": "person",
+        "canonical_name": "James Wilson",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "James Wilson",
+        "person_role": "Oversees Operations In New York And California",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 983,
+          "end": 996
+        },
+        "raw_text": "Lisa Anderson",
+        "entity_type": "person",
+        "canonical_name": "Lisa Anderson",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Lisa Anderson",
+        "person_role": "Coo",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1442,
+          "end": 1453
+        },
+        "raw_text": "Priya Patel",
+        "entity_type": "person",
+        "canonical_name": "Priya Patel",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Priya Patel",
+        "person_role": "Assessed 12 Sites In Texas",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1596,
+          "end": 1607
+        },
+        "raw_text": "Yuki Tanaka",
+        "entity_type": "person",
+        "canonical_name": "Yuki Tanaka",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Yuki Tanaka",
+        "person_role": "Delivered Ahead Of Schedule",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1736,
+          "end": 1747
+        },
+        "raw_text": "Olga Volkov",
+        "entity_type": "person",
+        "canonical_name": "Olga Volkov",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Olga Volkov",
+        "person_role": "Research Director At Moscow Institute",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 2163,
+          "end": 2172
+        },
+        "raw_text": "John John",
+        "entity_type": "person",
+        "canonical_name": "John John",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "John John",
+        "person_role": "Celebrity Spokesperson For Safety Campaign",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1161,
+          "end": 1178
+        },
+        "raw_text": "Patricia Thompson",
+        "entity_type": "person",
+        "canonical_name": "Patricia Thompson",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Patricia Thompson",
+        "person_role": "Assurance Specialist",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1821,
+          "end": 1833
+        },
+        "raw_text": "Silva Santos",
+        "entity_type": "person",
+        "canonical_name": "Silva Santos",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Silva Santos",
+        "person_role": "Manager",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1927,
+          "end": 1939
+        },
+        "raw_text": "Van Der Berg",
+        "entity_type": "person",
+        "canonical_name": "Van Der Berg",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Van Der Berg",
+        "person_role": "Last Name Only With Title",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 10002,
+          "end": 10012
+        },
+        "raw_text": "John Smith",
+        "entity_type": "person",
+        "canonical_name": "John Smith",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "John Smith",
+        "person_role": "Chief Executive Officer At Global Dynamics Corporation",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 10028,
+          "end": 10040
+        },
+        "raw_text": "Mary Johnson",
+        "entity_type": "person",
+        "canonical_name": "Mary Johnson",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Mary Johnson",
+        "person_role": "Director Of Engineering",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 10219,
+          "end": 10236
+        },
+        "raw_text": "Jennifer Martinez",
+        "entity_type": "person",
+        "canonical_name": "Jennifer Martinez",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Jennifer Martinez",
+        "person_role": "Compliance Manager At Osha",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 5117,
+          "end": 5125
+        },
+        "raw_text": "San Jose",
+        "entity_type": "person",
+        "canonical_name": "San Jose",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "San Jose",
+        "person_role": null,
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 5069,
+          "end": 5080
+        },
+        "raw_text": "San Antonio",
+        "entity_type": "person",
+        "canonical_name": "San Antonio",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "San Antonio",
+        "person_role": null,
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 5086,
+          "end": 5095
+        },
+        "raw_text": "San Diego",
+        "entity_type": "person",
+        "canonical_name": "San Diego",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "San Diego",
+        "person_role": null,
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 12679,
+          "end": 12697
+        },
+        "raw_text": "Span Accuracy Rule",
+        "entity_type": "person",
+        "canonical_name": "Span Accuracy Rule",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Span Accuracy Rule",
+        "person_role": "As Rules 10",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 11952,
+          "end": 11972
+        },
+        "raw_text": "Role Extraction Rule",
+        "entity_type": "person",
+        "canonical_name": "Role Extraction Rule",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Role Extraction Rule",
+        "person_role": "Each Person With A Title Should",
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPersonFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 11853,
+          "end": 11874
+        },
+        "raw_text": "Person Detection Rule",
+        "entity_type": "person",
+        "canonical_name": "Person Detection Rule",
+        "extraction_layer": "semantic_promotion",
+        "person_name": "Person Detection Rule",
+        "person_role": null,
+        "person_organization": "Global Dynamics Corp",
+        "person_context": "",
+        "extraction_source": "global"
+      }
+    ],
+    "global_org": [
+      {
+        "fact_type": "GlobalOrgFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 416,
+          "end": 436
+        },
+        "raw_text": "Global Dynamics Corp",
+        "entity_type": "org",
+        "canonical_name": "Global Dynamics Corp",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalOrgFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1772,
+          "end": 1788
+        },
+        "raw_text": "Moscow Institute",
+        "entity_type": "org",
+        "canonical_name": "Moscow Institute",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalOrgFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 2203,
+          "end": 2212
+        },
+        "raw_text": "Tech Corp",
+        "entity_type": "org",
+        "canonical_name": "Tech Corp",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalOrgFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 2906,
+          "end": 2924
+        },
+        "raw_text": "National Institute",
+        "entity_type": "org",
+        "canonical_name": "National Institute",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalOrgFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 3396,
+          "end": 3410
+        },
+        "raw_text": "Microsoft Corp",
+        "entity_type": "org",
+        "canonical_name": "Microsoft Corp",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalOrgFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 3546,
+          "end": 3570
+        },
+        "raw_text": "General Electric Company",
+        "entity_type": "org",
+        "canonical_name": "General Electric Company",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalOrgFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 3691,
+          "end": 3700
+        },
+        "raw_text": "M Company",
+        "entity_type": "org",
+        "canonical_name": "M Company",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalOrgFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 3766,
+          "end": 3777
+        },
+        "raw_text": "Boeing Corp",
+        "entity_type": "org",
+        "canonical_name": "Boeing Corp",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalOrgFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 3894,
+          "end": 3905
+        },
+        "raw_text": "Walmart Inc",
+        "entity_type": "org",
+        "canonical_name": "Walmart Inc",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalOrgFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 3965,
+          "end": 3974
+        },
+        "raw_text": "Apple Inc",
+        "entity_type": "org",
+        "canonical_name": "Apple Inc",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      }
+    ],
+    "global_loc": [
+      {
+        "fact_type": "GlobalLocFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 733,
+          "end": 735
+        },
+        "raw_text": "Dr",
+        "entity_type": "loc",
+        "canonical_name": "Dr",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      }
+    ],
+    "global_gpe": [
+      {
+        "fact_type": "GlobalGpeFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1130,
+          "end": 1138
+        },
+        "raw_text": "New York",
+        "entity_type": "gpe",
+        "canonical_name": "New York",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalGpeFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1143,
+          "end": 1153
+        },
+        "raw_text": "California",
+        "entity_type": "gpe",
+        "canonical_name": "California",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalGpeFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1429,
+          "end": 1434
+        },
+        "raw_text": "Texas",
+        "entity_type": "gpe",
+        "canonical_name": "Texas",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalGpeFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 5230,
+          "end": 5237
+        },
+        "raw_text": "Florida",
+        "entity_type": "gpe",
+        "canonical_name": "Florida",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalGpeFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 5243,
+          "end": 5256
+        },
+        "raw_text": "United States",
+        "entity_type": "gpe",
+        "canonical_name": "United States",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalGpeFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 5262,
+          "end": 5268
+        },
+        "raw_text": "Canada",
+        "entity_type": "gpe",
+        "canonical_name": "Canada",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalGpeFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 5527,
+          "end": 5533
+        },
+        "raw_text": "Mexico",
+        "entity_type": "gpe",
+        "canonical_name": "Mexico",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      }
+    ],
+    "global_date": [
+      {
+        "fact_type": "GlobalDateFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 243,
+          "end": 259
+        },
+        "raw_text": "January 15, 2024",
+        "entity_type": "date",
+        "canonical_name": "January 15, 2024",
+        "extraction_layer": "semantic_promotion",
+        "date_value": "January 15, 2024",
+        "date_format": "unknown",
+        "temporal_context": "he MVP-Fusion extraction pipeline. **Test Date:** January 15, 2024 **Version:** 1.0 --- ## SECTION 1: PERSON ENTIT",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalDateFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 551,
+          "end": 565
+        },
+        "raw_text": "March 20, 2024",
+        "entity_type": "date",
+        "canonical_name": "March 20, 2024",
+        "extraction_layer": "semantic_promotion",
+        "date_value": "March 20, 2024",
+        "date_format": "unknown",
+        "temporal_context": "of Engineering, will present at the conference on March 20, 2024. 3. **Robert Chen**, Senior Analyst, completed th",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalDateFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 2714,
+          "end": 2726
+        },
+        "raw_text": "June 1, 2024",
+        "entity_type": "date",
+        "canonical_name": "June 1, 2024",
+        "extraction_layer": "semantic_promotion",
+        "date_value": "June 1, 2024",
+        "date_format": "unknown",
+        "temporal_context": "The **Department of Labor** announced updated regulations effective June 1, 2024.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalDateFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 5680,
+          "end": 5695
+        },
+        "raw_text": "January 1, 2024",
+        "entity_type": "date",
+        "canonical_name": "January 1, 2024",
+        "extraction_layer": "semantic_promotion",
+        "date_value": "January 1, 2024",
+        "date_format": "unknown",
+        "temporal_context": "Implementation begins on **January 1, 2024** 2.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalDateFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 5730,
+          "end": 5747
+        },
+        "raw_text": "February 15, 2024",
+        "entity_type": "date",
+        "canonical_name": "February 15, 2024",
+        "extraction_layer": "semantic_promotion",
+        "date_value": "February 15, 2024",
+        "date_format": "unknown",
+        "temporal_context": "First review scheduled for **February 15, 2024** 3.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalDateFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 5776,
+          "end": 5790
+        },
+        "raw_text": "March 31, 2024",
+        "entity_type": "date",
+        "canonical_name": "March 31, 2024",
+        "extraction_layer": "semantic_promotion",
+        "date_value": "March 31, 2024",
+        "date_format": "unknown",
+        "temporal_context": "Quarterly report due **March 31, 2024** 4.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalDateFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 5821,
+          "end": 5835
+        },
+        "raw_text": "April 30, 2024",
+        "entity_type": "date",
+        "canonical_name": "April 30, 2024",
+        "extraction_layer": "semantic_promotion",
+        "date_value": "April 30, 2024",
+        "date_format": "unknown",
+        "temporal_context": "Training completion by **April 30, 2024** 5.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalDateFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 5866,
+          "end": 5879
+        },
+        "raw_text": "June 30, 2024",
+        "entity_type": "date",
+        "canonical_name": "June 30, 2024",
+        "extraction_layer": "semantic_promotion",
+        "date_value": "June 30, 2024",
+        "date_format": "unknown",
+        "temporal_context": "Mid-year assessment on **June 30, 2024** 6.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalDateFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 5909,
+          "end": 5921
+        },
+        "raw_text": "July 1, 2024",
+        "entity_type": "date",
+        "canonical_name": "July 1, 2024",
+        "extraction_layer": "semantic_promotion",
+        "date_value": "July 1, 2024",
+        "date_format": "unknown",
+        "temporal_context": "Policy effective from **July 1, 2024** 7.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalDateFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 5996,
+          "end": 6014
+        },
+        "raw_text": "September 30, 2024",
+        "entity_type": "date",
+        "canonical_name": "September 30, 2024",
+        "extraction_layer": "semantic_promotion",
+        "date_value": "September 30, 2024",
+        "date_format": "unknown",
+        "temporal_context": "Compliance deadline: **September 30, 2024** 9.",
+        "extraction_source": "global"
+      }
+    ],
+    "global_time": [
+      {
+        "fact_type": "GlobalTimeFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 6416,
+          "end": 6423
+        },
+        "raw_text": "9:00 AM",
+        "entity_type": "time",
+        "canonical_name": "9:00 AM",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalTimeFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 6429,
+          "end": 6437
+        },
+        "raw_text": "10:30 AM",
+        "entity_type": "time",
+        "canonical_name": "10:30 AM",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalTimeFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 6443,
+          "end": 6451
+        },
+        "raw_text": "12:00 PM",
+        "entity_type": "time",
+        "canonical_name": "12:00 PM",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalTimeFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 6464,
+          "end": 6471
+        },
+        "raw_text": "2:15 PM",
+        "entity_type": "time",
+        "canonical_name": "2:15 PM",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalTimeFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 6477,
+          "end": 6484
+        },
+        "raw_text": "3:45 PM",
+        "entity_type": "time",
+        "canonical_name": "3:45 PM",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalTimeFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 6490,
+          "end": 6497
+        },
+        "raw_text": "5:00 PM",
+        "entity_type": "time",
+        "canonical_name": "5:00 PM",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalTimeFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 6503,
+          "end": 6510
+        },
+        "raw_text": "6:30 PM",
+        "entity_type": "time",
+        "canonical_name": "6:30 PM",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalTimeFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 6520,
+          "end": 6528
+        },
+        "raw_text": "11:59 PM",
+        "entity_type": "time",
+        "canonical_name": "11:59 PM",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalTimeFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 6455,
+          "end": 6459
+        },
+        "raw_text": "noon",
+        "entity_type": "time",
+        "canonical_name": "noon",
+        "extraction_layer": "semantic_promotion",
+        "extraction_source": "global"
+      }
+    ],
+    "global_money": [
+      {
+        "fact_type": "GlobalMoneyFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1053,
+          "end": 1055
+        },
+        "raw_text": "$2",
+        "entity_type": "money",
+        "canonical_name": "$2",
+        "extraction_layer": "semantic_promotion",
+        "amount": 2.0,
+        "currency": "USD",
+        "financial_context": "ety Coordinator, implemented new protocols saving $2.5 million. 9. **James Wilson**, Regional Director",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMoneyFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 2795,
+          "end": 2797
+        },
+        "raw_text": "$5",
+        "entity_type": "money",
+        "canonical_name": "$5",
+        "extraction_layer": "semantic_promotion",
+        "amount": 5.0,
+        "currency": "USD",
+        "financial_context": "onmental Protection Agency) fined three companies $5 million total. 4. The **Centers for Disease Contr",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMoneyFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 3429,
+          "end": 3433
+        },
+        "raw_text": "$100",
+        "entity_type": "money",
+        "canonical_name": "$100",
+        "extraction_layer": "semantic_promotion",
+        "amount": 100.0,
+        "currency": "USD",
+        "financial_context": "nizations) 11. **Microsoft Corporation** invested $100 million in safety technology. 12. **Amazon Web Se",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMoneyFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 4350,
+          "end": 4353
+        },
+        "raw_text": "$10",
+        "entity_type": "money",
+        "canonical_name": "$10",
+        "extraction_layer": "semantic_promotion",
+        "amount": 10.0,
+        "currency": "USD",
+        "financial_context": "n Corporation** completed defense contracts worth $10 billion. 25. **Raytheon Technologies** developed",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMoneyFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 6658,
+          "end": 6666
+        },
+        "raw_text": "$500,000",
+        "entity_type": "money",
+        "canonical_name": "$500,000",
+        "extraction_layer": "semantic_promotion",
+        "amount": 500000.0,
+        "currency": "USD",
+        "financial_context": "Safety equipment budget: **$500,000** 2.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMoneyFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 6695,
+          "end": 6697
+        },
+        "raw_text": "$1",
+        "entity_type": "money",
+        "canonical_name": "$1",
+        "extraction_layer": "semantic_promotion",
+        "amount": 1.0,
+        "currency": "USD",
+        "financial_context": "Training allocation: **$1.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMoneyFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 6736,
+          "end": 6744
+        },
+        "raw_text": "$250,000",
+        "entity_type": "money",
+        "canonical_name": "$250,000",
+        "extraction_layer": "semantic_promotion",
+        "amount": 250000.0,
+        "currency": "USD",
+        "financial_context": "Compliance software: **$250,000** 4.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMoneyFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 6769,
+          "end": 6776
+        },
+        "raw_text": "$75,000",
+        "entity_type": "money",
+        "canonical_name": "$75,000",
+        "extraction_layer": "semantic_promotion",
+        "amount": 75000.0,
+        "currency": "USD",
+        "financial_context": "Consulting fees: **$75,000** 5.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMoneyFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 6804,
+          "end": 6806
+        },
+        "raw_text": "$3",
+        "entity_type": "money",
+        "canonical_name": "$3",
+        "extraction_layer": "semantic_promotion",
+        "amount": 3.0,
+        "currency": "USD",
+        "financial_context": "Insurance premiums: **$3.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMoneyFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 7074,
+          "end": 7081
+        },
+        "raw_text": "$14,502",
+        "entity_type": "money",
+        "canonical_name": "$14,502",
+        "extraction_layer": "semantic_promotion",
+        "amount": 14502.0,
+        "currency": "USD",
+        "financial_context": "Maximum OSHA fine: **$14,502** per violation 12.",
+        "extraction_source": "global"
+      }
+    ],
+    "global_phone": [
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8232,
+          "end": 8246
+        },
+        "raw_text": "(800) 321-6742",
+        "entity_type": "phone",
+        "canonical_name": "(800) 321-6742",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(800) 321-6742",
+        "contact_type": "phone",
+        "formatted_number": "(800) 321-6742",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8252,
+          "end": 8266
+        },
+        "raw_text": "(202) 693-1999",
+        "entity_type": "phone",
+        "canonical_name": "(202) 693-1999",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(202) 693-1999",
+        "contact_type": "phone",
+        "formatted_number": "(202) 693-1999",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8272,
+          "end": 8286
+        },
+        "raw_text": "(877) 889-5627",
+        "entity_type": "phone",
+        "canonical_name": "(877) 889-5627",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(877) 889-5627",
+        "contact_type": "phone",
+        "formatted_number": "(877) 889-5627",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8292,
+          "end": 8306
+        },
+        "raw_text": "(617) 565-9860",
+        "entity_type": "phone",
+        "canonical_name": "(617) 565-9860",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(617) 565-9860",
+        "contact_type": "phone",
+        "formatted_number": "(617) 565-9860",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8312,
+          "end": 8326
+        },
+        "raw_text": "(212) 337-2378",
+        "entity_type": "phone",
+        "canonical_name": "(212) 337-2378",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(212) 337-2378",
+        "contact_type": "phone",
+        "formatted_number": "(212) 337-2378",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8332,
+          "end": 8346
+        },
+        "raw_text": "(404) 562-2300",
+        "entity_type": "phone",
+        "canonical_name": "(404) 562-2300",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(404) 562-2300",
+        "contact_type": "phone",
+        "formatted_number": "(404) 562-2300",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8352,
+          "end": 8366
+        },
+        "raw_text": "(312) 353-2220",
+        "entity_type": "phone",
+        "canonical_name": "(312) 353-2220",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(312) 353-2220",
+        "contact_type": "phone",
+        "formatted_number": "(312) 353-2220",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8372,
+          "end": 8386
+        },
+        "raw_text": "(214) 767-4731",
+        "entity_type": "phone",
+        "canonical_name": "(214) 767-4731",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(214) 767-4731",
+        "contact_type": "phone",
+        "formatted_number": "(214) 767-4731",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8392,
+          "end": 8406
+        },
+        "raw_text": "(303) 844-1600",
+        "entity_type": "phone",
+        "canonical_name": "(303) 844-1600",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(303) 844-1600",
+        "contact_type": "phone",
+        "formatted_number": "(303) 844-1600",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalPhoneFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8412,
+          "end": 8426
+        },
+        "raw_text": "(415) 975-4310",
+        "entity_type": "phone",
+        "canonical_name": "(415) 975-4310",
+        "extraction_layer": "semantic_promotion",
+        "phone_number": "(415) 975-4310",
+        "contact_type": "phone",
+        "formatted_number": "(415) 975-4310",
+        "extraction_source": "global"
+      }
+    ],
+    "global_regulation": [
+      {
+        "fact_type": "GlobalRegulationFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8487,
+          "end": 8502
+        },
+        "raw_text": "29 CFR 1910.132",
+        "entity_type": "regulation",
+        "canonical_name": "29 CFR 1910.132",
+        "extraction_layer": "semantic_promotion",
+        "regulation_id": "29 CFR 1910.132",
+        "issuing_authority": "Federal Government",
+        "regulatory_domain": "federal_regulation",
+        "compliance_level": "informational",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalRegulationFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8508,
+          "end": 8522
+        },
+        "raw_text": "29 CFR 1926.95",
+        "entity_type": "regulation",
+        "canonical_name": "29 CFR 1926.95",
+        "extraction_layer": "semantic_promotion",
+        "regulation_id": "29 CFR 1926.95",
+        "issuing_authority": "Federal Government",
+        "regulatory_domain": "federal_regulation",
+        "compliance_level": "informational",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalRegulationFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8528,
+          "end": 8543
+        },
+        "raw_text": "29 CFR 1910.134",
+        "entity_type": "regulation",
+        "canonical_name": "29 CFR 1910.134",
+        "extraction_layer": "semantic_promotion",
+        "regulation_id": "29 CFR 1910.134",
+        "issuing_authority": "Federal Government",
+        "regulatory_domain": "federal_regulation",
+        "compliance_level": "informational",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalRegulationFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8623,
+          "end": 8633
+        },
+        "raw_text": "40 CFR 264",
+        "entity_type": "regulation",
+        "canonical_name": "40 CFR 264",
+        "extraction_layer": "semantic_promotion",
+        "regulation_id": "40 CFR 264",
+        "issuing_authority": "Federal Government",
+        "regulatory_domain": "federal_regulation",
+        "compliance_level": "informational",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalRegulationFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8643,
+          "end": 8653
+        },
+        "raw_text": "49 CFR 172",
+        "entity_type": "regulation",
+        "canonical_name": "49 CFR 172",
+        "extraction_layer": "semantic_promotion",
+        "regulation_id": "49 CFR 172",
+        "issuing_authority": "Federal Government",
+        "regulatory_domain": "federal_regulation",
+        "compliance_level": "informational",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalRegulationFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8663,
+          "end": 8673
+        },
+        "raw_text": "21 CFR 211",
+        "entity_type": "regulation",
+        "canonical_name": "21 CFR 211",
+        "extraction_layer": "semantic_promotion",
+        "regulation_id": "21 CFR 211",
+        "issuing_authority": "Federal Government",
+        "regulatory_domain": "federal_regulation",
+        "compliance_level": "informational",
+        "extraction_source": "global"
+      }
+    ],
+    "global_url": [
+      {
+        "fact_type": "GlobalUrlFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8726,
+          "end": 8749
+        },
+        "raw_text": "https://www.osha.gov**,",
+        "entity_type": "url",
+        "canonical_name": "https://www.osha.gov**,",
+        "extraction_layer": "semantic_promotion",
+        "url": "https://www.osha.gov**,",
+        "domain": "www.osha.gov**,",
+        "link_type": "government",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalUrlFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8752,
+          "end": 8779
+        },
+        "raw_text": "http://www.cdc.gov/niosh**,",
+        "entity_type": "url",
+        "canonical_name": "http://www.cdc.gov/niosh**,",
+        "extraction_layer": "semantic_promotion",
+        "url": "http://www.cdc.gov/niosh**,",
+        "domain": "www.cdc.gov",
+        "link_type": "government",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalUrlFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8782,
+          "end": 8815
+        },
+        "raw_text": "https://www.epa.gov/compliance**,",
+        "entity_type": "url",
+        "canonical_name": "https://www.epa.gov/compliance**,",
+        "extraction_layer": "semantic_promotion",
+        "url": "https://www.epa.gov/compliance**,",
+        "domain": "www.epa.gov",
+        "link_type": "government",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalUrlFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8818,
+          "end": 8850
+        },
+        "raw_text": "https://www.iso.org/standards**,",
+        "entity_type": "url",
+        "canonical_name": "https://www.iso.org/standards**,",
+        "extraction_layer": "semantic_promotion",
+        "url": "https://www.iso.org/standards**,",
+        "domain": "www.iso.org",
+        "link_type": "organization",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalUrlFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 8853,
+          "end": 8875
+        },
+        "raw_text": "http://www.ansi.org**.",
+        "entity_type": "url",
+        "canonical_name": "http://www.ansi.org**.",
+        "extraction_layer": "semantic_promotion",
+        "url": "http://www.ansi.org**.",
+        "domain": "www.ansi.org**.",
+        "link_type": "organization",
+        "extraction_source": "global"
+      }
+    ],
+    "global_measurement": [
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 4905,
+          "end": 4909
+        },
+        "raw_text": "20 l",
+        "entity_type": "measurement",
+        "canonical_name": "20 l",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "20",
+        "unit": "",
+        "measurement_context": "ls. --- ## SECTION 3: LOCATION ENTITIES (Total: 20 locations) ### 3.1 Cities (10 locations) Operation",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 4936,
+          "end": 4940
+        },
+        "raw_text": "10 l",
+        "entity_type": "measurement",
+        "canonical_name": "10 l",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "10",
+        "unit": "",
+        "measurement_context": "N ENTITIES (Total: 20 locations) ### 3.1 Cities (10 locations) Operations expanded to: **New York City*",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 5160,
+          "end": 5164
+        },
+        "raw_text": "10 l",
+        "entity_type": "measurement",
+        "canonical_name": "10 l",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "10",
+        "unit": "",
+        "measurement_context": "and **San Jose**. ### 3.2 States and Countries (10 locations) International presence in: **California*",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 11381,
+          "end": 11385
+        },
+        "raw_text": "20 l",
+        "entity_type": "measurement",
+        "canonical_name": "20 l",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "20",
+        "unit": "",
+        "measurement_context": "ernment, 15 companies, 5 educational) - LOCATION: 20 locations (10 cities, 10 states/countries) - GPE: 8",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 9705,
+          "end": 9710
+        },
+        "raw_text": "113 k",
+        "entity_type": "measurement",
+        "canonical_name": "113 k",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "113",
+        "unit": "",
+        "measurement_context": "s** for 8 hours - Weight capacity **250 pounds** (113 kg) per person - Temperature range **-20°F to 120°F",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 9747,
+          "end": 9751
+        },
+        "raw_text": "20°F",
+        "entity_type": "measurement",
+        "canonical_name": "20°F",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "20",
+        "unit": "",
+        "measurement_context": "unds** (113 kg) per person - Temperature range **-20°F to 120°F** (-29°C to 49°C) - Visibility distance",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 9755,
+          "end": 9760
+        },
+        "raw_text": "120°F",
+        "entity_type": "measurement",
+        "canonical_name": "120°F",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "120",
+        "unit": "",
+        "measurement_context": "113 kg) per person - Temperature range **-20°F to 120°F** (-29°C to 49°C) - Visibility distance **500 fee",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 9765,
+          "end": 9769
+        },
+        "raw_text": "29°C",
+        "entity_type": "measurement",
+        "canonical_name": "29°C",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "29",
+        "unit": "",
+        "measurement_context": "r person - Temperature range **-20°F to 120°F** (-29°C to 49°C) - Visibility distance **500 feet** (152",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 9773,
+          "end": 9777
+        },
+        "raw_text": "49°C",
+        "entity_type": "measurement",
+        "canonical_name": "49°C",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "49",
+        "unit": "",
+        "measurement_context": "- Temperature range **-20°F to 120°F** (-29°C to 49°C) - Visibility distance **500 feet** (152 meters)",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1221,
+          "end": 1226
+        },
+        "raw_text": "99.5%",
+        "entity_type": "measurement",
+        "canonical_name": "99.5%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "99.5",
+        "unit": "",
+        "measurement_context": "hompson**, Quality Assurance Specialist, achieved 99.5% accuracy rate. ### 1.2 Challenging Names (8 pers",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1725,
+          "end": 1728
+        },
+        "raw_text": "40%",
+        "entity_type": "measurement",
+        "canonical_name": "40%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "40",
+        "unit": "",
+        "measurement_context": "hid**, Security Specialist, enhanced protocols by 40%. 17. **Olga Volkov**, Research Director at Moscow",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 3587,
+          "end": 3590
+        },
+        "raw_text": "25%",
+        "entity_type": "measurement",
+        "canonical_name": "25%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "25",
+        "unit": "",
+        "measurement_context": "s. 13. **General Electric Company** (GE) reported 25% improvement in safety metrics. 14. **Johnson & Jo",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 4009,
+          "end": 4012
+        },
+        "raw_text": "60%",
+        "entity_type": "measurement",
+        "canonical_name": "60%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "60",
+        "unit": "",
+        "measurement_context": "19. **Apple Inc.** reduced workplace incidents by 60%. 20. **Google LLC** implemented AI-powered safety",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 4255,
+          "end": 4260
+        },
+        "raw_text": "99.9%",
+        "entity_type": "measurement",
+        "canonical_name": "99.9%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "99.9",
+        "unit": "",
+        "measurement_context": "ries safely. 23. **FedEx Corporation** maintained 99.9% delivery accuracy. 24. **Lockheed Martin Corporat",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 7519,
+          "end": 7532
+        },
+        "raw_text": "15 percentage",
+        "entity_type": "measurement",
+        "canonical_name": "15 percentage",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "15",
+        "unit": "",
+        "measurement_context": "on** --- ## SECTION 8: PERCENT ENTITIES (Total: 15 percentages) 1. Safety improvement: **25%** reduction in in",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 7561,
+          "end": 7564
+        },
+        "raw_text": "25%",
+        "entity_type": "measurement",
+        "canonical_name": "25%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "25",
+        "unit": "",
+        "measurement_context": "Safety improvement: **25%** reduction in incidents 2.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 7612,
+          "end": 7617
+        },
+        "raw_text": "98.5%",
+        "entity_type": "measurement",
+        "canonical_name": "98.5%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "98.5",
+        "unit": "",
+        "measurement_context": "Compliance rate: **98.5%** of facilities 3.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 7660,
+          "end": 7664
+        },
+        "raw_text": "100%",
+        "entity_type": "measurement",
+        "canonical_name": "100%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "100",
+        "unit": "",
+        "measurement_context": "Training completion: **100%** of employees 4.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 7701,
+          "end": 7704
+        },
+        "raw_text": "15%",
+        "entity_type": "measurement",
+        "canonical_name": "15%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "15",
+        "unit": "",
+        "measurement_context": "Cost reduction: **15%** year-over-year 5.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 7744,
+          "end": 7747
+        },
+        "raw_text": "30%",
+        "entity_type": "measurement",
+        "canonical_name": "30%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "30",
+        "unit": "",
+        "measurement_context": "Efficiency gain: **30%** in processing time 6.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1221,
+          "end": 1226
+        },
+        "raw_text": "99.5%",
+        "entity_type": "measurement",
+        "canonical_name": "99.5%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "99.5",
+        "unit": "",
+        "measurement_context": "hompson**, Quality Assurance Specialist, achieved 99.5% accuracy rate. ### 1.2 Challenging Names (8 pers",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 1725,
+          "end": 1728
+        },
+        "raw_text": "40%",
+        "entity_type": "measurement",
+        "canonical_name": "40%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "40",
+        "unit": "",
+        "measurement_context": "hid**, Security Specialist, enhanced protocols by 40%. 17. **Olga Volkov**, Research Director at Moscow",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 3587,
+          "end": 3590
+        },
+        "raw_text": "25%",
+        "entity_type": "measurement",
+        "canonical_name": "25%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "25",
+        "unit": "",
+        "measurement_context": "s. 13. **General Electric Company** (GE) reported 25% improvement in safety metrics. 14. **Johnson & Jo",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 4009,
+          "end": 4012
+        },
+        "raw_text": "60%",
+        "entity_type": "measurement",
+        "canonical_name": "60%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "60",
+        "unit": "",
+        "measurement_context": "19. **Apple Inc.** reduced workplace incidents by 60%. 20. **Google LLC** implemented AI-powered safety",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 4255,
+          "end": 4260
+        },
+        "raw_text": "99.9%",
+        "entity_type": "measurement",
+        "canonical_name": "99.9%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "99.9",
+        "unit": "",
+        "measurement_context": "ries safely. 23. **FedEx Corporation** maintained 99.9% delivery accuracy. 24. **Lockheed Martin Corporat",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 7612,
+          "end": 7617
+        },
+        "raw_text": "98.5%",
+        "entity_type": "measurement",
+        "canonical_name": "98.5%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "98.5",
+        "unit": "",
+        "measurement_context": "Compliance rate: **98.5%** of facilities 3.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 7660,
+          "end": 7664
+        },
+        "raw_text": "100%",
+        "entity_type": "measurement",
+        "canonical_name": "100%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "100",
+        "unit": "",
+        "measurement_context": "Training completion: **100%** of employees 4.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 7701,
+          "end": 7704
+        },
+        "raw_text": "15%",
+        "entity_type": "measurement",
+        "canonical_name": "15%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "15",
+        "unit": "",
+        "measurement_context": "Cost reduction: **15%** year-over-year 5.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 7744,
+          "end": 7747
+        },
+        "raw_text": "30%",
+        "entity_type": "measurement",
+        "canonical_name": "30%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "30",
+        "unit": "",
+        "measurement_context": "Efficiency gain: **30%** in processing time 6.",
+        "extraction_source": "global"
+      },
+      {
+        "fact_type": "GlobalMeasurementFact",
+        "confidence": 0.85,
+        "span": {
+          "start": 7788,
+          "end": 7793
+        },
+        "raw_text": "45.5%",
+        "entity_type": "measurement",
+        "canonical_name": "45.5%",
+        "extraction_layer": "semantic_promotion",
+        "measurement_value": "45.5",
+        "unit": "",
+        "measurement_context": "Market share: **45.5%** of industry 7.",
+        "extraction_source": "global"
+      }
+    ],
+    "domain_financial": [],
+    "domain_percentages": [],
+    "domain_organizations": [],
+    "domain_people": [],
+    "domain_locations": [],
+    "domain_regulations": [],
+    "domain_statistics": []
+  }
+}
