@@ -151,8 +151,8 @@ class GlobalComponentManager:
                 return self._ac_classifier
                 
             try:
-                from knowledge.layered_ac_classifier import AhoCorasickLayeredClassifier
-                self._ac_classifier = AhoCorasickLayeredClassifier()
+                from knowledge.aho_corasick_engine import AhoCorasickKnowledgeEngine
+                self._ac_classifier = AhoCorasickKnowledgeEngine()
                 
                 logger = logging.getLogger(__name__)
                 logger.info("✅ Global AhoCorasick classifier initialized")
@@ -193,7 +193,7 @@ class GlobalComponentManager:
                 return self._entity_normalizer
                 
             try:
-                from normalization.entity_normalizer import EntityNormalizer
+                from knowledge.extractors.entity_normalizer import EntityNormalizer
                 self._entity_normalizer = EntityNormalizer(config)
                 
                 logger = logging.getLogger(__name__)

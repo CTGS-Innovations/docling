@@ -85,52 +85,70 @@ class CleanFusionPipeline:
         self._initialize_pipeline()
     
     def _initialize_pipeline(self):
-        """Initialize the pipeline phases based on configuration."""
-        pipeline_config = self.config.get('pipeline', {})
+        """Initialize the orchestrated pipeline wrapper."""
+        # Initialize the service processor once during pipeline initialization
+        from pipeline.legacy.service_processor import ServiceProcessor
+        self.service_processor = ServiceProcessor(self.config, max_workers=8)
         
-        # Phase 1: PDF Conversion (handled by extractors - minimal overhead)
-        # Phase 2: Document Processing (configurable processor)
-        document_config = pipeline_config.get('document_processing', {})
-        processor_type = document_config.get('processor', 'service_processor')
-        
-        # Load the configured processor (temporarily using sys.path for import)
-        if processor_type == 'service_processor':
-            import sys
-            from pathlib import Path
-            sys.path.insert(0, str(Path(__file__).parent / 'pipeline' / 'legacy'))
-            from service_processor import ServiceProcessor
-            max_workers = self.config.get('max_workers', 8)
-            processor = ServiceProcessor(self.config, max_workers)
-        elif processor_type == 'fusion_pipeline':
-            from pipeline.legacy.fusion_pipeline import FusionPipeline as LegacyFusionPipeline
-            processor = LegacyFusionPipeline(self.config)
-        else:
-            raise ValueError(f"Unknown processor type: {processor_type}")
-        
-        # Add document processing phase
-        self.phases.append(PipelinePhase("document_processing", processor, document_config))
-        
-        # Phase 3-6: Classification, Entity Extraction, Normalization, Semantic Analysis
-        # These are currently handled within the document processor
-        # Future enhancement: separate these into individual configurable phases
-        
-        # Setup sidecar A/B testing if configured
-        sidecar_config = document_config.get('sidecar_test')
-        if sidecar_config:
-            self._setup_sidecar_test(sidecar_config)
+        # Use orchestrated pipeline wrapper as the default system
+        from pipeline.orchestrated_pipeline_wrapper import OrchestratedPipelineWrapper
+        self.orchestrated_pipeline = OrchestratedPipelineWrapper(self.config, self.service_processor)
+        self.phases = []  # No individual phases needed - orchestrated handles all
+        self.logger.stage("🏗️ Using Orchestrated Pipeline Wrapper with 7 isolated stages")
     
     def _setup_sidecar_test(self, sidecar_config: str):
         """Setup sidecar A/B testing for performance comparison."""
         self.logger.stage(f"🧪 Setting up sidecar test: {sidecar_config}")
         
-        if sidecar_config == 'fusion_pipeline':
-            from pipeline.legacy.fusion_pipeline import FusionPipeline as LegacyFusionPipeline
-            sidecar_processor = LegacyFusionPipeline(self.config)
-            self.sidecar_tests['fusion_pipeline'] = sidecar_processor
+        try:
+            if sidecar_config == 'fusion_pipeline':
+                from pipeline.legacy.fusion_pipeline import FusionPipeline as LegacyFusionPipeline
+                sidecar_processor = LegacyFusionPipeline(self.config)
+                self.sidecar_tests['fusion_pipeline'] = sidecar_processor
+                self.logger.stage(f"✅ Sidecar '{sidecar_config}' activated successfully")
+                
+            elif sidecar_config == 'optimized_doc_processor':
+                # Try to import optimized processor directly (bypass factory issues)
+                try:
+                    import sys
+                    from pathlib import Path
+                    sys.path.insert(0, str(Path(__file__).parent / 'pipeline'))
+                    from optimized_doc_processor import OptimizedDocProcessorWrapper
+                    
+                    sidecar_processor = OptimizedDocProcessorWrapper(self.config)
+                    self.sidecar_tests['optimized_doc_processor'] = sidecar_processor
+                    self.logger.stage(f"✅ Sidecar '{sidecar_config}' activated successfully")
+                    
+                except Exception as import_error:
+                    self.logger.stage(f"❌ Sidecar '{sidecar_config}' failed to load: {import_error}")
+                    self.logger.stage(f"   Sidecar A/B testing disabled for this run")
+                    
+            else:
+                self.logger.stage(f"❌ Unknown sidecar processor: {sidecar_config}")
+                self.logger.stage(f"   Available: fusion_pipeline, optimized_doc_processor")
+                
+        except Exception as e:
+            self.logger.stage(f"❌ Sidecar setup failed: {e}")
+            self.logger.stage(f"   Sidecar A/B testing disabled for this run")
     
     def process(self, input_data: Any, metadata: Dict[str, Any] = None) -> tuple[Any, Dict[str, Any]]:
         """Process input through all pipeline phases."""
         metadata = metadata or {}
+        
+        # Check if using orchestrated pipeline
+        if hasattr(self, 'orchestrated_pipeline') and self.orchestrated_pipeline:
+            # Use the orchestrated pipeline
+            results = self.orchestrated_pipeline.process(input_data, metadata)
+            
+            # Convert to expected format
+            return results['final_output'], {
+                'pipeline_timing_ms': results['total_pipeline_ms'],
+                'phase_results': results['stage_results'],
+                'sidecar_results': {},
+                'processor_type': 'orchestrated_pipeline'
+            }
+        
+        # Legacy pipeline processing
         current_data = input_data
         
         # Track overall pipeline timing
@@ -1523,6 +1541,22 @@ Examples:
                         if resource_summary.get('memory_used_mb', 0) > 0:
                             logger.entity(f"   📈 PROCESSING MEMORY: {resource_summary['memory_used_mb']:.1f} MB during extraction")
                         logger.stage(f"   ⚡ EFFICIENCY: {resource_summary['efficiency_pages_per_worker']:.0f} pages/worker, {resource_summary['efficiency_mb_per_worker']:.1f} MB/worker")
+                
+                # Add sidecar status reporting
+                if hasattr(pipeline, 'sidecar_tests') and pipeline.sidecar_tests:
+                    logger.stage(f"\n🧪 SIDECAR A/B TESTING STATUS:")
+                    for sidecar_name, sidecar_processor in pipeline.sidecar_tests.items():
+                        processor_type = type(sidecar_processor).__name__
+                        logger.stage(f"   ✅ {sidecar_name}: ACTIVATED ({processor_type})")
+                        logger.stage(f"      └─ Phase: document_processing")
+                elif hasattr(pipeline, 'config') and pipeline.config.get('pipeline', {}).get('document_processing', {}).get('sidecar_test'):
+                    configured_sidecar = pipeline.config['pipeline']['document_processing']['sidecar_test']
+                    logger.stage(f"\n🧪 SIDECAR A/B TESTING STATUS:")
+                    logger.stage(f"   ❌ {configured_sidecar}: CONFIGURED BUT FAILED TO ACTIVATE")
+                    logger.stage(f"      └─ Phase: document_processing (check import errors above)")
+                else:
+                    logger.stage(f"\n🧪 SIDECAR A/B TESTING STATUS:")
+                    logger.stage(f"   ⚪ No sidecars configured")
                 
                 logger.success(f"   ✅ SUCCESS RATE: {(successful/len(results)*100):.1f}% ({successful}/{len(results)})")
             else:

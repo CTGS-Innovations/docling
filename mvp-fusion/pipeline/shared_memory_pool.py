@@ -143,7 +143,7 @@ class SharedMemoryPool:
                             self.processing_stats['total_pages'] += result.pages
                         else:
                             failed_loads += 1
-                            print(f"   ⚠️  Memory limit reached, skipping: {Path(result.file_path).name}")
+                            print(f"   � ️  Memory limit reached, skipping: {Path(result.file_path).name}")
                     
                     # Delete temporary file (we have it in memory now)
                     Path(result.output_path).unlink()

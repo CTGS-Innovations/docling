@@ -337,5 +337,23 @@ mvp-fusion/
 └── fusion_cli.py            # Production code only
 ```
 
+### **Rule #16: Architecture Patterns Reference - MANDATORY**
+**CRITICAL**: Always reference `docs/ARCHITECTURE_PATTERNS.md` for project-specific architectural patterns and definitions.
+
+**🚨 BEFORE implementing any architecture:**
+- **READ** `docs/ARCHITECTURE_PATTERNS.md` first
+- **FOLLOW** the patterns defined in that document
+- **NEVER** assume industry standard definitions override project patterns
+- **ASK** if unsure about any architectural pattern
+
+**📁 CONTAINS:**
+- Pipeline Sidecar Pattern definition
+- Service interface requirements
+- A/B testing methodology
+- Performance optimization approach
+
+**⚠️ ENFORCEMENT:**
+Violating project architectural patterns wastes time and creates confusion. This rule ensures consistent implementation across all development work.
+
 ---
 **These rules prevent codebase clutter and maintain focus on performance and clarity.**

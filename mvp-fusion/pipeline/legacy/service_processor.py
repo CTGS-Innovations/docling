@@ -177,7 +177,7 @@ class ServiceProcessor:
                     self._hybrid_system = HighPerformanceEntityMetadata()
                     self.logger.logger.info("🟢 High-performance Aho-Corasick entity system initialized")
                 except Exception as e:
-                    self.logger.logger.warning(f"⚠️ High-performance extraction system failed: {e}")
+                    self.logger.logger.warning(f"� ️ High-performance extraction system failed: {e}")
                     self._hybrid_system = None
                 
                 # CORE-8 ENTITY CORPUS INITIALIZATION
@@ -190,7 +190,7 @@ class ServiceProcessor:
                     self.core8_corpus_data = corpus_loader.corpus_data
                     self.core8_corpus_loader = corpus_loader  # Store for subcategory lookup
                 except Exception as e:
-                    self.logger.logger.warning(f"⚠️ Core-8 corpus loader failed: {e}")
+                    self.logger.logger.warning(f"� ️ Core-8 corpus loader failed: {e}")
                     self.core8_automatons = {}
                     self.core8_corpus_data = {}
                 
@@ -211,7 +211,7 @@ class ServiceProcessor:
                     )
                     self.logger.logger.info("🟢 World-scale person extractor initialized (AC + FLPC strategy)")
                 except Exception as e:
-                    self.logger.logger.warning(f"⚠️ World-scale person extractor failed: {e}")
+                    self.logger.logger.warning(f"� ️ World-scale person extractor failed: {e}")
                     self.world_scale_person_extractor = None
                 
                 # PERFORMANCE FIX: Initialize FLPC engine ONCE (14.9x faster than Python regex)
@@ -220,7 +220,7 @@ class ServiceProcessor:
                     self.flpc_engine = FLPCEngine(self.config)
                     self.logger.logger.info("🟢 FLPC Rust engine initialized (69M+ chars/sec)")
                 except Exception as e:
-                    self.logger.logger.warning(f"⚠️ FLPC engine failed to initialize: {e}")
+                    self.logger.logger.warning(f"� ️ FLPC engine failed to initialize: {e}")
                     self.flpc_engine = None
                 
                 # Initialize semantic fact extractor
@@ -259,7 +259,7 @@ class ServiceProcessor:
                     else:
                         self.phase_manager.log('core8_extractor', "ℹ️  POS Gap Discovery disabled in configuration")
                 except Exception as e:
-                    self.logger.logger.warning(f"⚠️ POS Gap Discovery initialization failed: {e}")
+                    self.logger.logger.warning(f"� ️ POS Gap Discovery initialization failed: {e}")
                     self.pos_gap_discovery = None
                 
                 # Initialize tentative corpus manager for auto-learning
@@ -274,25 +274,25 @@ class ServiceProcessor:
                     else:
                         self.phase_manager.log('core8_extractor', "ℹ️  Tentative corpus auto-learning disabled")
                 except Exception as e:
-                    self.logger.logger.warning(f"⚠️ Tentative corpus manager initialization failed: {e}")
+                    self.logger.logger.warning(f"� ️ Tentative corpus manager initialization failed: {e}")
                     self.tentative_corpus_manager = None
                 
                 set_current_phase('initialization')
                 self.phase_manager.log('core8_extractor', "✅ Real extractors initialized")
             except Exception as e:
-                self.logger.logger.warning(f"⚠️  Failed to initialize extractors: {e}")
+                self.logger.logger.warning(f"� ️  Failed to initialize extractors: {e}")
                 self.aho_corasick_engine = None
                 self.semantic_extractor = None
                 self.person_extractor = None
                 self.entity_normalizer = None
         else:
-            self.logger.logger.warning("⚠️  Real extractors not available - using mock processing")
+            self.logger.logger.warning("� ️  Real extractors not available - using mock processing")
             self.entity_normalizer = None
     
     def start_service(self):
         """Start the I/O + CPU worker service"""
         if self.active:
-            self.logger.logger.warning("⚠️  Service already running")
+            self.logger.logger.warning("� ️  Service already running")
             return
         
         self.active = True
@@ -326,7 +326,7 @@ class ServiceProcessor:
         try:
             # PERFORMANCE FIX: Use pre-initialized optimized system
             if not self._hybrid_system:
-                self.logger.logger.warning("⚠️ High-performance system not initialized, falling back to basic extraction")
+                self.logger.logger.warning("� ️ High-performance system not initialized, falling back to basic extraction")
                 return {'gpe': [], 'location': []}
             
             # Single-pass Aho-Corasick extraction (1,656x faster than O(n²) loops)
@@ -693,13 +693,13 @@ class ServiceProcessor:
                             learned_count += 1
                     
                     if learned_count > 0:
-                        self.logger.logger.info(f"🧠 Tentative Learning: Added {learned_count}/{pos_learning_candidates} discoveries to tentative corpus")
+                        self.logger.logger.info(f"�  Tentative Learning: Added {learned_count}/{pos_learning_candidates} discoveries to tentative corpus")
                 
                 if pos_discoveries > 0:
                     self.logger.logger.info(f"🔍 POS Gap Discovery: Found {pos_discoveries} new entities ({pos_learning_candidates} learning candidates)")
                 
             except Exception as e:
-                self.logger.logger.warning(f"⚠️ POS Gap Discovery failed: {e}")
+                self.logger.logger.warning(f"� ️ POS Gap Discovery failed: {e}")
         
         timing_breakdown['pos_gap_discovery'] = (time.perf_counter() - pos_start) * 1000
         
@@ -1007,9 +1007,9 @@ class ServiceProcessor:
                 set_current_phase('entity_extraction')
                 self.phase_manager.log('entity_extraction', f"✅ Loaded {len(gpe_entities)} GPE entities from corpus")
             else:
-                self.logger.logger.warning(f"⚠️  GPE corpus file not found: {gpe_file}")
+                self.logger.logger.warning(f"� ️  GPE corpus file not found: {gpe_file}")
         except Exception as e:
-            self.logger.logger.warning(f"⚠️  Failed to load GPE corpus: {e}")
+            self.logger.logger.warning(f"� ️  Failed to load GPE corpus: {e}")
         
         return gpe_entities
     
@@ -1177,7 +1177,7 @@ class ServiceProcessor:
                     # self.logger.queue(f"Queued InMemoryDocument: {file_path.name}", 
                     #                 queue_size=queue_size, queue_max=self.queue_size)
                 except Full:
-                    self.logger.logger.warning(f"⚠️  Queue full, dropping: {file_path.name}")
+                    self.logger.logger.warning(f"� ️  Queue full, dropping: {file_path.name}")
                     
             except Exception as e:
                 self.logger.logger.error(f"❌ I/O error processing {file_path.name}: {e}")
@@ -1203,7 +1203,7 @@ class ServiceProcessor:
         
         results = []
         set_current_phase('service_coordination')
-        self.phase_manager.log('service_coordinator', f"🧠 CPU worker {worker_id} started")
+        self.phase_manager.log('service_coordinator', f"�  CPU worker {worker_id} started")
         
         while self.active:
             try:
@@ -1408,7 +1408,7 @@ class ServiceProcessor:
                         doc.success = True
                         doc.yaml_frontmatter['processing']['stage'] = 'mock_processed'
                         set_current_phase('document_processing')
-                        self.phase_manager.log('document_processor', f"⚠️  Using mock processing for {doc.source_filename}")
+                        self.phase_manager.log('document_processor', f"� ️  Using mock processing for {doc.source_filename}")
                         
                 except Exception as e:
                     self.logger.logger.error(f"❌ Entity extraction failed for {doc.source_filename}: {e}")
@@ -1610,7 +1610,7 @@ class ServiceProcessor:
                                 json.dump(doc.semantic_json, f, indent=2)
                         else:
                             set_current_phase('file_writing')
-                            self.phase_manager.log('file_writer', f"⚠️  No semantic JSON to write for {doc.source_filename}")
+                            self.phase_manager.log('file_writer', f"� ️  No semantic JSON to write for {doc.source_filename}")
                         
                         successful_writes += 1
                         

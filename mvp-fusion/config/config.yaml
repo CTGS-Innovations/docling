@@ -173,14 +173,17 @@ extractor:
 
 # Clean Pipeline Architecture Configuration (NEW)
 pipeline:
+  # Use orchestrated pipeline with 7 isolated stages
+  use_orchestrated: false        # Disable orchestrated pipeline to test original
+  
   # Memory limits for edge deployment (CloudFlare Workers ready)
   memory_limit_mb: 100           # Per document memory limit
   service_memory_limit_mb: 1024  # Total service memory limit (1GB)
   
   # Clean Pipeline Phase Configuration
   document_processing:
-    processor: "service_processor"    # Primary processor: "service_processor" or "fusion_pipeline"
-    sidecar_test: "optimized_doc_processor"  # 54x faster optimized processor
+    processor: "service_processor"    # Fallback processor when not using orchestrated
+    sidecar_test: null  # No sidecar needed for baseline testing
     
     # Performance targets
     target_time_ms: 30               # Target: <30ms per document (vs 425ms current)

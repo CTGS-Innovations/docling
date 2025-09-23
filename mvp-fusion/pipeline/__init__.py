@@ -27,7 +27,7 @@ try:
     __all__ = ['CleanFusionPipeline', 'PipelinePhase']
     
 except ImportError as e:
-    print(f"  Pipeline framework import failed: {e}")
+    print(f"  Pipeline framework import failed: {e}")
     __all__ = []
 
 # Version info

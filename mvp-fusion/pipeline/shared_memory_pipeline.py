@@ -97,7 +97,7 @@ class SharedMemoryFusionPipeline:
         # Stream Enrichment (Now integrated into Layered Classification)
         if 'enrich' in self.stages_to_run:
             print(f"\n🌊 Phase 2b: Legacy enrichment (replaced by Layer 4-5 in classification)...")
-            print(f"   ⚠️  NOTE: Enrichment now integrated into Layered Classification (Layers 4-5)")
+            print(f"   � ️  NOTE: Enrichment now integrated into Layered Classification (Layers 4-5)")
             print(f"   ⚡ Performance gain: ~30ms saved by eliminating duplicate processing")
             
             def enrich_document(doc):
@@ -211,7 +211,7 @@ class SharedMemoryFusionPipeline:
                 if ms_per_doc < 50:
                     print(f"   ✅ Performance target achieved!")
                 else:
-                    print(f"   ⚠️  Performance target missed (optimize Aho-Corasick implementation needed)")
+                    print(f"   � ️  Performance target missed (optimize Aho-Corasick implementation needed)")
         
         # Cleanup
         self.memory_pool.cleanup()
