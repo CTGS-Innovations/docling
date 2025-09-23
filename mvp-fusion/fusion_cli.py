@@ -1462,7 +1462,7 @@ Examples:
                     
                     logger.stage(f"   🏗️  Pipeline Architecture: Clean Phase Separation")
                     logger.stage(f"   🔧 Primary Processor: {processor_type}")
-                    logger.stage(f"   ⚡ Total Pipeline Time: {total_pipeline_ms:.2f}ms")
+                    logger.stage(f"   ⚡ Pipeline Execution Time: {total_pipeline_ms:.2f}ms")
                     
                     for phase in phase_results:
                         phase_name = phase['phase']
@@ -1526,7 +1526,7 @@ Examples:
                     logger.logger.error(f"   ❌ FAILED: {true_failures} files (corrupted or unsupported)")
                 if warnings_count > 0:
                     logger.logger.warning(f"   ⚠️  WARNINGS: {warnings_count} files (minor PDF issues, but text extracted successfully)")
-                logger.stage(f"   ⚡ PROCESSING TIME: {processing_time:.2f}s")
+                logger.stage(f"   ⚡ PIPELINE PROCESSING TIME: {processing_time:.2f}s")
                 if initialization_time > 0:
                     logger.stage(f"   🔧 INITIALIZATION TIME: {initialization_time:.2f}s")
                 total_time = processing_time + initialization_time

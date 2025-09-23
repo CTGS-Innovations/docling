@@ -382,6 +382,7 @@ class OrchestratedPipelineWrapper:
             }
             
             self.logger.stage("\n📊 PIPELINE PHASE PERFORMANCE:")
+            self.logger.stage("   (Individual stage timings - does not include I/O, queue management, setup/teardown overhead)")
             
             # Process each line and convert to pipeline format
             for line in lines:
