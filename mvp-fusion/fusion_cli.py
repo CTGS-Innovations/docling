@@ -88,7 +88,13 @@ class CleanFusionPipeline:
         """Initialize the orchestrated pipeline wrapper."""
         # Initialize the service processor once during pipeline initialization
         from pipeline.legacy.service_processor import ServiceProcessor
-        self.service_processor = ServiceProcessor(self.config, max_workers=8)
+        from utils.deployment_manager import DeploymentManager
+        
+        # Get correct worker count from deployment profile
+        deployment_manager = DeploymentManager(self.config)
+        max_workers = deployment_manager.get_max_workers()
+        
+        self.service_processor = ServiceProcessor(self.config, max_workers)
         
         # Use orchestrated pipeline wrapper as the default system
         from pipeline.orchestrated_pipeline_wrapper import OrchestratedPipelineWrapper
@@ -1437,10 +1443,11 @@ Examples:
                 true_failures = failed - skipped_large
                 warnings_count = sum(1 for doc in results if doc.success and doc.error_message)
                 
-                # Show phase-by-phase performance breakdown
-                phase_report = get_phase_performance_report()
-                if phase_report and "📊 PHASE PERFORMANCE:" in phase_report:
-                    logger.stage(phase_report)
+                # Show phase-by-phase performance breakdown (skip if using orchestrated pipeline)
+                if not hasattr(pipeline, 'orchestrated_pipeline') or not pipeline.orchestrated_pipeline:
+                    phase_report = get_phase_performance_report()
+                    if phase_report and "📊 PHASE PERFORMANCE:" in phase_report:
+                        logger.stage(phase_report)
                 
                 logger.stage(f"\n🚀 PROCESSING PERFORMANCE:")
                 logger.stage(f"   🚀 PAGES/SEC: {pages_per_sec:.0f} (overall pipeline)")

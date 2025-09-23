@@ -333,7 +333,13 @@ class OrchestratedPipelineWrapper:
         else:
             # Fallback: create new service processor if none provided
             from pipeline.legacy.service_processor import ServiceProcessor
-            service_processor = ServiceProcessor(self.config, max_workers=8)
+            from utils.deployment_manager import DeploymentManager
+            
+            # Get correct worker count from deployment profile
+            deployment_manager = DeploymentManager(self.config)
+            max_workers = deployment_manager.get_max_workers()
+            
+            service_processor = ServiceProcessor(self.config, max_workers)
         
         # Process using existing service processor
         output_dir = metadata.get('output_dir', Path.cwd())
@@ -384,7 +390,7 @@ class OrchestratedPipelineWrapper:
                         if old_format in line:
                             # Extract the performance data after the colon
                             perf_data = line.split(':', 1)[1].strip()
-                            self.logger.stage(f"   {emoji_num} {new_name} (v1): {perf_data}")
+                            self.logger.stage(f"   {emoji_num}  {new_name} (v1): {perf_data}")
                             break
     
     def _log_pipeline_performance(self, stage_timings: Dict, total_ms: float):
