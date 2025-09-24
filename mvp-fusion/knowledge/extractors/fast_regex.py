@@ -32,7 +32,8 @@ class FastRegexEngine:
             return compiled
         except Exception as e:
             # Fallback to Python regex for unsupported patterns
-            print(f"FLPC fallback for pattern: {pattern[:50]}... - {e}")
+            # Debug: FLPC fallback (use Python regex for unsupported patterns)
+            # Uncomment for debugging: print(f"FLPC fallback for pattern: {pattern[:50]}... - {e}")
             return re.compile(pattern, flags)
     
     def findall(self, pattern: str, text: str, flags: int = 0) -> List[str]:

@@ -4,16 +4,17 @@ Implements universal fact schema with typed facts for cross-domain knowledge ext
 Uses FLPC Rust regex + Aho-Corasick for high-performance semantic understanding
 """
 
+# Always use standard Python re module - FastRegexEngine causes hanging
+import re
+
+# Import FastRegexEngine separately if needed for specific operations
 try:
     from .fast_regex import FastRegexEngine
-    # Use the existing fast_regex wrapper which handles FLPC + fallback
-    _regex_engine = FastRegexEngine()
-    # Create re-like interface
-    re = _regex_engine
-    FLPC_AVAILABLE = True
+    _fast_regex_engine = FastRegexEngine()
+    FAST_REGEX_AVAILABLE = True
 except ImportError:
-    import re
-    FLPC_AVAILABLE = False
+    _fast_regex_engine = None
+    FAST_REGEX_AVAILABLE = False
 
 # Try to import Aho-Corasick (if available)
 try:
@@ -37,6 +38,14 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 # Import centralized logging
 sys.path.append(str(Path(__file__).parent.parent.parent))
 from utils.logging_config import get_fusion_logger
+
+# Import FLPC engine for high-performance pattern matching (14.9x faster than re)
+try:
+    from fusion.flpc_engine import FLPCEngine
+    FLPC_AVAILABLE = True
+except ImportError:
+    FLPC_AVAILABLE = False
+    FLPCEngine = None
 
 # Import conservative person entity extractor
 try:
@@ -125,6 +134,32 @@ class PersonFact(SemanticFact):
     ambiguity_score: float = 0.0
     
 @dataclass
+class RegulatoryAuthorityFact(SemanticFact):
+    """Government agencies and regulatory bodies with their authority scope"""
+    organization_name: str = ""
+    full_name: str = ""
+    authority_type: str = ""  # federal_agency, state_agency, regulatory_body
+    regulatory_scope: str = ""  # workplace_safety, environmental, financial
+    jurisdiction: str = ""  # federal, state, local
+    key_regulations: List[str] = field(default_factory=list)
+    
+@dataclass 
+class CompanyFact(SemanticFact):
+    """Private companies and organizations with business context"""
+    company_name: str = ""
+    industry_sector: str = ""  # construction, manufacturing, technology
+    organization_type: str = ""  # corporation, llc, partnership
+    business_context: str = ""  # appears in safety context, regulatory context
+    
+@dataclass
+class GeographicFact(SemanticFact): 
+    """Locations with geographic and regulatory context"""
+    location_name: str = ""
+    location_type: str = ""  # state, city, region, country
+    regulatory_context: str = ""  # subject to OSHA regulations, state jurisdiction
+    jurisdiction_level: str = ""  # federal, state, local
+
+@dataclass
 class CausalFact(SemanticFact):
     """Cause and effect relationships"""
     cause: str = ""
@@ -140,9 +175,22 @@ class SemanticFactExtractor:
     
     def __init__(self, config: Optional[Dict] = None):
         self.logger = get_fusion_logger(__name__)
+        self.config = config or {}
         self.canonical_map = self._build_canonical_map()
         self.fact_patterns = self._build_fact_patterns()
         self.aho_corasick = self._build_normalizer()
+        
+        # Initialize FLPC engine for high-performance pattern matching (Rule #12)
+        self.flpc_engine = None
+        if FLPC_AVAILABLE:
+            try:
+                self.flpc_engine = FLPCEngine(self.config)
+                self.logger.config("🚀 FLPC engine initialized for 14.9x faster pattern matching")
+            except Exception as e:
+                self.logger.config(f"⚠️ FLPC engine failed to initialize: {e}")
+                self.flpc_engine = None
+        else:
+            self.logger.config("⚠️ FLPC not available - falling back to Python regex (40x slower)")
         
         # Initialize conservative person extractor if available
         self.person_extractor = None
@@ -233,11 +281,14 @@ class SemanticFactExtractor:
         """Build FLPC regex patterns for fact extraction"""
         return {
             'RegulationCitation': [
+                r'(\d+\s+CFR\s+[\d\.\-]+)',  # "29 CFR 1926.1050-1060"
                 r'(\w+)\s+(\d+\s+CFR\s+[\d\.]+)',  # "OSHA 29 CFR 1926.1050"
                 r'(ISO\s+\d+(?::\d+)?)',  # "ISO 9001:2015"
                 r'(ANSI\s+[A-Z]\d+(?:\.\d+)*)',  # "ANSI A14.3"
                 r'(\d+\s+USC\s+[\d\.]+)',  # "29 USC 651"
                 r'(Section\s+[\d\.]+(?:\([a-z]\))?)',  # "Section 5(a)(1)"
+                r'(\d{4}\.\d+)',  # "1926.1050" (OSHA style)
+                r'(Subpart\s+[A-Z])',  # "Subpart L"
             ],
             
             'Requirement': [
@@ -269,9 +320,14 @@ class SemanticFactExtractor:
             ],
             
             'ActionFact': [
-                r'(\w+(?:\s+\w+)*)\s+(requires?|enforces?|provides?|maintains?|conducts?|issues?)\s+(.+?)(?=\.|,|;)',
-                r'(\w+(?:\s+\w+)*)\s+(prevents?|reduces?|increases?|improves?|eliminates?)\s+(.+?)(?=\.|,|;)',
-                r'(\w+(?:\s+\w+)*)\s+(applies?\s+to|governs?|regulates?|oversees?)\s+(.+?)(?=\.|,|;)',
+                # Capture complete noun phrases as subjects (not fragments)
+                r'([A-Z][\w\s]+?(?:system|process|method|approach|technique|model|framework|algorithm|tool|service|department|agency|administration|organization|company|entity)s?)\s+(requires?|enforces?|provides?|maintains?|conducts?|issues?)\s+(.+?)(?=\.|,|;)',
+                r'([A-Z][\w\s]+?(?:system|process|method|approach|technique|model|framework|algorithm|tool|service|department|agency|administration|organization|company|entity)s?)\s+(prevents?|reduces?|increases?|improves?|eliminates?|enhances?|optimizes?)\s+(.+?)(?=\.|,|;)',
+                r'([A-Z][\w\s]+?(?:system|process|method|approach|technique|model|framework|algorithm|tool|service|department|agency|administration|organization|company|entity)s?)\s+(applies?\s+to|governs?|regulates?|oversees?|manages?|controls?)\s+(.+?)(?=\.|,|;)',
+                # Capture "The/This/That X" patterns
+                r'(?:The|This|That|These|Those|Our|Their)\s+([\w\s]+?)\s+(requires?|enforces?|provides?|maintains?|conducts?|issues?|prevents?|reduces?|increases?|improves?|eliminates?)\s+(.+?)(?=\.|,|;)',
+                # Capture pronoun references if clear
+                r'(It|They|He|She)\s+(requires?|enforces?|provides?|maintains?|conducts?|issues?|prevents?|reduces?|increases?|improves?|eliminates?)\s+(.+?)(?=\.|,|;)',
             ],
             
             'CausalFact': [
@@ -319,12 +375,64 @@ class SemanticFactExtractor:
         return normalized
     
     def _extract_regulation_citations(self, text: str, normalized_entities: Dict) -> List[RegulationCitation]:
-        """Extract regulation citations as structured facts"""
+        """Extract regulation citations using FLPC for 14.9x performance (Rule #12)"""
+        facts = []
+        
+        # Use FLPC engine if available, otherwise fallback to Python regex
+        if self.flpc_engine:
+            try:
+                # Use FLPC for high-performance pattern matching
+                flpc_results = self.flpc_engine.extract_entities(text, pattern_set="regulation")
+                regulation_matches = flpc_results.get('entities', {}).get('regulation', [])
+                
+                for match_info in regulation_matches:
+                    raw_text = match_info.get('text', '')
+                    start = match_info.get('start', 0)
+                    end = match_info.get('end', len(raw_text))
+                    
+                    # Determine authority and regulation
+                    if 'CFR' in raw_text:
+                        authority = 'Federal Government'
+                        reg_id = raw_text
+                    elif 'ISO' in raw_text:
+                        authority = 'International Organization for Standardization'
+                        reg_id = raw_text
+                    elif 'ANSI' in raw_text:
+                        authority = 'American National Standards Institute'
+                        reg_id = raw_text
+                    else:
+                        authority = 'Unknown'
+                        reg_id = raw_text
+                    
+                    fact = RegulationCitation(
+                        fact_type='RegulationCitation',
+                        confidence=0.7,
+                        span={'start': start, 'end': end},
+                        raw_text=raw_text,
+                        regulation_id=reg_id,
+                        issuing_authority=authority,
+                        subject_area='',
+                        normalized_entities=normalized_entities
+                    )
+                    facts.append(fact)
+                    
+            except Exception as e:
+                self.logger.semantics(f"⚠️ FLPC regulation extraction failed: {e}")
+                # Fallback to manual pattern matching
+                facts = self._extract_regulation_citations_fallback(text, normalized_entities)
+        else:
+            # Fallback to Python regex (40x slower)
+            facts = self._extract_regulation_citations_fallback(text, normalized_entities)
+            
+        return facts
+    
+    def _extract_regulation_citations_fallback(self, text: str, normalized_entities: Dict) -> List[RegulationCitation]:
+        """Fallback regulation extraction using Python regex (for when FLPC unavailable)"""
         facts = []
         
         for pattern in self.fact_patterns['RegulationCitation']:
             try:
-                for match in re.finditer(pattern, text, 0):
+                for match in re.finditer(pattern, text, re.MULTILINE | re.IGNORECASE):
                     raw_text = match.group(0)
                     
                     # Determine authority and regulation
@@ -343,7 +451,7 @@ class SemanticFactExtractor:
                     
                     fact = RegulationCitation(
                         fact_type='RegulationCitation',
-                        confidence=0.9,
+                        confidence=0.7,
                         span={'start': match.start(), 'end': match.end()},
                         raw_text=raw_text,
                         regulation_id=reg_id,
@@ -352,36 +460,52 @@ class SemanticFactExtractor:
                         normalized_entities=normalized_entities
                     )
                     facts.append(fact)
-            except:
+            except Exception as e:
+                self.logger.semantics(f"Pattern {pattern} failed: {e}")
                 continue
                 
         return facts
     
     def _split_into_sentences(self, text: str) -> List[Tuple[str, int]]:
-        """Split text into sentences and return (sentence_text, start_position) tuples"""
+        """Split text into sentences using simple string operations (Rule #12 compliant)"""
         sentences = []
         
-        # Simple sentence boundary detection using periods, exclamation marks, question marks
-        import re as stdlib_re  # Use standard regex for simple splitting
-        
-        # Split on sentence boundaries while keeping track of positions
-        sentence_pattern = r'[.!?]+\s+'
+        # Simple sentence boundary detection without regex
+        sentence_endings = ['. ', '! ', '? ', '.\n', '!\n', '?\n']
         
         current_pos = 0
-        for match in stdlib_re.finditer(sentence_pattern, text):
-            sentence_end = match.start() + 1  # Include the punctuation
-            sentence_text = text[current_pos:sentence_end].strip()
+        
+        while current_pos < len(text):
+            # Find next sentence boundary
+            next_boundary = len(text)
+            boundary_len = 0
+            
+            for ending in sentence_endings:
+                pos = text.find(ending, current_pos)
+                if pos != -1 and pos < next_boundary:
+                    next_boundary = pos + 1  # Include punctuation
+                    boundary_len = len(ending)
+            
+            # Extract sentence
+            sentence_text = text[current_pos:next_boundary].strip()
             
             if len(sentence_text) > 10:  # Skip very short fragments
                 sentences.append((sentence_text, current_pos))
             
-            current_pos = match.end()
+            # Move to next sentence
+            if next_boundary >= len(text):
+                # No more boundaries found - we're done
+                break
+            
+            current_pos = next_boundary + boundary_len - 1
+            
+            # Skip whitespace
+            while current_pos < len(text) and text[current_pos].isspace():
+                current_pos += 1
         
-        # Add final sentence if text doesn't end with punctuation
-        if current_pos < len(text):
-            final_sentence = text[current_pos:].strip()
-            if len(final_sentence) > 10:
-                sentences.append((final_sentence, current_pos))
+        # Handle case where no boundaries found (single sentence)
+        if not sentences and len(text.strip()) > 10:
+            sentences.append((text.strip(), 0))
         
         return sentences
     
@@ -411,7 +535,7 @@ class SemanticFactExtractor:
                         
                         fact = Requirement(
                             fact_type='Requirement',
-                            confidence=0.85,
+                            confidence=0.65,  # Lowered from 0.85
                             span={'start': sentence_start + match.start(), 'end': sentence_start + match.end()},
                             raw_text=match.group(0),
                             requirement_text=requirement_text,
@@ -456,7 +580,7 @@ class SemanticFactExtractor:
                     
                     fact = FinancialImpact(
                         fact_type='FinancialImpact',
-                        confidence=0.8,
+                        confidence=0.6,  # Lowered from 0.8
                         span={'start': match.start(), 'end': match.end()},
                         raw_text=raw_text,
                         amount=amount,
@@ -562,8 +686,14 @@ class SemanticFactExtractor:
         return ""
     
     def _extract_action_facts(self, text: str, normalized_entities: Dict) -> List[ActionFact]:
-        """Extract action facts (subject-verb-object)"""
+        """Extract action facts (subject-verb-object) with quality validation"""
         facts = []
+        
+        # Words that indicate incomplete subjects
+        incomplete_subject_markers = {
+            'such', 'as', 'like', 'including', 'with', 'without', 'for', 'to', 
+            'from', 'by', 'of', 'in', 'on', 'at', 'the', 'a', 'an'
+        }
         
         for pattern in self.fact_patterns['ActionFact']:
             try:
@@ -572,14 +702,55 @@ class SemanticFactExtractor:
                     action_verb = match.group(2).strip()
                     object_text = match.group(3).strip()
                     
+                    # Quality validation: Skip if subject is incomplete or too short
+                    subject_words = subject.split()
+                    if len(subject_words) < 2:  # Single word subjects are usually poor
+                        continue
+                    
+                    # Check if subject starts or ends with incomplete markers
+                    if subject_words[0].lower() in incomplete_subject_markers:
+                        continue
+                    if subject_words[-1].lower() in incomplete_subject_markers:
+                        continue
+                        
+                    # Skip if subject is mostly function words
+                    content_words = [w for w in subject_words if w.lower() not in incomplete_subject_markers]
+                    if len(content_words) < len(subject_words) * 0.5:  # Less than 50% content words
+                        continue
+                    
+                    # Extract modifiers from surrounding context
+                    context_start = max(0, match.start() - 50)
+                    context_end = min(len(text), match.end() + 50)
+                    context = text[context_start:context_end]
+                    
+                    # Look for modifying phrases
+                    modifiers = []
+                    modifier_patterns = [
+                        r'(?:in|at|on|during|through|via|using|with)\s+[^,\.;]+',
+                        r'(?:for|to|from|by)\s+[^,\.;]+',
+                        r'(?:when|while|if|unless|although|because)\s+[^,\.;]+'
+                    ]
+                    
+                    for mod_pattern in modifier_patterns:
+                        mod_matches = re.findall(mod_pattern, context, re.IGNORECASE)
+                        modifiers.extend([m.strip() for m in mod_matches[:2]])  # Limit to 2 modifiers per pattern
+                    
+                    # Calculate confidence based on quality
+                    confidence = 0.75
+                    if len(subject_words) >= 3 and len(content_words) >= 2:
+                        confidence = 0.85
+                    if modifiers:
+                        confidence += 0.1
+                    
                     fact = ActionFact(
                         fact_type='ActionFact',
-                        confidence=0.75,
+                        confidence=min(confidence, 0.95),
                         span={'start': match.start(), 'end': match.end()},
                         raw_text=match.group(0),
                         subject=subject,
                         action_verb=action_verb,
                         object=object_text,
+                        modifiers=modifiers[:3],  # Limit to 3 most relevant modifiers
                         normalized_entities=normalized_entities
                     )
                     facts.append(fact)
@@ -651,7 +822,7 @@ class SemanticFactExtractor:
         from utils.worker_utils import set_worker_id
         set_worker_id(f"Person-{worker_id}")
         
-        return self._create_dynamic_semantic_fact(entity_type, entity, markdown_content)
+        return self._create_intelligent_semantic_fact(entity_type, entity, markdown_content)
     
     def _promote_yaml_entities_to_facts(self, existing_entities: Dict, markdown_content: str) -> Dict[str, List]:
         """Dynamic promotion of any YAML entities to structured semantic facts"""
@@ -703,7 +874,7 @@ class SemanticFactExtractor:
                 for entity in entities:
                     if isinstance(entity, dict):
                         # Create semantic fact based on entity type
-                        semantic_fact = self._create_dynamic_semantic_fact(entity_type, entity, markdown_content)
+                        semantic_fact = self._create_intelligent_semantic_fact(entity_type, entity, markdown_content)
                         if semantic_fact:  # Only add non-None facts
                             promoted_facts[entity_type].append(semantic_fact)
                         elif entity_type == 'person':
@@ -737,28 +908,412 @@ class SemanticFactExtractor:
         # Strip leading/trailing whitespace
         return cleaned.strip()
     
-    def _create_dynamic_semantic_fact(self, entity_type: str, entity: Dict, context: str) -> Optional[Dict]:
-        """Create semantic fact dynamically based on entity type"""
+    def _create_intelligent_semantic_fact(self, entity_type: str, entity: Dict, context: str) -> Optional[Dict]:
+        """Create meaningful semantic facts based on entity type and context analysis"""
         # EFFICIENCY: Early validation - check if entity has valid content before expensive processing
         raw_value = entity.get('value', entity.get('text', ''))
         if not raw_value or not raw_value.strip():
-            # Skip logging for clearly empty entities - no need to spam logs
             return None
             
         # Apply universal text cleaning to all text fields
         raw_text = self._universal_text_clean(raw_value)
         canonical_name = self._universal_text_clean(self._get_canonical_name(raw_value, entity_type))
         
-        base_data = {
-            'fact_type': f"{entity_type.title()}Fact",
-            'confidence': 0.85,
-            'span': entity.get('span', {}),
-            'raw_text': raw_text,
-            'entity_type': entity_type,
-            'canonical_name': canonical_name,
-            'extraction_layer': 'semantic_promotion'
+        # Filter out meaningless entities
+        if self._is_meaningless_entity(raw_text, entity_type):
+            return None
+            
+        # Create intelligent facts based on entity type and context
+        fact = None
+        if entity_type == 'org':
+            fact = self._create_organization_fact(raw_text, canonical_name, entity, context)
+        elif entity_type == 'gpe' or entity_type == 'location':
+            fact = self._create_geographic_fact(raw_text, canonical_name, entity, context)
+        elif entity_type == 'person':
+            fact = self._create_person_context_fact(raw_text, canonical_name, entity, context)
+        else:
+            # For other entity types, create minimal contextual facts
+            fact = self._create_contextual_fact(entity_type, raw_text, canonical_name, entity, context)
+        
+        # Filter out facts with no meaningful context
+        if fact:
+            context = fact.get('context_summary', '')
+            if not context or context == 'No specific context found' or context.strip() == '':
+                return None
+            
+        return fact
+    
+    def _is_meaningless_entity(self, text: str, entity_type: str) -> bool:
+        """Filter out meaningless entities that shouldn't become facts"""
+        meaningless_words = {
+            'place', 'time', 'work', 'part', 'way', 'day', 'year', 'area', 'case', 
+            'hand', 'side', 'fact', 'point', 'right', 'thing', 'world', 'life',
+            'system', 'group', 'number', 'part', 'water', 'course', 'state'
         }
         
+        # Filter very short or meaningless organization names
+        if entity_type == 'org' and (len(text) < 3 or text.lower() in meaningless_words):
+            return True
+            
+        # Filter generic location words  
+        if entity_type in ['gpe', 'location'] and text.lower() in meaningless_words:
+            return True
+            
+        return False
+    
+    def _create_organization_fact(self, raw_text: str, canonical_name: str, entity: Dict, context: str) -> Dict:
+        """Create intelligent organization facts with regulatory/business context"""
+        # Detect if this is a regulatory authority
+        regulatory_keywords = ['administration', 'agency', 'bureau', 'commission', 'department', 'authority']
+        is_regulatory = any(keyword in raw_text.lower() for keyword in regulatory_keywords)
+        
+        if is_regulatory or 'OSHA' in raw_text or 'EPA' in raw_text:
+            return {
+                'fact_type': 'RegulatoryAuthorityFact',
+                'confidence': 0.9,
+                'span': entity.get('span', {}),
+                'raw_text': raw_text,
+                'organization_name': canonical_name,
+                'full_name': self._expand_regulatory_acronym(raw_text),
+                'authority_type': self._classify_authority_type(raw_text),
+                'regulatory_scope': self._extract_regulatory_scope(context, raw_text),
+                'jurisdiction': self._determine_jurisdiction(raw_text),
+                'extraction_layer': 'intelligent_analysis'
+            }
+        else:
+            return {
+                'fact_type': 'CompanyFact', 
+                'confidence': 0.85,
+                'span': entity.get('span', {}),
+                'raw_text': raw_text,
+                'company_name': canonical_name,
+                'industry_sector': self._classify_industry_sector(context, raw_text),
+                'business_context': self._extract_business_context(context, raw_text),
+                'extraction_layer': 'intelligent_analysis'
+            }
+    
+    def _create_geographic_fact(self, raw_text: str, canonical_name: str, entity: Dict, context: str) -> Dict:
+        """Create intelligent geographic facts with jurisdictional context"""
+        return {
+            'fact_type': 'GeographicFact',
+            'confidence': 0.85, 
+            'span': entity.get('span', {}),
+            'raw_text': raw_text,
+            'location_name': canonical_name,
+            'location_type': self._classify_location_type(raw_text),
+            'regulatory_context': self._extract_regulatory_context(context, raw_text),
+            'jurisdiction_level': self._determine_geographic_jurisdiction(raw_text),
+            'extraction_layer': 'intelligent_analysis'
+        }
+        
+    def _create_person_context_fact(self, raw_text: str, canonical_name: str, entity: Dict, context: str) -> Dict:
+        """Create intelligent person facts with professional context"""
+        return {
+            'fact_type': 'PersonFact',
+            'confidence': 0.8,
+            'span': entity.get('span', {}),
+            'raw_text': raw_text,
+            'person_name': canonical_name,
+            'professional_role': self._extract_professional_role(context, raw_text),
+            'organizational_affiliation': self._extract_organizational_context(context, raw_text),
+            'expertise_domain': self._classify_expertise_domain(context, raw_text),
+            'extraction_layer': 'intelligent_analysis'
+        }
+        
+    def _create_contextual_fact(self, entity_type: str, raw_text: str, canonical_name: str, entity: Dict, context: str) -> Dict:
+        """Create contextual facts for other entity types"""
+        return {
+            'fact_type': f'{entity_type.title()}ContextFact',
+            'confidence': 0.6,  # Lowered from 0.8 to get more facts
+            'span': entity.get('span', {}), 
+            'raw_text': raw_text,
+            'canonical_name': canonical_name,
+            'context_summary': self._extract_context_summary(context, raw_text),
+            'extraction_layer': 'intelligent_analysis'
+        }
+        
+    # Helper methods for context analysis
+    def _expand_regulatory_acronym(self, text: str) -> str:
+        """Expand common regulatory acronyms"""
+        expansions = {
+            'OSHA': 'Occupational Safety and Health Administration',
+            'EPA': 'Environmental Protection Agency', 
+            'NIOSH': 'National Institute for Occupational Safety and Health',
+            'DOL': 'Department of Labor'
+        }
+        return expansions.get(text, text)
+        
+    def _classify_authority_type(self, text: str) -> str:
+        """Classify the type of regulatory authority"""
+        if 'administration' in text.lower():
+            return 'federal_administration'
+        elif 'agency' in text.lower():
+            return 'federal_agency'
+        elif 'department' in text.lower():
+            return 'federal_department'
+        else:
+            return 'regulatory_body'
+            
+    def _extract_regulatory_scope(self, context: str, org_name: str) -> str:
+        """Extract what this organization regulates based on context"""
+        if 'safety' in context.lower() or 'OSHA' in org_name:
+            return 'workplace_safety'
+        elif 'environment' in context.lower() or 'EPA' in org_name:
+            return 'environmental_protection'
+        else:
+            return 'general_regulatory'
+            
+    def _determine_jurisdiction(self, text: str) -> str:
+        """Determine jurisdiction level"""
+        return 'federal'  # Most regulatory agencies are federal
+        
+    def _classify_industry_sector(self, context: str, company: str) -> str:
+        """Classify industry sector based on context"""
+        if 'construction' in context.lower() or 'building' in context.lower():
+            return 'construction'
+        elif 'manufacturing' in context.lower():
+            return 'manufacturing'
+        else:
+            return 'general_business'
+            
+    def _extract_business_context(self, context: str, company: str) -> str:
+        """Extract business context"""
+        if 'safety' in context.lower():
+            return 'safety_context'
+        elif 'regulation' in context.lower():
+            return 'regulatory_context'
+        else:
+            return 'business_context'
+            
+    def _classify_location_type(self, location: str) -> str:
+        """Classify type of location"""
+        if len(location) == 2 and location.isupper():
+            return 'state_abbreviation'
+        elif 'county' in location.lower():
+            return 'county'
+        elif 'city' in location.lower():
+            return 'city'
+        else:
+            return 'general_location'
+            
+    def _extract_regulatory_context(self, context: str, location: str) -> str:
+        """Extract regulatory context for location"""
+        if 'OSHA' in context or 'federal' in context.lower():
+            return 'federal_jurisdiction'
+        else:
+            return 'state_local_jurisdiction'
+            
+    def _determine_geographic_jurisdiction(self, location: str) -> str:
+        """Determine jurisdiction level for geographic entity"""
+        if len(location) == 2 and location.isupper():
+            return 'state'
+        else:
+            return 'local'
+            
+    def _extract_context_summary(self, context: str, entity: str) -> str:
+        """Extract clean, readable sentence containing the entity (no markup or tags)"""
+        # First, clean the context of all processing artifacts using string operations
+        cleaned_context = context
+        
+        # Remove entity tags like ||UC Berkeley||org110|| using string replacement
+        while '||' in cleaned_context:
+            start = cleaned_context.find('||')
+            if start == -1:
+                break
+            
+            # Find the content and end tag
+            content_start = start + 2
+            content_end = cleaned_context.find('||', content_start)
+            if content_end == -1:
+                break
+            
+            # Find the closing tag marker (like org110||)
+            final_end = cleaned_context.find('||', content_end + 2)
+            if final_end == -1:
+                final_end = content_end + 2
+            else:
+                final_end += 2
+            
+            # Extract the clean content and replace the tagged version
+            content = cleaned_context[content_start:content_end]
+            cleaned_context = cleaned_context[:start] + content + cleaned_context[final_end:]
+        
+        # Remove markdown formatting using string operations
+        # Remove **bold**
+        while '**' in cleaned_context:
+            start = cleaned_context.find('**')
+            end = cleaned_context.find('**', start + 2)
+            if start == -1 or end == -1:
+                break
+            content = cleaned_context[start + 2:end]
+            cleaned_context = cleaned_context[:start] + content + cleaned_context[end + 2:]
+        
+        # Remove *italic*
+        while '*' in cleaned_context:
+            start = cleaned_context.find('*')
+            end = cleaned_context.find('*', start + 1)
+            if start == -1 or end == -1:
+                break
+            content = cleaned_context[start + 1:end]
+            cleaned_context = cleaned_context[:start] + content + cleaned_context[end + 1:]
+        
+        # Remove markdown headers and page markers
+        lines = cleaned_context.split('\n')
+        cleaned_lines = []
+        for line in lines:
+            line = line.strip()
+            # Skip headers and page markers
+            if line.startswith('#') or line.startswith('## Page') or line.startswith('I '):
+                continue
+            if line:
+                cleaned_lines.append(line)
+        
+        # Rejoin and clean whitespace
+        cleaned_context = ' '.join(' '.join(cleaned_lines).split())
+        
+        # Find sentences containing the entity
+        entity_lower = entity.lower()
+        
+        # Better sentence splitting - look for complete sentences with proper boundaries
+        sentences = []
+        
+        # Split by sentence endings followed by capital letters or common sentence starters
+        potential_sentences = []
+        current = ""
+        
+        i = 0
+        while i < len(cleaned_context):
+            char = cleaned_context[i]
+            current += char
+            
+            # Check for sentence ending
+            if char in '.!?':
+                # Look ahead to see if this is a real sentence ending
+                next_chars = cleaned_context[i+1:i+4] if i+1 < len(cleaned_context) else ""
+                
+                # Real sentence ending if followed by space + capital letter or end of text
+                if (len(next_chars) >= 2 and next_chars[0] == ' ' and next_chars[1].isupper()) or i+1 >= len(cleaned_context):
+                    # Make sure sentence is substantial (not just abbreviations)
+                    if len(current.strip()) > 20:  # Minimum meaningful sentence length
+                        potential_sentences.append(current.strip())
+                        current = ""
+                # Skip common abbreviations that shouldn't split sentences
+                elif any(abbrev in current[-10:].lower() for abbrev in ['dr.', 'mr.', 'mrs.', 'vs.', 'etc.', 'inc.', 'ltd.']):
+                    pass  # Continue building sentence
+                else:
+                    # Check if we have a meaningful sentence boundary
+                    if len(current.strip()) > 15:
+                        potential_sentences.append(current.strip())
+                        current = ""
+            
+            i += 1
+        
+        # Add any remaining content as a sentence if substantial
+        if current.strip() and len(current.strip()) > 15:
+            potential_sentences.append(current.strip())
+        
+        sentences = potential_sentences
+        
+        # Find the best sentence containing the entity
+        best_sentence = None
+        for sentence in sentences:
+            if entity_lower in sentence.lower():
+                # Clean the sentence
+                clean_sentence = sentence.strip()
+                # Ensure proper ending
+                if clean_sentence and clean_sentence[-1] not in '.!?':
+                    clean_sentence += '.'
+                # Prefer longer, more informative sentences
+                if not best_sentence or len(clean_sentence) > len(best_sentence):
+                    best_sentence = clean_sentence
+        
+        if best_sentence:
+            return best_sentence
+        
+        # Fallback: create a complete sentence window around the entity
+        if entity_lower in cleaned_context.lower():
+            pos = cleaned_context.lower().find(entity_lower)
+            
+            # Find the start of the sentence containing the entity
+            sentence_start = 0
+            for i in range(pos - 1, -1, -1):
+                if cleaned_context[i] in '.!?' and i > 0:
+                    # Check if this is a real sentence boundary
+                    if i + 1 < len(cleaned_context) and cleaned_context[i + 1] == ' ':
+                        sentence_start = i + 2  # Start after ". "
+                        break
+            
+            # Find the end of the sentence containing the entity
+            sentence_end = len(cleaned_context)
+            for i in range(pos + len(entity), len(cleaned_context)):
+                if cleaned_context[i] in '.!?':
+                    # Check if this is a real sentence boundary
+                    if i + 1 >= len(cleaned_context) or (cleaned_context[i + 1] == ' ' and 
+                        i + 2 < len(cleaned_context) and cleaned_context[i + 2].isupper()):
+                        sentence_end = i + 1
+                        break
+            
+            context_window = cleaned_context[sentence_start:sentence_end].strip()
+            
+            # If we got a very short fragment, expand to get more context
+            if len(context_window) < 30:
+                # Get a larger window but try to end at sentence boundaries
+                start = max(0, pos - 200)
+                end = min(len(cleaned_context), pos + len(entity) + 200)
+                
+                # Try to find sentence boundaries in this larger window
+                larger_window = cleaned_context[start:end]
+                
+                # Find the last complete sentence in this window
+                last_period = larger_window.rfind('.')
+                if last_period > len(entity) + 20:  # Make sure we have substantial content
+                    context_window = larger_window[:last_period + 1].strip()
+                else:
+                    context_window = larger_window.strip()
+                    if context_window and context_window[-1] not in '.!?':
+                        context_window += '.'
+            
+            if context_window:
+                return context_window
+        
+        return 'No specific context found'
+        
+    def _extract_professional_role(self, context: str, person_name: str) -> str:
+        """Extract professional role for person entity"""
+        role_patterns = ['CEO', 'CTO', 'researcher', 'professor', 'scientist', 'engineer', 'manager', 'director']
+        context_lower = context.lower()
+        
+        for role in role_patterns:
+            if role.lower() in context_lower:
+                return role
+        return 'unknown'
+    
+    def _extract_organizational_context(self, context: str, person_name: str) -> str:
+        """Extract organizational affiliation for person entity"""
+        # Simple pattern matching for common organizational indicators
+        org_patterns = ['University', 'Institute', 'Corporation', 'Company', 'Lab', 'Laboratory']
+        for pattern in org_patterns:
+            if pattern.lower() in context.lower():
+                return pattern
+        return 'unknown'
+    
+    def _classify_expertise_domain(self, context: str, person_name: str) -> str:
+        """Classify expertise domain for person entity"""
+        domain_keywords = {
+            'machine_learning': ['neural', 'learning', 'AI', 'artificial intelligence'],
+            'software_engineering': ['software', 'programming', 'development'],
+            'research': ['research', 'study', 'analysis'],
+            'business': ['business', 'management', 'executive']
+        }
+        
+        context_lower = context.lower()
+        for domain, keywords in domain_keywords.items():
+            if any(keyword.lower() in context_lower for keyword in keywords):
+                return domain
+        return 'general'
+        
+    def _create_intelligent_semantic_fact_body(self, entity_type: str, entity: Dict, markdown_content: str) -> Dict:
+        """Create intelligent semantic fact body"""
         # Add entity-specific semantic enrichment
         if entity_type == 'money':
             financial_context = self._universal_text_clean(self._extract_financial_context(entity, context))
@@ -1333,9 +1888,9 @@ class SemanticFactExtractor:
         if existing_entities:
             for entity_type, entities in existing_entities.items():
                 count = len(entities) if isinstance(entities, list) else 1
-                print(f"   - {entity_type}: {count} entities")
+                self.logger.logger.debug(f"   - {entity_type}: {count} entities")
         else:
-            print("   ⚠️  No entities found in YAML structure")
+            self.logger.logger.debug("   ⚠️  No entities found in YAML structure")
         
         # Step 3: Normalize entities from YAML
         normalized_entities = self._normalize_yaml_entities(existing_entities)
@@ -1359,14 +1914,30 @@ class SemanticFactExtractor:
         
         # Step 6: Extract meaningful semantic facts from markdown content (regulations, requirements, financial impacts)
         self.logger.logger.debug("🔍 Extracting semantic facts from markdown content...")
+        # Check if this is a regulatory/safety document for enhanced extraction
+        domain_classification = yaml_data.get('domain_classification', {})
+        top_domains = domain_classification.get('top_domains', [])
+        top_doc_types = domain_classification.get('top_document_types', [])
         
-        # Extract regulation citations
+        is_regulatory_document = (
+            'safety_compliance' in top_domains or 
+            'osha_report' in top_doc_types or 
+            'regulation' in top_doc_types
+        )
+        # Skip expensive markdown search if already identified as regulatory
+        if not is_regulatory_document:
+            is_regulatory_document = 'OSHA' in markdown_content
+        
+        if is_regulatory_document:
+            self.logger.logger.debug("🏛️ Regulatory document detected - enabling enhanced regulatory extraction")
+        
+        # Extract regulation citations (enhanced for regulatory docs)
         regulation_facts = self._extract_regulation_citations(markdown_content, normalized_entities)
         if regulation_facts:
             all_facts['regulation_citations'] = regulation_facts
             self.logger.logger.debug(f"   - regulation_citations: {len(regulation_facts)} regulatory citations found")
         
-        # Extract requirements and rules
+        # Extract requirements and rules (enhanced for regulatory docs)
         requirement_facts = self._extract_requirements(markdown_content, normalized_entities)
         if requirement_facts:
             all_facts['requirements'] = requirement_facts
@@ -1439,10 +2010,18 @@ class SemanticFactExtractor:
         """
         self.logger.entity("🧠 Starting semantic fact extraction from classification data...")
         
-        # Step 1: Get ALL entities from classification structure (both global and domain)
-        entities_section = classification_data.get('raw_entities', {})
-        global_entities = entities_section.get('global_entities', {})
-        domain_entities = entities_section.get('domain_entities', {})
+        # Step 1: Get entities from classification structure (adapt to actual format)
+        raw_entities = classification_data.get('raw_entities', {})
+        
+        # Handle both nested and flat raw_entities structure
+        if 'global_entities' in raw_entities or 'domain_entities' in raw_entities:
+            # Nested structure
+            global_entities = raw_entities.get('global_entities', {})
+            domain_entities = raw_entities.get('domain_entities', {})
+        else:
+            # Flat structure - treat all raw_entities as global for now
+            global_entities = raw_entities
+            domain_entities = {}
         
         # STRUCTURED ENTITY LOGGING RULE: 2-line summary format for each layer
         # Line 1: Global entities summary
@@ -1563,7 +2142,7 @@ class SemanticFactExtractor:
         from utils.worker_utils import set_worker_id
         set_worker_id(f"ClassPerson-{worker_id}")
         
-        semantic_fact = self._create_dynamic_semantic_fact(entity_type, entity, markdown_content)
+        semantic_fact = self._create_intelligent_semantic_fact(entity_type, entity, markdown_content)
         if semantic_fact:
             # Add source information to semantic fact
             semantic_fact['extraction_source'] = source
@@ -1617,7 +2196,7 @@ class SemanticFactExtractor:
                 for entity in entities:
                     if isinstance(entity, dict):
                         # Create semantic fact based on entity type
-                        semantic_fact = self._create_dynamic_semantic_fact(entity_type, entity, markdown_content)
+                        semantic_fact = self._create_intelligent_semantic_fact(entity_type, entity, markdown_content)
                         if semantic_fact:
                             # Add source information to semantic fact
                             semantic_fact['extraction_source'] = source

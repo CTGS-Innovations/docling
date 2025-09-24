@@ -855,9 +855,30 @@ class ServiceProcessor:
                 original_text = sentence_text[start_pos:end_pos + 1]
                 
                 # Only add reasonable matches - filter out short ambiguous org names and common words
-                common_words = {'standard', 'addition', 'current', 'time', 'side', 'express', 'general', 'national', 'international', 'global', 'service', 'services', 'company', 'group', 'systems', 'solutions', 'technologies', 'management', 'development', 'research', 'institute', 'center', 'association', 'corporation', 'foundation'}
+                common_words = {
+                    # Original common words
+                    'standard', 'addition', 'current', 'time', 'side', 'express', 'general', 'national', 'international', 'global', 'service', 'services', 'company', 'group', 'systems', 'solutions', 'technologies', 'management', 'development', 'research', 'institute', 'center', 'association', 'corporation', 'foundation',
+                    # Common verbs that appear as false organizations
+                    'built', 'made', 'used', 'said', 'done', 'come', 'gone', 'seen', 'been', 'have', 'will', 'can', 'may', 'must', 'should', 'would', 'could', 'might',
+                    # Common nouns/adjectives/prepositions that appear as false organizations  
+                    'place', 'front', 'back', 'here', 'there', 'where', 'when', 'what', 'which', 'that', 'this', 'these', 'those',
+                    'above', 'below', 'under', 'over', 'into', 'onto', 'from', 'with', 'without', 'through', 'around', 'about',
+                    'good', 'bad', 'new', 'old', 'big', 'small', 'long', 'short', 'high', 'low', 'wide', 'narrow', 'deep', 'shallow',
+                    'right', 'left', 'up', 'down', 'in', 'out', 'on', 'off', 'at', 'by', 'for', 'to', 'of', 'and', 'or', 'but',
+                    # Common incomplete words/fragments
+                    'angl', 'ange', 'orkin', 'ment', 'tion', 'ing', 'ed', 'ly', 'er', 're', 'un', 'pre', 'pro', 'anti', 'non',
+                    # Technical/document artifacts
+                    'figure', 'table', 'section', 'page', 'line', 'item', 'part', 'step', 'note', 'see', 'ref', 'example',
+                    # Common single letters and short fragments that shouldn't be organizations
+                    'a', 'an', 'the', 'is', 'are', 'was', 'were', 'be', 'am', 'do', 'did', 'has', 'had', 'get', 'got', 'let', 'set', 'put', 'cut', 'run', 'go', 'no', 'so', 'my', 'me', 'we', 'us', 'he', 'she', 'it', 'they', 'you', 'your', 'our', 'his', 'her', 'its', 'their'
+                }
                 is_valid = (len(original_text) >= 4 or (entity_type != 'ORG' and len(original_text) > 2))
                 is_not_common_word = (entity_type != 'ORG' or original_text.lower() not in common_words)
+                
+                # Enhanced validation for single-word organizations
+                if entity_type == 'ORG' and is_valid and is_not_common_word:
+                    is_valid = self._validate_organization_entity(original_text, sentence_text, start_pos)
+                
                 if is_valid and is_not_common_word:
                     entity = {
                         'value': original_text,
@@ -1373,9 +1394,9 @@ class ServiceProcessor:
                             set_current_phase('semantic_analysis')
                             # Pages already counted in classification phase
                             
-                            # Real semantic extraction
+                            # Real semantic extraction with domain classification
                             self.semantic_analyzer.semantics(f"Extracting semantic facts: {doc.source_filename}")
-                            # Generate full document with YAML frontmatter for semantic extraction
+                            # Generate full document with YAML frontmatter (includes domain classification)
                             full_document = doc.generate_final_markdown()
                             semantic_facts = self.semantic_extractor.extract_semantic_facts(full_document)
                             
@@ -1625,6 +1646,152 @@ class ServiceProcessor:
         finally:
             # Restore original thread name
             threading.current_thread().name = original_name
+    
+    def _validate_organization_entity(self, original_text: str, sentence_text: str, start_pos: int) -> bool:
+        """
+        Confidence Scoring Cascade for Organization Detection
+        
+        Uses multi-stage detection with evidence-based scoring:
+        1. Multi-word organizations (highest confidence) 
+        2. Pattern-enhanced single words (medium-high confidence)
+        3. Bare single words (lowest confidence, strict validation)
+        
+        Args:
+            original_text: The matched organization candidate from corpus
+            sentence_text: The full sentence containing the match
+            start_pos: Position of match within sentence
+            
+        Returns:
+            True if confidence score >= threshold, False otherwise
+        """
+        # Import FLPC engine for high-performance pattern matching
+        from knowledge.extractors.fast_regex import FastRegexEngine
+        
+        # Create context window around the candidate (±100 characters for better context)
+        context_start = max(0, start_pos - 100)
+        context_end = min(len(sentence_text), start_pos + len(original_text) + 100)
+        context = sentence_text[context_start:context_end]
+        
+        # Initialize scoring system
+        confidence_score = 0.0
+        word_count = len(original_text.split())
+        word_length = len(original_text.strip())
+        
+        # BASE SCORES based on type
+        if word_count > 1:
+            # Multi-word organizations get high base score
+            confidence_score = 0.9
+        elif original_text[0].isupper() if original_text else False:
+            # Single word, capitalized
+            confidence_score = 0.3
+        else:
+            # Single word, not capitalized
+            confidence_score = 0.1
+        
+        # SHORT WORD PENALTY (words ≤4 characters need more evidence)
+        if word_count == 1 and word_length <= 4:
+            confidence_score *= 0.5  # Halve the base score for short words
+        
+        # Initialize FLPC engine for pattern matching
+        flpc_engine = FastRegexEngine()
+        
+        # EVIDENCE MODIFIERS - Each pattern adds to confidence
+        evidence_patterns = {
+            # HIGH VALUE EVIDENCE (+0.5)
+            'legal_suffix': (r'\b[A-Za-z0-9\-]*(?:Inc|LLC|Ltd|Corp|Co|SA|SPA|GmbH|PLC|AG|SAS|NV|BV)\b', 0.5),
+            'corporate_context': (r'\b[A-Za-z0-9\-]+\s+(?:Inc|LLC|Ltd|Corp|Co|Company|Group|Holdings|Ventures|Partners|Enterprise|Industries|Solutions|Technologies|Services|Consulting)\b', 0.5),
+            
+            # MEDIUM-HIGH VALUE EVIDENCE (+0.4)
+            'numeric_embedded': (r'\b[A-Za-z]*\d+[A-Za-z0-9]*\b', 0.4),
+            'numeric_prefix': (r'\b\d{1,5}[A-Za-z][A-Za-z0-9\-]*\b', 0.4),
+            'numeric_suffix': (r'\b[A-Za-z][A-Za-z0-9\-]*\d{1,5}\b', 0.4),
+            
+            # MEDIUM VALUE EVIDENCE (+0.3)
+            'executive_context': (r'\b(?:CEO|CTO|CFO|President|Founder|Chairman|Director)\s+(?:of|at)\s+[A-Za-z0-9\-]+\b', 0.3),
+            'business_suffix': (r'\b[A-Za-z]+(?:Bank|Air|Labs|Tech|Media|Systems|Motors|Foods|Pharma)\b', 0.3),
+            
+            # LOWER VALUE EVIDENCE (+0.2)
+            'caps_acronym': (r'\b[A-Z]{3,}\b', 0.35),  # Increased for all-caps acronyms
+            'camel_case': (r'\b[A-Z][a-z]+[A-Z][A-Za-z0-9]*\b', 0.2),
+            'dotted_initials': (r'\b(?:[A-Z]\.){2,}[A-Z]?\b', 0.2),
+            'hyphenated': (r'\b[A-Za-z0-9]+\-[A-Za-z0-9\-]+\b', 0.2),
+            'ampersand': (r'\b[A-Za-z0-9]+&[A-Za-z0-9]+\b', 0.2)
+        }
+        
+        # Check for evidence patterns and accumulate scores
+        candidate_lower = original_text.lower().strip()
+        evidence_found = []
+        
+        try:
+            for pattern_name, (pattern, score_modifier) in evidence_patterns.items():
+                matches = flpc_engine.findall(pattern, context)
+                if matches:
+                    # Check if any match contains or is near our candidate
+                    for match in matches:
+                        match_lower = match.lower()
+                        # Direct match or candidate is part of the pattern match
+                        if candidate_lower in match_lower or match_lower in candidate_lower:
+                            confidence_score += score_modifier
+                            evidence_found.append(pattern_name)
+                            break
+                        # Check proximity (within 20 chars)
+                        elif abs(context.lower().find(candidate_lower) - context.lower().find(match_lower)) <= 20:
+                            confidence_score += score_modifier * 0.5  # Half credit for proximity
+                            evidence_found.append(f"{pattern_name}_proximity")
+                            break
+                            
+        except Exception:
+            # FLPC fallback: use basic validation
+            if self._basic_organization_validation(original_text, context):
+                confidence_score += 0.3
+        
+        # SPECIAL RULES FOR COMMON WORDS
+        common_words_requiring_strong_evidence = {
+            'here', 'there', 'place', 'front', 'back', 'side', 'top', 'bottom',
+            'left', 'right', 'made', 'built', 'used', 'work', 'home', 'house',
+            'time', 'year', 'month', 'week', 'day', 'part', 'area', 'zone'
+        }
+        
+        if candidate_lower in common_words_requiring_strong_evidence:
+            # Common words need VERY strong evidence (threshold raised to 0.8)
+            return confidence_score >= 0.8
+        
+        # THRESHOLDS based on word characteristics
+        if word_count > 1:
+            # Multi-word: accept if score >= 0.5 (already starts at 0.9)
+            acceptance_threshold = 0.5
+        elif word_length <= 4:
+            # Short single words: need strong evidence (threshold 0.6)
+            acceptance_threshold = 0.6
+        else:
+            # Normal single words: standard threshold
+            acceptance_threshold = 0.5
+        
+        return confidence_score >= acceptance_threshold
+    
+    def _basic_organization_validation(self, original_text: str, context: str) -> bool:
+        """Fallback validation when FLPC patterns fail"""
+        context_lower = context.lower()
+        
+        # Basic corporate suffixes
+        corporate_indicators = [
+            'inc', 'llc', 'corp', 'ltd', 'company', 'co',
+            'group', 'holdings', 'ventures', 'enterprise'
+        ]
+        
+        # Check for corporate indicators near the candidate
+        candidate_lower = original_text.lower()
+        for indicator in corporate_indicators:
+            if indicator in context_lower:
+                return True
+        
+        # Check for executive titles
+        executive_titles = ['ceo', 'cto', 'cfo', 'president', 'founder', 'chairman', 'director']
+        for title in executive_titles:
+            if title in context_lower:
+                return True
+        
+        return False
 
 
 if __name__ == "__main__":

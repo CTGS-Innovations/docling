@@ -27,12 +27,11 @@ class Core8CorpusLoader:
         },
         'ORG': {
             'files': [
-                'organizations_2025_09_18.txt',
                 'unicorn_companies_2025_09_18.txt',
                 'investors_2025_09_18.txt'
             ],
             'tentative_files': ['pos_discovered_organizations.txt'],
-            'subfolders': []
+            'subfolders': ['org']  # Load multi-word and single-word organization files from org subfolder
         },
         'GPE': {
             'files': [
