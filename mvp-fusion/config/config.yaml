@@ -400,7 +400,8 @@ logging:
   verbosity: 1                 # Default: NORMAL mode (standard output)
   
   # Output options
-  file: "fusion_pipeline.log"  # Log file name (optional)
+  # file: "fusion_pipeline.log"  # Log file name (optional)
+  file: "MVP.log"  # Log file name (optional)
   console: true                # Display output to console
   use_colors: true             # Enable colored terminal output
   json_format: false           # Use JSON structured logging format
