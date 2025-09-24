@@ -196,13 +196,20 @@ def fast_json_loads(s: Union[str, bytes]) -> Any:
 # Convenience function for semantic fact files specifically
 def save_semantic_facts_fast(data: Dict[str, Any], file_path: str) -> None:
     """
-    Save semantic facts to file with high-performance formatting
+    Save semantic facts to file with high-performance formatting and automatic text cleaning
     
     Args:
         data: Semantic extraction results
         file_path: Output file path
     """
-    formatted_json = format_semantic_json_fast(data)
+    # Clean all text content before formatting to remove newlines and tags
+    try:
+        from utils.json_output_cleaner import clean_json_data
+        cleaned_data = clean_json_data(data)
+        formatted_json = format_semantic_json_fast(cleaned_data)
+    except ImportError:
+        # Fallback if cleaner not available
+        formatted_json = format_semantic_json_fast(data)
     
     with open(file_path, 'w', encoding='utf-8') as f:
         f.write(formatted_json)

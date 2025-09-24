@@ -1338,6 +1338,10 @@ class ServiceProcessor:
                                 set_current_phase('normalization')
                                 self.entity_normalizer_logger.normalization(f"🔄 Normalization Phase: Processing entities for canonicalization: {doc.source_filename}")
                                 
+                                # PRESERVE CLEAN MARKDOWN: Store original text for semantic analysis before normalization
+                                doc.clean_markdown_content = doc.markdown_content
+                                self.entity_normalizer_logger.normalization(f"📄 Clean markdown preserved for semantic analysis: {len(doc.clean_markdown_content)} chars")
+                                
                                 # Perform entity canonicalization and global text replacement
                                 normalization_result = self.entity_normalizer.normalize_entities_phase(
                                     entities, doc.markdown_content
@@ -1396,9 +1400,21 @@ class ServiceProcessor:
                             
                             # Intelligent semantic extraction with meaningful fact focus
                             self.semantic_analyzer.semantics(f"🧠 Intelligent semantic extraction (quality-focused SPO): {doc.source_filename}")
-                            # Generate full document with YAML frontmatter (includes domain classification)
-                            full_document = doc.generate_final_markdown()
-                            semantic_facts = self.semantic_extractor.extract_semantic_facts(full_document)
+                            
+                            # CLEAN TEXT SEMANTIC ANALYSIS: Use preserved clean markdown instead of normalized text
+                            if hasattr(doc, 'clean_markdown_content') and doc.clean_markdown_content:
+                                # Generate clean document with YAML frontmatter but using original markdown
+                                original_markdown = doc.markdown_content
+                                doc.markdown_content = doc.clean_markdown_content  # Temporarily use clean text
+                                full_clean_document = doc.generate_final_markdown()
+                                doc.markdown_content = original_markdown  # Restore normalized text
+                                
+                                self.semantic_analyzer.semantics(f"📄 Using clean text for semantic analysis ({len(doc.clean_markdown_content)} chars)")
+                                semantic_facts = self.semantic_extractor.extract_semantic_facts(full_clean_document)
+                            else:
+                                # Fallback to normalized text if clean text not available
+                                full_document = doc.generate_final_markdown()
+                                semantic_facts = self.semantic_extractor.extract_semantic_facts(full_document)
                             
                             if semantic_facts:
                                 # Store semantic data in document

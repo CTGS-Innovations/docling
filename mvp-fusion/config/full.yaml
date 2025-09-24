@@ -1,0 +1,452 @@
+# MVP-Fusion Configuration
+# ========================
+# High-Performance Document Processing Pipeline
+# Optimized for raw speed while maintaining output quality
+
+# MVP-Fusion Deployment Profiles
+deployment:
+  # Current active profile - change this one line to switch everything
+  active_profile: "local"
+  
+  # Available deployment profiles
+  profiles:
+    local:
+      name: "Local Development/CLI"
+      description: "High-performance local machine or development server"
+      memory_mb: 8192
+      memory_threshold: 0.8        # Use 80% of available memory
+      max_workers: 2
+      queue_size: 100
+      enabled: true
+      
+    cloudflare:
+      name: "Cloudflare Workers"
+      description: "Cloudflare edge computing with strict memory limits"
+      memory_mb: 128
+      memory_threshold: 0.7        # Conservative for edge deployment
+      max_workers: 2               # Limited CPU on edge
+      queue_size: 5
+      enabled: true
+      
+    aws:
+      name: "AWS Lambda/EC2"
+      description: "Amazon Web Services cloud deployment"
+      memory_mb: 512
+      memory_threshold: 0.8
+      max_workers: 4
+      queue_size: 20
+      enabled: true
+      
+    gcp:
+      name: "Google Cloud Platform"
+      description: "Google Cloud Functions/Compute Engine"
+      memory_mb: 1024
+      memory_threshold: 0.75
+      max_workers: 6
+      queue_size: 30
+      enabled: true
+      
+    docker:
+      name: "Docker Container"
+      description: "Containerized deployment with resource limits"
+      memory_mb: 2048
+      memory_threshold: 0.8
+      max_workers: 4
+      queue_size: 50
+      enabled: true
+      
+    disabled:
+      name: "No Memory Management"
+      description: "Disable memory management and queue limits"
+      enabled: false
+      # When disabled, use unlimited memory and workers from performance section
+
+# Global Performance Settings (fallback when deployment profile disabled)
+performance:
+  # Aggressive performance mode
+  mode: "extreme"  # Options: "balanced", "aggressive", "extreme"
+  
+  # Target performance metrics
+  target_pages_per_sec: 10000  # 50x improvement target
+  max_memory_usage_gb: 16      # Memory limit for processing
+  
+  # Processing strategy
+  enable_vectorization: true    # SIMD operations
+  enable_parallel_processing: true
+  max_workers: 2               # Test higher workers with connection pool optimization
+  
+  # Batch processing for efficiency
+  batch_size: 32               # Process 32 documents simultaneously
+  batch_timeout_seconds: 10    # Max time per batch
+
+# Input Configuration
+inputs:
+  # File sources
+  files: []
+  
+  # Directory sources - absolute paths for reliable processing
+  directories:
+    - "/home/corey/projects/docling/cli/data_complex"
+    - "/home/corey/projects/docling/cli/data"
+    - "/home/corey/projects/docling/cli/data_osha"
+  
+  # URL sources - can process web content directly
+  urls: []
+  
+  # URL file sources - files containing lists of URLs to process
+  url_files:
+    - "MVP-FOUNDERS-JOURNEY-50-URLS.md"
+  
+  # Skip file extensions for speed
+  skip_extensions:
+    - ".jpg"
+    - ".jpeg"
+    - ".png"
+    - ".gif"
+    - ".mp3"
+    - ".mp4"
+    - ".zip"
+    - ".tar"
+    - ".exe"
+  
+  # Performance limits
+  max_file_size_mb: 10.0       # Larger than MVP-Hyper for better throughput
+  timeout_per_file: 5          # Faster timeout for efficiency
+  
+  # URL-specific timeout settings
+  url_timeout_seconds: 15      # Primary URL download timeout
+  url_retry_timeout: 30        # Optional: retry timeout for failed URLs
+
+# Fusion Engine Configuration
+fusion_engine:
+  # Multi-engine strategy
+  engines:
+    aho_corasick:
+      enabled: true
+      priority: 1                # Highest priority - fastest
+      target_chars_per_sec: 50000000  # 50M chars/sec
+      
+    flpc_rust:
+      enabled: true
+      priority: 2                # Second priority
+      target_chars_per_sec: 69000000  # 69M chars/sec
+      
+    python_re:
+      enabled: false             # Disabled - fallback only
+      priority: 3                # Fallback for compatibility
+  
+  # Pattern routing strategy
+  routing:
+    # Use content analysis to select optimal engine
+    smart_routing: true
+    
+    # Route simple keywords to AC, complex patterns to FLPC
+    keyword_threshold: 0.8       # 80% keywords -> AC automaton
+    complexity_threshold: 0.3    # 30% complex -> FLPC regex
+    
+    # Early termination for speed
+    early_termination: true
+    confidence_threshold: 0.95   # Stop when 95% confident
+
+# Pattern Configuration
+patterns:
+  # Pattern set selection
+  pattern_sets:
+    universal_entities: true     # Money, dates, emails, phones
+    domain_keywords: true        # Safety, compliance, regulations
+    technical_terms: true        # Measurements, versions, URLs
+    
+  # Pattern optimization
+  optimization:
+    precompile_patterns: true    # Compile all patterns at startup
+    cache_results: true          # Cache pattern matches
+    cache_size_mb: 512           # 512MB pattern cache
+    
+  # Performance tuning
+  performance:
+    max_patterns_per_engine: 20  # Limit patterns per engine
+    pattern_timeout_ms: 100      # 100ms timeout per pattern
+    enable_pattern_profiling: true
+
+# Extractor Configuration
+extractor:
+  name: "highspeed_markdown_general"    # Default: high-speed markdown extraction
+  description: "Default high-performance extractor for general documents"
+
+# Clean Pipeline Architecture Configuration (NEW)
+pipeline:
+  # Use orchestrated pipeline with 7 isolated stages
+  use_orchestrated: true         # Enable orchestrated pipeline wrapper with working semantic extraction
+  
+  # Memory limits for edge deployment (CloudFlare Workers ready)
+  memory_limit_mb: 100           # Per document memory limit
+  service_memory_limit_mb: 1024  # Total service memory limit (1GB)
+  
+  # Clean Pipeline Phase Configuration
+  document_processing:
+    processor: "service_processor"    # Fallback processor when not using orchestrated
+    sidecar_test: null  # No sidecar needed for baseline testing
+    
+    # Performance targets
+    target_time_ms: 30               # Target: <30ms per document (vs 425ms current)
+    enable_performance_monitoring: true
+    
+  # Future configurable phases (currently handled within document processor)
+  pdf_conversion:
+    enabled: true
+    processor: "docling_extractor"   # Built into extractors
+    
+  classification:
+    enabled: true                    # Handled within document processor
+    processor: "embedded"
+    
+  entity_extraction:
+    enabled: true                    # Handled within document processor  
+    processor: "embedded"
+    
+  normalization:
+    enabled: true                    # Handled within document processor
+    processor: "embedded"
+    
+  semantic_analysis:
+    enabled: true                    # Handled within document processor
+    processor: "embedded"
+  
+  # Legacy Stage control - enable/disable individual stages (DEPRECATED)
+  stages:
+    convert: true      # Stage 1: PDF/Doc -> Markdown conversion
+    classify: true     # Stage 2: Document classification & type detection
+    enrich: true       # Stage 3: Entity extraction & enrichment
+    normalize: true    # Stage 4: Entity canonicalization & text normalization
+    extract: true      # Stage 5: Semantic extraction & JSON generation
+  
+  # Stage-specific settings
+  convert:
+    # Document conversion settings
+    preserve_formatting: true
+    extract_tables: true
+    extract_images: false  # Skip for speed
+    ocr_fallback: true
+    
+  classify:
+    # Classification settings
+    confidence_threshold: 0.7
+    max_categories: 5
+    enable_entity_extraction: true
+    
+  enrich:
+    # Enrichment settings  
+    target_domains: ["safety", "compliance", "regulatory", "technical"]
+    max_entities_per_type: 100
+    confidence_threshold: 0.8
+    
+  normalize:
+    # Entity normalization settings
+    enabled: true
+    output_format: "canonical_with_id"     # Format: ||canonical||id||
+    include_raw_entities: false            # Debug flag - output raw entities to markdown
+    fuzzy_matching_threshold: 0.85         # Person name similarity threshold
+    canonical_preference: "longest"        # Choose longest variant as canonical form
+    
+    # Entity type-specific settings
+    entity_types:
+      person:
+        enable_fuzzy_matching: true
+        title_removal: true                # Remove Dr., Mr., etc.
+        suffix_removal: true               # Remove Jr., PhD, etc.
+      organization:
+        expand_acronyms: true              # EPA -> Environmental Protection Agency
+        normalize_legal_suffixes: true     # Inc, Corp, LLC handling
+      location:
+        use_usps_standards: true           # USPS address standardization
+        expand_abbreviations: true         # NYC -> New York City, NY
+      gpe:
+        use_iso_codes: true                # ISO 3166 country codes
+        canonical_names: true              # Official government names
+      date:
+        iso_format: true                   # ISO 8601 YYYY-MM-DD format
+        resolve_relative: true             # "today", "next week" -> actual dates
+      time:
+        hour_24_format: true               # 24-hour HH:MM:SS format
+        timezone_handling: true            # Timezone inference from context
+      money:
+        iso_currency_codes: true           # ISO 4217 currency codes (USD, EUR)
+        numeric_storage: true              # Store as numbers, not strings
+      measurement:
+        si_units: true                     # Convert to SI metric units
+        categorize_types: true             # Length, weight, temperature, etc.
+    
+    # Performance settings
+    performance:
+      target_processing_time_ms: 50       # Target: <50ms per document
+      memory_efficient: true              # CloudFlare Workers compatible
+      aho_corasick_enabled: true          # Use Aho-Corasick for global replacement
+      
+  extract:
+    # Semantic extraction settings
+    extract_facts: true
+    extract_rules: true
+    extract_relationships: true
+    max_facts: 50
+    max_rules: 20
+    
+  # POS Gap Discovery - Smart entity discovery for unknown entities
+  pos_gap_discovery:
+    enabled: false                    # FEATURE TOGGLE: Enable/disable POS gap discovery (DISABLED - causing 20x slowdown)
+    discover_organizations: true      # Discover unknown companies, agencies, institutions
+    discover_people: true             # Discover unknown person names
+    discover_locations: false         # Discover unknown locations (conservative default)
+    
+    # Performance settings
+    max_sentence_length: 200          # Skip very long sentences for performance
+    min_confidence_threshold: 0.7     # Minimum confidence for discoveries
+    max_discoveries_per_sentence: 3   # Limit discoveries per sentence
+    
+    # Auto-learning pipeline
+    auto_learn_enabled: true          # Feed discoveries back to AC corpus
+    learning_confidence_threshold: 0.8 # High-confidence threshold for learning
+    
+  # Tentative Corpus Auto-Learning - Safe learning with human validation
+  tentative_learning:
+    enabled: true                     # Enable tentative corpus auto-learning
+    auto_append_enabled: true         # Auto-append discoveries to tentative corpus
+    confidence_threshold: 0.8         # Minimum confidence for auto-learning
+    max_discoveries_per_session: 100  # Limit discoveries per processing session
+
+# Output Configuration
+output:
+  # Output directory structure
+  base_directory: "../output/fusion"
+  
+  # Output format control
+  formats:
+    enhanced_markdown: true    # Rich markdown with metadata headers
+    semantic_json: true        # Semantic extraction JSON
+    raw_markdown: false       # Plain markdown without metadata
+    performance_metrics: true  # Processing performance data
+  
+  # File organization
+  organization:
+    preserve_directory_structure: true
+    create_subdirectories: true
+    include_source_path: true
+  
+  # Metadata inclusion
+  metadata:
+    include_processing_stats: true
+    include_engine_info: true
+    include_timestamp: true
+    compact_json: true         # Minimize JSON size
+
+# File Processing Configuration
+files:
+  # Supported extensions (comprehensive Docling support)
+  supported_extensions:
+    - ".pdf"           # PDF documents
+    - ".docx"          # Microsoft Word (modern)
+    - ".doc"           # Microsoft Word (legacy)
+    - ".xlsx"          # Microsoft Excel (modern)
+    - ".xls"           # Microsoft Excel (legacy)
+    - ".xlsm"          # Microsoft Excel (with macros)
+    - ".pptx"          # Microsoft PowerPoint (modern)
+    - ".ppt"           # Microsoft PowerPoint (legacy)
+    - ".html"          # HTML web pages
+    - ".htm"           # HTML alternative extension
+    - ".xml"           # XML documents
+    - ".nxml"          # Scientific XML (PubMed/JATS)
+    - ".txt"           # Plain text files
+    - ".md"            # Markdown documents
+    - ".csv"           # Comma-separated values
+    - ".tsv"           # Tab-separated values
+    - ".json"          # JSON data files
+    - ".asciidoc"      # AsciiDoc format
+    - ".rst"           # reStructuredText
+    - ".rtf"           # Rich Text Format
+    - ".odt"           # OpenDocument Text
+    - ".epub"          # E-book format
+    - ".tex"           # LaTeX documents
+    - ".latex"         # LaTeX alternative extension
+    - ".org"           # Org-mode documents
+    - ".textile"       # Textile markup
+    - ".wiki"          # Wiki markup
+    - ".mediawiki"     # MediaWiki format
+    - ".adoc"          # AsciiDoc alternative
+    - ".yaml"          # YAML files (documentation/config)
+    - ".yml"           # YAML alternative
+    - ".toml"          # TOML configuration
+    - ".ini"           # INI configuration
+    - ".cfg"           # Configuration files
+    - ".conf"          # Configuration files
+    - ".log"           # Log files (for analysis)
+    - ".rdoc"          # Ruby documentation
+    - ".pod"           # Perl documentation
+  
+  # Processing options
+  recursive: true              # Process subdirectories
+  follow_symlinks: false       # Skip symbolic links
+  max_files_per_batch: 100     # Limit files per processing batch
+  
+  # Size and content limits
+  max_file_size_mb: 50         # Increased from 10MB for full processing
+  min_file_size_bytes: 100     # Skip tiny files
+  timeout_per_file_seconds: 30 # Generous timeout for large files
+
+# Logging and Monitoring
+# See config/logging_examples.yaml for more logging configuration examples
+logging:
+  # Verbosity levels:
+  #   0 = QUIET   (errors and final results only)
+  #   1 = NORMAL  (standard stage progress and key metrics) - DEFAULT
+  #   2 = VERBOSE (detailed progress with entity counts, memory usage)  
+  #   3 = DEBUG   (full diagnostic info with timestamps)
+  verbosity: 1                 # Default: NORMAL mode (standard output)
+  
+  # Output options
+  file: "fusion_pipeline.log"  # Log file name (optional)
+  console: true                # Display output to console
+  use_colors: true             # Enable colored terminal output
+  json_format: false           # Use JSON structured logging format
+  
+  # Performance and monitoring
+  include_performance: true    # Include performance metrics in output
+  max_log_size_mb: 100         # Rotate log files at this size
+
+# Entity Recognition Corpus Configuration
+corpus:
+  # Conservative person entity extraction settings
+  person_min_confidence: 0.7   # High accuracy threshold for person entities
+  
+  # Corpus file paths (relative to config directory or absolute paths)
+  # Using date-certain final corpus files - cleaned September 18, 2025
+  first_names_path: "knowledge/corpus/foundation_data/first_names_2025_09_18.txt"
+  last_names_path: "knowledge/corpus/foundation_data/last_names_2025_09_18.txt"  
+  organizations_path: "knowledge/corpus/foundation_data/organizations_100k.txt"
+  
+  # Person extraction behavior
+  person_extraction:
+    mode: "conservative"       # "conservative", "balanced", or "aggressive"
+    require_multiple_evidence: true
+    min_evidence_count: 3
+    blacklist_ambiguous: true
+    require_full_name: true    # Prefer full names over single names
+    single_name_requires_title: true
+    reject_company_names: true
+    
+    # Confidence thresholds by name type
+    thresholds:
+      single_name: 0.85        # Very high for single names
+      full_name: 0.7           # High for full names  
+      with_title: 0.65         # Slightly lower with titles
+      
+    # Penalty multipliers for ambiguous cases
+    penalties:
+      ambiguous_name: 0.5
+      single_name: 0.6
+      common_word: 0.7
+
+# Error Handling
+error_handling:
+  continue_on_error: true      # Don't stop pipeline on individual file errors
+  max_errors: 50               # Stop if too many errors
+  retry_failed: true           # Retry failed files once
+  create_error_report: true    # Generate error summary
