@@ -1,0 +1,91 @@
+# SPO Ownership Predicates - AC Pattern Dictionary
+# High-frequency exact match patterns for ownership/control relationships
+# Performance: O(1) AC lookup for each pattern
+
+# Direct ownership
+owns
+owned
+owner of
+belongs to
+possessed by
+holds
+held
+holds title to
+has ownership of
+controls
+controlled by
+manages
+managed by
+operates
+operated by
+runs
+run by
+administers
+administered by
+
+# Corporate control
+leads
+led by
+heads
+headed by
+directs
+directed by
+supervises
+supervised by
+oversees
+overseen by
+governs
+governed by
+commands
+commanded by
+rules
+ruled by
+dominates
+dominated by
+
+# Financial control
+invests in
+invested in
+backs
+backed by
+funds
+funded by
+finances
+financed by
+sponsors
+sponsored by
+supports
+supported by
+underwrites
+underwritten by
+
+# Asset relationships
+acquires
+acquired
+purchases
+purchased
+buys
+bought
+sells
+sold
+trades
+traded
+exchanges
+exchanged
+transfers
+transferred
+conveys
+conveyed
+
+# Legal ownership
+licensed to
+licensed by
+copyrighted by
+trademarked by
+patented by
+registered to
+assigned to
+allocated to
+granted to
+awarded to
+entitled to

@@ -1,0 +1,131 @@
+# SPO Relationship Predicates - AC Pattern Dictionary
+# High-frequency exact match patterns for personal/social relationships
+# Performance: O(1) AC lookup for each pattern
+
+# Family relationships
+married to
+spouse of
+wife of
+husband of
+partner of
+divorced from
+separated from
+engaged to
+dating
+child of
+parent of
+father of
+mother of
+son of
+daughter of
+sibling of
+brother of
+sister of
+related to
+family of
+relative of
+
+# Professional relationships
+works for
+employed by
+employee of
+colleague of
+coworker of
+supervisor of
+managed by
+reports to
+subordinate of
+assistant to
+secretary to
+advisor to
+consultant to
+mentor of
+mentored by
+trained by
+teaches
+taught by
+student of
+apprentice to
+
+# Business partnerships
+partner with
+associated with
+affiliated with
+allied with
+collaborates with
+works with
+cooperates with
+joint venture with
+merged with
+acquired by
+subsidiary of
+parent company of
+division of
+unit of
+branch of
+office of
+
+# Social connections
+friend of
+acquaintance of
+neighbor of
+roommate of
+classmate of
+teammate of
+member of
+belongs to
+associated with
+connected to
+linked to
+tied to
+bound to
+related to
+
+# Professional roles
+represents
+represented by
+serves
+served by
+assists
+assisted by
+supports
+supported by
+advises
+advised by
+counsels
+counseled by
+guides
+guided by
+leads
+led by
+
+# Legal relationships
+defendant in
+plaintiff in
+accused of
+charged with
+convicted of
+acquitted of
+sued by
+suing
+prosecuted by
+prosecuting
+defended by
+defending
+represented by
+counsel for
+
+# Academic relationships
+studies under
+student of
+professor of
+researcher at
+scholar at
+fellow at
+graduate of
+alumnus of
+attended
+enrolled in
+degree from
+certified by
+licensed by

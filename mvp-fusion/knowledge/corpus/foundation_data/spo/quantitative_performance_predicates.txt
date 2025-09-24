@@ -1,0 +1,147 @@
+# SPO Quantitative/Performance Predicates - AC Pattern Dictionary
+# High-frequency exact match patterns for quantitative and performance relationships
+# Performance: O(1) AC lookup for each pattern
+
+# Reporting and disclosure
+reported
+disclosed
+announced
+revealed
+published
+released
+stated
+declared
+claimed
+estimated
+projected
+forecasted
+predicted
+anticipated
+
+# Achievement and accomplishment
+achieved
+accomplished
+attained
+reached
+met
+exceeded
+surpassed
+outperformed
+delivered
+completed
+finished
+realized
+secured
+obtained
+
+# Increases and growth
+increased
+grew
+rose
+climbed
+jumped
+soared
+spiked
+surged
+expanded
+extended
+enlarged
+boosted
+enhanced
+improved
+strengthened
+
+# Decreases and decline
+reduced
+decreased
+fell
+dropped
+declined
+plummeted
+crashed
+collapsed
+shrank
+contracted
+diminished
+weakened
+deteriorated
+worsened
+slumped
+
+# Performance comparison
+outperformed
+underperformed
+exceeded
+surpassed
+beat
+topped
+led
+dominated
+lagged behind
+trailed
+matched
+equaled
+compared to
+relative to
+
+# Change and variation
+changed
+shifted
+moved
+varied
+fluctuated
+oscillated
+swung
+alternated
+transformed
+converted
+modified
+adjusted
+adapted
+evolved
+
+# Measurement and quantification
+measured
+calculated
+computed
+determined
+assessed
+evaluated
+valued
+priced
+cost
+worth
+estimated at
+valued at
+priced at
+totaled
+amounted to
+
+# Target achievement
+met targets
+exceeded goals
+fell short of
+missed targets
+achieved objectives
+accomplished goals
+realized expectations
+delivered results
+produced outcomes
+generated returns
+yielded profits
+earned revenue
+
+# Performance metrics
+scored
+ranked
+rated
+graded
+classified
+categorized
+positioned
+placed
+indexed
+benchmarked
+compared
+contrasted
+evaluated against

@@ -1,0 +1,88 @@
+# SPO State Predicates - AC Pattern Dictionary
+# High-frequency exact match patterns for state/being relationships
+# Performance: O(1) AC lookup for each pattern
+
+# Core state verbs
+is
+was
+are
+were
+be
+been
+being
+become
+became
+becomes
+remain
+remains
+remained
+appear
+appears
+appeared
+seem
+seems
+seemed
+exist
+exists
+existed
+continue
+continues
+continued
+stay
+stays
+stayed
+
+# State descriptors
+classified as
+identified as
+recognized as
+known as
+considered
+regarded as
+described as
+characterized as
+defined as
+labeled as
+tagged as
+marked as
+designated as
+categorized as
+viewed as
+seen as
+perceived as
+understood as
+
+# Existence states
+born
+created
+established
+formed
+founded
+launched
+started
+initiated
+originated
+developed
+built
+constructed
+manufactured
+produced
+generated
+made
+
+# Termination states
+died
+deceased
+passed away
+expired
+ended
+terminated
+closed
+dissolved
+disbanded
+abolished
+eliminated
+removed
+deleted
+destroyed
+demolished

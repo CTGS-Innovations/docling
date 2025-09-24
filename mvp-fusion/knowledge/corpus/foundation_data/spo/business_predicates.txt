@@ -1,0 +1,156 @@
+# SPO Business Predicates - AC Pattern Dictionary
+# High-frequency exact match patterns for business/commercial relationships
+# Performance: O(1) AC lookup for each pattern
+
+# Company formation
+founded
+established
+incorporated
+created
+launched
+started
+initiated
+formed
+organized
+chartered
+registered
+set up
+
+# Business transactions
+acquired
+purchased
+bought
+sold
+merged with
+spun off
+divested
+invested in
+funded
+financed
+backed
+sponsored
+underwrote
+capitalized
+
+# Market operations
+competes with
+competitor of
+rival of
+supplies
+supplied by
+vendor of
+customer of
+client of
+serves
+contracts with
+partners with
+distributes
+manufactures
+produces
+develops
+designs
+builds
+
+# Financial relationships
+pays
+paid by
+owes
+owed by
+lends to
+borrowed from
+credits
+debited
+invoices
+billed by
+charges
+charged by
+costs
+priced at
+valued at
+worth
+
+# Employment/hiring
+hires
+hired by
+employs
+employed by
+recruits
+recruited by
+fires
+fired by
+promotes
+promoted by
+demotes
+demoted by
+transfers
+transferred to
+
+# Product/service delivery
+provides
+supplied by
+delivers
+delivered by
+ships
+shipped by
+imports
+imported by
+exports
+exported to
+sells to
+buys from
+orders from
+sources from
+
+# Legal/regulatory
+complies with
+regulated by
+licensed by
+certified by
+audited by
+inspected by
+approved by
+authorized by
+sanctions
+sanctioned by
+penalized by
+fined by
+
+# Strategic relationships
+allies with
+joint venture with
+licenses to
+licensed from
+franchises
+franchised by
+outsources to
+subcontracts
+subcontracted by
+consults for
+advised by
+represents
+represented by
+
+# Market positioning
+leads
+leads in
+dominates
+competes in
+operates in
+present in
+active in
+specializes in
+focuses on
+targets
+serves
+
+# Performance metrics
+outperforms
+underperforms
+exceeds
+falls short of
+matches
+beats
+loses to
+gains from
+benefits from
+profits from

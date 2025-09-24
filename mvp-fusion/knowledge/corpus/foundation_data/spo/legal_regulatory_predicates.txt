@@ -1,0 +1,132 @@
+# SPO Legal/Regulatory Predicates - AC Pattern Dictionary
+# High-frequency exact match patterns for legal and regulatory relationships
+# Performance: O(1) AC lookup for each pattern
+
+# Enforcement actions
+fined
+penalized
+sanctioned
+punished
+disciplined
+censured
+warned
+cited
+charged
+prosecuted
+sued
+investigated
+audited
+inspected
+reviewed
+examined
+
+# Approvals and permissions
+approved
+approved by
+denied
+denied by
+permitted
+permitted by
+authorized
+authorized by
+licensed
+licensed by
+certified
+certified by
+accredited
+accredited by
+registered
+registered with
+endorsed
+endorsed by
+
+# Compliance relationships
+regulated by
+governed by
+overseen by
+supervised by
+monitored by
+controlled by
+subject to
+bound by
+complies with
+adheres to
+follows
+conforms to
+meets
+satisfies
+fulfills
+
+# Violations and non-compliance
+violates
+breaches
+infringes
+contravenes
+fails to comply with
+does not meet
+falls short of
+exceeds limits
+breaks
+transgresses
+offends against
+disregards
+ignores
+neglects
+
+# Legal proceedings
+filed against
+sued by
+prosecuted by
+defended by
+represented by
+testified against
+testified for
+convicted of
+acquitted of
+sentenced to
+appealed by
+settled with
+dismissed by
+ruled against
+ruled in favor of
+
+# Regulatory status
+subject to
+exempt from
+excluded from
+covered by
+protected by
+insured by
+bonded by
+guaranteed by
+secured by
+backed by
+underwritten by
+
+# Contractual relationships
+contracted with
+contracted by
+bound by
+obligated to
+committed to
+agreed to
+promised to
+guaranteed to
+responsible for
+liable for
+accountable to
+answerable to
+
+# Standards and requirements
+required to
+mandated to
+obliged to
+compelled to
+forced to
+must
+shall
+should
+supposed to
+expected to
+intended to
+designed to

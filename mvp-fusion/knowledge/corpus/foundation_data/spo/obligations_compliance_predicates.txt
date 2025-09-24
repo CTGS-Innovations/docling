@@ -1,0 +1,123 @@
+# SPO Obligations/Compliance Predicates - AC Pattern Dictionary
+# High-frequency exact match patterns for obligations and compliance relationships
+# Performance: O(1) AC lookup for each pattern
+
+# Mandatory obligations
+must
+shall
+required to
+obligated to
+bound to
+compelled to
+mandated to
+commanded to
+ordered to
+directed to
+instructed to
+supposed to
+expected to
+intended to
+
+# Permissions and rights
+permitted to
+allowed to
+authorized to
+licensed to
+entitled to
+qualified to
+eligible to
+approved to
+cleared to
+empowered to
+enabled to
+free to
+able to
+
+# Prohibitions and restrictions
+prohibited from
+forbidden from
+banned from
+barred from
+restricted from
+prevented from
+blocked from
+stopped from
+denied access to
+excluded from
+disqualified from
+ineligible for
+unable to
+not allowed to
+
+# Compliance actions
+complies with
+adheres to
+conforms to
+follows
+observes
+respects
+honors
+fulfills
+satisfies
+meets
+achieves
+accomplishes
+performs
+executes
+
+# Non-compliance
+failed to
+refused to
+neglected to
+omitted to
+avoided
+ignored
+disregarded
+violated
+breached
+contravened
+transgressed
+infringed
+defaulted on
+missed
+
+# Conditional obligations
+provided that
+subject to
+conditional on
+contingent upon
+dependent on
+based on
+assuming
+given that
+in case of
+unless
+except when
+only if
+as long as
+
+# Responsibility assignments
+responsible for
+accountable for
+liable for
+answerable for
+in charge of
+tasked with
+assigned to
+delegated to
+entrusted with
+charged with
+burdened with
+saddled with
+
+# Performance standards
+expected to achieve
+required to maintain
+obligated to ensure
+must demonstrate
+shall provide
+supposed to deliver
+intended to produce
+designed to accomplish
+meant to satisfy
+should result in

@@ -1,0 +1,110 @@
+# SPO Location Predicates - AC Pattern Dictionary
+# High-frequency exact match patterns for location/spatial relationships
+# Performance: O(1) AC lookup for each pattern
+
+# Basic location
+located in
+located at
+based in
+based at
+situated in
+situated at
+positioned in
+positioned at
+placed in
+placed at
+found in
+found at
+present in
+present at
+exists in
+exists at
+
+# Geographic relationships
+resides in
+lives in
+dwells in
+inhabits
+originates from
+comes from
+hails from
+born in
+native of
+citizen of
+resident of
+domiciled in
+
+# Business/organizational location
+headquarters in
+headquartered in
+offices in
+branches in
+facilities in
+operations in
+presence in
+established in
+incorporated in
+registered in
+chartered in
+
+# Physical positioning
+stands in
+sits in
+lies in
+rests in
+extends to
+reaches to
+spans across
+covers
+encompasses
+surrounds
+borders
+adjacent to
+next to
+near
+close to
+far from
+distant from
+
+# Movement/direction
+moves to
+travels to
+goes to
+arrives at
+departs from
+leaves from
+enters
+exits
+approaches
+heads to
+bound for
+destined for
+shipped to
+transported to
+delivered to
+
+# Containment
+contains
+includes
+houses
+holds
+stores
+keeps
+maintains
+preserves
+protects
+shelters
+
+# Regional/administrative
+governed by
+administered by
+ruled by
+controlled by
+managed by
+overseen by
+part of
+member of
+belongs to
+within
+outside
+beyond
