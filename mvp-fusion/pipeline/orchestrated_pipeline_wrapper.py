@@ -93,7 +93,9 @@ class Stage2_DocumentProcessing(StageInterface):
     def __init__(self, config: Dict[str, Any]):
         super().__init__(config)
         # Use existing service processor for document processing
-        self.service_processor = ServiceProcessor(config, max_workers=8)
+        # Use max_workers from config, default to 2 if not specified
+        max_workers = config.get('performance', {}).get('max_workers', 2)
+        self.service_processor = ServiceProcessor(config, max_workers=max_workers)
     
     def process(self, input_data: List[InMemoryDocument], metadata: Dict[str, Any]) -> Tuple[List[InMemoryDocument], float]:
         """Process documents using existing service processor logic"""

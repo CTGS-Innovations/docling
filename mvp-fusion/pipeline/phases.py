@@ -64,7 +64,7 @@ class PhaseDefinitions:
                 name=PhaseType.DOCUMENT_PROCESSING.value,
                 processor="service_processor",
                 target_time_ms=30,  # Main performance target
-                config={"max_workers": 8}
+                config={"max_workers": 2}  # Should use config value
             ),
             PhaseConfig(
                 name=PhaseType.CLASSIFICATION.value,

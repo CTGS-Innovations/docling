@@ -94,6 +94,10 @@ class ServiceProcessor:
         self.logger = get_fusion_logger(__name__)
         self.yaml_engine = YAMLMetadataEngine()  # Initialize YAML metadata engine
         
+        # Thread safety for file I/O operations
+        import threading
+        self._write_lock = threading.Lock()
+        
         # PERFORMANCE FIX: Initialize Aho-Corasick systems ONCE, not per document
         self._hybrid_system = None
         
@@ -1540,43 +1544,102 @@ class ServiceProcessor:
         
         self.service_coordinator.staging(f"🚀 Processing {len(file_paths)} files with enhanced ThreadPool architecture ({self.cpu_workers} workers)")
         
-        # SEQUENTIAL PROCESSING: Eliminate ThreadPool overhead entirely
+        # A/B TEST MODE: Compare ThreadPool vs Sequential processing
+        USE_SEQUENTIAL = False  # Use ThreadPool for parallel processing
         all_results = []
         failed_count = 0
         completed_count = 0
         
-        # TIMING: Measure sequential processing overhead
-        processing_start = time.perf_counter()
-        
-        # Process each file sequentially (no ThreadPool blocking)
-        for file_path in file_paths:
-            try:
-                doc = self._process_single_document(file_path)
-                if doc and doc.success:
-                    all_results.append(doc)
-                    completed_count += 1
-                    # Progress feedback every 100 files
-                    if completed_count % 100 == 0:
-                        self.service_coordinator.staging(f"📊 Processing: {completed_count}/{len(file_paths)} files...")
-                else:
+        if USE_SEQUENTIAL:
+            # SEQUENTIAL PROCESSING TEST
+            processing_start = time.perf_counter()
+            self.service_coordinator.staging(f"📊 TESTING: Sequential mode (no ThreadPool)")
+            
+            for file_path in file_paths:
+                try:
+                    doc = self._process_single_document(file_path)
+                    if doc and doc.success:
+                        all_results.append(doc)
+                        completed_count += 1
+                        if completed_count % 100 == 0:
+                            self.service_coordinator.staging(f"📊 Processing: {completed_count}/{len(file_paths)} files...")
+                    else:
+                        failed_count += 1
+                        self.logger.logger.warning(f"⚠️ Failed to process {file_path.name}")
+                except Exception as e:
                     failed_count += 1
-                    self.logger.logger.warning(f"⚠️ Failed to process {file_path.name}")
-            except Exception as e:
-                failed_count += 1
-                self.logger.logger.error(f"❌ Pipeline error for {file_path.name}: {e}")
+                    self.logger.logger.error(f"❌ Pipeline error for {file_path.name}: {e}")
+            
+            processing_time = (time.perf_counter() - processing_start) * 1000
+            self.service_coordinator.staging(f"📊 TIMING: Sequential processing took {processing_time:.2f}ms")
+            
+        else:
+            # THREADPOOL PROCESSING - Optimized for 2 cores
+            submission_start = time.perf_counter()
+            # Use exactly 2 workers to match our CPU allocation
+            actual_workers = self.cpu_workers  # Should be 2 from config
+            
+            with ThreadPoolExecutor(max_workers=actual_workers) as executor:
+                future_to_path = {
+                    executor.submit(self._process_single_document, file_path): file_path 
+                    for file_path in file_paths
+                }
+                
+                submission_time = (time.perf_counter() - submission_start) * 1000
+                self.service_coordinator.staging(f"📊 TIMING: Task submission took {submission_time:.2f}ms")
+                
+                collection_start = time.perf_counter()
+                
+                # Process files in batches of 10 as originally requested
+                from concurrent.futures import as_completed
+                
+                # Ensure output directory exists once
+                if output_dir is None:
+                    output_dir = Path.cwd()
+                output_dir.mkdir(parents=True, exist_ok=True)
+                
+                # Batch configuration
+                BATCH_SIZE = 20  # Process and write in batches of 10
+                current_batch = []
+                
+                for future in as_completed(future_to_path):
+                    file_path = future_to_path[future]
+                    try:
+                        doc = future.result()
+                        if doc and doc.success:
+                            all_results.append(doc)
+                            current_batch.append(doc)
+                            completed_count += 1
+                            
+                            # Write batch when we reach BATCH_SIZE
+                            if len(current_batch) >= BATCH_SIZE:
+                                self._write_results_to_disk(current_batch, output_dir)
+                                self.service_coordinator.staging(f"📊 Batch written: {completed_count}/{len(file_paths)} files processed ({BATCH_SIZE} files/batch)")
+                                current_batch = []  # Reset batch
+                            
+                        else:
+                            failed_count += 1
+                            self.logger.logger.warning(f"⚠️ Failed to process {file_path.name}")
+                    except Exception as e:
+                        failed_count += 1
+                        self.logger.logger.error(f"❌ Pipeline error for {file_path.name}: {e}")
+                
+                # Write any remaining files in the final batch
+                if current_batch:
+                    self._write_results_to_disk(current_batch, output_dir)
+                    self.service_coordinator.staging(f"📊 Final batch written: {len(current_batch)} files")
+                
+                collection_time = (time.perf_counter() - collection_start) * 1000
+                self.service_coordinator.staging(f"📊 TIMING: ThreadPool collection took {collection_time:.2f}ms")
         
-        processing_time = (time.perf_counter() - processing_start) * 1000
-        self.service_coordinator.staging(f"📊 TIMING: Sequential processing took {processing_time:.2f}ms")
-        
-        # TIMING: Measure batch I/O time
-        io_start = time.perf_counter()
-        
-        # Batch write all results at once for maximum I/O efficiency
-        if all_results:
+        # Files are now written immediately as they complete in ThreadPool mode
+        # No need for batch write at the end
+        if USE_SEQUENTIAL and all_results:
+            # Only do batch write if we're in sequential mode
+            io_start = time.perf_counter()
             self._write_results_to_disk(all_results, output_dir or Path.cwd())
-        
-        io_time = (time.perf_counter() - io_start) * 1000
-        self.service_coordinator.staging(f"📊 TIMING: Batch I/O write took {io_time:.2f}ms")
+            io_time = (time.perf_counter() - io_start) * 1000
+            self.service_coordinator.staging(f"📊 TIMING: Batch I/O write took {io_time:.2f}ms")
         
         completed_count = len(all_results)
         failed_count = len(file_paths) - completed_count
@@ -1683,8 +1746,9 @@ class ServiceProcessor:
             # Merge with basic content flags
             content_flags.update(comprehensive_analysis)
             
-            # Set up YAML frontmatter using existing template
-            doc.yaml_frontmatter = self.yaml_template.copy()
+            # Set up YAML frontmatter using existing template (FIXED: Deep copy nested dicts)
+            import copy
+            doc.yaml_frontmatter = copy.deepcopy(self.yaml_template)
             doc.yaml_frontmatter['conversion']['source_file'] = file_path.name
             doc.yaml_frontmatter['conversion']['conversion_time_ms'] = conversion_time
             doc.yaml_frontmatter['conversion']['page_count'] = doc.page_count
@@ -1820,7 +1884,7 @@ class ServiceProcessor:
                         }
                     
                     # Semantic fact extraction (OPTIONAL - can be disabled for speed)
-                    ENABLE_SEMANTIC = False  # Set to False for maximum speed
+                    ENABLE_SEMANTIC = True  # Enable Stage 6: Semantic Analysis
                     if ENABLE_SEMANTIC and hasattr(self, 'semantic_extractor') and self.semantic_extractor:
                         set_current_phase('semantic_analysis')
                         add_pages_processed(doc.page_count)
@@ -1929,9 +1993,18 @@ class ServiceProcessor:
                     yaml_header = force_flow_style_spans(yaml_header)
                     full_content = f"---\n{yaml_header}---\n\n{doc.markdown_content}"
                 
-                # Write markdown file
+                yaml_time = (time.perf_counter() - yaml_start) * 1000
+                total_yaml_time += yaml_time
+                
+                # TIMING: File write
+                write_start = time.perf_counter()
                 with open(md_path, 'w', encoding='utf-8') as f:
                     f.write(full_content)
+                write_time = (time.perf_counter() - write_start) * 1000
+                total_file_write_time += write_time
+                
+                if i < 3:  # Log first 3 files for analysis
+                    self.service_coordinator.staging(f"📊 I/O TIMING File {i+1}: YAML={yaml_time:.2f}ms, Write={write_time:.2f}ms")
                 
                 # ALWAYS write JSON file alongside Markdown for pipeline consistency
                 # Initialize empty if not present
@@ -1941,6 +2014,8 @@ class ServiceProcessor:
                 json_filename = f"{doc.source_stem}.json"
                 json_path = output_dir / json_filename
                 
+                # TIMING: JSON write
+                json_start = time.perf_counter()
                 try:
                     import orjson
                     with open(json_path, 'wb') as f:
@@ -1949,6 +2024,12 @@ class ServiceProcessor:
                     import json
                     with open(json_path, 'w', encoding='utf-8') as f:
                         json.dump(doc.semantic_json, f, indent=2)
+                
+                json_time = (time.perf_counter() - json_start) * 1000
+                total_json_write_time += json_time
+                
+                if i < 3:  # Log first 3 files for analysis  
+                    self.service_coordinator.staging(f"📊 I/O TIMING File {i+1}: JSON={json_time:.2f}ms")
                             
         except Exception as e:
             self.logger.logger.error(f"❌ Failed to write {doc.source_filename}: {e}")
@@ -1970,18 +2051,29 @@ class ServiceProcessor:
         # Return immediately - don't wait for writes to complete
     
     def _write_results_to_disk(self, results: List[InMemoryDocument], output_dir: Path):
-        """WRITER-IO phase: Write processed documents to disk"""
-        # Set thread name for I/O worker attribution 
-        original_name = threading.current_thread().name
-        threading.current_thread().name = "IOWorker-1"
-        
+        """WRITER-IO phase: Write batch of documents to disk"""
+        # Batch writing - no lock needed since we write batches sequentially
         try:
+            # Set thread name for I/O worker attribution 
+            original_name = threading.current_thread().name
+            threading.current_thread().name = "IOWorker-1"
+            
+            # DETAILED I/O TIMING ANALYSIS
+            import time
+            total_yaml_time = 0
+            total_file_write_time = 0
+            total_json_write_time = 0
+            
+            
             # Ensure output directory exists
+            mkdir_start = time.perf_counter()
             output_dir.mkdir(parents=True, exist_ok=True)
+            mkdir_time = (time.perf_counter() - mkdir_start) * 1000
+            self.service_coordinator.staging(f"📊 I/O TIMING: mkdir took {mkdir_time:.2f}ms")
             
             successful_writes = 0
             
-            for doc in results:
+            for i, doc in enumerate(results):
                 if doc.success and doc.markdown_content:
                     try:
                         # Debug what we have in the document
@@ -1993,6 +2085,9 @@ class ServiceProcessor:
                         # Write markdown file (with YAML frontmatter)
                         md_filename = f"{doc.source_stem}.md"
                         md_path = output_dir / md_filename
+                        
+                        # TIMING: YAML generation
+                        yaml_start = time.perf_counter()
                         
                         # Construct full markdown with YAML frontmatter (in correct order)
                         full_content = doc.markdown_content
@@ -2081,7 +2176,12 @@ class ServiceProcessor:
                             # Apply regex post-processing to guarantee flow style spans
                             yaml_header = force_flow_style_spans(yaml_header)
                             full_content = f"---\n{yaml_header}---\n\n{doc.markdown_content}"
-                            
+                        
+                        yaml_time = (time.perf_counter() - yaml_start) * 1000
+                        total_yaml_time += yaml_time
+                        
+                        # TIMING: File write
+                        write_start = time.perf_counter()
                         set_current_phase('file_writing')
                         # Get page count from document metadata
                         doc_page_count = doc.yaml_frontmatter.get('page_count', 0)
@@ -2089,6 +2189,12 @@ class ServiceProcessor:
                         self.phase_manager.log('file_writer', f"Writing markdown with YAML: {md_filename}")
                         with open(md_path, 'w', encoding='utf-8') as f:
                             f.write(full_content)
+                        
+                        write_time = (time.perf_counter() - write_start) * 1000
+                        total_file_write_time += write_time
+                        
+                        # TIMING: JSON write
+                        json_start = time.perf_counter()
                         
                         # Write JSON knowledge file if we have semantic data (HIGH-PERFORMANCE orjson)
                         if doc.semantic_json:
@@ -2111,6 +2217,9 @@ class ServiceProcessor:
                             set_current_phase('file_writing')
                             self.phase_manager.log('file_writer', f"� ️  No semantic JSON to write for {doc.source_filename}")
                         
+                        json_time = (time.perf_counter() - json_start) * 1000
+                        total_json_write_time += json_time
+                        
                         successful_writes += 1
                         
                     except Exception as e:
@@ -2119,6 +2228,13 @@ class ServiceProcessor:
             set_current_phase('file_writing')
             self.phase_manager.log('file_writer', f"Saved {successful_writes} files to {output_dir}")
             
+            # DETAILED I/O TIMING SUMMARY
+            self.service_coordinator.staging(f"📊 I/O BREAKDOWN: YAML gen: {total_yaml_time:.2f}ms, File writes: {total_file_write_time:.2f}ms, JSON writes: {total_json_write_time:.2f}ms")
+            self.service_coordinator.staging(f"📊 I/O TOTAL: {total_yaml_time + total_file_write_time + total_json_write_time:.2f}ms for {successful_writes} files ({(total_yaml_time + total_file_write_time + total_json_write_time)/successful_writes:.1f}ms/file)")
+            
+        except Exception as e:
+            self.logger.logger.error(f"❌ Batch write failed: {e}")
+            raise
         finally:
             # Restore original thread name
             threading.current_thread().name = original_name

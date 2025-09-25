@@ -59,7 +59,7 @@ class ServiceProcessorWrapper(AbstractProcessor):
         # Import and initialize the actual ServiceProcessor
         try:
             from pipeline.legacy.service_processor import ServiceProcessor
-            max_workers = config.get('max_workers', 8)
+            max_workers = config.get('max_workers', 2)  # Default to 2, not 8
             self.processor = ServiceProcessor(config, max_workers)
             self.name = "ServiceProcessor"
         except ImportError as e:
@@ -128,7 +128,7 @@ class FusionProcessorWrapper(AbstractProcessor):
             if isinstance(input_data, list):
                 files = input_data
                 output_dir = metadata.get('output_dir', Path.cwd())
-                max_workers = metadata.get('max_workers', 8)
+                max_workers = metadata.get('max_workers', 2)  # Default to 2, not 8
                 
                 # Create a minimal extractor for FusionPipeline
                 # This is a simplified approach - in practice you'd pass the real extractor

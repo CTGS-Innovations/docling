@@ -1,0 +1,80 @@
+{
+  "semantic_summary": {
+    "total_facts": 3,
+    "fact_types": {
+      "actionable_requirements": 2,
+      "measurement_facts": 1,
+      "spo_triplets": 3
+    },
+    "engine": "Standalone Intelligent SPO Extractor",
+    "performance_model": "Quality-Focused Meaningful Extraction",
+    "domain_context": "general",
+    "actionable_facts": 2,
+    "quality_threshold": 0.75
+  },
+  "facts": [
+    {
+      "subject": "Entity",
+      "predicate": "REQUIRED_TO",
+      "object": "completed on or before [Delivery Date], and payment shall be made in full to [Payment Account Info] within 30 days of delivery",
+      "confidence": 1.0,
+      "fact_type": "safety_requirements_fact",
+      "context": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. The delivery of GPUs shall be completed on or before [Delivery Date], and payment shall be..",
+      "span": {
+        "start": 638,
+        "end": 774
+      },
+      "actionable": true,
+      "extraction_layer": "intelligent_spo_analysis"
+    },
+    {
+      "subject": "Entity",
+      "predicate": "REQUIRED_TO",
+      "object": "governed by and construed in accordance with the laws of [Governing Law State]",
+      "confidence": 0.9500000000000001,
+      "fact_type": "safety_requirements_fact",
+      "context": "1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+      "span": {
+        "start": 1590,
+        "end": 1678
+      },
+      "actionable": true,
+      "extraction_layer": "intelligent_spo_analysis"
+    },
+    {
+      "subject": "Time Requirement",
+      "predicate": "HAS_VALUE",
+      "object": "30 days",
+      "confidence": 0.7999999999999999,
+      "fact_type": "measurement_requirements_fact",
+      "context": "rcitation ullamco laboris nisi ut aliquip ex ea commodo consequat. The delivery of GPUs shall be completed on or before [Delivery Date], and payment shall be made in full to [Payment Account Info].",
+      "span": {
+        "start": 748,
+        "end": 762
+      },
+      "actionable": false,
+      "extraction_layer": "intelligent_spo_analysis"
+    }
+  ],
+  "rules": [],
+  "relationships": [
+    {
+      "subject": "Entity",
+      "predicate": "REQUIRED_TO",
+      "object": "completed on or before [Delivery Date], and payment shall be made in full to [Payment Account Info] within 30 days of delivery",
+      "confidence": 1.0
+    },
+    {
+      "subject": "Entity",
+      "predicate": "REQUIRED_TO",
+      "object": "governed by and construed in accordance with the laws of [Governing Law State]",
+      "confidence": 0.9500000000000001
+    },
+    {
+      "subject": "Time Requirement",
+      "predicate": "HAS_VALUE",
+      "object": "30 days",
+      "confidence": 0.7999999999999999
+    }
+  ]
+}

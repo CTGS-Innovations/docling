@@ -1,0 +1,38 @@
+[
+  {
+    "batch_size": 10,
+    "total_time_seconds": 106.94310719298664,
+    "exit_code": 0,
+    "files_processed": 0,
+    "files_per_second": 0,
+    "avg_batch_time_ms": 0,
+    "io_efficiency": 0
+  },
+  {
+    "batch_size": 20,
+    "total_time_seconds": 101.7914072680287,
+    "exit_code": 0,
+    "files_processed": 0,
+    "files_per_second": 0,
+    "avg_batch_time_ms": 0,
+    "io_efficiency": 0
+  },
+  {
+    "batch_size": 40,
+    "total_time_seconds": 104.82622571999673,
+    "exit_code": 0,
+    "files_processed": 0,
+    "files_per_second": 0,
+    "avg_batch_time_ms": 0,
+    "io_efficiency": 0
+  },
+  {
+    "batch_size": 80,
+    "total_time_seconds": 104.69243190099951,
+    "exit_code": 0,
+    "files_processed": 0,
+    "files_per_second": 0,
+    "avg_batch_time_ms": 0,
+    "io_efficiency": 0
+  }
+]

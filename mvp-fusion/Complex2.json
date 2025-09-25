@@ -1,0 +1,54 @@
+{
+  "semantic_summary": {
+    "total_facts": 1,
+    "fact_types": {
+      "actionable_requirements": 1,
+      "compliance_facts": 1,
+      "spo_triplets": 1
+    },
+    "engine": "Standalone Intelligent SPO Extractor",
+    "performance_model": "Quality-Focused Meaningful Extraction",
+    "domain_context": "general",
+    "actionable_facts": 1,
+    "quality_threshold": 0.75
+  },
+  "facts": [
+    {
+      "subject": "Entity",
+      "predicate": "MUST_FOLLOW",
+      "object": "vision",
+      "confidence": 0.75,
+      "fact_type": "compliance_requirements_fact",
+      "context": "2022. Cmt: Convolutional neural networks meet vision transformers. In Proceedings of the IEEE/CVF con- ference on computer vision and pattern recognition, 12175– 12185.",
+      "span": {
+        "start": 35644,
+        "end": 35668
+      },
+      "actionable": true,
+      "extraction_layer": "intelligent_spo_analysis"
+    },
+    {
+      "subject": "Entity",
+      "predicate": "MUST_FOLLOW",
+      "object": "vision",
+      "confidence": 0.75,
+      "fact_type": "compliance_requirements_fact",
+      "context": "2022. Cmt: Convolutional neural networks meet vision transformers. In Proceedings of the IEEE/CVF con- ference on computer vision and pattern recognition, 12175– 12185.",
+      "span": {
+        "start": 35644,
+        "end": 35668
+      },
+      "actionable": true,
+      "extraction_layer": "intelligent_spo_analysis"
+    }
+  ],
+  "rules": [],
+  "relationships": [
+    {
+      "subject": "Entity",
+      "predicate": "MUST_FOLLOW",
+      "object": "vision",
+      "confidence": 0.75
+    }
+  ]
+}
