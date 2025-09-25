@@ -1,0 +1,72 @@
+🔬 ThreadPoolExecutor vs Queue Performance Test
+⚙️  Config: 2 workers, queue size 100
+------------------------------------------------------------
+📁 Found 20 test files
+🚀 Starting Performance Comparison
+Files to process: 20
+============================================================
+
+🔄 Test 1: Current Queue Approach
+----------------------------------------
+   Using real ServiceProcessor...
+
+======================================================================
+📈 CORE-8 INITIALIZATION SUMMARY
+----------------------------------------------------------------------
+Entity          Patterns        Engine                   
+----------------------------------------------------------------------
+PERSON                 498,064 Aho-Corasick ✅           
+ORG                    142,266 Aho-Corasick ✅           
+GPE                      3,247 Aho-Corasick ✅           
+LOC                      1,167 Aho-Corasick ✅           
+DATE             FLPC Compiled FLPC Engine ✅            
+TIME             FLPC Compiled FLPC Engine ✅            
+MONEY            FLPC Compiled FLPC Engine ✅            
+MEASUREMENT      FLPC Compiled FLPC Engine ✅            
+----------------------------------------------------------------------
+TOTAL                  644,744 786.7ms                  
+======================================================================
+   ✅ 2 files in 1685.33ms
+
+⚡ Test 2: ThreadPoolExecutor Approach
+----------------------------------------
+   ✅ 20 files in 11.84ms
+
+📄 Test 3: Direct Processing (Baseline)
+----------------------------------------
+   ✅ 20 files in 22.56ms
+
+============================================================
+📊 PERFORMANCE COMPARISON REPORT
+============================================================
+
+📈 Results (processing 20 files):
+------------------------------------------------------------
+Approach             Time (ms)    Files/sec    Status
+------------------------------------------------------------
+ServiceProcessor        1685.33         1.2  ✅ Success
+ThreadPoolExecutor        11.84      1689.8  ✅ Success
+Direct                    22.56       886.7  ✅ Success
+
+🏆 WINNER: ThreadPoolExecutor
+   Time: 11.84ms
+   Speed: 1689.8 files/sec
+
+📈 Performance Improvement:
+   142.39x faster than ServiceProcessor
+   Time saved: 1673.49ms
+
+💡 RECOMMENDATION:
+----------------------------------------
+✅ Replace ServiceProcessor queues with ThreadPoolExecutor
+   - Eliminates queue blocking issues
+   - Better performance and reliability
+   - Easier to maintain and debug
+
+🔧 Next Steps:
+----------------------------------------
+1. Update ServiceProcessor to use ThreadPoolExecutor
+2. Remove manual queue management code
+3. Test with larger document batches
+4. Deploy to production
+============================================================

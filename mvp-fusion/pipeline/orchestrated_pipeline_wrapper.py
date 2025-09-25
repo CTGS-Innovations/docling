@@ -321,7 +321,7 @@ class OrchestratedPipelineWrapper:
         self.service_processor = service_processor
         self.stages = []
         
-        self.logger.stage("🏗️ Orchestrated Pipeline Wrapper initialized with 7 stages")
+        # 7-stage orchestrated pipeline initialized
     
     def process(self, input_files: List[Path], metadata: Dict[str, Any]) -> Dict[str, Any]:
         """Process files through 7 pipeline stages using pre-initialized service processor"""

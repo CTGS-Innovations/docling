@@ -37,7 +37,7 @@ class HighPerformanceEntityMetadata:
     
     def __init__(self):
         self.logger = get_fusion_logger(__name__)
-        self._foundation_path = Path(__file__).parent / "knowledge/corpus/foundation_data"
+        self._foundation_path = Path(__file__).parent.parent / "knowledge/corpus/foundation_data"
         
         # Single Aho-Corasick automaton for ALL entities
         self.entity_automaton = None
@@ -156,9 +156,14 @@ class HighPerformanceEntityMetadata:
         NON-LINEAR: O(n + m) where n=text length, m=pattern count
         """
         
+        # Handle empty or invalid text
+        if not text or not isinstance(text, str):
+            return {'gpe': [], 'location': [], 'metadata': {'total_matches': 0, 'resolved_matches': 0, 'processing_method': 'aho_corasick_single_pass'}}
+        
         # Single pass through text to find ALL matches
         raw_matches = []
         text_lower = text.lower()
+        text_length = len(text)
         
         # PERFORMANCE: Single Aho-Corasick scan finds ALL entities
         for end_index, (entity_key, entity_type, subcategory) in self.entity_automaton.iter(text_lower):
@@ -166,8 +171,12 @@ class HighPerformanceEntityMetadata:
             entity_length = len(entity_key)
             start_index = end_index - entity_length + 1
             
-            # Word boundary check
-            if self._is_word_boundary(text, start_index, entity_length):
+            # Bounds checking to prevent string index errors
+            if start_index < 0 or end_index >= text_length:
+                continue
+            
+            # Word boundary check with bounds protection
+            if self._is_word_boundary_safe(text, start_index, entity_length):
                 match = EntityMatch(
                     text=text[start_index:end_index + 1],
                     entity_type=entity_type,
@@ -210,15 +219,28 @@ class HighPerformanceEntityMetadata:
             }
         }
     
-    def _is_word_boundary(self, text: str, start: int, length: int) -> bool:
-        """Fast word boundary check"""
+    def _is_word_boundary_safe(self, text: str, start: int, length: int) -> bool:
+        """Fast word boundary check with bounds protection"""
+        text_length = len(text)
         end = start + length
         
-        if start > 0 and text[start - 1].isalnum():
+        # Bounds checking
+        if start < 0 or end > text_length:
             return False
-        if end < len(text) and text[end].isalnum():
+        
+        # Check character before start
+        if start > 0 and start - 1 < text_length and text[start - 1].isalnum():
             return False
+            
+        # Check character after end
+        if end < text_length and text[end].isalnum():
+            return False
+            
         return True
+    
+    def _is_word_boundary(self, text: str, start: int, length: int) -> bool:
+        """Fast word boundary check (legacy - kept for compatibility)"""
+        return self._is_word_boundary_safe(text, start, length)
     
     def _resolve_overlaps_fast(self, matches: List[EntityMatch]) -> List[EntityMatch]:
         """

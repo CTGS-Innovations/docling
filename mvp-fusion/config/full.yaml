@@ -15,7 +15,7 @@ deployment:
       description: "High-performance local machine or development server"
       memory_mb: 8192
       memory_threshold: 0.8        # Use 80% of available memory
-      max_workers: 2
+      max_workers: 8
       queue_size: 100
       enabled: true
       
@@ -87,8 +87,9 @@ inputs:
   # Directory sources - absolute paths for reliable processing
   directories:
     - "/home/corey/projects/docling/cli/data_complex"
-    - "/home/corey/projects/docling/cli/data"
-    - "/home/corey/projects/docling/cli/data_osha"
+    - "/home/corey/projects/docling/cli/data"    
+    - "/home/corey/projects/docling/cli/data_osha"    
+
   
   # URL sources - can process web content directly
   urls: []

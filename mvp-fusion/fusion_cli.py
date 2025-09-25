@@ -100,7 +100,7 @@ class CleanFusionPipeline:
         from pipeline.orchestrated_pipeline_wrapper import OrchestratedPipelineWrapper
         self.orchestrated_pipeline = OrchestratedPipelineWrapper(self.config, self.service_processor)
         self.phases = []  # No individual phases needed - orchestrated handles all
-        self.logger.stage("🏗️ Using Orchestrated Pipeline Wrapper with 7 isolated stages")
+        # Using orchestrated pipeline architecture
     
     def _setup_sidecar_test(self, sidecar_config: str):
         """Setup sidecar A/B testing for performance comparison."""
