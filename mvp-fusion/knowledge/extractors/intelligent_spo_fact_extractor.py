@@ -100,29 +100,29 @@ class IntelligentSPOFactExtractor(SemanticFactExtractor):
         """Initialize high-value relationship patterns for meaningful fact extraction"""
         return {
             'safety_requirements': [
-                r'(?:must|shall|required to|mandatory)\s+(?:wear|use|maintain|comply with|follow)\s+([^.]{1,100})',
-                r'(?:employees|workers|personnel|staff)\s+(?:must|shall|are required to)\s+([^.]{1,100})',
-                r'(?:minimum|maximum)\s+(?:distance|height|weight|time|temperature)\s+(?:of|is|must be)\s+([^.]{1,50})',
+                r'(?:must|shall|required to|mandatory)\s+(?:wear|use|maintain|comply with|follow)\s+(.*?)(?=\.[\s]*$|!|\?|$)',
+                r'(?:employees|workers|personnel|staff)\s+(?:must|shall|are required to)\s+(.*?)(?=\.[\s]*$|!|\?|$)',
+                r'(?:minimum|maximum)\s+(?:distance|height|weight|time|temperature)\s+(?:of|is|must be)\s+(.*?)(?=\.[\s]*$|!|\?|$)',
             ],
             'compliance_requirements': [
                 r'(?:comply with|adhere to|follow|meet)\s+(OSHA|ISO|ANSI|[A-Z]{2,5})\s+(?:standards?|regulations?|requirements?)',
-                r'(?:violation|breach|non-compliance)\s+(?:of|with)\s+([^.]{1,100})',
-                r'(?:inspection|audit|review)\s+(?:required|mandatory|must be conducted)\s+([^.]{1,100})',
+                r'(?:violation|breach|non-compliance)\s+(?:of|with)\s+([^.;!?]*(?:\([^)]*\))?[^.;!?]*)',
+                r'(?:inspection|audit|review)\s+(?:required|mandatory|must be conducted)\s+([^.;!?]*(?:\([^)]*\))?[^.;!?]*)',
             ],
             'measurement_relationships': [
-                r'(?:distance|height|weight|length|width|depth|diameter|radius)\s+(?:of|must be|shall be|is)\s+([0-9]+(?:\.[0-9]+)?\s*[a-zA-Z]+)',
-                r'(?:limit|threshold|maximum|minimum)\s+(?:of|is|must not exceed)\s+([0-9]+(?:\.[0-9]+)?\s*[a-zA-Z]+)',
-                r'(?:temperature|pressure|voltage|current)\s+(?:range|between|from)\s+([^.]{1,100})',
+                r'(?:distance|height|weight|length|width|depth|diameter|radius)\s+(?:of|must be|shall be|is)\s+([0-9]+(?:\.[0-9]+)?\s*[a-zA-Z]+(?:\s*\([^)]*\))?)',
+                r'(?:limit|threshold|maximum|minimum)\s+(?:of|for\s+\w+\s+is|is|must not exceed)\s+(.*?)(?=\.[\s]*$|!|\?|$)',
+                r'(?:temperature|pressure|voltage|current)\s+(?:range|between|from)\s+(.*?)(?=\.[\s]*$|!|\?|$)',
             ],
             'organizational_actions': [
-                r'(company|organization|employer|management)\s+(?:must|shall|will|provides?|ensures?)\s+([^.]{1,100})',
-                r'(employees|workers|staff)\s+(?:receive|provided with|equipped with)\s+([^.]{1,100})',
-                r'(?:training|education|certification)\s+(?:required|mandatory|provided)\s+([^.]{1,100})',
+                r'(company|organization|employer|management)\s+(?:must|shall|will|provides?|ensures?)\s+([^.;!?]*(?:\([^)]*\))?[^.;!?]*)',
+                r'(employees|workers|staff)\s+(?:receive|provided with|equipped with)\s+([^.;!?]*(?:\([^)]*\))?[^.;!?]*)',
+                r'(?:training|education|certification)\s+(?:required|mandatory|provided)\s+([^.;!?]*(?:\([^)]*\))?[^.;!?]*)',
             ],
             'temporal_requirements': [
                 r'(?:within|by|before|after|during)\s+([0-9]+\s*(?:days?|hours?|weeks?|months?|years?))',
-                r'(?:annually|monthly|weekly|daily|quarterly)\s+([^.]{1,100})',
-                r'(?:deadline|due date|expiration)\s+(?:is|of)\s+([^.]{1,50})',
+                r'(?:annually|monthly|weekly|daily|quarterly)\s+([^.;!?]*(?:\([^)]*\))?[^.;!?]*)',
+                r'(?:deadline|due date|expiration)\s+(?:is|of)\s+([^.;!?]*(?:\([^)]*\))?)',
             ]
         }
     

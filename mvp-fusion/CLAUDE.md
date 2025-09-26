@@ -26,6 +26,27 @@
 - Use proven patterns (like MVP-Hyper's approach)
 - Eliminate overhead at every level
 
+### **Rule #5: URL and File Processing Equivalence - MANDATORY**
+**CRITICAL**: There is no difference between processing a URL or a file - they use the same pipeline:
+
+**🚀 UNIFIED PROCESSING ARCHITECTURE:**
+1. **URL Processing**: Download → Convert HTML to Markdown → Process through standard pipeline
+2. **File Processing**: Read file → Process through standard pipeline
+3. **Same Pipeline**: Both URLs and files go through identical stages (convert → classify → enrich → normalize → extract)
+4. **Same Output Format**: Both generate identical YAML frontmatter and semantic JSON
+5. **Single or Batch**: One URL or list of URLs - all use same pipeline instance
+
+**✅ REQUIREMENTS:**
+- URLs must show `source_type: url` and `source_url` in YAML frontmatter
+- Files must show `source_type: file` and `source_path` in YAML frontmatter  
+- Both use CleanFusionPipeline (not legacy FusionPipeline)
+- Batch processing initializes pipeline ONCE for all items
+- Entity extraction works identically (shows ||entity||id|| markers)
+- HTML-to-markdown conversion happens before pipeline processing
+
+**⚠️ ENFORCEMENT:**
+Any difference in URL vs file processing violates the unified architecture principle and creates unnecessary complexity.
+
 ### **Rule #12: FLPC Pattern Matching - MANDATORY**
 **CRITICAL**: NEVER use regular expressions (re module) - use FLPC (Fast Lexical Pattern Compiler) instead:
 

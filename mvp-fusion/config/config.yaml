@@ -443,6 +443,37 @@ corpus:
       single_name: 0.6
       common_word: 0.7
 
+  # Organization extraction quality controls
+  organization_extraction:
+    mode: "conservative"       # "conservative", "balanced", or "aggressive"
+    min_length: 3              # Minimum characters for organization names
+    max_length: 100            # Maximum characters for organization names
+    reject_single_words: true  # Reject single common words like "element", "state"
+    reject_common_words: true  # Reject words like "the", "a", "an", "of"
+    require_capitalization: false  # Don't require capitalization (many orgs are lowercase)
+    
+    # Blacklist patterns for poor quality extractions
+    blacklist_patterns:
+      - "^the [a-z]$"          # "the u", "the a"
+      - "^[a-z]{1,3}$"         # 1-3 letter fragments like "fec", "sec", "cia"
+      - "^element$"            # Generic word "element"
+      - "^complex$"            # Generic word "complex"
+      - "^state$"              # Generic word "state"
+      - "^way$"                # Generic word "way"
+      - "^fire$"               # Generic word "fire"
+      - "^market$"             # Generic word "market"
+      
+    # Quality thresholds
+    thresholds:
+      confidence: 0.8          # High confidence for organizations
+      context_relevance: 0.7   # Must be contextually relevant
+      
+    # Penalties for low-quality extractions
+    penalties:
+      partial_word: 0.3        # Heavy penalty for partial words
+      common_word: 0.2         # Heavy penalty for common words
+      single_letter: 0.1       # Very heavy penalty for single letters
+
 # Error Handling
 error_handling:
   continue_on_error: true      # Don't stop pipeline on individual file errors

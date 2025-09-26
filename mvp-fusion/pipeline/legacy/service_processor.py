@@ -1440,18 +1440,13 @@ class ServiceProcessor:
                             # Intelligent semantic extraction with meaningful fact focus
                             self.semantic_analyzer.semantics(f"🧠 Intelligent semantic extraction (quality-focused SPO): {doc.source_filename}")
                             
-                            # CLEAN TEXT SEMANTIC ANALYSIS: Use preserved clean markdown instead of normalized text
+                            # CLEAN TEXT SEMANTIC ANALYSIS: Use raw text without entity normalization tags
                             if hasattr(doc, 'clean_markdown_content') and doc.clean_markdown_content:
-                                # Generate clean document with YAML frontmatter but using original markdown
-                                original_markdown = doc.markdown_content
-                                doc.markdown_content = doc.clean_markdown_content  # Temporarily use clean text
-                                full_clean_document = doc.generate_final_markdown()
-                                doc.markdown_content = original_markdown  # Restore normalized text
-                                
+                                # Use clean markdown directly for semantic extraction (no entity tags)
                                 self.semantic_analyzer.semantics(f"📄 Using clean text for semantic analysis ({len(doc.clean_markdown_content)} chars)")
-                                semantic_facts = self.semantic_extractor.extract_semantic_facts(full_clean_document)
+                                semantic_facts = self.semantic_extractor.extract_semantic_facts(doc.clean_markdown_content)
                             else:
-                                # Fallback to normalized text if clean text not available
+                                # Fallback to raw text if clean text not available (avoid normalized entity tags)
                                 full_document = doc.generate_final_markdown()
                                 semantic_facts = self.semantic_extractor.extract_semantic_facts(full_document)
                             
@@ -1889,7 +1884,7 @@ class ServiceProcessor:
                         set_current_phase('semantic_analysis')
                         add_pages_processed(doc.page_count)
                         try:
-                            semantic_results = self.semantic_extractor.extract_semantic_facts(doc.clean_markdown_content or doc.markdown_content)
+                            semantic_results = self.semantic_extractor.extract_semantic_facts(doc.markdown_content or doc.clean_markdown_content)
                             
                             if semantic_results and semantic_results.get('semantic_facts'):
                                 # Convert from StandaloneIntelligentExtractor format to expected format

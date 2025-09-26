@@ -52,35 +52,35 @@ class StandaloneIntelligentExtractor:
         # More flexible relationship patterns for broader matching
         self.relationship_patterns = {
             'safety_requirements': [
-                # OSHA regulatory requirements - exact pattern for our document
-                r'(OSHA\s+regulation\s+[\d\s\.CFR]+)\s+(requires\s+all\s+construction\s+workers\s+to\s+wear\s+[^.]+)',
-                # PPE requirements with specific items
-                r'(personal\s+protective\s+equipment\s*\([^)]+\))\s+(including\s+[^.]+)',
-                r'(appropriate\s+personal\s+protective\s+equipment)\s*\([^)]+\)\s+(including\s+[^.]+)',
+                # OSHA regulatory requirements - exact pattern for our document - Fixed to handle decimal points
+                r'(OSHA\s+regulation\s+[\d\s\.CFR]+)\s+(requires\s+all\s+construction\s+workers\s+to\s+wear\s+.*?)(?=\.[\s]*$|!|\?|$)',
+                # PPE requirements with specific items - Fixed to handle decimal points
+                r'(personal\s+protective\s+equipment\s*\([^)]+\))\s+(including\s+.*?)(?=\.[\s]*$|!|\?|$)',
+                r'(appropriate\s+personal\s+protective\s+equipment)\s*\([^)]+\)\s+(including\s+.*?)(?=\.[\s]*$|!|\?|$)',
                 # Training requirements
                 r'(training)\s+(?:costs?\s+)?([\$\d,]+\s+per\s+group)',
-                r'(training)\s+(?:must\s+be\s+)?(completed\s+by\s+[^.]+)',
-                # Contact requirements
-                r'(contact\s+[^@\s]+@[^\s]+)\s+(or\s+call\s+[^.]+)',
-                # Flexible employee requirements (fallback)
-                r'(?:employees|workers|personnel|staff|all\s+(?:employees|workers))\s+(?:must|shall|are\s+required\s+to|need\s+to|should)\s+([^.]{8,150})',
-                # Equipment and system requirements
-                r'(?:all|any)?\s*(?:equipment|devices|systems|procedures)\s+(?:must|shall|should)\s+(?:be|meet|comply\s+with|follow)\s+([^.]{8,150})',
-                # Direct safety requirements
-                r'(?:required|mandatory|obligatory|necessary)\s+(?:above|below|within|for|to)\s+([^.]{8,150})',
-                # Must/shall statements
-                r'(?:must|shall)\s+(?:be|have|meet|provide|maintain|ensure)\s+([^.]{8,150})',
+                r'(training)\s+(?:must\s+be\s+)?(completed\s+by\s+.*?)(?=\.[\s]*$|!|\?|$)',
+                # Contact requirements - Fixed to handle decimal points
+                r'(contact\s+[^@\s]+@[^\s]+)\s+(or\s+call\s+.*?)(?=\.[\s]*$|!|\?|$)',
+                # Flexible employee requirements (fallback) - Fixed to handle decimal points
+                r'(?:employees|workers|personnel|staff|all\s+(?:employees|workers))\s+(?:must|shall|are\s+required\s+to|need\s+to|should)\s+(.*?)(?=\.[\s]*$|!|\?|$)',
+                # Equipment and system requirements - Fixed to handle decimal points
+                r'(?:all|any)?\s*(?:equipment|devices|systems|procedures)\s+(?:must|shall|should)\s+(?:be|meet|comply\s+with|follow)\s+(.*?)(?=\.[\s]*$|!|\?|$)',
+                # Direct safety requirements - Fixed to handle decimal points
+                r'(?:required|mandatory|obligatory|necessary)\s+(?:above|below|within|for|to)\s+(.*?)(?=\.[\s]*$|!|\?|$)',
+                # Must/shall statements - Fixed to handle decimal points
+                r'(?:must|shall)\s+(?:be|have|meet|provide|maintain|ensure)\s+(.*?)(?=\.[\s]*$|!|\?|$)',
             ],
             
             'compliance_requirements': [
-                # Regulatory compliance
-                r'(?:comply\s+with|adhere\s+to|follow|meet)\s+(OSHA|ISO|ANSI|CFR|EPA|[A-Z]{2,6})\s*([^.]{0,100})',
-                # Violations and penalties
-                r'(?:violation|breach|fine|penalty)\s+(?:of|for|up\s+to)?\s*[\$]?([0-9,\.]+)\s*([^.]{0,100})',
-                # Maximum fines
-                r'(?:maximum|minimum)\s+(?:OSHA\s+)?(?:fine|penalty)\s*:?\s*[\$]?([0-9,\.]+)\s*([^.]{0,100})',
-                # Reporting requirements
-                r'(?:reporting|notification|record)\s+(?:required|mandatory|must\s+be)\s+(?:within|by)\s+([^.]{8,100})',
+                # Regulatory compliance - Fixed to handle decimal points
+                r'(?:comply\s+with|adhere\s+to|follow|meet)\s+(OSHA|ISO|ANSI|CFR|EPA|[A-Z]{2,6})\s*(.*?)(?=\.[\s]*$|!|\?|$)',
+                # Violations and penalties - Fixed to handle decimal points
+                r'(?:violation|breach|fine|penalty)\s+(?:of|for|up\s+to)?\s*[\$]?([0-9,\.]+)\s*(.*?)(?=\.[\s]*$|!|\?|$)',
+                # Maximum fines - Fixed to handle decimal points
+                r'(?:maximum|minimum)\s+(?:OSHA\s+)?(?:fine|penalty)\s*:?\s*[\$]?([0-9,\.]+)\s*(.*?)(?=\.[\s]*$|!|\?|$)',
+                # Reporting requirements - Fixed to handle decimal points
+                r'(?:reporting|notification|record)\s+(?:required|mandatory|must\s+be)\s+(?:within|by)\s+(.*?)(?=\.[\s]*$|!|\?|$)',
             ],
             
             'measurement_requirements': [
@@ -97,14 +97,14 @@ class StandaloneIntelligentExtractor:
             ],
             
             'organizational_actions': [
-                # Company actions
-                r'(company|organization|employer|management)\s+([^.]{8,150})\s+(?:training|safety|compliance|employees)',
-                # Training and education
-                r'(?:training|education|instruction)\s+(?:provided|required|mandatory|completed)\s+([^.]{8,150})',
-                # Inspections and audits
-                r'(?:inspection|audit|review)\s+(?:conducted|performed|completed|required)\s+([^.]{8,150})',
-                # Employee provisions
-                r'(?:employees|workers|staff)\s+(?:receive|provided\s+with|equipped\s+with)\s+([^.]{8,150})',
+                # Company actions - Fixed to handle decimal points
+                r'(company|organization|employer|management)\s+(.*?)(?=\.[\s]*$|!|\?|$)\s+(?:training|safety|compliance|employees)',
+                # Training and education - Fixed to handle decimal points
+                r'(?:training|education|instruction)\s+(?:provided|required|mandatory|completed)\s+(.*?)(?=\.[\s]*$|!|\?|$)',
+                # Inspections and audits - Fixed to handle decimal points
+                r'(?:inspection|audit|review)\s+(?:conducted|performed|completed|required)\s+(.*?)(?=\.[\s]*$|!|\?|$)',
+                # Employee provisions - Fixed to handle decimal points
+                r'(?:employees|workers|staff)\s+(?:receive|provided\s+with|equipped\s+with)\s+(.*?)(?=\.[\s]*$|!|\?|$)',
             ],
             
             'quantitative_facts': [
@@ -117,14 +117,14 @@ class StandaloneIntelligentExtractor:
                 # Contact information
                 r'(call)\s+(\([0-9]{3}\)\s+[0-9]{3}-[0-9]{4})',
                 r'(safety-coordinator@[^\s]+)',
-                # General financial amounts
-                r'[\$]?([0-9,\.]+)\s*(?:million|billion|thousand|M|B|K)?\s+(?:fine|cost|costs?|savings|investment|budget)\s*([^.]{0,100})',
-                # Employee counts
-                r'([0-9,]+)\s+(?:employees|workers|staff|people|persons)\s+([^.]{8,150})',
-                # Percentages
-                r'([0-9]+(?:\.[0-9]+)?)\s*%\s+(?:improvement|increase|decrease|reduction|of)\s+([^.]{8,150})',
-                # Facility counts
-                r'([0-9]+)\s+(?:facilities|locations|sites|offices|plants|buildings)\s*([^.]{0,100})',
+                # General financial amounts - Fixed to handle decimal points
+                r'[\$]?([0-9,\.]+)\s*(?:million|billion|thousand|M|B|K)?\s+(?:fine|cost|costs?|savings|investment|budget)\s*(.*?)(?=\.[\s]*$|!|\?|$)',
+                # Employee counts - Fixed to handle decimal points
+                r'([0-9,]+)\s+(?:employees|workers|staff|people|persons)\s+(.*?)(?=\.[\s]*$|!|\?|$)',
+                # Percentages - Fixed to handle decimal points
+                r'([0-9]+(?:\.[0-9]+)?)\s*%\s+(?:improvement|increase|decrease|reduction|of)\s+(.*?)(?=\.[\s]*$|!|\?|$)',
+                # Facility counts - Fixed to handle decimal points
+                r'([0-9]+)\s+(?:facilities|locations|sites|offices|plants|buildings)\s*(.*?)(?=\.[\s]*$|!|\?|$)',
             ]
         }
         

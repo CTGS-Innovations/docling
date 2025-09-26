@@ -26,6 +26,7 @@ import tempfile
 from utils.logging_config import setup_logging, get_fusion_logger
 from utils.phase_manager import get_phase_performance_report
 from utils.deployment_manager import DeploymentManager
+from utils.html_to_markdown_converter import convert_html_to_markdown
 
 
 class PipelinePhase:
@@ -505,155 +506,112 @@ def process_single_url(extractor: BaseExtractor, url: str, output_dir: Path = No
         # Create safe filename from URL for final output
         safe_filename = create_filename_from_url(url)
         
-        # Log content type detection
-        logger.entity(f"📄 Detected content type: {content_type} → {file_ext}")
-        
-        # Create file with URL-based name for pipeline (ripples through entire system)
-        import tempfile
-        temp_dir = Path(tempfile.gettempdir())
-        temp_filename = f"{safe_filename}{file_ext}"
-        temp_path = temp_dir / temp_filename
-        
-        # Write content to URL-named file
-        if success:
-            # Successful URLs: Write actual content
-            with open(temp_path, 'wb') as f:
-                f.write(content)
+        # Convert HTML to markdown content (IN MEMORY - no temp files)
+        if success and 'html' in content_type.lower():
+            logger.entity(f"🔄 Converting HTML to Markdown for: {content_type}")
+            try:
+                # Convert HTML content to markdown
+                html_content = content.decode('utf-8', errors='ignore')
+                markdown_content = convert_html_to_markdown(html_content, base_url=url)
+                logger.success(f"✅ HTML converted to markdown ({len(markdown_content)} chars)")
+            except Exception as e:
+                logger.logger.warning(f"⚠️ HTML-to-markdown conversion failed: {e}")
+                # Fall back to raw content
+                markdown_content = content.decode('utf-8', errors='ignore')
         else:
-            # Failed URLs: Create minimal HTML with failure metadata for pipeline processing
-            failure_html = f"""<!DOCTYPE html>
-<html>
-<head>
-    <title>URL Processing Failed: {status_code} Error</title>
-    <meta name="http-status" content="{status_code}">
-    <meta name="validation-failure" content="true">
-    <meta name="source-url" content="{url}">
-</head>
-<body>
-    <h1>URL Processing Failed</h1>
-    <p><strong>URL:</strong> {url}</p>
-    <p><strong>HTTP Status:</strong> {status_code}</p>
-    <p><strong>Error:</strong> {message}</p>
-    <p><strong>Content Type:</strong> {content_type or 'unknown'}</p>
-    <p><strong>Response Size:</strong> {len(content)} bytes</p>
-    <p>This document represents a failed URL processing attempt and should not proceed to semantic extraction.</p>
-</body>
-</html>"""
-            with open(temp_path, 'w', encoding='utf-8') as f:
-                f.write(failure_html)
+            # For non-HTML or failed URLs, use raw content
+            markdown_content = content.decode('utf-8', errors='ignore') if content else f"Failed to fetch URL: {message}"
         
-        # Store URL metadata in a companion metadata file that the extractor can read
-        metadata_file = temp_path.parent / f"{temp_path.stem}_url_metadata.json"
-        url_metadata = {
+        # Create InMemoryDocument directly (NO temp files)
+        from pipeline.in_memory_document import InMemoryDocument
+        
+        # Create in-memory document with URL as source
+        doc = InMemoryDocument(source_file_path=url, source_url=url)
+        doc.markdown_content = markdown_content
+        doc.source_filename = f"{safe_filename}.md"
+        doc.source_stem = safe_filename
+        
+        # Add Path-like attributes for pipeline compatibility
+        doc.name = doc.source_filename
+        doc.suffix = '.md'
+        doc.stem = safe_filename
+        
+        # Add URL metadata
+        doc.url_metadata = {
             'source_url': url,
             'content_type': content_type,
             'original_size': len(content),
             'safe_filename': safe_filename,
             'http_status': status_code,
             'response_headers': headers,
-            'validation_success': success,  # Track validation result
-            'validation_message': message,
-            'proceed_to_classification': success,  # Only proceed if validation passed
-            **validation_metadata  # Include validation metadata (http_status, content_type, etc.)
+            'validation_success': success,
+            'validation_message': message
         }
-        with open(metadata_file, 'w') as f:
-            json.dump(url_metadata, f)
         
-        # Use the FULL FUSION PIPELINE (like file processing does)
-        # This ensures we get: Convert → Classify → Enrich → Extract
-        if config:
-            use_shared_memory = config.get('pipeline', {}).get('use_shared_memory', False)
-            
-            if use_shared_memory:
-                logger.entity(f"🏊 Using Shared Memory Pipeline for URL")
-                from pipeline.shared_memory_pipeline import SharedMemoryFusionPipeline
-                pipeline = SharedMemoryFusionPipeline(config)
-            else:
-                logger.entity(f"🔄 Using Traditional Pipeline for URL")
-                from pipeline.legacy.fusion_pipeline import FusionPipeline
-                pipeline = FusionPipeline(config)
-            
-            # Process single file through complete pipeline (use configured workers even for single files)
-            batch_result = pipeline.process_files(extractor, [temp_path], output_dir or Path.cwd(), max_workers=max_workers)
-            if len(batch_result) == 3:
-                results, extraction_time, resource_summary = batch_result
-            else:
-                results, extraction_time = batch_result
-            
-            # Get the result (should be single item)
-            if results:
-                result = results[0]
-                
-                # Debug: Check what attributes the result has
-                logger.entity(f"🔍 Result type: {type(result)}")
-                logger.entity(f"🔍 Result attributes: {[attr for attr in dir(result) if not attr.startswith('_')]}")
-                
-                # Update to use URL-based filename instead of temp filename
-                # InMemoryDocument has different attribute structure than ExtractionResult
-                success_check = getattr(result, 'success', True)  # Default to True for InMemoryDocument
-                logger.entity(f"🔍 Success: {success_check}")
-                logger.entity(f"🔍 Has output_path: {hasattr(result, 'output_path')}")
-                
-                if success_check:
-                    # InMemoryDocument doesn't have output_path - need to generate files ourselves
-                    # The pipeline already wrote the files with temp names, need to find and rename them
-                    output_dir_path = output_dir or Path.cwd()
-                    temp_stem = temp_path.stem
-                    
-                    # Find the generated files with temp names
-                    potential_md = output_dir_path / f"{temp_stem}.md"
-                    potential_json = output_dir_path / f"{temp_stem}.json"
-                    
-                    logger.entity(f"🔍 Looking for: {potential_md}")
-                    logger.entity(f"🔍 Looking for: {potential_json}")
-                    
-                    if potential_md.exists():
-                        # Rename markdown file to URL-based name
-                        new_md_output = potential_md.parent / f"{safe_filename}.md"
-                        potential_md.rename(new_md_output)
-                        logger.success(f"📝 Created markdown: {new_md_output.name}")
-                        
-                        # Also rename corresponding JSON file if it exists
-                        if potential_json.exists():
-                            new_json_output = potential_json.parent / f"{safe_filename}.json"
-                            potential_json.rename(new_json_output)
-                            logger.success(f"📊 Created knowledge: {new_json_output.name}")
-                        
-                        # Clean up any remaining temp files that might not have been renamed
-                        # Note: rename() should have moved the files, but check for safety
-                    else:
-                        logger.logger.warning(f"⚠️ Could not find expected output file: {potential_md}")
-                    
-                    # Update source information
-                    if hasattr(result, 'metadata'):
-                        if not result.metadata:
-                            result.metadata = {}
-                        result.metadata['source_url'] = url
-                        result.metadata['content_type'] = content_type
-                        result.metadata['original_size_bytes'] = len(content)
-                    
-                    # Update document path to show URL
-                    if hasattr(result, 'document_path'):
-                        result.document_path = url
-                        
-                return result
-            else:
-                raise Exception("Pipeline returned no results")
+        # Process through the COMPLETE PIPELINE (same as files) with all stages
+        logger.entity(f"🔄 Processing markdown through complete pipeline like files")
+        
+        # Create a temporary path-like object that the pipeline expects
+        import tempfile
+        temp_dir = Path(tempfile.gettempdir())
+        temp_filename = f"{safe_filename}.md"
+        temp_path = temp_dir / temp_filename
+        
+        # Write our converted markdown to the temp file
+        with open(temp_path, 'w', encoding='utf-8') as f:
+            f.write(markdown_content)
+        
+        # Use the EXACT SAME PIPELINE as regular files - CleanFusionPipeline (not legacy)
+        logger.entity(f"🔄 Using Clean Pipeline Architecture for URL (same as files)")
+        from fusion_cli import CleanFusionPipeline
+        pipeline = CleanFusionPipeline(config or {})
+        
+        # Process single file through clean pipeline (same as files)
+        deployment_manager = DeploymentManager(config or {})
+        max_workers = deployment_manager.get_max_workers()
+        
+        # Use the same process method that files use
+        pipeline_metadata = {'output_dir': output_dir or Path.cwd(), 'max_workers': max_workers}
+        file_results, pipeline_info = pipeline.process([temp_path], pipeline_metadata)
+        
+        # Get the result (should be single item)
+        if file_results:
+            result = file_results[0]
         else:
-            # Fallback to extractor only (conversion only)
-            logger.entity(f"⚠️ No config provided - using conversion only")
-            result = extractor.extract_single(temp_path, output_dir or Path.cwd())
+            raise Exception("Pipeline returned no results")
+        
+        # The CleanFusionPipeline works with InMemoryDocuments and generates final output
+        # Fix the in-memory document to show URL as source instead of temp file
+        if hasattr(result, 'markdown_content') and result.markdown_content:
+            # Fix the source_file to show URL and add source_type
+            import re
+            result.markdown_content = re.sub(r'(source_file:\s*)[^\n]+', f'source_file: {url}', result.markdown_content)
+            # Add source_type: url right after source_file
+            if 'source_type:' not in result.markdown_content:
+                result.markdown_content = re.sub(r'(source_file: [^\n]+)', f'\\1\n  source_type: url', result.markdown_content)
             
-            # Update filename for fallback case
-            if result.success and hasattr(result, 'output_path') and result.output_path:
-                old_output = Path(result.output_path)
-                if old_output.exists():
-                    new_output = old_output.parent / f"{safe_filename}.md"
-                    old_output.rename(new_output)
-                    result.output_path = str(new_output)
-                    logger.success(f"📝 Created: {new_output.name}")
+            # Generate final files with corrected content
+            output_dir_path = output_dir or Path.cwd()
             
-            return result
+            # Write corrected markdown file
+            markdown_output = output_dir_path / f"{safe_filename}.md"
+            with open(markdown_output, 'w', encoding='utf-8') as f:
+                f.write(result.markdown_content)
+            logger.success(f"📝 Created markdown: {markdown_output.name}")
+            
+            # Write JSON knowledge file if semantic data exists
+            if hasattr(result, 'semantic_json') and result.semantic_json:
+                json_output = output_dir_path / f"{safe_filename}.json"
+                with open(json_output, 'w', encoding='utf-8') as f:
+                    import json
+                    json.dump(result.semantic_json, f, indent=2)
+                logger.success(f"📊 Created knowledge: {json_output.name}")
+        
+        # Clean up temp file
+        if temp_path.exists():
+            temp_path.unlink()
+        
+        return result
         
     except Exception as e:
         logger.logger.error(f"❌ Failed to process URL {url}: {e}")
@@ -1283,12 +1241,12 @@ Examples:
             config_urls = config.get('inputs', {}).get('urls', []) if args.urls else []
             config_url_files = config.get('inputs', {}).get('url_files', []) if args.urls else []
             
-            if config_dirs or (args.urls and (config_urls or config_url_files)):
+            if (config_dirs and not args.urls) or (args.urls and (config_urls or config_url_files)):
                 all_files = []
                 all_urls = []
                 
-                # Process directories if specified (DEFAULT behavior)
-                if config_dirs:
+                # Process directories if specified (DEFAULT behavior) BUT NOT if --urls flag is provided
+                if config_dirs and not args.urls:
                     logger.staging(f"Processing {len(config_dirs)} directories from config (default):")
                     for config_dir in config_dirs:
                         logger.staging(f"   - {config_dir}")
@@ -1306,6 +1264,10 @@ Examples:
                         for ext in extensions:
                             files.extend(directory.glob(f"**/*{ext}"))
                         all_files.extend(files)
+                elif config_dirs and args.urls:
+                    logger.staging(f"⚪ Skipping {len(config_dirs)} directories (--urls flag provided - URLs only)")
+                    for config_dir in config_dirs:
+                        logger.staging(f"   - {config_dir} (skipped)")  
                 
                 # Process URLs if specified (EXPLICIT --urls flag required)
                 if args.urls and config_urls:
@@ -1331,8 +1293,10 @@ Examples:
                 if not all_files and not all_urls:
                     if not config_dirs and not args.urls:
                         logger.logger.error(f"❌ No directories found in config. Use --urls flag to process URLs.")
-                    elif not config_dirs and args.urls and not config_urls and not config_url_files:
+                    elif args.urls and not config_urls and not config_url_files:
                         logger.logger.error(f"❌ No URLs found in config despite --urls flag.")
+                    elif config_dirs and args.urls:
+                        logger.logger.error(f"❌ Directories ignored due to --urls flag, but no URLs found in config.")
                     else:
                         logger.logger.error(f"❌ No files or URLs found")
                     sys.exit(1)
@@ -1369,17 +1333,116 @@ Examples:
                     all_results.extend(file_results)
                     resource_summary = pipeline_info  # Pipeline provides detailed performance metrics
                 
-                # Process URLs sequentially if any
+                # Process URLs in batch if any (same as files)
                 if all_urls:
                     logger.stage(f"\n🌐 Processing {len(all_urls)} URLs...")
+                    
+                    # First, download and convert all URLs to markdown temp files
+                    import tempfile
+                    temp_dir = Path(tempfile.gettempdir())
+                    url_temp_files = []
+                    url_metadata_map = {}
+                    
                     for i, url in enumerate(all_urls, 1):
                         try:
-                            logger.entity(f"📋 Processing URL {i}/{len(all_urls)}: {url[:60]}...")
-                            url_result = process_single_url(extractor, url, output_dir, config)
-                            all_results.append(url_result)
+                            logger.entity(f"📋 Downloading URL {i}/{len(all_urls)}: {url[:60]}...")
+                            
+                            # Download URL content
+                            url_timeout = config.get('inputs', {}).get('url_timeout_seconds', 15)
+                            max_size_mb = config.get('inputs', {}).get('max_file_size_mb', 10.0)
+                            content, content_type, file_ext, status_code, headers = download_url_content(
+                                url, max_size_mb=max_size_mb, timeout_seconds=url_timeout
+                            )
+                            
+                            # Validate URL
+                            success, message, validation_metadata = ConversionSuccess.validate_url(
+                                status_code, len(content), content_type
+                            )
+                            
+                            if success and 'html' in content_type.lower():
+                                # Convert HTML to markdown
+                                logger.entity(f"🔄 Converting HTML to Markdown")
+                                html_content = content.decode('utf-8', errors='ignore')
+                                markdown_content = convert_html_to_markdown(html_content, base_url=url)
+                            else:
+                                markdown_content = content.decode('utf-8', errors='ignore') if content else f"Failed: {message}"
+                            
+                            # Create temp file for this URL
+                            safe_filename = create_filename_from_url(url)
+                            temp_filename = f"{safe_filename}.md"
+                            temp_path = temp_dir / temp_filename
+                            
+                            # Write markdown to temp file
+                            with open(temp_path, 'w', encoding='utf-8') as f:
+                                f.write(markdown_content)
+                            
+                            url_temp_files.append(temp_path)
+                            url_metadata_map[str(temp_path)] = {
+                                'url': url,
+                                'safe_filename': safe_filename,
+                                'content_type': content_type,
+                                'original_size': len(content)
+                            }
+                            
                         except Exception as e:
-                            logger.logger.error(f"❌ Error processing URL {i}: {e}")
+                            logger.logger.error(f"❌ Error downloading URL {i}: {e}")
                             continue
+                    
+                    # Now process all URL temp files through a SINGLE pipeline instance
+                    if url_temp_files:
+                        logger.stage(f"🚀 Processing {len(url_temp_files)} URLs through pipeline...")
+                        
+                        # Use the SAME pipeline instance as files (or create one if not exists)
+                        if 'pipeline' not in locals():
+                            pipeline = CleanFusionPipeline(config)
+                        
+                        # Process all URL markdown files in batch
+                        pipeline_metadata = {'output_dir': output_dir or Path.cwd(), 'max_workers': max_workers}
+                        url_results, url_pipeline_info = pipeline.process(url_temp_files, pipeline_metadata)
+                        
+                        # Fix YAML frontmatter and rename files for each result
+                        for result, temp_path in zip(url_results, url_temp_files):
+                            metadata = url_metadata_map.get(str(temp_path), {})
+                            url = metadata.get('url', '')
+                            safe_filename = metadata.get('safe_filename', temp_path.stem)
+                            
+                            # Find and fix the output files
+                            output_dir_path = output_dir or Path.cwd()
+                            temp_stem = temp_path.stem
+                            
+                            # Find the generated files
+                            potential_md = output_dir_path / f"{temp_stem}.md"
+                            potential_json = output_dir_path / f"{temp_stem}.json"
+                            
+                            if potential_md.exists():
+                                # Read and fix YAML
+                                with open(potential_md, 'r', encoding='utf-8') as f:
+                                    content = f.read()
+                                
+                                import re
+                                content = re.sub(r'(source_file:\s*)[^\n]+', f'source_file: {url}', content)
+                                # Add source_type: url right after source_file if not present
+                                if 'source_type:' not in content:
+                                    content = re.sub(r'(source_file: [^\n]+)', f'\\1\n  source_type: url', content)
+                                
+                                with open(potential_md, 'w', encoding='utf-8') as f:
+                                    f.write(content)
+                                
+                                # Rename files if needed
+                                new_md_output = potential_md.parent / f"{safe_filename}.md"
+                                if potential_md != new_md_output:
+                                    potential_md.rename(new_md_output)
+                                
+                                if potential_json.exists():
+                                    new_json_output = potential_json.parent / f"{safe_filename}.json"
+                                    potential_json.rename(new_json_output)
+                        
+                        # Clean up temp files
+                        for temp_path in url_temp_files:
+                            if temp_path.exists():
+                                temp_path.unlink()
+                        
+                        all_results.extend(url_results)
                 
                 results = all_results
                     
@@ -1392,9 +1455,9 @@ Examples:
                     initialization_time = 0
                 
                 # Calculate comprehensive metrics (works with both InMemoryDocument and ExtractionResult objects)
-                successful = sum(1 for doc in results if hasattr(doc, 'success') and doc.success)
+                successful = sum(1 for doc in results if getattr(doc, 'success', True))
                 failed = len(results) - successful
-                total_pages = sum(getattr(doc, 'pages_processed', getattr(doc, 'pages', 1)) for doc in results if hasattr(doc, 'success') and doc.success)
+                total_pages = sum(getattr(doc, 'pages_processed', getattr(doc, 'pages', 1)) for doc in results if getattr(doc, 'success', True))
                 
                 # Calculate input data sizes by scanning all attempted files directly
                 total_input_bytes = 0
@@ -1415,7 +1478,7 @@ Examples:
                 
                 # Count skipped files from results
                 for doc in results:
-                    if not doc.success and doc.error_message and "pages (>100 limit)" in doc.error_message:
+                    if not getattr(doc, 'success', True) and getattr(doc, 'error_message', None) and "pages (>100 limit)" in getattr(doc, 'error_message', ""):
                         skipped_large += 1
                 
                 # Calculate output size from in-memory documents (exact calculation)
@@ -1424,11 +1487,24 @@ Examples:
                 total_memory_mb = 0
                 
                 for doc in results:
-                    if doc.success:
-                        # Get memory footprint (includes markdown + YAML + JSON)
-                        doc_memory = doc.get_memory_footprint()
-                        total_output_bytes += doc_memory
-                        total_memory_mb += doc_memory / 1024 / 1024
+                    if getattr(doc, 'success', True):
+                        # Handle both InMemoryDocument and ExtractionResult objects
+                        if hasattr(doc, 'get_memory_footprint'):
+                            # InMemoryDocument - get memory footprint
+                            doc_memory = doc.get_memory_footprint()
+                            total_output_bytes += doc_memory
+                            total_memory_mb += doc_memory / 1024 / 1024
+                        elif hasattr(doc, 'output_path') and doc.output_path:
+                            # ExtractionResult - get file size on disk
+                            try:
+                                output_path = Path(doc.output_path)
+                                if output_path.exists():
+                                    file_size = output_path.stat().st_size
+                                    total_output_bytes += file_size
+                                    total_memory_mb += file_size / 1024 / 1024
+                            except:
+                                # If we can't get file size, skip it
+                                pass
                         output_file_count += 1
                 
                 logger.entity(f"   💾 In-memory processing: {total_memory_mb:.1f}MB total document memory")
@@ -1442,10 +1518,10 @@ Examples:
                 
                 # True failures vs skips and warnings
                 true_failures = failed - skipped_large
-                warnings_count = sum(1 for doc in results if doc.success and doc.error_message)
+                warnings_count = sum(1 for doc in results if getattr(doc, 'success', True) and getattr(doc, 'error_message', None))
                 
                 # Show phase-by-phase performance breakdown (skip if using orchestrated pipeline)
-                if not hasattr(pipeline, 'orchestrated_pipeline') or not pipeline.orchestrated_pipeline:
+                if 'pipeline' in locals() and (not hasattr(pipeline, 'orchestrated_pipeline') or not pipeline.orchestrated_pipeline):
                     phase_report = get_phase_performance_report()
                     if phase_report and "📊 PHASE PERFORMANCE:" in phase_report:
                         logger.stage(phase_report)
@@ -1455,7 +1531,7 @@ Examples:
                 logger.stage(f"   ⚡ THROUGHPUT: {throughput_mb_sec:.1f} MB/sec raw document processing")
                 
                 # Add pipeline performance breakdown if available
-                if resource_summary and 'phase_results' in resource_summary:
+                if 'resource_summary' in locals() and resource_summary and 'phase_results' in resource_summary:
                     logger.stage(f"\n🔧 CLEAN PIPELINE PERFORMANCE:")
                     phase_results = resource_summary['phase_results']
                     total_pipeline_ms = resource_summary.get('pipeline_timing_ms', 0)
@@ -1491,7 +1567,7 @@ Examples:
                                 logger.stage(f"   • {test_name}: ❌ Failed - {test_result.get('error', 'Unknown error')}")
                 
                 # Legacy stage timing support (fallback)
-                elif resource_summary and 'stage_timings' in resource_summary:
+                elif 'resource_summary' in locals() and resource_summary and 'stage_timings' in resource_summary:
                     logger.stage(f"\n📊 LEGACY STAGE-BY-STAGE PERFORMANCE:")
                     stage_timings = resource_summary['stage_timings']
                     total_pages_for_stages = resource_summary.get('total_pages', total_pages)
@@ -1534,7 +1610,7 @@ Examples:
                 logger.stage(f"   ⏱️  TOTAL TIME: {total_time:.2f}s")
                 
                 # Add system resource information if available
-                if resource_summary:
+                if 'resource_summary' in locals() and resource_summary:
                     logger.stage(f"\n💻 PROCESSING FOOTPRINT:")
                     if 'shared_memory_architecture' in resource_summary:
                         # Shared memory architecture stats
@@ -1551,20 +1627,24 @@ Examples:
                         logger.stage(f"   ⚡ EFFICIENCY: {resource_summary['efficiency_pages_per_worker']:.0f} pages/worker, {resource_summary['efficiency_mb_per_worker']:.1f} MB/worker")
                 
                 # Add sidecar status reporting
-                if hasattr(pipeline, 'sidecar_tests') and pipeline.sidecar_tests:
-                    logger.stage(f"\n🧪 SIDECAR A/B TESTING STATUS:")
-                    for sidecar_name, sidecar_processor in pipeline.sidecar_tests.items():
-                        processor_type = type(sidecar_processor).__name__
-                        logger.stage(f"   ✅ {sidecar_name}: ACTIVATED ({processor_type})")
-                        logger.stage(f"      └─ Phase: document_processing")
-                elif hasattr(pipeline, 'config') and pipeline.config.get('pipeline', {}).get('document_processing', {}).get('sidecar_test'):
-                    configured_sidecar = pipeline.config['pipeline']['document_processing']['sidecar_test']
-                    logger.stage(f"\n🧪 SIDECAR A/B TESTING STATUS:")
-                    logger.stage(f"   ❌ {configured_sidecar}: CONFIGURED BUT FAILED TO ACTIVATE")
-                    logger.stage(f"      └─ Phase: document_processing (check import errors above)")
+                if 'pipeline' in locals():
+                    if hasattr(pipeline, 'sidecar_tests') and pipeline.sidecar_tests:
+                        logger.stage(f"\n🧪 SIDECAR A/B TESTING STATUS:")
+                        for sidecar_name, sidecar_processor in pipeline.sidecar_tests.items():
+                            processor_type = type(sidecar_processor).__name__
+                            logger.stage(f"   ✅ {sidecar_name}: ACTIVATED ({processor_type})")
+                            logger.stage(f"      └─ Phase: document_processing")
+                    elif hasattr(pipeline, 'config') and pipeline.config.get('pipeline', {}).get('document_processing', {}).get('sidecar_test'):
+                        configured_sidecar = pipeline.config['pipeline']['document_processing']['sidecar_test']
+                        logger.stage(f"\n🧪 SIDECAR A/B TESTING STATUS:")
+                        logger.stage(f"   ❌ {configured_sidecar}: CONFIGURED BUT FAILED TO ACTIVATE")
+                        logger.stage(f"      └─ Phase: document_processing (check import errors above)")
+                    else:
+                        logger.stage(f"\n🧪 SIDECAR A/B TESTING STATUS:")
+                        logger.stage(f"   ⚪ No sidecars configured")
                 else:
                     logger.stage(f"\n🧪 SIDECAR A/B TESTING STATUS:")
-                    logger.stage(f"   ⚪ No sidecars configured")
+                    logger.stage(f"   ⚪ No pipeline created (URLs only processing)")
                 
                 logger.success(f"   ✅ SUCCESS RATE: {(successful/len(results)*100):.1f}% ({successful}/{len(results)})")
             else:
