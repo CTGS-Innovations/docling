@@ -736,6 +736,11 @@ class ServiceProcessor:
         if len(content) > MAX_CONTENT_LENGTH:
             content = content[:MAX_CONTENT_LENGTH] + "... [truncated for performance]"
         
+        # TEXT PREPROCESSING: Clean formatting corruption from HTML-to-markdown conversion
+        # This prevents dual entity detection where corrupted text appears as PERSON entities
+        # while clean versions appear as GPE/location entities
+        content = self._clean_text_formatting(content)
+        
         # PERSON - World-scale AC + FLPC strategy (NO Python regex)
         person_start = time.perf_counter()
         # PERSON EXTRACTION FIX: Use conservative extractor directly since world-scale has quality issues
@@ -748,13 +753,15 @@ class ServiceProcessor:
                 entities['person'] = []
                 for person in conservative_persons:
                     # Standard NER format with clean, consistent structure
+                    raw_text = person.get('text', person.get('name', ''))
+                    clean_text = self._clean_entity_text(raw_text)
                     entity = {
-                        'value': person.get('text', person.get('name', '')),
-                        'text': person.get('text', person.get('name', '')),
+                        'value': clean_text,
+                        'text': clean_text,
                         'type': 'PERSON',
                         'span': {
                             'start': person.get('position', 0),
-                            'end': person.get('position', 0) + len(person.get('text', person.get('name', '')))
+                            'end': person.get('position', 0) + len(raw_text)  # Use original length for span
                         }
                     }
                     entities['person'].append(entity)
@@ -844,9 +851,10 @@ class ServiceProcessor:
                         if hasattr(self, 'core8_corpus_loader'):
                             subcategory = self.core8_corpus_loader.get_subcategory('GPE', original_text)
                         
+                        clean_text = self._clean_entity_text(original_text)
                         entity = {
-                            'value': original_text,
-                            'text': original_text,
+                            'value': clean_text,
+                            'text': clean_text,
                             'type': 'GPE',
                             'span': {
                                 'start': start_pos,
@@ -886,9 +894,10 @@ class ServiceProcessor:
                         if hasattr(self, 'core8_corpus_loader'):
                             subcategory = self.core8_corpus_loader.get_subcategory('LOC', original_text)
                         
+                        clean_text = self._clean_entity_text(original_text)
                         entity = {
-                            'value': original_text,
-                            'text': original_text,
+                            'value': clean_text,
+                            'text': clean_text,
                             'type': 'LOC',
                             'span': {
                                 'start': start_pos,
@@ -1155,6 +1164,153 @@ class ServiceProcessor:
                 return True
         
         return False
+    
+    def _clean_text_formatting(self, content: str) -> str:
+        """
+        Clean text formatting corruption from HTML-to-markdown conversion.
+        
+        This prevents dual entity detection where corrupted text like:
+        'Boston\n\n\n      Boston' gets detected as PERSON entity
+        while clean 'Boston' gets detected as GPE entity.
+        
+        Args:
+            content: Raw text content potentially with formatting artifacts
+            
+        Returns:
+            Cleaned text with normalized whitespace
+        """
+        if not content:
+            return content
+        
+        # Replace multiple consecutive newlines with single newlines
+        import re
+        content = re.sub(r'\n\s*\n\s*\n+', '\n\n', content)
+        
+        # Replace excessive whitespace within lines
+        content = re.sub(r'[ \t]{3,}', ' ', content)
+        
+        # Clean up lines that have redundant text separated by whitespace
+        # Pattern: "Text\n\n\n    Text" -> "Text"
+        lines = content.split('\n')
+        cleaned_lines = []
+        
+        for i, line in enumerate(lines):
+            line = line.strip()
+            if not line:
+                cleaned_lines.append('')
+                continue
+            
+            # Check if this line is a duplicate or near-duplicate of a recent line (within 3 lines)
+            is_duplicate = False
+            for j in range(max(0, i-3), i):
+                if j < len(cleaned_lines):
+                    prev_line = cleaned_lines[j].strip()
+                    if prev_line and self._is_near_duplicate(prev_line, line):
+                        is_duplicate = True
+                        break
+            
+            if not is_duplicate:
+                cleaned_lines.append(line)
+            else:
+                # Skip duplicate line but preserve structure with empty line
+                cleaned_lines.append('')
+        
+        # Rejoin and normalize final whitespace
+        cleaned_content = '\n'.join(cleaned_lines)
+        
+        # Final cleanup: normalize multiple spaces to single space
+        cleaned_content = re.sub(r' +', ' ', cleaned_content)
+        
+        return cleaned_content.strip()
+    
+    def _is_near_duplicate(self, text1: str, text2: str) -> bool:
+        """
+        Check if two text strings are near-duplicates (accounting for typos).
+        
+        This handles cases like 'San Francisco' vs 'San Fransisco' where
+        one line has a typo but represents the same entity.
+        
+        Args:
+            text1: First text string
+            text2: Second text string
+            
+        Returns:
+            True if strings are near-duplicates, False otherwise
+        """
+        if not text1 or not text2:
+            return False
+        
+        # Normalize case for comparison
+        t1 = text1.lower().strip()
+        t2 = text2.lower().strip()
+        
+        # Exact match
+        if t1 == t2:
+            return True
+        
+        # If strings are very different in length, likely not duplicates
+        len_diff = abs(len(t1) - len(t2))
+        max_len = max(len(t1), len(t2))
+        if max_len > 0 and len_diff / max_len > 0.3:  # More than 30% length difference
+            return False
+        
+        # Calculate character similarity using simple distance
+        # For strings like "San Francisco" vs "San Fransisco"
+        def char_similarity(s1, s2):
+            if not s1 or not s2:
+                return 0.0
+            
+            # Count matching characters in order
+            matches = 0
+            i = j = 0
+            while i < len(s1) and j < len(s2):
+                if s1[i] == s2[j]:
+                    matches += 1
+                    i += 1
+                    j += 1
+                else:
+                    # Try advancing either pointer to find next match
+                    if i + 1 < len(s1) and s1[i + 1] == s2[j]:
+                        i += 1
+                    elif j + 1 < len(s2) and s1[i] == s2[j + 1]:
+                        j += 1
+                    else:
+                        i += 1
+                        j += 1
+            
+            return matches / max(len(s1), len(s2))
+        
+        similarity = char_similarity(t1, t2)
+        
+        # Consider strings near-duplicates if >85% similar
+        return similarity > 0.85
+    
+    def _clean_entity_text(self, text: str) -> str:
+        """
+        Clean entity text to remove formatting corruption and normalize whitespace.
+        
+        This ensures raw entity output doesn't contain corrupted text like:
+        'Boston\n\n\n      Boston' or extra symbols/newlines.
+        
+        Args:
+            text: Raw entity text potentially with formatting artifacts
+            
+        Returns:
+            Cleaned entity text suitable for storage and output
+        """
+        if not text:
+            return text
+        
+        # Remove excessive newlines and whitespace
+        import re
+        cleaned = re.sub(r'\n+', ' ', text)  # Replace newlines with spaces
+        cleaned = re.sub(r'\s+', ' ', cleaned)  # Normalize multiple spaces
+        cleaned = cleaned.strip()  # Remove leading/trailing whitespace
+        
+        # Remove special symbols that shouldn't be in entity text
+        cleaned = re.sub(r'[^\w\s\-\.\,\'\"\$€£¥₹]+', '', cleaned)  # Keep alphanumeric, spaces, basic punctuation, currencies
+        
+        return cleaned
     
     def _extract_entities_with_spans(self, content: str, pattern: str, entity_type: str, flags: int = 0) -> List[Dict]:
         """Extract entities with span information and clean text."""

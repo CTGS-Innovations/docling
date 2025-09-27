@@ -132,8 +132,8 @@ flpc_regex_patterns:
       priority: high
       
     url:
-      pattern: '(?i)(?:https?://|www\.)[^\s<>"{}|\\\\^`\\[\\]]+'
-      description: "URLs and web links including bare www"
+      pattern: '(?i)(?:https?://|www\.)[^\s<>"{}|\\\\^`\\[\\]()]+'
+      description: "URLs and web links with markdown boundary detection"
       priority: medium
       
     version:
