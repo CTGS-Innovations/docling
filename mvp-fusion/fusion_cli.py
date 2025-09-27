@@ -1020,8 +1020,8 @@ Examples:
     parser.add_argument('--urls', action='store_true',
                        help='Process URLs from config file (directories are processed by default)')
     parser.add_argument('--output', '-o', type=str, help='Output directory')
-    parser.add_argument('--batch-size', '-b', type=int, default=32, 
-                       help='Batch size for parallel processing')
+    parser.add_argument('--batch-size', '-b', type=int, default=None, 
+                       help='Batch size for parallel processing (overrides config file)')
     
     # File options
     parser.add_argument('--extensions', nargs='+', default=['.txt', '.md', '.pdf', '.docx'],
@@ -1741,7 +1741,8 @@ def _load_and_override_config(args) -> dict:
     config['pipeline']['stages_to_run'] = stages_to_run
     
     # Override other settings
-    if args.batch_size:
+    # Only override batch_size if explicitly provided via CLI
+    if args.batch_size is not None:
         if not config.get('performance'):
             config['performance'] = {}
         config['performance']['batch_size'] = args.batch_size

@@ -76,7 +76,7 @@ performance:
   max_workers: 2               # Test higher workers with connection pool optimization
   
   # Batch processing for efficiency
-  batch_size: 32               # Process 32 documents simultaneously
+  batch_size: 25               # Process 50 documents simultaneously
   batch_timeout_seconds: 10    # Max time per batch
 
 # Input Configuration

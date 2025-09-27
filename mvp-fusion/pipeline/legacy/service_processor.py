@@ -2230,7 +2230,7 @@ class ServiceProcessor:
                 output_dir.mkdir(parents=True, exist_ok=True)
                 
                 # Batch configuration
-                BATCH_SIZE = 20  # Process and write in batches of 10
+                BATCH_SIZE = self.config.get('performance', {}).get('batch_size', 20)  # Use config performance.batch_size, fallback to 20
                 current_batch = []
                 
                 for future in as_completed(future_to_path):
