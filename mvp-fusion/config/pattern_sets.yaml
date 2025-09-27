@@ -102,8 +102,8 @@ flpc_regex_patterns:
   # Universal Entities (Complex Patterns)
   universal_entities:
     money:
-      pattern: '(?i)(?:[\$£€¥₹₽₩₪₦₨₱₡₵₴₸₿]\s*\d+(?:[,\.]\d+)*(?:\.\d{2})?|\b\d+(?:[,\.]\d+)*(?:\.\d{2})?\s*(?:dollars?|usd|pounds?|gbp|euros?|eur|yen|jpy|yuan|cny|rupees?|inr|rubles?|rub|won|krw|shekels?|ils|naira?|ngn|pesos?|mxn|php|colones?|crc|cedis?|ghs|hryvnia|uah|tenge|kzt|bitcoin|btc|satoshis?)\b)'
-      description: "International currencies with word boundaries"
+      pattern: '(?i)(?:[\$£€¥₹₽₩₪₦₨₱₡₵₴₸₿]\s*\d+(?:[,\.]\d+)*(?:\.\d{2})?\s*(?:thousand|million|billion|trillion|k|m|b|t)?\b|\b\d+(?:[,\.]\d+)*(?:\.\d{2})?\s*(?:thousand|million|billion|trillion|k|m|b|t)?\s*(?:dollars?|usd|pounds?|gbp|euros?|eur|yen|jpy|yuan|cny|rupees?|inr|rubles?|rub|won|krw|shekels?|ils|naira?|ngn|pesos?|mxn|php|colones?|crc|cedis?|ghs|hryvnia|uah|tenge|kzt|bitcoin|btc|satoshis?)\b)'
+      description: "International currencies with word boundaries and magnitude support (million, billion, etc.)"
       priority: high
       
     date:

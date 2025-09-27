@@ -214,7 +214,26 @@ class EntityNormalizer:
                 for entity in type_entities:
                     for mention in entity.mentions:
                         original_text = mention['text']
-                        replacement_map[original_text] = (entity.normalized, entity.id)
+                        
+                        # MARKDOWN COMPATIBILITY: Check if text is in markdown format first
+                        # Priority: most specific markdown > less specific > plain text
+                        markdown_versions = [
+                            f"**{original_text}**",  # Bold (check first - most specific)
+                            f"`{original_text}`",    # Code
+                            f"*{original_text}*",    # Italic (check last - least specific)
+                        ]
+                        
+                        # Check for markdown versions in order of specificity
+                        found_markdown = False
+                        for markdown_version in markdown_versions:
+                            if markdown_version in document_text:
+                                replacement_map[markdown_version] = (entity.normalized, entity.id)
+                                found_markdown = True
+                                break  # Only use the first (most specific) match
+                        
+                        # Only add plain text if no markdown version was found
+                        if not found_markdown:
+                            replacement_map[original_text] = (entity.normalized, entity.id)
         
         # Step 2: Perform global text replacement using Aho-Corasick
         normalized_text = self._perform_global_replacement(document_text, replacement_map)
@@ -901,8 +920,9 @@ class EntityNormalizer:
                 else:
                     currency = 'USD'  # Default
                 
-                # Industry standard: normalized is the actual numeric value
-                canonical = str(actual_value)
+                # PRESERVE-ORIGINAL: Keep original format like "$14,502" instead of converting to "14502.0"
+                # This maintains user context and currency formatting expectations
+                canonical = text.strip()
                 
                 # Create metadata with all the parsed information
                 metadata = {
