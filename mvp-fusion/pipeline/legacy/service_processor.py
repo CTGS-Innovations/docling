@@ -1449,10 +1449,30 @@ class ServiceProcessor:
         for sentence_text, sentence_start in sentences:
             sentence_entities = []
             
-            # Extract entities from this sentence
+            # Extract entities from this sentence with word boundary validation
             for end_pos, (ent_type, canonical) in automaton.iter(sentence_text.lower()):
                 start_pos = end_pos - len(canonical) + 1
                 original_text = sentence_text[start_pos:end_pos + 1]
+                
+                # WORD BOUNDARY VALIDATION: Ensure we're matching whole words, not substrings
+                # Check that the match is bounded by non-alphanumeric characters or string boundaries
+                is_valid_word_boundary = True
+                
+                # Check character before the match (if exists)
+                if start_pos > 0:
+                    char_before = sentence_text[start_pos - 1]
+                    if char_before.isalnum():  # If previous character is alphanumeric, it's not a word boundary
+                        is_valid_word_boundary = False
+                
+                # Check character after the match (if exists)  
+                if end_pos + 1 < len(sentence_text):
+                    char_after = sentence_text[end_pos + 1]
+                    if char_after.isalnum():  # If next character is alphanumeric, it's not a word boundary
+                        is_valid_word_boundary = False
+                
+                # Skip this match if it's not a valid word boundary
+                if not is_valid_word_boundary:
+                    continue
                 
                 # Only add reasonable matches - filter out short ambiguous org names and common words
                 common_words = {
