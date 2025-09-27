@@ -26,7 +26,7 @@ import tempfile
 from utils.logging_config import setup_logging, get_fusion_logger
 from utils.phase_manager import get_phase_performance_report
 from utils.deployment_manager import DeploymentManager
-from utils.html_to_markdown_converter import convert_html_to_markdown
+from utils.configurable_markdown_converter import convert_html_to_markdown_configurable
 
 
 class PipelinePhase:
@@ -512,7 +512,7 @@ def process_single_url(extractor: BaseExtractor, url: str, output_dir: Path = No
             try:
                 # Convert HTML content to markdown
                 html_content = content.decode('utf-8', errors='ignore')
-                markdown_content = convert_html_to_markdown(html_content, base_url=url)
+                markdown_content = convert_html_to_markdown_configurable(html_content, base_url=url, config=config)
                 logger.success(f"✅ HTML converted to markdown ({len(markdown_content)} chars)")
             except Exception as e:
                 logger.logger.warning(f"⚠️ HTML-to-markdown conversion failed: {e}")
@@ -1363,7 +1363,7 @@ Examples:
                                 # Convert HTML to markdown
                                 logger.entity(f"🔄 Converting HTML to Markdown")
                                 html_content = content.decode('utf-8', errors='ignore')
-                                markdown_content = convert_html_to_markdown(html_content, base_url=url)
+                                markdown_content = convert_html_to_markdown_configurable(html_content, base_url=url, config=config)
                             else:
                                 markdown_content = content.decode('utf-8', errors='ignore') if content else f"Failed: {message}"
                             

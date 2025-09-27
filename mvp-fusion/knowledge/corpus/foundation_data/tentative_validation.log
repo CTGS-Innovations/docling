@@ -62,3 +62,6 @@
 {'timestamp': '2025-09-22T20:43:32.878446', 'entity_type': 'ORG', 'text': 'In Advances In Neural Information Processing Systems', 'confidence': 1.0, 'source': 'pos_gap_discovery', 'context': 'Document processing - gap discovery'}
 {'timestamp': '2025-09-22T20:43:32.878472', 'entity_type': 'ORG', 'text': 'Neural\nInformation Processing Systems', 'confidence': 1.0, 'source': 'pos_gap_discovery', 'context': 'Document processing - gap discovery'}
 {'timestamp': '2025-09-22T20:43:32.878519', 'entity_type': 'ORG', 'text': 'Neural Information\nProcessing Systems', 'confidence': 1.0, 'source': 'pos_gap_discovery', 'context': 'Document processing - gap discovery'}
+{'timestamp': '2025-09-27T17:20:36.969522', 'entity_type': 'ORG', 'text': 'River Systems', 'confidence': 1.0, 'source': 'pos_gap_discovery', 'context': 'Document processing - gap discovery'}
+{'timestamp': '2025-09-27T17:20:37.634366', 'entity_type': 'ORG', 'text': 'Stanford Graduate School', 'confidence': 0.9500000000000001, 'source': 'pos_gap_discovery', 'context': 'Document processing - gap discovery'}
+{'timestamp': '2025-09-27T17:20:38.571355', 'entity_type': 'ORG', 'text': 'Email\n\nCompany', 'confidence': 1.0, 'source': 'pos_gap_discovery', 'context': 'Document processing - gap discovery'}

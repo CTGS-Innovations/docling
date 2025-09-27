@@ -1,3 +1,17 @@
 https://www.ctgs.com/
 https://www.cbinsights.com/research-unicorn-companies
 https://dealroom.net/blog/top-venture-capital-firms
+https://www.forbes.com/sites/georgedeeb/2019/12/03/calculate-your-addressable-market-size-to-help-you-attract-investors/
+https://www.forbes.com/sites/abdoriani/2024/03/22/5-famous-startup-examples-of-finding-product-market-fit/
+https://techcrunch.com/2025/04/16/startup-funding-hit-records-in-q1-but-the-outlook-for-2025-is-still-awful/
+https://techcrunch.com/2024/01/15/startup-valuations-predictions-2024/
+https://techcrunch.com/2025/09/12/we-are-entering-a-golden-age-of-robotics-startups-and-not-just-because-of-ai/
+https://a16z.com/big-ideas-in-tech-2025/
+https://a16z.com/unbundling-the-bpo-how-ai-will-disrupt-outsourced-work/
+https://a16z.com/deconstructing-deel/
+https://www.cbinsights.com/research/report/venture-trends-q1-2025/
+https://www.cbinsights.com/research/report/fintech-trends-2024/
+https://www.cbinsights.com/research/report/insurtech-trends-q1-2025/
+https://www.statista.com/topics/840/venture-capital/
+https://www.statista.com/topics/871/startups-in-the-us/
+https://www.statista.com/topics/3122/artificial-intelligence-ai-in-business/
