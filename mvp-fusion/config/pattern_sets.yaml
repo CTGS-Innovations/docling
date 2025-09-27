@@ -102,13 +102,13 @@ flpc_regex_patterns:
   # Universal Entities (Complex Patterns)
   universal_entities:
     money:
-      pattern: '(?i)[\$€£¥₹]\s*[\d.,]+(?:\.\d{1,2})?(?:\s*(?:k|m|b|thousand|million|billion))?|(?:USD|EUR|GBP|JPY|CNY|INR|AUD|CAD)\s*[\d.,]+(?:\s*(?:k|m|bn))?|[\d.,]+(?:\.\d{1,2})?\s+(?:dollars?|euros?|yen|yuan|rupees?|pounds\s+sterling|british\s+pounds)'
-      description: "Money amounts requiring explicit currency symbols or currency words"
+      pattern: '(?i)(?:[\$£€¥₹₽₩₪₦₨₱₡₵₴₸₿]\s*\d+(?:[,\.]\d+)*(?:\.\d{2})?|\b\d+(?:[,\.]\d+)*(?:\.\d{2})?\s*(?:dollars?|usd|pounds?|gbp|euros?|eur|yen|jpy|yuan|cny|rupees?|inr|rubles?|rub|won|krw|shekels?|ils|naira?|ngn|pesos?|mxn|php|colones?|crc|cedis?|ghs|hryvnia|uah|tenge|kzt|bitcoin|btc|satoshis?)\b)'
+      description: "International currencies with word boundaries"
       priority: high
       
     date:
-      pattern: '(?i)\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec|January|February|March|April|June|July|August|September|October|November|December)\s+\d{1,2}(?:st|nd|rd|th)?,?\s+\d{4}|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)\s+\d{4}|\bQ[1-4]\s+\d{4}|\bFY\s?\d{4}|\b\d{4}[/-]\d{1,2}[/-]\d{1,2}|\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}'
-      description: "Comprehensive date formats including abbreviated months, quarters, fiscal years"
+      pattern: '(?i)\b(?:(?:january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+\d{1,2}(?:st|nd|rd|th)?,?\s*\d{4}|\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}|\d{4}[\/\-\.]\d{1,2}[\/\-\.]\d{1,2})\b'
+      description: "International date formats with word boundaries"
       priority: high
       
     email:
@@ -127,9 +127,9 @@ flpc_regex_patterns:
       priority: medium
       
     time:
-      pattern: '(?i)\b(?:[01]?\d|2[0-3]):[0-5]\d(?::[0-5]\d)?(?:\s*(?:UTC|Z|[AP]M|[AP]M [A-Z]{2,4}|[A-Z]{2,4}))?\b|\b\d{1,2}\s*(?:AM|PM)\b|\b(?:[01]?\d|2[0-3])[:.][0-5]\d\s*(?:-|–|—|to)\s*(?:[01]?\d|2[0-3])[:.][0-5]\d(?:\s*(?:AM|PM))?'
-      description: "Time expressions with 24h format, zones, and ranges"
-      priority: low
+      pattern: "(?i)\\b(?:\\d{1,2}:\\d{2}(?::\\d{2})?\\s*(?:am|pm|a\\.m\\.|p\\.m\\.)?|\\d{1,2}\\s*(?:am|pm|a\\.m\\.|p\\.m\\.|o'clock|hours?|hrs?|h))\\b"
+      description: "International time formats with word boundaries"
+      priority: high
       
     url:
       pattern: '(?i)(?:https?://|www\.)[^\s<>"{}|\\\\^`\\[\\]]+'
@@ -143,29 +143,45 @@ flpc_regex_patterns:
       
     # Split measurement patterns by category for optimal FLPC performance
     measurement_length:
-      pattern: '(?i)(?:^|[\s\-])\d+(?:\.\d+)?\s*(?:feet|ft|inches?|inch|cm|mm|meters?|metres?|kilometers?|kilometres?|km|miles?|mi|yd|yards?)'
-      description: "Length and distance measurements"
+      pattern: '(?i)\b\d+(?:\.\d+)?\s*(?:millimeters?|millimetres?|mm|centimeters?|centimetres?|cm|meters?|metres?|m|kilometers?|kilometres?|km|inches?|inch|in|feet|foot|ft|yards?|yd|miles?|mi|nautical\s+miles?|nmi|fathoms?|fm|chains?|ch|rods?|rd|furlongs?|fur|leagues?|angstroms?|å|micrometers?|micrometres?|μm|nanometers?|nanometres?|nm|light\s+years?|ly|parsecs?|pc|astronomical\s+units?|au)\b'
+      description: "Clean length measurements with word boundaries (true clean separation)"
       priority: medium
       
     measurement_weight:
-      pattern: '(?i)(?:^|[\s\-])-?\d+(?:\.\d+)?\s*(?:kg|pounds?|lbs?|oz|g|mg|tons?|tonnes?)'
-      description: "Weight and mass measurements"
+      pattern: '(?i)\b\d+(?:\.\d+)?\s*(?:milligrams?|mg|grams?|grammes?|g|kilograms?|kilogrammes?|kg|metric\s+tons?|metric\s+tonnes?|t|ounces?|oz|pounds?|lbs?|lb|stones?|st|tons?|tonnes?|short\s+tons?|long\s+tons?|carats?|ct|grains?|gr|drams?|dr|pennyweights?|dwt|troy\s+ounces?|troy\s+pounds?|slugs?)\b'
+      description: "Clean weight measurements with word boundaries (true clean separation)"
       priority: medium
       
     measurement_time:
-      pattern: '(?i)(?:^|[\s\-])-?\d+(?:\.\d+)?\s*(?:minutes?|mins?|seconds?|secs?|hours?|hrs?|days?|weeks?|months?|years?)'
-      description: "Time duration measurements"
+      pattern: '(?i)\b\d+(?:\.\d+)?\s*(?:nanoseconds?|ns|microseconds?|μs|milliseconds?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|wks?|w|months?|mos?|years?|yrs?|y|decades?|centuries?|millennia?|fortnights?)\b'
+      description: "Clean time measurements with word boundaries (true clean separation)"
       priority: medium
       
     measurement_temperature:
-      pattern: '(?i)(?:^|[\s\-])-?\d+(?:\.\d+)?\s*(?:degrees?|degC|degF|°C|°F)'
-      description: "Temperature measurements"
+      pattern: '(?i)\b\d+(?:\.\d+)?\s*(?:degrees?\s*(?:celsius|centigrade|fahrenheit|kelvin)|°\s*(?:c|f|k)|degc|degf|degk|°c|°f|°k)\b'
+      description: "Clean temperature measurements with word boundaries (true clean separation)"
       priority: medium
       
     measurement_sound:
-      pattern: '(?i)(?:^|[\s\-])-?\d+(?:\.\d+)?\s*(?:decibels?|dB)'
-      description: "Sound level measurements"
+      pattern: '(?i)\b\d+(?:\.\d+)?\s*(?:decibels?|db|dba|dbc|sones?)\b'
+      description: "Clean sound measurements with word boundaries (true clean separation)"
       priority: medium
+      
+    measurement_percentage:
+      pattern: '(?i)\b\d+(?:\.\d+)?\s*%'
+      description: "Percentage measurements with word boundaries (handles ranges like 10-15%)"
+      priority: medium
+      
+    # Range-aware measurement patterns for compound measurements
+    measurement_length_range:
+      pattern: '(?i)\b(?:-?\d+(?:\.\d+)?)\s*(?:[-–—]\s*\d+(?:\.\d+)?)?\s*(?:millimeters?|millimetres?|mm|centimeters?|centimetres?|cm|meters?|metres?|m|kilometers?|kilometres?|km|inches?|inch|in|feet|foot|ft|yards?|yd|miles?|mi)\b'
+      description: "Range-aware length measurements (handles 30-37 inches)"
+      priority: high
+      
+    measurement_temperature_range:
+      pattern: '(?i)\b-?\d+(?:\.\d+)?\s*(?:degrees?\s*(?:celsius|fahrenheit|kelvin)|°\s*(?:c|f|k)|°c|°f|°k)\s*(?:(?:to|through|[-–—])\s*-?\d+(?:\.\d+)?\s*(?:degrees?\s*(?:celsius|fahrenheit|kelvin)|°\s*(?:c|f|k)|°c|°f|°k))?\b'
+      description: "Range-aware temperature measurements (handles -20°F to 120°F)"
+      priority: high
       
     range_indicator:
       pattern: '(?i)\b(?:to|through|between|and)\b|[-–—]'
@@ -269,6 +285,9 @@ pattern_sets:
       - measurement_time
       - measurement_temperature
       - measurement_sound
+      - measurement_percentage
+      - measurement_length_range
+      - measurement_temperature_range
       - range_indicator
       - regulation
       

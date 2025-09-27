@@ -1,0 +1,151 @@
+# COMPREHENSIVE INTERNATIONAL FLPC PATTERNS WITH WORD BOUNDARIES
+# ================================================================
+# ALL patterns use \b word boundaries to prevent substring extraction
+# Covers international variants and standards for global scaling
+
+flpc_regex_patterns:
+  universal_entities:
+    
+    # ===================
+    # DATE PATTERNS  
+    # ===================
+    date:
+      pattern: '(?i)\b(?:(?:january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+\d{1,2}(?:st|nd|rd|th)?,?\s*\d{4}|\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}|\d{4}[\/\-\.]\d{1,2}[\/\-\.]\d{1,2})\b'
+      description: "International date formats with word boundaries"
+      priority: high
+    
+    # ===================
+    # TIME PATTERNS
+    # ===================  
+    time:
+      pattern: '(?i)\b(?:\d{1,2}:\d{2}(?::\d{2})?\s*(?:am|pm|a\.m\.|p\.m\.)?|\d{1,2}\s*(?:am|pm|a\.m\.|p\.m\.|o\'clock|hours?|hrs?|h))\b'
+      description: "International time formats with word boundaries"
+      priority: high
+    
+    # ===================
+    # MONEY PATTERNS
+    # ===================
+    money:
+      pattern: '(?i)(?:[\$£€¥₹₽₩₪₦₨₱₡₵₴₸₿]\s*\d+(?:[,\.]\d+)*(?:\.\d{2})?|\b\d+(?:[,\.]\d+)*(?:\.\d{2})?\s*(?:dollars?|usd|pounds?|gbp|euros?|eur|yen|jpy|yuan|cny|rupees?|inr|rubles?|rub|won|krw|shekels?|ils|naira?|ngn|pesos?|mxn|php|colones?|crc|cedis?|ghs|hryvnia|uah|tenge|kzt|bitcoin|btc|satoshis?)\b)'
+      description: "International currencies with word boundaries"
+      priority: high
+    
+    # ===================
+    # MEASUREMENT LENGTH/DISTANCE  
+    # ===================
+    measurement_length:
+      pattern: '(?i)\b\d+(?:\.\d+)?\s*(?:millimeters?|millimetres?|mm|centimeters?|centimetres?|cm|meters?|metres?|m|kilometers?|kilometres?|km|inches?|inch|in|feet|foot|ft|yards?|yd|miles?|mi|nautical\s+miles?|nmi|fathoms?|fm|chains?|ch|rods?|rd|furlongs?|fur|leagues?|angstroms?|å|micrometers?|micrometres?|μm|nanometers?|nanometres?|nm|light\s+years?|ly|parsecs?|pc|astronomical\s+units?|au)\b'
+      description: "International length/distance measurements with word boundaries"
+      priority: medium
+    
+    # ===================
+    # MEASUREMENT WEIGHT/MASS
+    # ===================
+    measurement_weight:
+      pattern: '(?i)\b\d+(?:\.\d+)?\s*(?:milligrams?|mg|grams?|grammes?|g|kilograms?|kilogrammes?|kg|metric\s+tons?|metric\s+tonnes?|t|ounces?|oz|pounds?|lbs?|lb|stones?|st|tons?|tonnes?|short\s+tons?|long\s+tons?|carats?|ct|grains?|gr|drams?|dr|pennyweights?|dwt|troy\s+ounces?|troy\s+pounds?|slugs?)\b'
+      description: "International weight/mass measurements with word boundaries"
+      priority: medium
+    
+    # ===================
+    # MEASUREMENT TEMPERATURE
+    # ===================
+    measurement_temperature:
+      pattern: '(?i)\b\d+(?:\.\d+)?\s*(?:degrees?\s*(?:celsius|centigrade|fahrenheit|kelvin)|°\s*(?:c|f|k)|degc|degf|degk|°c|°f|°k)\b'
+      description: "International temperature measurements with word boundaries"
+      priority: medium
+    
+    # ===================
+    # MEASUREMENT TIME/DURATION
+    # ===================
+    measurement_time:
+      pattern: '(?i)\b\d+(?:\.\d+)?\s*(?:nanoseconds?|ns|microseconds?|μs|milliseconds?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|wks?|w|months?|mos?|years?|yrs?|y|decades?|centuries?|millennia?|fortnights?)\b'
+      description: "International time/duration measurements with word boundaries"
+      priority: medium
+    
+    # ===================
+    # MEASUREMENT VOLUME  
+    # ===================
+    measurement_volume:
+      pattern: '(?i)\b\d+(?:\.\d+)?\s*(?:milliliters?|millilitres?|ml|liters?|litres?|l|cubic\s+meters?|cubic\s+metres?|m³|cubic\s+centimeters?|cubic\s+centimetres?|cm³|cc|fluid\s+ounces?|fl\s+oz|cups?|pints?|pt|quarts?|qt|gallons?|gal|imperial\s+gallons?|us\s+gallons?|barrels?|bbl|bushels?|bu|pecks?|pk)\b'
+      description: "International volume measurements with word boundaries"
+      priority: medium
+    
+    # ===================
+    # MEASUREMENT PRESSURE
+    # ===================
+    measurement_pressure:
+      pattern: '(?i)\b\d+(?:\.\d+)?\s*(?:pascals?|pa|kilopascals?|kpa|megapascals?|mpa|bars?|millibars?|mbar|atmospheres?|atm|pounds?\s+per\s+square\s+inch|psi|mmhg|mmh2o|inhg|inh2o|torr?|psia|psig)\b'
+      description: "International pressure measurements with word boundaries"
+      priority: medium
+    
+    # ===================
+    # MEASUREMENT SPEED/VELOCITY
+    # ===================
+    measurement_speed:
+      pattern: '(?i)\b\d+(?:\.\d+)?\s*(?:meters?\s+per\s+second|metres?\s+per\s+second|m\/s|kilometers?\s+per\s+hour|kilometres?\s+per\s+hour|km\/h|kph|miles?\s+per\s+hour|mph|feet\s+per\s+second|ft\/s|knots?|kn|mach)\b'
+      description: "International speed/velocity measurements with word boundaries"
+      priority: medium
+    
+    # ===================
+    # MEASUREMENT ENERGY/POWER
+    # ===================
+    measurement_energy:
+      pattern: '(?i)\b\d+(?:\.\d+)?\s*(?:joules?|j|kilojoules?|kj|megajoules?|mj|calories?|cal|kilocalories?|kcal|british\s+thermal\s+units?|btu|watts?|w|kilowatts?|kw|megawatts?|mw|gigawatts?|gw|horsepower|hp|volt\s+amps?|va|kilovolt\s+amps?|kva)\b'
+      description: "International energy/power measurements with word boundaries"
+      priority: medium
+    
+    # ===================
+    # MEASUREMENT AREA
+    # ===================
+    measurement_area:
+      pattern: '(?i)\b\d+(?:\.\d+)?\s*(?:square\s+millimeters?|square\s+millimetres?|mm²|square\s+centimeters?|square\s+centimetres?|cm²|square\s+meters?|square\s+metres?|m²|square\s+kilometers?|square\s+kilometres?|km²|square\s+inches?|sq\s+in|square\s+feet|sq\s+ft|square\s+yards?|sq\s+yd|square\s+miles?|sq\s+mi|acres?|hectares?|ha)\b'
+      description: "International area measurements with word boundaries"
+      priority: medium
+    
+    # ===================
+    # MEASUREMENT SOUND
+    # ===================
+    measurement_sound:
+      pattern: '(?i)\b\d+(?:\.\d+)?\s*(?:decibels?|db|dba|dbc|sones?)\b'
+      description: "International sound measurements with word boundaries"
+      priority: medium
+    
+    # ===================
+    # MEASUREMENT FREQUENCY
+    # ===================
+    measurement_frequency:
+      pattern: '(?i)\b\d+(?:\.\d+)?\s*(?:hertz|hz|kilohertz|khz|megahertz|mhz|gigahertz|ghz|terahertz|thz|revolutions?\s+per\s+minute|rpm|beats?\s+per\s+minute|bpm)\b'
+      description: "International frequency measurements with word boundaries"
+      priority: medium
+    
+    # ===================
+    # RANGE INDICATORS
+    # ===================
+    range_indicator:
+      pattern: '(?i)\b(?:to|through|between|and|from)\b|[-–—]'
+      description: "Range indicators with word boundaries for word-based indicators"
+      priority: low
+
+    # ===================
+    # PHONE PATTERNS
+    # ===================
+    phone:
+      pattern: '(?i)\b(?:\+?\d{1,4}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b'
+      description: "International phone numbers with word boundaries"
+      priority: medium
+    
+    # ===================
+    # EMAIL PATTERNS
+    # ===================
+    email:
+      pattern: '(?i)\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b'
+      description: "Email addresses with word boundaries"
+      priority: medium
+    
+    # ===================
+    # URL PATTERNS
+    # ===================
+    url:
+      pattern: '(?i)\b(?:https?:\/\/|www\.)[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\/[^\s]*)?\b'
+      description: "URLs with word boundaries"
+      priority: medium

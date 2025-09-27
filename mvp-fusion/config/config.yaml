@@ -86,8 +86,8 @@ inputs:
   
   # Directory sources - single complex PDF folder for testing
   directories:
-    - "~/projects/docling/cli/data_complex"
-  
+    - "~/projects/docling/output_sourcefiles/data_complex"
+
   # URL sources - can process web content directly
   urls: []
   

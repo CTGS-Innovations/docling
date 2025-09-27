@@ -86,9 +86,9 @@ inputs:
   
   # Directory sources - absolute paths for reliable processing
   directories:
-    - "/home/corey/projects/docling/cli/data_complex"
-    - "/home/corey/projects/docling/cli/data"    
-    - "/home/corey/projects/docling/cli/data_osha"    
+    - "/home/corey/projects/docling/output_sourcefiles/data_complex"
+    - "/home/corey/projects/docling/output_sourcefiles/data"    
+    - "/home/corey/projects/docling/output_sourcefiles/data_osha"    
 
   
   # URL sources - can process web content directly

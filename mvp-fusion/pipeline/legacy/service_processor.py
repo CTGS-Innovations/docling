@@ -371,6 +371,157 @@ class ServiceProcessor:
                 entities.append(entity)
         return entities
     
+    def _filter_parenthetical_measurements(self, entities: List[Dict], content: str) -> List[Dict]:
+        """
+        Filter out measurements that appear within parentheses to preserve ONLY original units.
+        
+        This prevents tagging of converted units like (1.8 meters) when the original 
+        is **6 feet**, ensuring we only tag user's original measurement units.
+        
+        Args:
+            entities: List of measurement entities from FLPC
+            content: Original content to check for parenthetical context
+            
+        Returns:
+            Filtered list with parenthetical measurements removed
+        """
+        filtered_entities = []
+        
+        for entity in entities:
+            measurement_text = entity.get('text', '')
+            
+            # Find all occurrences of this measurement in the content
+            import re
+            # Escape special regex characters in measurement text
+            escaped_text = re.escape(measurement_text)
+            
+            # Find all matches of this measurement in content
+            matches = list(re.finditer(escaped_text, content, re.IGNORECASE))
+            
+            # Check each occurrence to see if any are NOT in parentheses
+            has_non_parenthetical_occurrence = False
+            
+            for match in matches:
+                start_pos = match.start()
+                end_pos = match.end()
+                
+                # Check context around this specific occurrence
+                context_start = max(0, start_pos - 50)
+                context_end = min(len(content), end_pos + 50)
+                
+                # Get text before and after this occurrence
+                before_text = content[context_start:start_pos]
+                after_text = content[end_pos:context_end]
+                
+                # Look for parentheses pattern
+                last_open_paren = before_text.rfind('(')
+                first_close_paren = after_text.find(')')
+                
+                # Check if this occurrence is within parentheses
+                is_in_parentheses = False
+                if last_open_paren != -1 and first_close_paren != -1:
+                    # Make sure there's no closing paren between opening paren and measurement
+                    between_open_and_measurement = before_text[last_open_paren:]
+                    if ')' not in between_open_and_measurement:
+                        is_in_parentheses = True
+                        self.logger.logger.debug(f"Found parenthetical occurrence: '{measurement_text}' in '{before_text[last_open_paren:]}...{after_text[:first_close_paren+1]}'")
+                
+                # If this occurrence is NOT in parentheses, keep the entity
+                if not is_in_parentheses:
+                    has_non_parenthetical_occurrence = True
+                    self.logger.logger.debug(f"Found non-parenthetical occurrence: '{measurement_text}'")
+                    break
+            
+            # Only keep entities that have at least one non-parenthetical occurrence
+            if has_non_parenthetical_occurrence:
+                filtered_entities.append(entity)
+            else:
+                self.logger.logger.debug(f"Filtering out measurement '{measurement_text}' - only found in parentheses")
+        
+        return filtered_entities
+    
+    def _deduplicate_range_measurements(self, entities: List[Dict], content: str) -> List[Dict]:
+        """
+        Deduplicate overlapping measurements to prefer range matches over individual matches.
+        
+        For example, if we detect both "30-37 inches" and "37 inches" from the same text,
+        we keep only "30-37 inches" as it's the more complete measurement.
+        
+        Args:
+            entities: List of measurement entities from FLPC
+            content: Original content for text analysis
+            
+        Returns:
+            Deduplicated list preferring longer/more complete measurements
+        """
+        if not entities:
+            return entities
+        
+        # Group entities by whether they are ranges or individual measurements
+        range_entities = []
+        individual_entities = []
+        
+        for entity in entities:
+            entity_text = entity.get('text', '')
+            entity_type = entity.get('type', '')
+            
+            # Check if this is a range entity (contains range indicators or is from range pattern)
+            is_range = False
+            
+            # Check if it's from a range pattern type
+            if 'RANGE' in entity_type:
+                is_range = True
+            # Check if it contains range indicators
+            elif any(indicator in entity_text for indicator in ['-', '–', '—', 'to', 'through']):
+                is_range = True
+            
+            if is_range:
+                range_entities.append(entity)
+            else:
+                individual_entities.append(entity)
+        
+        # For each individual entity, check if it's contained within a range entity
+        deduplicated_entities = range_entities.copy()  # Always keep range entities
+        
+        for individual in individual_entities:
+            individual_text = individual.get('text', '')
+            
+            # Check if this individual measurement is contained within any range measurement
+            is_contained_in_range = False
+            
+            for range_entity in range_entities:
+                range_text = range_entity.get('text', '')
+                
+                # Find all occurrences of both measurements in content
+                import re
+                escaped_individual = re.escape(individual_text)
+                escaped_range = re.escape(range_text)
+                
+                individual_matches = list(re.finditer(escaped_individual, content, re.IGNORECASE))
+                range_matches = list(re.finditer(escaped_range, content, re.IGNORECASE))
+                
+                # Check if any individual occurrence is contained within a range occurrence
+                for ind_match in individual_matches:
+                    for range_match in range_matches:
+                        # Check if individual measurement is contained within range text
+                        if (range_match.start() <= ind_match.start() and 
+                            ind_match.end() <= range_match.end()):
+                            is_contained_in_range = True
+                            self.logger.logger.debug(f"Individual measurement '{individual_text}' contained in range '{range_text}'")
+                            break
+                    if is_contained_in_range:
+                        break
+                
+                if is_contained_in_range:
+                    break
+            
+            # Only keep individual measurement if it's not contained in any range
+            if not is_contained_in_range:
+                deduplicated_entities.append(individual)
+        
+        self.logger.logger.debug(f"Measurement deduplication: {len(entities)} → {len(deduplicated_entities)} entities")
+        return deduplicated_entities
+    
     def _detect_ranges_from_text(self, text: str) -> List[Dict]:
         """
         Post-processing range detection using FLPC-compatible span analysis.
@@ -777,12 +928,23 @@ class ServiceProcessor:
                 entities['money'] = self._convert_flpc_entities(flpc_entities.get('MONEY', []), 'MONEY')[:40]
                 # Combine all measurement subcategories into measurement entity
                 measurement_entities = []
-                for measurement_type in ['MEASUREMENT_LENGTH', 'MEASUREMENT_WEIGHT', 'MEASUREMENT_TIME', 'MEASUREMENT_TEMPERATURE', 'MEASUREMENT_SOUND']:
+                for measurement_type in ['MEASUREMENT_LENGTH', 'MEASUREMENT_WEIGHT', 'MEASUREMENT_TIME', 'MEASUREMENT_TEMPERATURE', 'MEASUREMENT_SOUND', 'MEASUREMENT_PERCENTAGE', 'MEASUREMENT_LENGTH_RANGE', 'MEASUREMENT_TEMPERATURE_RANGE']:
                     measurement_entities.extend(self._convert_flpc_entities(flpc_entities.get(measurement_type, []), measurement_type))
+                
+                # CRITICAL: Filter out parenthetical measurements to preserve ONLY original units
+                # This removes converted units like (1.8 meters) while keeping original **6 feet**
+                measurement_entities = self._filter_parenthetical_measurements(measurement_entities, content)
+                
+                # RANGE OPTIMIZATION: Deduplicate overlapping measurements to prefer range matches
+                # This ensures "30-37 inches" is chosen over separate "30 inches" and "37 inches"
+                measurement_entities = self._deduplicate_range_measurements(measurement_entities, content)
                 entities['measurement'] = measurement_entities[:50]
                 
                 # Add range indicators for proximity-based range detection
                 entities['range_indicator'] = self._convert_flpc_entities(flpc_entities.get('RANGE_INDICATOR', []), 'RANGE_INDICATOR')[:50]
+                
+                # AC+FLPC HYBRID: Flag entities with range indicators using detected range locations
+                entities = self._flag_range_entities(entities, content)
                 
                 self.logger.logger.info(f"🟢 FLPC extraction [UPDATED]: DATE={len(entities['date'])}, MONEY={len(entities['money'])}, TIME={len(entities['time'])}, MEASUREMENT={len(entities['measurement'])}")
             except Exception as e:
@@ -2629,6 +2791,108 @@ class ServiceProcessor:
                 return True
         
         return False
+    
+    def _flag_range_entities(self, entities: Dict, content: str) -> Dict:
+        """AC+FLPC HYBRID: Flag entities with range indicators using detected locations"""
+        range_indicators = entities.get('range_indicator', [])
+        
+        if not range_indicators:
+            # No range indicators detected - add False flag to all entities
+            for entity_type in ['measurement', 'money', 'date', 'time']:
+                if entity_type in entities:
+                    for entity in entities[entity_type]:
+                        entity['range_indicator'] = {'detected': False}
+            return entities
+        
+        # Flag entities that contain or are adjacent to range indicators
+        for entity_type in ['measurement', 'money', 'date', 'time']:
+            if entity_type in entities:
+                for entity in entities[entity_type]:
+                    entity_span = entity.get('span', {})
+                    entity_start = entity_span.get('start', 0)
+                    entity_end = entity_span.get('end', 0)
+                    
+                    # Check if any range indicator overlaps or is adjacent to this entity
+                    range_detected = False
+                    range_info = {'detected': False}
+                    
+                    for indicator in range_indicators:
+                        indicator_span = indicator.get('span', {})
+                        indicator_start = indicator_span.get('start', 0)
+                        indicator_end = indicator_span.get('end', 0)
+                        
+                        # Check for overlap or adjacency (within 2 characters)
+                        if self._spans_overlap_or_adjacent(entity_start, entity_end, indicator_start, indicator_end):
+                            range_context = self._analyze_range_context(entity, indicator, content)
+                            
+                            range_info = {
+                                'detected': True,
+                                'type': self._classify_range_indicator(indicator.get('text', '')),
+                                'indicator_text': indicator.get('text', ''),
+                                'indicator_span': indicator_span,
+                                'context': range_context,
+                                'pattern_source': 'FLPC'  # FLPC detected the range indicator
+                            }
+                            range_detected = True
+                            break
+                    
+                    entity['range_indicator'] = range_info
+        
+        return entities
+    
+    def _spans_overlap_or_adjacent(self, e_start: int, e_end: int, r_start: int, r_end: int, adjacency_margin: int = 2) -> bool:
+        """Check if entity span overlaps with or is adjacent to range indicator span"""
+        # Direct overlap
+        if (e_start <= r_end and e_end >= r_start):
+            return True
+        
+        # Adjacent (within margin characters)
+        if (abs(e_end - r_start) <= adjacency_margin) or (abs(r_end - e_start) <= adjacency_margin):
+            return True
+        
+        return False
+    
+    def _analyze_range_context(self, entity: Dict, indicator: Dict, content: str) -> str:
+        """Determine if range indicator indicates range or negative modifier"""
+        indicator_span = indicator.get('span', {})
+        indicator_start = indicator_span.get('start', 0)
+        indicator_end = indicator_span.get('end', 0)
+        
+        # Look at surrounding text for context clues
+        context_before = content[max(0, indicator_start - 20):indicator_start]
+        context_after = content[indicator_end:indicator_end + 20]
+        
+        # Range pattern: number-number (e.g., "30-37")
+        if self._has_number_before(context_before) and self._has_number_after(context_after):
+            return 'range'
+        
+        # Negative pattern: dash at start with no preceding number
+        if not self._has_number_before(context_before):
+            return 'negative'
+        
+        # Default to range for ambiguous cases
+        return 'ambiguous'
+    
+    def _has_number_before(self, text: str) -> bool:
+        """Check if text ends with a number (for range detection)"""
+        import re
+        return bool(re.search(r'\d+\s*$', text))
+    
+    def _has_number_after(self, text: str) -> bool:
+        """Check if text starts with a number (for range detection)"""
+        import re
+        return bool(re.search(r'^\s*\d+', text))
+    
+    def _classify_range_indicator(self, indicator_text: str) -> str:
+        """Classify the type of range indicator"""
+        if indicator_text in ['-', '–', '—']:
+            return 'hyphen_range'
+        elif indicator_text.lower() in ['to', 'through']:
+            return 'word_range'
+        elif indicator_text.lower() in ['between', 'and']:
+            return 'between_range'
+        else:
+            return 'unknown_range'
 
 
 if __name__ == "__main__":

@@ -1018,12 +1018,12 @@ class EntityNormalizer:
                         measurement_type = mtype
                         break
                 
-                # Special handling for percentages (keep as percentage, not ratio)
+                # PRESERVE ORIGINAL TEXT - never change user's units in tags
+                # Store conversions in metadata only
                 if unit_lower in ['%', 'percent', 'percentage']:
                     si_value = original_value  # Keep as percentage
                     si_unit = 'percent'
-                    canonical = str(si_value)
-                # Special handling for temperature
+                # Special handling for temperature conversion
                 elif measurement_type == 'temperature':
                     if unit_lower in ['°f', 'f', 'fahrenheit']:
                         si_value = (original_value - 32) * 5/9  # Convert to Celsius
@@ -1034,25 +1034,21 @@ class EntityNormalizer:
                     else:
                         si_value = original_value
                         si_unit = 'celsius'
-                    canonical = str(round(si_value, 2))
-                # Standard unit conversion
+                # Standard unit conversion to SI
                 elif unit_lower in unit_conversions and isinstance(unit_conversions[unit_lower], (int, float)):
                     conversion_factor = unit_conversions[unit_lower]
                     si_value = original_value * conversion_factor
                     
                     # Determine SI unit based on measurement type
                     si_unit = measurement_types.get(measurement_type, {}).get('si_unit', unit_str)
-                    
-                    # Round appropriately based on magnitude
-                    if si_value >= 1:
-                        canonical = str(round(si_value, 4))
-                    else:
-                        canonical = str(round(si_value, 6))
                 else:
-                    # No conversion available, keep original
+                    # No conversion available, keep original values
                     si_value = original_value
                     si_unit = unit_str
-                    canonical = str(original_value)
+                
+                # CRITICAL: Always use original text as canonical for tagging
+                # This preserves user context and prevents unit system violation
+                canonical = text.strip()
                 
                 # Create comprehensive metadata
                 metadata = {
