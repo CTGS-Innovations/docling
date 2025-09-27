@@ -102,13 +102,13 @@ flpc_regex_patterns:
   # Universal Entities (Complex Patterns)
   universal_entities:
     money:
-      pattern: '(?i)(?:[\$£€¥₹₽₩₪₦₨₱₡₵₴₸₿]\s*\d+(?:[,\.]\d+)*(?:\.\d{2})?\s*(?:thousand|million|billion|trillion|k|m|b|t)?\b|\b\d+(?:[,\.]\d+)*(?:\.\d{2})?\s*(?:thousand|million|billion|trillion|k|m|b|t)?\s*(?:dollars?|usd|pounds?|gbp|euros?|eur|yen|jpy|yuan|cny|rupees?|inr|rubles?|rub|won|krw|shekels?|ils|naira?|ngn|pesos?|mxn|php|colones?|crc|cedis?|ghs|hryvnia|uah|tenge|kzt|bitcoin|btc|satoshis?)\b)'
-      description: "International currencies with word boundaries and magnitude support (million, billion, etc.)"
+      pattern: '(?i)(?:[\$£€¥₹₽₩₪₦₨₱₡₵₴₸₿]\s*\d+(?:[,\.]\d+)*(?:\.\d{2})?(?:\s*[-–—]\s*\d+(?:[,\.]\d+)*(?:\.\d{2})?)?\s*(?:thousand|million|billion|trillion|k|m|b|t)?\b|\b\d+(?:[,\.]\d+)*(?:\.\d{2})?(?:\s*[-–—]\s*\d+(?:[,\.]\d+)*(?:\.\d{2})?)?\s*(?:thousand|million|billion|trillion|k|m|b|t)?\s*(?:dollars?|usd|pounds?|gbp|euros?|eur|yen|jpy|yuan|cny|rupees?|inr|rubles?|rub|won|krw|shekels?|ils|naira?|ngn|pesos?|mxn|php|colones?|crc|cedis?|ghs|hryvnia|uah|tenge|kzt|bitcoin|btc|satoshis?)\b)'
+      description: "International currencies with range support ($1.5-2.5 million), word boundaries and magnitude support"
       priority: high
       
     date:
-      pattern: '(?i)\b(?:(?:january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+\d{1,2}(?:st|nd|rd|th)?,?\s*\d{4}|\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}|\d{4}[\/\-\.]\d{1,2}[\/\-\.]\d{1,2})\b'
-      description: "International date formats with word boundaries"
+      pattern: '(?i)\b(?:(?:january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+\d{1,2}(?:st|nd|rd|th)?(?:\s*[-–—]\s*(?:(?:january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+)?\d{1,2}(?:st|nd|rd|th)?)?,?\s*\d{4}|\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}|\d{4}[\/\-\.]\d{1,2}[\/\-\.]\d{1,2})\b'
+      description: "International date formats with same-month ranges (August 15-20, 2024) and cross-month ranges (October 10 - November 12, 2024)"
       priority: high
       
     email:

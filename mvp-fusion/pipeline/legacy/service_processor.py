@@ -1076,6 +1076,10 @@ class ServiceProcessor:
         
         timing_breakdown['pos_gap_discovery'] = (time.perf_counter() - pos_start) * 1000
         
+        # ENTITY CONFLICT RESOLUTION: Remove overlapping Aho-Corasick entities when FLPC entities take precedence
+        # Priority: FLPC (DATE, TIME, MONEY, MEASUREMENT) > Aho-Corasick (PERSON, ORG, LOC, GPE)
+        entities = self._resolve_entity_conflicts(entities)
+        
         # Log detailed timing breakdown
         total_timing = sum(timing_breakdown.values())
         self.logger.logger.info(f"🕐 Core 8 Entity Timing Breakdown ({total_timing:.1f}ms total):")
@@ -1084,6 +1088,73 @@ class ServiceProcessor:
             self.logger.logger.info(f"   {entity_type}: {timing_ms:.1f}ms ({percentage:.1f}%)")
         
         return entities
+    
+    def _resolve_entity_conflicts(self, entities: Dict[str, List]) -> Dict[str, List]:
+        """
+        Resolve conflicts between overlapping entities by prioritizing FLPC over Aho-Corasick.
+        Priority: FLPC (DATE, TIME, MONEY, MEASUREMENT) > Aho-Corasick (PERSON, ORG, LOC, GPE)
+        
+        This prevents cases like "August 15-20, 2024" where:
+        - FLPC detects the full date range "August 15-20, 2024"  
+        - AC detects "August" as an organization (from corpus)
+        - Result should only show the complete date, not both
+        
+        Uses text-based conflict resolution due to FLPC span reliability issues.
+        """
+        # FLPC entities have high priority (complex patterns, specific detection)
+        high_priority_types = ['date', 'time', 'money', 'measurement']
+        # Aho-Corasick entities have lower priority (simple keyword matching)
+        low_priority_types = ['person', 'org', 'loc', 'gpe']
+        
+        # Collect all high-priority entity texts for substring matching
+        high_priority_texts = []
+        for entity_type in high_priority_types:
+            if entity_type in entities:
+                for entity in entities[entity_type]:
+                    text = entity.get('text', '').strip()
+                    if text:
+                        high_priority_texts.append({
+                            'text': text,
+                            'type': entity_type
+                        })
+        
+        # Remove low-priority entities whose text appears within high-priority entity text
+        conflicts_removed = 0
+        for entity_type in low_priority_types:
+            if entity_type in entities:
+                original_count = len(entities[entity_type])
+                entities[entity_type] = [
+                    entity for entity in entities[entity_type]
+                    if not self._entity_text_contained_in_priority(entity, high_priority_texts)
+                ]
+                removed_count = original_count - len(entities[entity_type])
+                conflicts_removed += removed_count
+                
+                if removed_count > 0:
+                    self.logger.logger.debug(f"🔧 Removed {removed_count} {entity_type} entities due to conflicts")
+        
+        if conflicts_removed > 0:
+            self.logger.logger.info(f"🔧 Entity Conflict Resolution: Removed {conflicts_removed} overlapping low-priority entities")
+        else:
+            self.logger.logger.debug(f"🔧 Entity Conflict Resolution: No conflicts detected")
+        
+        return entities
+    
+    def _entity_text_contained_in_priority(self, entity: Dict, priority_texts: List[Dict]) -> bool:
+        """Check if an entity's text is contained within any priority entity text."""
+        entity_text = entity.get('text', '').strip().lower()
+        if not entity_text:
+            return False
+        
+        for priority in priority_texts:
+            priority_text = priority['text'].strip().lower()
+            
+            # Check if the entity text appears as a substring in the priority text
+            if entity_text in priority_text:
+                self.logger.logger.debug(f"🔧 Conflict: '{entity_text}' found in priority '{priority_text}' ({priority['type']})")
+                return True
+        
+        return False
     
     def _extract_entities_with_spans(self, content: str, pattern: str, entity_type: str, flags: int = 0) -> List[Dict]:
         """Extract entities with span information and clean text."""
