@@ -376,5 +376,23 @@ mvp-fusion/
 **⚠️ ENFORCEMENT:**
 Violating project architectural patterns wastes time and creates confusion. This rule ensures consistent implementation across all development work.
 
+### **Rule #17: Decision Framework - MANDATORY**
+**CRITICAL**: Before proposing ANY solution, use the Problem-Strategy-Rating Decision Framework.
+
+**🚨 MANDATORY REFERENCE:**
+- **READ** `CLAUDE_DECISION_FRAMEWORK.md` before proposing solutions
+- **FOLLOW** the 3-step process: Problem → Strategy → Rating
+- **NEVER** propose solutions that contradict user strategy
+- **ALWAYS** rate options against user's explicit requirements
+
+**🎯 PURPOSE:**
+- Prevents misaligned solutions
+- Ensures working systems remain intact
+- Forces objective evaluation against user strategy
+- Eliminates personal bias in solution selection
+
+**⚠️ ENFORCEMENT:**
+This framework must be used before proposing any solution. Failure to follow this process leads to broken functionality and wasted development time.
+
 ---
 **These rules prevent codebase clutter and maintain focus on performance and clarity.**

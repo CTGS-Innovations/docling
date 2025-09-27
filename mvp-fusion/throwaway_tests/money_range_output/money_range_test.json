@@ -1,0 +1,14 @@
+{
+  "semantic_summary": {
+    "total_facts": 0,
+    "fact_types": {},
+    "engine": "Standalone Intelligent SPO Extractor",
+    "performance_model": "Quality-Focused Meaningful Extraction",
+    "domain_context": "general",
+    "actionable_facts": 0,
+    "quality_threshold": 0.75
+  },
+  "facts": [],
+  "rules": [],
+  "relationships": []
+}

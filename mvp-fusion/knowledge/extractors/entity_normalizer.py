@@ -544,13 +544,61 @@ class EntityNormalizer:
                     'enrichment_source': 'government_csv_kb'
                 })
             else:
-                # Standard organization canonicalization
+                # PREMIUM ENTITY DETECTION: Check for unicorn/investor subcategories
+                subcategory = None
+                premium_metadata = {}
+                
+                # Get subcategory using reference data (avoids Core8 loader re-initialization)
+                try:
+                    if reference_data:
+                        # Check if entity is unicorn or investor using reference data (case-insensitive)
+                        text_lower = text.lower()
+                        if text_lower in reference_data.unicorn_companies:
+                            subcategory = 'unicorn_companies'
+                        elif text_lower in reference_data.investors:
+                            subcategory = 'investors'
+                        else:
+                            subcategory = None
+                    else:
+                        subcategory = None
+                except Exception:
+                    subcategory = None
+                
+                # Apply premium entity metadata based on subcategory
+                if subcategory == 'unicorn_companies':
+                    premium_metadata = {
+                        'subcategory': 'unicorn_company',
+                        'premium_source': 'unicorn',
+                        'confidence': 0.90,
+                        'entity_class': 'premium_startup',
+                        'high_value_entity': True
+                    }
+                elif subcategory == 'investors':
+                    premium_metadata = {
+                        'subcategory': 'investor_company', 
+                        'premium_source': 'investor',
+                        'confidence': 0.85,
+                        'entity_class': 'investment_firm',
+                        'high_value_entity': True
+                    }
+                else:
+                    # Standard organization metadata
+                    premium_metadata = {
+                        'subcategory': subcategory or 'standard_organization',
+                        'premium_source': 'standard',
+                        'confidence': 0.70,
+                        'entity_class': 'organization',
+                        'high_value_entity': False
+                    }
+                
+                # Standard organization canonicalization with premium metadata
                 canonical_groups.append({
                     'id': f"org{self.entity_counters['ORG']:03d}",
                     'canonical': text,
                     'aliases': [],
                     'mentions': [{'text': text, 'span': org.get('span', {})}],
-                    'count': 1
+                    'count': 1,
+                    'premium_metadata': premium_metadata
                 })
         
         return [NormalizedEntity(

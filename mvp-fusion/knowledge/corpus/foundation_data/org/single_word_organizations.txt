@@ -1,4 +1,4 @@
-'feine
+feine
 'nanasplits
 'za
 0voice
@@ -131,7 +131,6 @@ airhart
 aistriu
 aixtron
 aj's
-ajinomoto
 akademiska
 akar
 akira
@@ -142,7 +141,6 @@ alberto’s
 albertsons
 albrecht
 alchemist
-alchemy
 aldi
 aldine
 aldo
@@ -369,7 +367,6 @@ asianoodle
 asie
 aspen
 aspetar
-assembly
 asset4
 asshhouse
 assurant
@@ -396,7 +393,6 @@ audionamix
 audrey
 august
 augusto's
-aura
 aurora
 autochoice
 autodesk
@@ -404,7 +400,6 @@ autofix
 autohaus
 autolinx
 autoliv
-automattic
 automotion
 autonerd
 autopotenza
@@ -599,7 +594,6 @@ bellywise
 belmere
 beloman
 bench
-benchmark
 benchsmith
 bendi
 beneluxx
@@ -697,8 +691,6 @@ blackball
 blackberry
 blackbird
 blackfish
-blackrock
-blackstone
 blanka
 blekingesjukhuset
 blender
@@ -824,7 +816,6 @@ brew
 brewburgers
 brewlab
 brewster's
-brex
 brian's
 bricknowlogy
 bricktop's
@@ -916,7 +907,6 @@ bvtlive!
 byblos
 byrdie's
 bytebytegohq
-bytedance
 bytes
 bésame
 böhme
@@ -928,7 +918,6 @@ c3.ai
 cabela's
 cabelas
 cache
-cadence
 cady
 cafette
 caffeination
@@ -967,7 +956,6 @@ canteen
 cantera
 cantina
 canton
-canva
 canvas
 canvitational
 capdeville
@@ -1029,7 +1017,6 @@ carvel
 carver's
 carvision
 carzoid
-carzone
 casablanca
 casadilla
 casale
@@ -1048,7 +1035,6 @@ catalino's
 catavinos
 catch
 catdaddy's
-caterpillar
 catherine's
 catlashed
 catppuccin
@@ -1103,7 +1089,6 @@ chachi's
 chad's
 chad’s
 chaikhana
-chainalysis
 chainlink
 chalily
 challwa
@@ -1170,7 +1155,6 @@ chili's
 chilis
 chilispot
 chill
-chime
 china
 china99
 chinalco
@@ -1274,13 +1258,11 @@ cloudflare
 cloudmade
 cloudspyre
 cloudwego
-clubhouse
 clustertruck
 clutch
 cmu
 cncf
 coach
-coalition
 coastal
 coauto
 cobby's
@@ -1293,7 +1275,6 @@ cocoally
 cocoon
 cocos
 cocusocial
-coda
 code-n
 code100x
 code50
@@ -1318,7 +1299,6 @@ coles
 colleen's
 collision
 colonnade
-color
 colorock
 columbia
 columns
@@ -1357,7 +1337,6 @@ conjugon
 connectedu
 connotate
 conocophillips
-consensys
 constat
 constellar
 containers
@@ -1529,14 +1508,12 @@ dartmouth
 dashed
 dasiwa
 data61
-databricks
 datadog
 datadrive
 datalogix
 datamade
 datamarket
 datamyne
-datarobot
 datatalksclub
 dataweave
 datawhalechina
@@ -1632,7 +1609,6 @@ dino's
 directv
 dirtbag's
 discology
-discord
 disfruta
 dish
 dishez
@@ -2043,7 +2019,6 @@ fido
 fiestaland
 fifendekel
 figaro's
-figma
 figo
 figs
 fiiz
@@ -2215,7 +2190,6 @@ froyo
 fruitflowers
 fry's
 ftc
-ftx
 fubar
 fuddruckers
 fudena
@@ -2398,7 +2372,6 @@ goodburger
 goodguide
 goodwill
 goodyear
-google
 googleapis
 googlechrome
 googlechromelabs
@@ -2409,7 +2382,6 @@ googleworkspace
 gooseberries
 goozy
 gophoto
-gopuff
 gordmans
 gordon's
 goree
@@ -2430,7 +2402,6 @@ gradiant
 gradient
 grafana
 gramat
-grammarly
 grammatech
 grampy's
 grams
@@ -2508,7 +2479,6 @@ guthries
 gwazi
 gymmatrix
 h-mart
-h2o.ai
 habistore
 hachi
 hackclub
@@ -2635,7 +2605,6 @@ hirosaki
 histogenex
 hitachi
 hitea
-hive
 hkuds
 hmart
 hmv
@@ -2656,7 +2625,6 @@ hologic
 holografika
 homage
 home
-homebrew
 homebrewstuff
 homecooked
 homecraft
@@ -2674,7 +2642,6 @@ honey's
 honeydeux
 honeygrow
 honeys
-honeywell
 honeywhisk
 honojs
 honorhealth
@@ -2868,7 +2835,6 @@ insilixa
 insmed
 insper
 inspire
-instacart
 instamek
 instem
 institut
@@ -3087,7 +3053,6 @@ kdays
 kde
 kebab
 kebablicious
-keep
 kegler's
 kellijane
 kelly's
@@ -3139,9 +3104,7 @@ kitson
 kittenish
 kitware
 kiyatec
-kkr
 klaiceva
-klarna
 kle
 klikfit
 klpx
@@ -3189,7 +3152,6 @@ kpicu
 kpmg
 kraftologee
 kraftwork
-kraken
 krankfit
 krave
 kream
@@ -3364,7 +3326,6 @@ lockmobile
 locksmith775
 locust
 loehmann's
-loft
 logan
 lohi
 loie
@@ -3675,7 +3636,6 @@ mercaris
 mercer
 merchant
 merchants
-mercury
 mercy
 merhaba
 meribo
@@ -3730,7 +3690,6 @@ microelectronica
 microg
 microgroove
 micron
-microsoft
 microsoftcopilot
 microsoftdocs
 microsoftlearning
@@ -3783,7 +3742,6 @@ mirabella
 miran
 mirfield
 mirna's
-miro
 misa
 miscenarios
 misoya
@@ -3842,7 +3800,6 @@ montimage
 montu
 monty's
 monzino
-monzo
 moo
 moody's
 moonbowls
@@ -3999,7 +3956,6 @@ nestology
 netapp
 netease
 netflix
-netlify
 neurolux
 neurosearch
 neutrogena
@@ -4159,7 +4115,6 @@ odabu
 odditytvandsound
 oddporium
 odette's
-odoo
 odunde
 oewaves
 officemax
@@ -4175,7 +4130,6 @@ olectric
 olgahospital
 olio
 oliva
-olive
 oliver's
 oliveto
 olivia
@@ -4210,7 +4164,6 @@ oomomo
 oori
 opa
 opa!
-openai
 openbmb
 opencounter
 opencv
@@ -4219,7 +4172,6 @@ opengov
 opengvlab
 openjdk
 openplans
-opensea
 opentofu
 openwrt
 openzeppelin
@@ -4368,7 +4320,6 @@ patrone
 pattaya
 paul
 paul's
-pave
 pavel
 pavimento
 pawllywood
@@ -4535,7 +4486,6 @@ pizzicare
 pizzicato
 pizzino
 pizzology
-plaid
 planchette
 planetecosystems
 plasma
@@ -4672,7 +4622,6 @@ prographics
 projectdiscovery
 promega
 prometeia
-prometheus
 prometric
 promgirl
 promobile
@@ -4783,7 +4732,6 @@ ragnarok
 raices
 railwayapp
 rairprotocol
-rakuten
 raley's
 rally
 rally's
@@ -4793,7 +4741,6 @@ rambla
 ramblei
 rambus
 rami's
-ramp
 rancharrah
 rancheritos
 randevu
@@ -4834,7 +4781,6 @@ redberry
 redbike
 redcoach
 reddboy's
-reddit
 reddy's
 redemption
 redfin
@@ -4906,7 +4852,6 @@ revibed
 revival
 revoltchat
 revolucion
-revolut
 revolutioneyes
 revolver
 revv
@@ -5102,7 +5047,6 @@ santander
 santo
 santosha
 santucci’s
-sap
 sapphire
 sapporo
 sara's
@@ -5348,7 +5292,6 @@ slashdb
 slate
 sleek
 sleepy's
-slice
 sligo
 sloco
 slotervaartziekenhuis
@@ -5356,7 +5299,6 @@ slucare
 sly's
 slycebox
 smallcakes
-smartasset
 smartcontractkit
 smartesting
 smartfactory
@@ -5433,7 +5375,6 @@ sophisticakes
 sophistikids
 sorella5
 sorrentino's
-sosv
 sotsot
 sotto
 souksavanh
@@ -5450,7 +5391,6 @@ southwest
 spabykelly
 spaceandtimefdn
 spacecurve
-spacex
 spago
 spamps
 sparklight
@@ -5491,7 +5431,6 @@ sporty's
 sposabella
 spot
 spotcrime
-spotify
 spotwalk
 spring-8
 springwater
@@ -5517,7 +5456,6 @@ starbuck's
 starbucks
 stargazy
 starrs
-stash
 statale
 state
 statemynt
@@ -5568,14 +5506,12 @@ stratix
 stratton's
 stratus
 straub's
-straumann
 strayboots
 streamlight
 streamlit
 street
 streeteasy
 stretchlab
-stripe
 structube
 strudelking
 strumento
@@ -5824,10 +5760,8 @@ temple
 tempt
 temptation
 temptations
-tempus
 tempwise
 ten14
-tencent
 tencentarc
 tendenza
 tendril
@@ -5963,7 +5897,6 @@ torshi
 tortillas
 toscana
 toshiba
-toss
 tossed
 tostones
 totopos
@@ -5995,7 +5928,6 @@ trattoria168
 travelstore
 travinia
 travr
-trax
 treasures
 treat
 tredici
@@ -6025,7 +5957,6 @@ tropicalia
 tropiccool
 trubarre
 trudog
-true
 truecar
 truffles
 trulia
@@ -6218,7 +6149,6 @@ varalli
 vardagen
 vardforbundet
 vaso
-vattenfall
 vaxart
 vcibo
 vedge
@@ -6238,7 +6168,6 @@ venom
 ventresca
 venture-n
 verasci
-vercel
 verdafero
 verde
 verdé
@@ -6464,7 +6393,6 @@ workday
 workhands
 worksafebc
 workzones
-worldcoin
 worldfish
 wrapture
 wrvu
@@ -6483,7 +6411,6 @@ xdayta
 xdevplatform
 xencor
 xfinity
-xiaomi
 xignite
 xilantro
 xilinx
@@ -6584,7 +6511,6 @@ zama
 zambon
 zamorano
 zamzows
-zapier
 zara
 zarubezhneft
 zasu
@@ -6624,7 +6550,6 @@ zipperhead
 zizi's
 zmac
 zocalo
-zocdoc
 zoe
 zoetis
 zogsports

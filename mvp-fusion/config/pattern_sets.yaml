@@ -102,13 +102,13 @@ flpc_regex_patterns:
   # Universal Entities (Complex Patterns)
   universal_entities:
     money:
-      pattern: '(?i)\$[\d,]+(?:\.?\d{0,2})?(?:\s*(?:million|billion|thousand|M|B|K))?|[\d,]+(?:\.?\d{0,2})?\s*(?:dollars?|USD|EUR|GBP|pounds?|euros?)'
-      description: "Money amounts with currency"
+      pattern: '(?i)[\$€£¥₹]\s*[\d.,]+(?:\.\d{1,2})?(?:\s*(?:k|m|b|thousand|million|billion))?|(?:USD|EUR|GBP|JPY|CNY|INR|AUD|CAD)\s*[\d.,]+(?:\s*(?:k|m|bn))?|[\d.,]+(?:\.\d{1,2})?\s+(?:dollars?|euros?|yen|yuan|rupees?|pounds\s+sterling|british\s+pounds)'
+      description: "Money amounts requiring explicit currency symbols or currency words"
       priority: high
       
     date:
-      pattern: '(?i)\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(?:st|nd|rd|th)?,?\s+\d{4}|\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\b\d{4}[/-]\d{1,2}[/-]\d{1,2}'
-      description: "Various date formats"
+      pattern: '(?i)\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec|January|February|March|April|June|July|August|September|October|November|December)\s+\d{1,2}(?:st|nd|rd|th)?,?\s+\d{4}|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)\s+\d{4}|\bQ[1-4]\s+\d{4}|\bFY\s?\d{4}|\b\d{4}[/-]\d{1,2}[/-]\d{1,2}|\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}'
+      description: "Comprehensive date formats including abbreviated months, quarters, fiscal years"
       priority: high
       
     email:
@@ -117,23 +117,23 @@ flpc_regex_patterns:
       priority: medium
       
     phone:
-      pattern: '\b(?:\+?1[-.\s]?)?\(?[0-9]{3}\)?[-.\s]?[0-9]{3}[-.\s]?[0-9]{4}\b|\b\d{3}[-.\s]\d{3}[-.\s]\d{4}\b'
-      description: "Phone numbers"
+      pattern: '(?i)(?:\+?\d{1,3}[\s.-]?)?(?:\(?\d{2,4}\)?[\s.-]?)?\d{3,4}[\s.-]?\d{3,4}(?:\s*(?:x|ext\.?|extension)\s*\d{1,6})?'
+      description: "Phone numbers with international formats and extensions"
       priority: medium
       
     percent:
-      pattern: '\b\d{1,3}(?:\.\d{1,2})?%'
+      pattern: '(?i)\b\d{1,3}(?:\.\d{1,2})?%'
       description: "Percentage values"
-      priority: low
+      priority: medium
       
     time:
-      pattern: '(?i)\b\d{1,2}:\d{2}(?::\d{2})?(?:\s*(?:AM|PM|am|pm))?\b|\b\d{1,2}\s*(?:AM|PM|am|pm)\b'
-      description: "Time expressions"
+      pattern: '(?i)\b(?:[01]?\d|2[0-3]):[0-5]\d(?::[0-5]\d)?(?:\s*(?:UTC|Z|[AP]M|[AP]M [A-Z]{2,4}|[A-Z]{2,4}))?\b|\b\d{1,2}\s*(?:AM|PM)\b|\b(?:[01]?\d|2[0-3])[:.][0-5]\d\s*(?:-|–|—|to)\s*(?:[01]?\d|2[0-3])[:.][0-5]\d(?:\s*(?:AM|PM))?'
+      description: "Time expressions with 24h format, zones, and ranges"
       priority: low
       
     url:
-      pattern: 'https?://[^\s<>"{}|\\^`\[\]]+'
-      description: "URLs and web links"
+      pattern: '(?i)(?:https?://|www\.)[^\s<>"{}|\\\\^`\\[\\]]+'
+      description: "URLs and web links including bare www"
       priority: medium
       
     version:
@@ -141,19 +141,41 @@ flpc_regex_patterns:
       description: "Version numbers"
       priority: low
       
-    measurement:
-      pattern: '(?i)\b\d+(?:\.\d+)?\s*(?:mg|g|kg|lbs?|oz|ml|l|gal|ft|feet|inches?|meters?|m|cm|mm|°[CF]|degrees?)'
-      description: "Measurements and units"
+    # Split measurement patterns by category for optimal FLPC performance
+    measurement_length:
+      pattern: '(?i)(?:^|[\s\-])\d+(?:\.\d+)?\s*(?:feet|ft|inches?|inch|cm|mm|meters?|metres?|kilometers?|kilometres?|km|miles?|mi|yd|yards?)'
+      description: "Length and distance measurements"
       priority: medium
       
-    range:
-      pattern: '(?i)\b\d+\s*-\s*\d+\b|\b\d+\s*to\s*\d+\b'
-      description: "Numeric ranges"
+    measurement_weight:
+      pattern: '(?i)(?:^|[\s\-])-?\d+(?:\.\d+)?\s*(?:kg|pounds?|lbs?|oz|g|mg|tons?|tonnes?)'
+      description: "Weight and mass measurements"
+      priority: medium
+      
+    measurement_time:
+      pattern: '(?i)(?:^|[\s\-])-?\d+(?:\.\d+)?\s*(?:minutes?|mins?|seconds?|secs?|hours?|hrs?|days?|weeks?|months?|years?)'
+      description: "Time duration measurements"
+      priority: medium
+      
+    measurement_temperature:
+      pattern: '(?i)(?:^|[\s\-])-?\d+(?:\.\d+)?\s*(?:degrees?|degC|degF|°C|°F)'
+      description: "Temperature measurements"
+      priority: medium
+      
+    measurement_sound:
+      pattern: '(?i)(?:^|[\s\-])-?\d+(?:\.\d+)?\s*(?:decibels?|dB)'
+      description: "Sound level measurements"
+      priority: medium
+      
+    range_indicator:
+      pattern: '(?i)\b(?:to|through|between|and)\b|[-–—]'
+      description: "Range indicators for proximity-based range detection"
       priority: low
       
+      
     regulation:
-      pattern: '(?i)\b\d{1,2}\s*CFR\s*\d{3,4}(?:\.\d+)?(?:\([a-z]\))?'
-      description: "CFR regulation numbers"
+      pattern: '(?i)\b\d{1,2}\s*CFR\s*\d{3,4}(?:\.\d+)?(?:\([a-z0-9]+\))*(?:\s*Part\s*\d+)?|\b(?:ISO|IEC)\s*\d{4,5}(?::\d{4})?(?:/[A-Z]\d+)?|\bANSI\s*[A-Z]\d+(?:\.\d+)?(?::\d{4})?|\bNFPA\s*\d+[A-Z]?|\bOSHA\s*\d{4}-[A-Z0-9-]+|\bDOT\s*\d+\s*CFR\s*\d+|\bFDA\s*\d+\s*CFR\s*\d+'
+      description: "Comprehensive regulation patterns including ISO, NFPA, ANSI, OSHA, and CFR Part forms"
       priority: high
 
 # Pattern Performance Configuration
@@ -242,8 +264,12 @@ pattern_sets:
       - time
       - url
       - version
-      - measurement
-      - range
+      - measurement_length
+      - measurement_weight
+      - measurement_time
+      - measurement_temperature
+      - measurement_sound
+      - range_indicator
       - regulation
       
   # Domain-specific pattern sets

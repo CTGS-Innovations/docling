@@ -1,4 +1,4 @@
-"genuino" italian cafe'
+genuino" italian cafe'
 "no macarena" dj & custom music service
 # 1 nail salon
 # POS-discovered entities added on 2025-09-22T20:20:22.448430
@@ -743,9 +743,7 @@ $99 pool pumps & pool motors
 50 floor
 50/fifty kitchen
 500 degrees
-500 global
 500 harbour island
-500 startups
 501 eagle
 502 east event centre
 504 craft beer reserve
@@ -2214,7 +2212,6 @@ acb nails
 acb screen and window repair
 accademia albertina
 accardo and lambert plumbing and heating
-accel partners
 accelerated automotive
 acceleron pharma
 accellence home medical equipment
@@ -4084,7 +4081,6 @@ ali-baba’s greek & lebanese cuisine
 alia's coffee house
 aliah university
 aliana meat market
-alibaba group
 alibaba hookah lounge
 alibaba restaurant
 alibi cookies
@@ -5994,7 +5990,6 @@ andrea villa hair
 andrea's garden center
 andrea's restaurant
 andreas sygros hospital
-andreessen horowitz
 andreotti's viennese cafe
 andres hair salon
 andres roofing
@@ -9137,7 +9132,6 @@ avian glen winery
 aviana at tuscany
 aviation and missile command
 aviation grill
-aviation industry corporation of china
 aviator hotel & suites
 aviators tavern
 avid brew company
@@ -9795,7 +9789,6 @@ baileys' chocolate bar
 baileys' range
 baily's dairy
 baim institute for clinical research
-bain capital
 bain's deli
 bainbridge at westshore marina
 bainbridge bayside by the bainbridge companies
@@ -10885,7 +10878,6 @@ batters family pancake house
 battery park
 battery systems of reno
 battery systems of tucson
-battery ventures
 battery world
 battista's calzone
 battle born auto electronics and window tinting
@@ -12582,7 +12574,6 @@ beso beauty school
 beso del sol resort
 bespoke home + life
 bessant designs
-bessemer venture partners
 best alteration
 best alterations & shoe repair
 best auto detailz
@@ -14674,7 +14665,6 @@ bna hotel nashville
 bnai zion medical center
 bnb be clean
 bnb chain
-bnp paribas
 bo fung chinese kitchen
 bo ne restaurant
 bo sing
@@ -23582,7 +23572,6 @@ china chen restaurant
 china city
 china city restaurant
 china coal research institute
-china construction bank
 china cook express
 china cottage restaurant
 china court
@@ -25836,7 +25825,6 @@ coastline restaurant
 coat check coffee
 coates bros-cooper distributing
 coattails kitchen
-coatue management
 cobalt electric
 cobalt smoke & sea
 cobb mansion bed & breakfast
@@ -29443,11 +29431,9 @@ cuzins car wash
 cuñada
 cv art and frame
 cv nails
-cvc capital partners
 cvpath institute
 cvs - cityway
 cvs caremark corporation
-cvs health
 cvs health corporation
 cvs optical
 cvs pharmacy
@@ -36989,7 +36975,6 @@ epps plumbing & heating
 eppy's authentic bar-b-que & fried chicken
 epsom and st helier university hospitals nhs trust
 epworth hospital
-eqt partners
 equal pay for women
 equestrian apartments by meb mgmt
 equifax inc
@@ -39551,7 +39536,6 @@ fiddlecakes cummins
 fiddlehead fern café
 fiddlers green irish pub & eatery
 fiddlers inn
-fidelity investments
 fidelity national financial inc
 fidelity national information services inc
 fidelity systems
@@ -40030,7 +40014,6 @@ first rate property management
 first republic bank
 first research institute of the ministry of public security
 first response heating & cooling
-first round capital
 first service group real estate & property management
 first star nails
 first state bowling center
@@ -41444,7 +41427,6 @@ foundational health center
 foundations massage & wellness
 founded coffee & pizza
 founder institute
-founders fund
 founders grounds coffee company
 founders park
 founding farmers first bake cafe & creamery
@@ -41731,7 +41713,6 @@ franciscan inn & suites
 franciscan surgery center
 francisco de paula santander university
 francisco de vitoria university
-francisco partners
 francisco's de noche
 francisco's mobile auto detailing
 francisco's on the river
@@ -43949,7 +43930,6 @@ general administration of quality supervision inspection and quarantine
 general american donut company
 general atomics
 general candy company
-general catalyst
 general deck, bar, grill
 general dentistry for kids
 general directorate of highways
@@ -45375,7 +45355,6 @@ goldies paint and body
 goldilocks jewelry & coins
 goldkamp heating & cooling
 goldleaf savory & sweet
-goldman sachs
 golds gym northgate
 goldsberrys transmission
 goldsmiths university of london
@@ -45673,7 +45652,6 @@ google gemini
 google maps
 google public data explorer
 google research
-google ventures
 goomba's pizzeria
 goorin bros
 goorin bros.
@@ -46821,7 +46799,6 @@ greyhound bus lines
 greyhound courier express
 greyhound nails
 greyhound package express
-greylock partners
 greystone hall
 greystone oyster bar
 gridiron sports bar & pizzeria
@@ -49595,7 +49572,6 @@ hellenic telecommunications organization
 heller's seafood market
 hellerick family farm
 hellfire pizza
-hellman & friedman
 hello baby imaging boutique
 hello beautiful colour salon
 hello beautiful colour salon & spa
@@ -52657,7 +52633,6 @@ huffman jewelers
 hufford's jewelry
 huge ass beers
 huge impact restaurant
-hugging face
 hugh's towing
 hugh-baby's
 hugh-baby’s
@@ -53984,7 +53959,6 @@ independent vapes
 independent volkswagen and audi services
 indepth detailing
 indepth network
-index ventures
 indi tucson by tower property resources
 india bazaar
 india bistro
@@ -54795,7 +54769,6 @@ insight medical imaging - hermitage
 insight medical imaging - meadowlark diagnostic imaging
 insight medical imaging - unity square
 insight medical imaging - west end
-insight partners
 insight pest solutions
 insight property services
 insight vision center
@@ -56398,7 +56371,6 @@ integrity tattoo
 integrity tattoos
 integrity tire & automotive centers
 integrity treatment solutions
-intel capital
 intel collab
 intel corporation
 intel innersource
@@ -61692,7 +61664,6 @@ kendall ford of meridian
 kendall's used appliances
 kendall, rohde, & associates
 kendra barraza - realty one group eminence
-kendra scott
 kendra scott jewelry
 kendra's floral kreations
 kendrick guehr - santa barbara and montecito real estate
@@ -65915,7 +65886,6 @@ laxmi's indian grille
 laxmi's indian grille - broomall
 laxmi's indian grille-east falls
 layalena hookah lounge
-layerzero labs
 layla hair braiding
 layla threading
 layla's boutique
@@ -67112,7 +67082,6 @@ lights of lake park
 lights out boxing & fitness
 lights out electric
 lights out entertainment
-lightspeed venture partners
 lightworks acupuncture
 lightyear studio
 ligne roset
@@ -72173,7 +72142,6 @@ matrix auto glass and tint
 matrix hotel
 matrix medical
 matrix org
-matrix partners
 matrix research
 matrix salon
 matrix tattoo
@@ -72679,7 +72647,6 @@ mayfair pizza
 mayfair taproom
 mayfield dinner theatre
 mayfield florist
-mayfield fund
 mayfield management group
 mayfield veterinary hospital
 mayflower bakery & cafe
@@ -73523,7 +73490,6 @@ menlo aquatics center
 menlo home & garden
 menlo systems
 menlo therapeutics
-menlo ventures
 menninger clinic
 mennonite christian hospital
 mennonite sheds
@@ -82048,7 +82014,6 @@ norwegian university of life sciences
 norwegian university of science and technology
 norwegian veterinary institute
 norwegian water resources and energy directorate
-norwest venture partners
 norwich research park
 norwood family dentistry
 norwood hills country club
@@ -90641,7 +90606,6 @@ preferred home care
 preferred homecare
 preferred limousine & transportation
 preferred mattress
-preferred networks
 preferred party place
 preferred pavers
 preferred plumbing
@@ -93853,7 +93817,6 @@ redner's fresh market
 redner's warehouse market
 redondo towers
 redot engine
-redpoint ventures
 redrock bar
 reds & son foreign car repair
 reds bin 211
@@ -100163,9 +100126,7 @@ sbnc: westside neighborhood clinic
 sc damn good food
 scaffidi orthodontics
 scafidi cranston & associates llc
-scale ai
 scale unlimited
-scale venture partners
 scales & tails seafood grill& market
 scally's auto repair
 scallywags dog daycare
@@ -101210,7 +101171,6 @@ september's restaurant
 sepuluh nopember institute of technology
 sepulveda elementary school
 sequel salon
-sequoia capital
 sequoia sciences
 sequoia spas & saunas
 sequoia technologies
@@ -103065,7 +103025,6 @@ silver express
 silver fork thai & japanese cuisine
 silver home rentals
 silver in the city
-silver lake
 silver lake apartments
 silver lake dental care
 silver lake nature center
@@ -104304,7 +104263,6 @@ snooties bbq
 snooty giggles dog rescue
 snooze an am eatery
 snoozy's cafe
-snorkel ai
 snow & yogurt
 snow and avalanche study establishment
 snow bear dessert café
@@ -105689,7 +105647,6 @@ spar 1 nails
 sparadise day spa & salon
 spare no rib
 spark and vitality
-spark capital
 spark car wash
 spark creative events
 spark nutrition
@@ -113828,7 +113785,6 @@ the caramel room
 the cardinal room at golf club of indiana
 the caribbean room
 the carl vanvechten gallery
-the carlyle group
 the carousel bar & lounge
 the carpet & tile magicians
 the carpet guy
@@ -118604,7 +118560,6 @@ thistle farms
 thistletop inn
 tholl fence
 thom's jerky
-thoma bravo
 thomas & son
 thomas a collins attorney at law
 thomas a j basora, dds
@@ -118786,7 +118741,6 @@ thrive affordable vet care - metairie
 thrive affordable vet care - new orleans mid city
 thrive affordable vet care - new tampa
 thrive affordable vet care - seminole
-thrive capital
 thrive chiropractic
 thrive holistic wellness
 thrive physical therapy
@@ -118995,7 +118949,6 @@ tigas artisan pizzeria
 tiger auto transport
 tiger bakery
 tiger enterprises
-tiger global management
 tiger lilli's
 tiger lily
 tiger lily 2
@@ -120510,7 +120463,6 @@ toyota central research and development laboratories
 toyota industries
 toyota kosei hospital
 toyota memorial hospital
-toyota motor corporation
 toyota northwest edmonton
 toyota of cool springs
 toyota of cool springs collision center
@@ -122862,7 +122814,6 @@ union ramen
 union roofing
 union savings bank
 union shoe service
-union square ventures
 union station
 union station hotel nashville, autograph collection
 union station pub & grill
@@ -122975,7 +122926,6 @@ united fulfillment solutions
 united granite
 united hardware
 united hospital
-united imaging healthcare
 united international college
 united international university
 united kingdom atomic energy authority
@@ -128028,7 +127978,6 @@ vista bar
 vista clean junk removal
 vista del monte retirement community
 vista dental care
-vista equity partners
 vista family medicine
 vista feed & supply
 vista galleries
@@ -128238,7 +128187,6 @@ volgograd state university
 volgograd state university of architecture and civil engineering
 volition vapor
 volkswagen brandon
-volkswagen group
 volkswagen of cherry hill
 volkswagen of cool springs
 volkswagen of new port richey
@@ -128657,7 +128605,6 @@ wannan medical college
 war horse barbell
 war memorial auditorium
 warbler records & goods
-warburg pincus
 warby parker
 warby parker at art in the age
 ward john b & co tree experts
@@ -129206,7 +129153,6 @@ weifang university
 weifang university of science and technology
 weight & body solutions
 weight watchers
-weights & biases
 weikel's auto repair
 weil institute of critical care medicine
 weiler computer consulting
@@ -131863,7 +131809,6 @@ xylem inc
 y & v jewelry
 y afterhours
 y bark alone doggy daycare
-y combinator
 y kiki divers
 y not check background & fingerprinting
 y not indian

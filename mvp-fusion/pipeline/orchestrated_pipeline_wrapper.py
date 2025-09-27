@@ -126,32 +126,63 @@ class Stage2_DocumentProcessing(StageInterface):
 
 
 class Stage3_Classification(StageInterface):
-    """Stage 3: Classification - Wraps existing classification logic"""
+    """Stage 3: Classification + Early Entity Detection - Uses BOTH AC and FLPC for span identification"""
     
     def __init__(self, config: Dict[str, Any]):
         super().__init__(config)
-        # Initialize existing classification components
+        # Initialize BOTH classification and entity detection components
         from utils.global_spacy_manager import get_global_ac_classifier
         self.ac_classifier = get_global_ac_classifier()
+        
+        # Initialize FLPC engine for early pattern-based entity detection
+        try:
+            from fusion.flpc_engine import FLPCEngine
+            self.flpc_engine = FLPCEngine(config)
+            self.logger.logger.info("🟢 Stage 3: Initialized with dual-engine (AC + FLPC) for early entity detection")
+        except Exception as e:
+            self.logger.logger.warning(f"⚠️ Stage 3: FLPC engine failed: {e}")
+            self.flpc_engine = None
     
     def process(self, input_data: List[InMemoryDocument], metadata: Dict[str, Any]) -> Tuple[List[InMemoryDocument], float]:
-        """Apply classification using existing logic"""
+        """Apply classification AND early entity detection (AC + FLPC) to identify spans"""
         start_time = time.perf_counter()
         set_current_phase('classification')
         
         classified_docs = []
         for doc in input_data:
             try:
-                # Use existing classification logic from fusion_pipeline
-                if self.ac_classifier and hasattr(doc, 'markdown_content'):
-                    # Apply existing Aho-Corasick classification
-                    classification_data = self.ac_classifier.classify_document(doc.markdown_content)
-                    doc.add_classification_data(classification_data)
+                if hasattr(doc, 'markdown_content'):
+                    content = doc.markdown_content
+                    
+                    # 1. Apply Aho-Corasick classification
+                    if self.ac_classifier:
+                        classification_data = self.ac_classifier.classify_document(content)
+                        doc.add_classification_data(classification_data)
+                    
+                    # 2. Early entity detection with BOTH engines to identify spans
+                    entity_spans = {}
+                    
+                    # AC Engine: PERSON, ORG, GPE, LOC (corpus-based)
+                    if self.ac_classifier:
+                        ac_entities = self.ac_classifier.extract_entities(content)
+                        entity_spans.update(ac_entities)
+                    
+                    # FLPC Engine: DATE, TIME, MONEY, MEASUREMENT (pattern-based)
+                    if self.flpc_engine:
+                        flpc_results = self.flpc_engine.extract_entities(content)
+                        flpc_entities = flpc_results.get('entities', {})
+                        # Add FLPC entities to spans (they use uppercase keys)
+                        for entity_type in ['DATE', 'TIME', 'MONEY', 'MEASUREMENT']:
+                            if entity_type in flpc_entities:
+                                entity_spans[entity_type.lower()] = flpc_entities[entity_type]
+                    
+                    # Store entity spans for Stage 4 extraction
+                    doc.entity_spans = entity_spans
                 
                 classified_docs.append(doc)
                 
             except Exception as e:
-                self.logger.logger.error(f"❌ Stage 3 classification failed for {doc.source_filename}: {e}")
+                self.logger.logger.error(f"❌ Stage 3 classification/detection failed for {doc.source_filename}: {e}")
                 classified_docs.append(doc)  # Add anyway to maintain flow
                 continue
         
@@ -160,26 +191,33 @@ class Stage3_Classification(StageInterface):
 
 
 class Stage4_EntityExtraction(StageInterface):
-    """Stage 4: Entity Extraction - Wraps existing entity extraction logic"""
+    """Stage 4: Entity Extraction - Extracts full entities based on spans identified in Stage 3"""
     
     def __init__(self, config: Dict[str, Any]):
         super().__init__(config)
-        # Use existing entity extraction components
-        from utils.global_spacy_manager import get_global_ac_classifier
-        self.ac_classifier = get_global_ac_classifier()
+        # Initialize ServiceProcessor for full entity extraction
+        self.service_processor = ServiceProcessor(config)
+        self.logger.logger.info("🟢 Stage 4: Initialized for full entity extraction from pre-identified spans")
     
     def process(self, input_data: List[InMemoryDocument], metadata: Dict[str, Any]) -> Tuple[List[InMemoryDocument], float]:
-        """Extract entities using existing logic"""
+        """Extract full entities using spans identified in Stage 3 + ServiceProcessor extraction"""
         start_time = time.perf_counter()
         set_current_phase('entity_extraction')
         
         extracted_docs = []
         for doc in input_data:
             try:
-                # Use existing entity extraction logic
-                if self.ac_classifier and hasattr(doc, 'markdown_content'):
-                    # Apply existing entity extraction
-                    entities = self.ac_classifier.extract_entities(doc.markdown_content)
+                if hasattr(doc, 'markdown_content'):
+                    # Use ServiceProcessor's full extraction which includes proper span handling
+                    entities = self.service_processor._extract_universal_entities(doc.markdown_content)
+                    
+                    # Merge with entity spans from Stage 3 if available
+                    if hasattr(doc, 'entity_spans') and doc.entity_spans:
+                        # Ensure FLPC entities (especially MEASUREMENT) are included
+                        for entity_type, entity_list in doc.entity_spans.items():
+                            if entity_type not in entities or not entities[entity_type]:
+                                entities[entity_type] = entity_list
+                    
                     doc.add_entity_data(entities)
                 
                 extracted_docs.append(doc)

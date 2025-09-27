@@ -153,6 +153,7 @@ patterns:
     universal_entities: true     # Money, dates, emails, phones
     domain_keywords: true        # Safety, compliance, regulations
     technical_terms: true        # Measurements, versions, URLs
+    complete: true               # Complete pattern set for 100% detection
     
   # Pattern optimization
   optimization:

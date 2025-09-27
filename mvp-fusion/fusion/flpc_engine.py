@@ -235,8 +235,13 @@ class FLPCEngine:
                 if info.get('priority') == 'high'
             }
         elif pattern_set == "complete":
-            # All available patterns
-            return universal_patterns
+            # All available patterns, sorted by priority (highest first)
+            priority_order = {'highest': 0, 'high': 1, 'medium': 2, 'low': 3}
+            sorted_patterns = sorted(
+                universal_patterns.items(), 
+                key=lambda x: priority_order.get(x[1].get('priority', 'medium'), 2)
+            )
+            return dict(sorted_patterns)
         else:  # default
             # High and medium priority patterns
             return {

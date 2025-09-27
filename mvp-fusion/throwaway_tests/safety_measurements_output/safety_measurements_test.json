@@ -1,0 +1,59 @@
+{
+  "semantic_summary": {
+    "total_facts": 2,
+    "fact_types": {
+      "actionable_requirements": 2,
+      "spo_triplets": 2
+    },
+    "engine": "Standalone Intelligent SPO Extractor",
+    "performance_model": "Quality-Focused Meaningful Extraction",
+    "domain_context": "safety_compliance",
+    "actionable_facts": 2,
+    "quality_threshold": 0.75
+  },
+  "facts": [
+    {
+      "subject": "Entity",
+      "predicate": "REQUIRED_TO",
+      "object": ".8(.8288) in construction",
+      "confidence": 1.0,
+      "fact_type": "safety_requirements_fact",
+      "context": "Safety Measurements Test Testing measurement extraction from safety regulations: Construction Safety Measurements - Fall protection required above meas0011.",
+      "span": {
+        "start": 141,
+        "end": 210
+      },
+      "actionable": true,
+      "extraction_layer": "intelligent_spo_analysis"
+    },
+    {
+      "subject": "Entity",
+      "predicate": "REQUIRED_TO",
+      "object": ".07(.0668) high",
+      "confidence": 1.0,
+      "fact_type": "safety_requirements_fact",
+      "context": "Test Testing measurement extraction from safety regulations: Construction Safety Measurements - Fall protection required above meas0011.8288) in construction - Guardrails must be meas0031.",
+      "span": {
+        "start": 224,
+        "end": 276
+      },
+      "actionable": true,
+      "extraction_layer": "intelligent_spo_analysis"
+    }
+  ],
+  "rules": [],
+  "relationships": [
+    {
+      "subject": "Entity",
+      "predicate": "REQUIRED_TO",
+      "object": ".8(.8288) in construction",
+      "confidence": 1.0
+    },
+    {
+      "subject": "Entity",
+      "predicate": "REQUIRED_TO",
+      "object": ".07(.0668) high",
+      "confidence": 1.0
+    }
+  ]
+}

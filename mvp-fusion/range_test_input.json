@@ -1,0 +1,39 @@
+{
+  "semantic_summary": {
+    "total_facts": 1,
+    "fact_types": {
+      "actionable_requirements": 1,
+      "spo_triplets": 1
+    },
+    "engine": "Standalone Intelligent SPO Extractor",
+    "performance_model": "Quality-Focused Meaningful Extraction",
+    "domain_context": "general",
+    "actionable_facts": 1,
+    "quality_threshold": 0.75
+  },
+  "facts": [
+    {
+      "subject": "Entity",
+      "predicate": "REQUIRED_TO",
+      "object": "30-37 inches (76-94 cm)",
+      "confidence": 1.0,
+      "fact_type": "safety_requirements_fact",
+      "context": "Safety requirements for handrail installation: - Handrail height must be 30-37 inches (76-94 cm) - Distance between supports: 6 to meas00334.0194 minimum - Response time: 15-30 minutes for emergency..",
+      "span": {
+        "start": 65,
+        "end": 96
+      },
+      "actionable": true,
+      "extraction_layer": "intelligent_spo_analysis"
+    }
+  ],
+  "rules": [],
+  "relationships": [
+    {
+      "subject": "Entity",
+      "predicate": "REQUIRED_TO",
+      "object": "30-37 inches (76-94 cm)",
+      "confidence": 1.0
+    }
+  ]
+}

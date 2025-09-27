@@ -34,9 +34,9 @@ class ReferenceData:
         self.countries: Set[str] = self._load_set("countries.txt")  
         self.major_cities: Set[str] = self._load_set("major_cities.txt")
         
-        # Organization data
-        self.unicorn_companies: Set[str] = self._load_set("unicorn_companies.txt")
-        self.investors: Set[str] = self._load_set("investors.txt")
+        # Organization data - updated file paths
+        self.unicorn_companies: Set[str] = self._load_org_set("unicorn_companies_2025_09_18.txt")
+        self.investors: Set[str] = self._load_org_set("investors_2025_09_18.txt")
         
         # Combined lookup sets
         self.address_indicators = {
@@ -54,6 +54,17 @@ class ReferenceData:
         
         with open(file_path, 'r', encoding='utf-8') as f:
             return {line.strip() for line in f if line.strip()}
+    
+    def _load_org_set(self, filename: str) -> Set[str]:
+        """Load organization file from org/ subdirectory into set for O(1) lookups"""
+        file_path = self._base_path / "org" / filename
+        
+        if not file_path.exists():
+            print(f"Warning: {filename} not found at {file_path}")
+            return set()
+        
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return {line.strip().lower() for line in f if line.strip()}
     
     def classify_location(self, location: str) -> str:
         """
