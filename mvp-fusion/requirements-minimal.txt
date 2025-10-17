@@ -1,0 +1,52 @@
+# MVP-Fusion Minimal Requirements
+# Generated from dependency analysis - only actually used packages
+# Date: 2025-10-17
+
+# ========================================
+# CORE DEPENDENCIES (directly used in code)
+# ========================================
+
+# HTML/Markdown Processing
+beautifulsoup4>=4.13.0
+html2text>=2025.4.0
+markdownify>=1.2.0
+
+# PDF Processing
+PyMuPDF>=1.26.0
+
+# Pattern Matching & Entity Extraction
+flpc>=0.2.5
+pyahocorasick>=2.2.0
+
+# NLP & Text Processing
+spacy>=3.8.0
+# Note: Install language model separately with:
+# python -m spacy download en_core_web_sm
+
+# Data Processing
+pandas>=2.3.0
+
+# Performance & Utilities
+orjson>=3.11.0
+ujson>=5.11.0
+xxhash>=3.5.0
+psutil>=7.1.0
+
+# HTTP & Networking
+requests>=2.32.0
+
+# Configuration
+PyYAML>=6.0.0
+
+# ========================================
+# TRANSITIVE DEPENDENCIES
+# (Installed automatically by above packages)
+# ========================================
+# These will be installed automatically:
+# - numpy (via pandas, spacy)
+# - pydantic (via spacy)
+# - tqdm (via spacy)
+# - typing_extensions (via pydantic)
+# - All spacy dependencies (blis, catalogue, confection, cymem, etc.)
+# - All requests dependencies (certifi, charset-normalizer, idna, urllib3)
+# - All pandas dependencies (python-dateutil, pytz, tzdata)
